@@ -1,0 +1,223 @@
+<?xml version="1.0"?>
+<robot name="arm" xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <!-- TODO(someshdaga): Define the model of the arm accurately
+       i.e dimensions, layout, limits, efforts, meshes, materials etc -->
+
+  <!-- Include utility macros for simplying the urdfs -->
+	<xacro:include filename="$(find rover_description)/urdf/utils/utils.xacro"/>
+  <!-- Include macros for arm -->
+  <xacro:include filename="$(find rover_description)/urdf/arm/arm.gazebo.xacro"/>
+  <xacro:include filename="$(find rover_description)/urdf/arm/arm.transmission.xacro"/>
+
+  <xacro:property name="turntable_mass"      value="5"/>    <!-- kg -->
+  <xacro:property name="turntable_radius"    value="0.3"/>  <!-- m -->
+  <xacro:property name="turntable_height"    value="0.05"/> <!-- m -->
+
+  <xacro:property name="bicep_mass"      value="4"/>    <!-- kg -->
+  <xacro:property name="bicep_height"    value="0.25"/> <!-- m -->
+  <xacro:property name="bicep_length"    value="0.10"/> <!-- m -->
+  <xacro:property name="bicep_width"     value="0.10"/> <!-- m -->
+  <xacro:property name="bicep_min_angle" value="-90"/>  <!-- deg -->
+  <xacro:property name="bicep_max_angle" value="90"/>   <!-- deg -->
+
+  <xacro:property name="forearm_mass"      value="2.0"/>  <!-- kg -->
+  <xacro:property name="forearm_height"    value="0.2"/>  <!-- m -->
+  <xacro:property name="forearm_length"    value="0.10"/> <!-- m -->
+  <xacro:property name="forearm_width"     value="0.10"/> <!-- m -->
+  <xacro:property name="forearm_min_angle" value="-90"/>  <!-- deg -->
+  <xacro:property name="forearm_max_angle" value="90"/>   <!-- deg -->
+
+  <xacro:property name="wrist_mass"            value="1.5"/>   <!-- kg -->
+  <xacro:property name="wrist_height"          value="0.15"/>  <!-- m -->
+  <xacro:property name="wrist_length"          value="0.07"/>  <!-- m -->
+  <xacro:property name="wrist_width"           value="0.07"/>  <!-- m -->
+  <xacro:property name="wrist_min_angle"       value="-90"/>   <!-- deg -->
+  <xacro:property name="wrist_max_angle"       value="90"/>    <!-- deg -->
+
+  <xacro:property name="claw_mass"            value="0.5"/>  <!-- kg -->
+  <xacro:property name="claw_height"          value="0.10"/> <!-- m -->
+  <xacro:property name="claw_length"          value="0.05"/> <!-- m -->
+  <xacro:property name="claw_width"           value="0.05"/> <!-- m -->
+  <xacro:property name="claw_pitch_min_angle" value="-90"/>  <!-- deg -->
+  <xacro:property name="claw_pitch_max_angle" value="90"/>   <!-- deg -->
+  <xacro:property name="clas_roll_min_angle"  value="-90"/>  <!-- deg -->
+  <xacro:property name="claw_roll_max_angle"  value="90"/>   <!-- deg -->
+
+  <!-- Add a small offset distance at the joints between links so they don't collide with 
+       each other during motion -->
+  <xacro:property name="joint_offset" value="0.05"/> <!-- m -->
+
+  <xacro:macro name="arm" params="parent name">
+    <!-- (JOINT) MOBILE BASE/WORLD -> TURNTABLE -->
+    <joint name="${name}_base_turntable_joint" type="fixed">
+      <parent link="${parent}"/>
+      <child link="${name}_turntable_link"/>
+      <origin xyz="0 0 ${turntable_height / 2}" rpy="0 0 0"/>
+    </joint>
+
+    <!-- (LINK) TURNTABLE -->
+    <link name="${name}_turntable_link">
+      <inertial>
+        <mass value="${turntable_mass}"/>
+        <origin xyz="0 0 ${turntable_height / 2}" rpy="0 0 0"/>
+        <cylinder_inertia_def radius="${turntable_radius}" length="${turntable_height}"
+                              mass="${turntable_mass}"/>
+      </inertial>
+
+      <visual>
+        <origin xyz="0 0 ${turntable_height / 2}" rpy="0 0 0"/>
+        <geometry>
+            <cylinder radius="${turntable_radius}" length="${turntable_height}"/>
+        </geometry>
+      </visual>
+
+      <collision>
+        <origin xyz="0 0 ${turntable_height / 2}" rpy="0 0 0"/>
+        <geometry>
+            <cylinder radius="${turntable_radius}" length="${turntable_height}"/>
+        </geometry>
+      </collision> 
+    </link>
+
+    <!-- (JOINT) TURNTABLE -> BICEP -->
+    <joint name="${name}_turntable_bicep_joint" type="revolute">
+      <parent link="${name}_turntable_link"/>
+      <child link="${name}_bicep_link"/>
+      <axis xyz="0 1 0"/>
+      <origin xyz="0 0 ${turntable_height + joint_offset}" rpy="0 0 0"/>
+      <limit lower="${bicep_min_angle * M_PI / 2}" upper="${bicep_max_angle * M_PI / 2}"
+             effort="75" velocity="${M_PI / 2}"/>
+    </joint>
+
+    <!-- (LINK) BICEP -->
+    <link name="${name}_bicep_link">
+      <inertial>
+        <mass value="${bicep_mass}"/>
+        <origin xyz="0 0 ${bicep_height / 2}" rpy="0 0 0"/>
+        <cuboid_inertia_def width="${bicep_width}" length="${bicep_length}" height="${bicep_height}"
+                            mass="${bicep_mass}"/>
+      </inertial>
+
+      <visual>
+        <origin xyz="0 0 ${bicep_height / 2}" rpy="0 0 0"/>
+        <geometry>
+          <box size="${bicep_width} ${bicep_length} ${bicep_height}"/>
+        </geometry>
+      </visual>
+
+      <collision>
+        <origin xyz="0 0 ${bicep_height / 2}" rpy="0 0 0"/>
+        <geometry>
+          <box size="${bicep_width} ${bicep_length} ${bicep_height}"/>
+        </geometry>
+      </collision> 
+    </link>
+
+    <!-- (JOINT) BICEP -> FOREARM -->
+    <joint name="${name}_bicep_forearm_joint" type="revolute">
+      <parent link="${name}_bicep_link"/>
+      <child link="${name}_forearm_link"/>
+      <axis xyz="0 1 0"/>
+      <origin xyz="0 0 ${bicep_height + joint_offset}" rpy="0 ${M_PI/2} 0"/>
+      <limit lower="${forearm_min_angle * M_PI / 2}" upper="${forearm_max_angle * M_PI / 2}"
+             effort="75" velocity="${M_PI / 2}"/>
+    </joint>
+
+    <!-- (LINK) FOREARM -->
+    <link name="${name}_forearm_link">
+      <inertial>
+        <mass value="${forearm_mass}"/>
+        <origin xyz="0 0 ${forearm_height / 2}" rpy="0 0 0"/>
+        <cuboid_inertia_def width="${forearm_width}" length="${forearm_length}" height="${forearm_height}"
+                            mass="${forearm_mass}"/>
+      </inertial>
+
+      <visual>
+        <origin xyz="0 0 ${forearm_height / 2}" rpy="0 0 0"/>
+        <geometry>
+          <box size="${forearm_width} ${forearm_length} ${forearm_height}"/>
+        </geometry>
+      </visual>
+
+      <collision>
+        <origin xyz="0 0 ${forearm_height / 2}" rpy="0 0 0"/>
+        <geometry>
+          <box size="${forearm_width} ${forearm_length} ${forearm_height}"/>
+        </geometry>
+      </collision> 
+    </link>
+
+    <!-- (JOINT) FOREARM -> WRIST -->
+    <joint name="${name}_forearm_wrist_joint" type="revolute">
+      <parent link="${name}_forearm_link"/>
+      <child link="${name}_wrist_link"/>
+      <axis xyz="0 1 0"/>
+      <origin xyz="0 0 ${forearm_height + joint_offset}" rpy="0 ${M_PI/2} 0"/>
+      <limit lower="${wrist_min_angle * M_PI / 2}" upper="${wrist_max_angle * M_PI / 2}"
+             effort="75" velocity="${M_PI / 2}"/>
+    </joint>
+
+    <!-- (LINK) WRIST -->
+    <!-- TODO(someshdaga): Divide wrist link into two links to actuate claw in 2 DOF (roll + pitch) -->
+    <link name="${name}_wrist_link">
+      <inertial>
+        <mass value="${wrist_mass}"/>
+        <origin xyz="0 0 ${wrist_height / 2}" rpy="0 0 0"/>
+        <cuboid_inertia_def width="${forearm_width}" length="${forearm_length}" height="${forearm_height}"
+                            mass="${forearm_mass}"/>
+      </inertial>
+
+      <visual>
+        <origin xyz="0 0 ${wrist_height / 2}" rpy="0 0 0"/>
+        <geometry>
+          <box size="${wrist_width} ${wrist_length} ${wrist_height}"/>
+        </geometry>
+      </visual>
+
+      <collision>
+        <origin xyz="0 0 ${wrist_height / 2}" rpy="0 0 0"/>
+        <geometry>
+          <box size="${wrist_width} ${wrist_length} ${wrist_height}"/>
+        </geometry>
+      </collision> 
+    </link>
+
+    <!-- (JOINT) WRIST -> CLAW -->
+    <joint name="${name}_wrist_claw_joint" type="revolute">
+      <parent link="${name}_wrist_link"/>
+      <child link="${name}_claw_link"/>
+      <axis xyz="0 1 0"/>
+      <origin xyz="0 0 ${wrist_height + joint_offset}" rpy="0 -${M_PI/2} 0"/>
+      <limit lower="${claw_pitch_min_angle * M_PI / 2}" upper="${claw_pitch_max_angle * M_PI / 2}"
+             effort="75" velocity="${M_PI / 2}"/>
+    </joint>
+
+    <!-- (LINK) CLAW -->
+    <link name="${name}_claw_link">
+      <inertial>
+        <mass value="${claw_mass}"/>
+        <origin xyz="0 0 ${claw_height / 2}" rpy="0 0 0"/>
+        <cuboid_inertia_def width="${claw_width}" length="${claw_length}" height="${claw_height}"
+                            mass="${claw_mass}"/>
+      </inertial>
+
+      <visual>
+        <origin xyz="0 0 ${claw_height / 2}" rpy="0 0 0"/>
+        <geometry>
+          <box size="${claw_width} ${claw_length} ${claw_height}"/>
+        </geometry>
+      </visual>
+
+      <collision>
+        <origin xyz="0 0 ${claw_height / 2}" rpy="0 0 0"/>
+        <geometry>
+          <box size="${claw_width} ${claw_length} ${claw_height}"/>
+        </geometry>
+      </collision> 
+    </link>
+
+    <xacro:arm_gazebo name="${name}"/>
+    <xacro:arm_transmission name="${name}"/>
+
+  </xacro:macro>
+</robot>

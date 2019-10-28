@@ -1,0 +1,25 @@
+<?xml version="1.0" ?>
+<launch>
+  <arg name="publish_joint_states"  default="true"/>
+  <arg name="use_joint_states_gui"  default="false"/>
+  <arg name="urdf_file"             default="$(find rover_description)/urdf/rover.urdf.xacro"/>
+  
+  <!-- Load the robot_description -->
+  <param name="robot_description"  command="xacro $(arg urdf_file)"/>
+
+  <group>
+    <remap from="joint_states" to="rover/joint_states"/>
+  
+    <!-- Publish joint states (Note: When using ros_control, this should be done by
+        the controller manager -->
+    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher"
+          if="$(arg publish_joint_states)" respawn="true">
+      <param name="use_gui" value="$(arg use_joint_states_gui)"/>
+    </node>
+
+    <!-- Publish TFs based on the joint states -->
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
+          respawn="true">
+    </node>
+  </group>
+</launch>

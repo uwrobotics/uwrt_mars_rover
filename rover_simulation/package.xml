@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>rover_simulation</name>
+  <version>0.0.0</version>
+  <description>Simulation tools for UW Mars Rover using RViz and Gazebo</description>
+
+  <maintainer email="s2daga@uwaterloo.ca">Somesh Daga</maintainer>
+  <license>MIT</license>
+  <author email="s2daga@uwaterloo.ca">Somesh Daga</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>roslaunch</build_depend>
+
+  <exec_depend>controller_manager</exec_depend>
+  <exec_depend>gazebo_ros</exec_depend>
+  <exec_depend>position_controllers</exec_depend>
+  <exec_depend>rover_description</exec_depend>
+
+  <export>
+  </export>
+</package>

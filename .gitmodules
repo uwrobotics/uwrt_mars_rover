@@ -1,0 +1,3 @@
+[submodule "flexbe_app"]
+	path = flexbe_app
+	url = https://github.com/FlexBE/flexbe_app.git

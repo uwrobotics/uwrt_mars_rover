@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<behavior name="Autonomous">
+
+	<executable package_path="rover_auto_flexbe_behaviors.autonomous_sm" class="AutonomousSM" />
+	<tagstring></tagstring>
+	<author>Hamza Mahdi</author>
+	<date>Tue Dec 10 2019</date>
+	<description>
+		rover auto prototype
+	</description>
+
+
+	<!-- Contained Behaviors -->
+
+	<!-- Available Parameters -->
+	<params>
+
+		<param type="text" name="gps_coord" default="" label="gps_coord" hint="Sets the gps_coord" />
+
+		<param type="numeric" name="time" default="0" label="time" hint="Sets the time">
+			<min value="0" />
+			<max value="1" />
+		</param>
+
+	</params>
+
+
+</behavior>

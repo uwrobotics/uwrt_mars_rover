@@ -7,7 +7,8 @@ from flexbe_core import EventState, Logger
 class move_forward(EventState):
 	'''
 	This should let the rover move forward for a couple seconds until it acquires GPS coordinates
-
+	use the following formula
+	https://www.igismap.com/formula-to-find-bearing-or-heading-angle-between-two-points-latitude-longitude/
 	interface: TBD
 	--
 	<=

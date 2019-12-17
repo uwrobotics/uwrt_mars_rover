@@ -1,0 +1,24 @@
+<?xml version="1.0" ?>
+<launch>
+  <arg name="sim" default="false"/>
+  <group unless="$(arg sim)">
+    <!-- The CAN device on which arm feedback/states are written to/from -->
+    <arg name="can_device" default="can0"/>
+    <!-- The CAN ID for can frames containing joints feedback for arm -->
+    <arg name="can_id"     default="1"/>
+  </group>
+
+  <!-- Load Joint Names for the arm -->
+  <rosparam command="load" file="$(find uwrt_arm_control)/config/joint_names.yaml"/>
+  <rosparam command="load" file="$(find uwrt_arm_control)/config/controllers.yaml"/>
+
+  <!-- Spawn the ros_control controllers -->
+  <node name="controller_spawner" pkg="controller_manager" type="spawner"
+        args="joint_state_controller position_trajectory_controller"
+        respawn="true" output="screen"/>
+
+  <!-- Run Real Interfaces -->
+  <group unless="$(arg sim)">
+    <!-- TODO(someshdaga): Launch node(s) for arm ros_control -->
+  </group>
+</launch>

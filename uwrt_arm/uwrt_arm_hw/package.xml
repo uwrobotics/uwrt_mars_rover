@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>uwrt_arm_hw</name>
+  <version>0.0.0</version>
+  <description>ROS Control Hardware Interfaces for Arm of UWRT Rover</description>
+
+  <maintainer email="s2daga@uwaterloo.ca">Somesh Daga</maintainer>
+  <license>MIT</license>
+  <author email="s2daga@uwaterloo.ca">Somesh Daga</author>
+  
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>gazebo_dev</build_depend>
+  <build_depend>roslint</build_depend>
+
+  <depend>angles</depend>
+  <depend>controller_manager</depend>
+  <depend>gazebo_ros_control</depend>
+  <depend>hardware_interface</depend>
+  <depend>joint_limits_interface</depend>
+  <depend>roscpp</depend>
+  <depend>transmission_interface</depend>
+  <depend>urdf</depend>
+
+  <export>
+  </export>
+</package>

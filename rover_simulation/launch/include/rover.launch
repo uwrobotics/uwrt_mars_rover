@@ -5,30 +5,8 @@
   <arg name="spawn_y"   default="0"/>
   <arg name="spawn_yaw" default="0"/>
 
-  <!-- ros_control Parameters -->
-  <arg name="rover_control_config"
-       default="$(find rover_simulation)/config/rover_control.yaml"/>
-
-  <!-- Load ros_control configurations -->
-  <rosparam file="$(arg rover_control_config)" command="load"/>
-
   <!-- Launch the Robot/Joint State Publishers and add the Robot Description to the Parameter Server -->
-  <include file="$(find rover_description)/launch/description.launch">
-    <arg name="publish_joint_states" value="false"/>
-  </include>
-
-  <!-- TODO(someshdaga): Move control code to a separate package -->
-  <!-- Publish Joint States and Load ros_control Controllers -->
-  <!-- NOTE: Namespace should match the one defined for the
-             gazebo_ros_control plugin defined in the urdf -->
-  <node name="controller_spawner" pkg="controller_manager" type="spawner"
-        respawn="true" output="screen"
-        ns="rover"
-        args="joint_state_controller
-              arm_turntable_bicep_joint_controller
-              arm_bicep_forearm_joint_controller
-              arm_forearm_wrist_joint_controller
-              arm_wrist_claw_joint_controller"/>
+  <include file="$(find rover_description)/launch/description.launch"/>
 
   <!-- Spawn the robot in Gazebo -->
   <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model"

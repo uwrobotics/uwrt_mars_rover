@@ -3,9 +3,14 @@ project(rover_description)
 
 add_compile_options(-std=c++11)
 
-find_package(catkin REQUIRED)
+find_package(catkin REQUIRED COMPONENTS
+  uwrt_arm_hw
+)
 
-catkin_package()
+catkin_package(
+  CATKIN_DEPENDS
+    uwrt_arm_hw
+)
 
 install(
   DIRECTORY

@@ -4,8 +4,8 @@
   <xacro:macro name="arm_gazebo" params="name">
 
     <gazebo>
-      <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
-        <robotNamespace>/rover</robotNamespace>
+      <plugin name="uwrt_arm_hw" filename="libgazebo_uwrt_arm_hw.so">
+        <robotNamespace>/</robotNamespace>
       </plugin>
     </gazebo>
 

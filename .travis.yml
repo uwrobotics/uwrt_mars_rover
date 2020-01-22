@@ -30,7 +30,7 @@ env:
     - CATKIN_LINT=pedantic
   matrix: # each line is a job
     # Format Check Job
-    - CLANG_FORMAT_CHECK=file
+    - ROS_DISTRO="melodic" CLANG_FORMAT_CHECK=file
 
     # Build Jobs
     - ROS_DISTRO="melodic"

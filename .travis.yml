@@ -1,19 +1,35 @@
-sudo: required
+# This config uses industrial_ci (https://github.com/ros-industrial/industrial_ci.git).
+# For troubleshooting, see readme (https://github.com/ros-industrial/industrial_ci/blob/master/README.rst)
 
-language: cpp
+language: generic # optional, just removes the language badge
 
 services:
   - docker
 
+notifications:
+  email:
+    recipients:
+      - melvin.mc.wang@gmail.com
+    on_success: change #[always|never|change] # default: change
+    on_failure: change #[always|never|change] # default: always
+
+git:
+  quiet: true # optional, silences the cloning of the target repository
+
+# configure the build environment(s)
+# https://github.com/ros-industrial/industrial_ci/blob/master/doc/index.rst#variables-you-can-configure
 env:
-  global:
-    - toolset_branch: master
-    - server_type: travis
-    - ros_release_name: melodic
-    - ubuntu_version_name: bionic
-    - used_modules: check_cache,code_style_check,check_build,all_tests,benchmarking,check_install,build_debs,check_deb_make,code_coverage,codecov_tool
-    - remote_shell_script: 'https://raw.githubusercontent.com/shadow-robot/sr-build-tools/$toolset_branch/bin/sr-run-ci-build.sh'
+  global: # global settings for all jobs
+    - ROS_REPO=ros
+#    - CLANG_FORMAT_CHECK=file
+    - CLANG_TIDY=pedantic
+    - CATKIN_LINT=pedantic
+  matrix: # each line is a job
+    - ROS_DISTRO="melodic"
+    - ROS_DISTRO="melodic" ROS_REPO=ros-testing # overrides the global
 
+# clone and run industrial_ci
+install:
+  - git clone --quiet --depth 1 https://github.com/ros-industrial/industrial_ci.git .industrial_ci -b master
 script:
-  - curl -s "$( echo "$remote_shell_script" | sed 's/#/%23/g' )" | bash -x /dev/stdin "$toolset_branch" $server_type $used_modules
-
+  - .industrial_ci/travis.sh

@@ -3,7 +3,7 @@
 
   <name>uwrt_mars_rover</name>
   <version>0.0.0</version>
-  <description>The uwrt_mars_rover package</description>
+  <description>Metapackage containing all of UWRT's packages for our URC Mars Rover</description>
 
   <maintainer email="melvin.mc.wang@gmail.com">Melvin Wang</maintainer>
 

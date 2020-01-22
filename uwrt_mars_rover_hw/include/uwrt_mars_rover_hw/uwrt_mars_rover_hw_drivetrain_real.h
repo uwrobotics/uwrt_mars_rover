@@ -2,9 +2,9 @@
 
 #pragma once
 
-#include <uwrt_rover_hw_drivetrain.h>
+#include <uwrt_mars_rover_hw/uwrt_mars_rover_hw_drivetrain.h>
 
-namespace uwrt_rover_hw {
+namespace uwrt_mars_rover_hw {
 
 class UWRTRoverHWDrivetrainReal : public UWRTRoverHWDrivetrain {
  public:
@@ -13,4 +13,4 @@ class UWRTRoverHWDrivetrainReal : public UWRTRoverHWDrivetrain {
   void write(const ros::Time& time, const ros::Duration& period) override;
 };
 
-}  // namespace uwrt_rover_hw
+}  // namespace uwrt_mars_rover_hw

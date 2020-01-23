@@ -12,28 +12,28 @@ bool UWRTRoverHWDrivetrain::init(ros::NodeHandle& root_nh, ros::NodeHandle& robo
 
   // connect and register the joint position_ interface
   hardware_interface::JointHandle left_drive_position__handle(joint_state_interface_.getHandle("LeftDriveJoint"),
-                                                             &command_[0]);
+                                                              &command_[0]);
   joint_position_interface_.registerHandle(left_drive_position__handle);
   hardware_interface::JointHandle right_drive_position__handle(joint_state_interface_.getHandle("RightDriveJoint"),
-                                                              &command_[1]);
+                                                               &command_[1]);
   joint_position_interface_.registerHandle(right_drive_position__handle);
   registerInterface(&joint_position_interface_);
 
   // connect and register the joint velocity_ interface
   hardware_interface::JointHandle left_drive_velocity__handle(joint_state_interface_.getHandle("LeftDriveJoint"),
-                                                             &command_[0]);
+                                                              &command_[0]);
   joint_velocity_interface_.registerHandle(left_drive_velocity__handle);
   hardware_interface::JointHandle right_drive_velocity__handle(joint_state_interface_.getHandle("RightDriveJoint"),
-                                                              &command_[1]);
+                                                               &command_[1]);
   joint_velocity_interface_.registerHandle(right_drive_velocity__handle);
   registerInterface(&joint_velocity_interface_);
 
   // connect and register the joint effort_ interface
   hardware_interface::JointHandle left_drive_effort__handle(joint_state_interface_.getHandle("LeftDriveJoint"),
-                                                           &command_[0]);
+                                                            &command_[0]);
   joint_effort_interface_.registerHandle(left_drive_effort__handle);
   hardware_interface::JointHandle right_drive_effort__handle(joint_state_interface_.getHandle("RightDriveJoint"),
-                                                            &command_[1]);
+                                                             &command_[1]);
   joint_effort_interface_.registerHandle(right_drive_effort__handle);
   registerInterface(&joint_effort_interface_);
 

@@ -11,7 +11,9 @@ class UWRTRoverHWDrivetrain : public hardware_interface::RobotHW {
   explicit UWRTRoverHWDrivetrain() : UWRTRoverHWDrivetrain("uwrt_mars_rover_hw") {}
 
   bool init(ros::NodeHandle& root_nh, ros::NodeHandle& robot_hw_nh) override;
-  inline std::string getName() const { return name_; }
+  inline std::string getName() const {
+    return name_;
+  }
 
  protected:
   explicit UWRTRoverHWDrivetrain(const std::string& name) : name_(std::move(name)) {}

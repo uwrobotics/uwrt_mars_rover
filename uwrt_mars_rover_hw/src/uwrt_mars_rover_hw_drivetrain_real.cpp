@@ -5,6 +5,9 @@ bool UWRTRoverHWDrivetrainReal::init(ros::NodeHandle& root_nh, ros::NodeHandle& 
   if (UWRTRoverHWDrivetrain::init(root_nh, robot_hw_nh)) {
     return false;
   }
+
+  // TODO: socketcan
+  return true;
 }
 
 // TODO: Implement

@@ -3,7 +3,9 @@ project(uwrt_mars_rover_hw)
 
 ## Find catkin macros and libraries
 find_package(catkin REQUIRED COMPONENTS
+        controller_manager
         hardware_interface
+        joint_limits_interface
         roscpp
         )
 
@@ -22,7 +24,9 @@ catkin_package(
         LIBRARIES
         ${PROJECT_NAME}
         CATKIN_DEPENDS
+        controller_manager
         hardware_interface
+        joint_limits_interface
         roscpp
 )
 
@@ -57,6 +61,7 @@ add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catk
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(${PROJECT_NAME}_node
+        ${PROJECT_NAME}
         ${catkin_LIBRARIES}
         )
 

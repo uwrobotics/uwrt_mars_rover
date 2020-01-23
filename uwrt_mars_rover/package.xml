@@ -1,20 +1,20 @@
 <?xml version="1.0"?>
 <package format="2">
 
-  <name>uwrt_mars_rover</name>
-  <version>0.0.0</version>
-  <description>Metapackage containing all of UWRT's packages for our URC Mars Rover</description>
+    <name>uwrt_mars_rover</name>
+    <version>0.0.0</version>
+    <description>Metapackage containing all of UWRT's packages for our URC Mars Rover</description>
 
-  <maintainer email="melvin.mc.wang@gmail.com">Melvin Wang</maintainer>
+    <maintainer email="melvin.mc.wang@gmail.com">Melvin Wang</maintainer>
 
-  <license>MIT</license>
+    <license>MIT</license>
 
-  <buildtool_depend>catkin</buildtool_depend>
+    <buildtool_depend>catkin</buildtool_depend>
 
-  <exec_depend>uwrt_mars_rover_msgs</exec_depend>
+    <exec_depend>uwrt_mars_rover_msgs</exec_depend>
 
-  <export>
-    <metapackage/>
-  </export>
+    <export>
+        <metapackage/>
+    </export>
 
 </package>

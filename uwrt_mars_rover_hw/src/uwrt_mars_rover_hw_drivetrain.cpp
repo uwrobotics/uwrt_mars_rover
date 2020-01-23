@@ -11,9 +11,9 @@ bool UWRTRoverHWDrivetrain::init(ros::NodeHandle& root_nh, ros::NodeHandle& robo
   registerInterface(&joint_state_interface_);
 
   // connect and register the joint position_ interface
-  hardware_interface::JointHandle left_drive_position__handle(joint_state_interface_.getHandle("LeftDriveJoint"),
-                                                              &command_[0]);
-  joint_position_interface_.registerHandle(left_drive_position__handle);
+  hardware_interface::JointHandle left_drive_position_handle(joint_state_interface_.getHandle("LeftDriveJoint"),
+                                                             &command_[0]);
+  joint_position_interface_.registerHandle(left_drive_position_handle);
   hardware_interface::JointHandle right_drive_position__handle(joint_state_interface_.getHandle("RightDriveJoint"),
                                                                &command_[1]);
   joint_position_interface_.registerHandle(right_drive_position__handle);

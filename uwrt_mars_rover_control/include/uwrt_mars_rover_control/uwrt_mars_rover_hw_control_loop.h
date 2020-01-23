@@ -9,7 +9,11 @@
 #include <memory>
 #include <string>
 
+<<<<<<< HEAD:uwrt_mars_rover_control/include/uwrt_mars_rover_control/uwrt_mars_rover_hw_control_loop.h
 namespace uwrt_mars_rover_control {
+=======
+namespace uwrt_mars_rover_hw {
+>>>>>>> 4e2498a... initial science_hw base class implementation:uwrt_mars_rover_hw/include/uwrt_mars_rover_hw/uwrt_mars_rover_hw_control_loop.h
 
 class MarsRoverHWControlLoop {
  public:

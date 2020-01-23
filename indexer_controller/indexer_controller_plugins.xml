@@ -1,0 +1,12 @@
+<library path="lib/libindexer_controller">
+  <class name="indexer_controller/IndexerStateController" type="indexer_controller::IndexerStateController" base_class_type="controller_interface::ControllerBase">
+    <description>
+      Read and publish info from the indexers
+    </description>
+  </class>
+  <class name="indexer_controller/IndexerCommandController" type="indexer_controller::IndexerCommandController" base_class_type="controller_interface::ControllerBase">
+    <description>
+      Command an indexer
+    </description>
+  </class>
+</library>

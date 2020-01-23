@@ -16,4 +16,6 @@
 
   <depend>hardware_interface</depend>
 
+    <depend>indexer_controller</depend>
+
 </package>

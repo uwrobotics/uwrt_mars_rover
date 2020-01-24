@@ -25,21 +25,16 @@ bool MarsRoverHWControlLoop::init() {
   return true;
 }
 
-void MarsRoverHWControlLoop::update(const ros::Time& time_now, bool update_controllers) {
-  ros::Duration rw_period = time_now - last_rw_time_;
-  last_rw_time_ = time_now;
+void MarsRoverHWControlLoop::update(const ros::Time& time_now) {
+  ros::Duration control_loop_period = time_now - last_control_loop_time_;
+  last_control_loop_time_ = time_now;
 
-  rover_hw_->read(time_now, rw_period);
+  rover_hw_->read(time_now, control_loop_period);
 
-  if (update_controllers) {
-    ros::Duration update_period = time_now - last_update_time_;
-    last_update_time_ = time_now;
+  bool reset_controllers = (last_control_loop_time_.toSec() > controller_watchdog_timeout_);
+  controller_manager_->update(time_now, control_loop_period, reset_controllers);
 
-    bool reset_controllers = (update_period.toSec() > controller_watchdog_timeout_);
-    controller_manager_->update(time_now, update_period, reset_controllers);
-  }
-
-  rover_hw_->write(time_now, rw_period);
+  rover_hw_->write(time_now, control_loop_period);
 }
 
 }  // namespace uwrt_mars_rover_hw

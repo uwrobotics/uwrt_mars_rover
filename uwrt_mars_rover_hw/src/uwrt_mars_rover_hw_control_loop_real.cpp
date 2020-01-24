@@ -9,17 +9,17 @@ MarsRoverHWControlLoopReal::MarsRoverHWControlLoopReal(const ros::NodeHandle& nh
   }
 
   // Get current time for initial update
-  ros::ros_steadytime(last_update_time_.sec, last_update_time_.nsec);
+  ros::ros_steadytime(last_control_loop_time_.sec, last_control_loop_time_.nsec);
 }
 
 void MarsRoverHWControlLoopReal::runForeverBlocking() {
-  ros::Time time_now;
+  ros::Time current_time;
   ros::Rate rate(control_freq_);
 
   while (ros::ok()) {
     // Use Monotonic Time
-    ros::ros_steadytime(time_now.sec, time_now.nsec);
-    this->update(time_now);
+    ros::ros_steadytime(current_time.sec, current_time.nsec);
+    this->update(current_time);
     rate.sleep();
   }
 }

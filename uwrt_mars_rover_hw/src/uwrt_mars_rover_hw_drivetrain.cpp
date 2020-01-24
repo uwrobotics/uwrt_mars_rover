@@ -40,4 +40,6 @@ bool UWRTRoverHWDrivetrain::init(ros::NodeHandle& root_nh, ros::NodeHandle& robo
   return true;
 }
 
+// Todo: doSWITCH
+
 }  // namespace uwrt_mars_rover_hw

@@ -6,7 +6,7 @@ bool UWRTRoverHWDrivetrainReal::init(ros::NodeHandle& root_nh, ros::NodeHandle& 
     return false;
   }
 
-  // TODO: socketcan
+  // TODO: roboteq driver implementation
   return true;
 }
 

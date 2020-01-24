@@ -16,5 +16,7 @@ int main(int argc, char **argv) {
   uwrt_mars_rover_hw::MarsRoverHWControlLoopReal rover_hw_control_loop_real(nh);
   rover_hw_control_loop_real.runForeverBlocking();
 
+  async_spinner.stop();
+
   return EXIT_SUCCESS;
 }

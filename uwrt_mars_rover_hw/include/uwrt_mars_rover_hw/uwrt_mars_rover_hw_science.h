@@ -21,7 +21,7 @@ class UWRTRoverHWScience : public hardware_interface::RobotHW {
     enum class ScienceCmdType { NONE, POS, VEL, EFF };
 
     double data;
-    Type type;
+    ScienceCmdType type;
   };
 
   // Overrides

@@ -6,7 +6,7 @@ bool UWRTRoverHWScience::init(ros::NodeHandle& root_nh, ros::NodeHandle& robot_h
   // TODO (wraftus) load in the joints
 
   // connect and register the state and command interfaces
-  for(const auto& name : joint_name_){
+  for (const auto& name : joint_name_) {
     ScienceJointState joint_state = joint_states_[name].second;
     ScienceJointCmd joint_cmd = joint_cmds_[name].second;
 
@@ -17,11 +17,11 @@ bool UWRTRoverHWScience::init(ros::NodeHandle& root_nh, ros::NodeHandle& robot_h
     // joint position interface
     hardware_interface::JointHandle pos_handle(joint_state_interface_.getHandle(name), &joint_cmd.data);
     joint_pos_interface.registerHandle(pos_handle);
-    
+
     // joint position interface
     hardware_interface::JointHandle vel_handle(joint_state_interface_.getHandle(name), &joint_cmd.data);
     joint_pos_interface.registerHandle(vel_handle);
-    
+
     // joint effort interface
     hardware_interface::JointHandle eff_handle(joint_state_interface_.getHandle(name), &joint_cmd.data);
     joint_pos_interface.registerHandle(eff_handle);
@@ -68,7 +68,6 @@ void UWRTRoverHWScience::doSwitch(const std::list<hardware_interface::Controller
       }
     }
   }
-
 }
 
-} // namespace uwrt_mars_rover_hw
+}  // namespace uwrt_mars_rover_hw

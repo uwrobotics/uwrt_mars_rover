@@ -7,7 +7,7 @@ bool UWRTRoverHWScienceReal::init(ros::NodeHandle& root_nh, ros::NodeHandle& rob
   }
 
   // TODO (wraftus) init socketcan
-  
+
   return true;
 }
 
@@ -16,7 +16,7 @@ void UWRTRoverHWDrivetrainReal::read(const ros::Time& time, const ros::Duration&
 }
 // TODO: Implement
 void UWRTRoverHWDrivetrainReal::write(const ros::Time& time, const ros::Duration& period) {
-  //TODO (wraftus) send new commands from joint_cmds_ to the science board
+  // TODO (wraftus) send new commands from joint_cmds_ to the science board
 }
 
-} // namespace uwrt_mars_rover_hw
+}  // namespace uwrt_mars_rover_hw

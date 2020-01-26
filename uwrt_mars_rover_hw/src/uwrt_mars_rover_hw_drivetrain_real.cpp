@@ -2,7 +2,7 @@
 
 namespace uwrt_mars_rover_hw {
 bool UWRTRoverHWDrivetrainReal::init(ros::NodeHandle& root_nh, ros::NodeHandle& robot_hw_nh) {
-  if (UWRTRoverHWDrivetrain::init(root_nh, robot_hw_nh)) {
+  if (!UWRTRoverHWDrivetrain::init(root_nh, robot_hw_nh)) {
     return false;
   }
 

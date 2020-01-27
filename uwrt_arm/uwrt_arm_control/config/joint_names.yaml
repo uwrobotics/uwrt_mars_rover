@@ -1,1 +1,1 @@
-joint_names: ["arm_turntable_bicep_joint", "arm_bicep_forearm_joint", "arm_forearm_wrist_joint", "arm_wrist_claw_joint"]
+joint_names: ["arm_base_turntable_joint", "arm_shoulder_joint", "arm_elbow_joint", "arm_wrist_roll_joint", "arm_wrist_pitch_joint"]

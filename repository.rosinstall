@@ -1,0 +1,11 @@
+# .rosinstall file used by wstool.
+# Use this to download source-code dependencies.
+# This should ONLY be used if the dependency is not available on index.ros.org. 
+- git:
+    local-name: moveit
+    uri: https://github.com/ros-planning/moveit.git
+    version: 0f403d16b2b86a569e83b53065caa1276ea0aa03
+- git:
+    local-name: moveit_msgs
+    uri: https://github.com/ros-planning/moveit_msgs.git
+    version: 9d442d46aa269c7c3ba8ef76b3ff5147022cd774

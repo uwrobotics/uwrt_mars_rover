@@ -96,14 +96,13 @@ void ArmHWSim::write(const ros::Time& time, const ros::Duration& period)
     switch (joint_control_method_[i])
     {
       case ControlMethod::POSITION:
-        // ROS_ERROR("Position state for Joint %d is %d", i, joint_position_[i]);
-        // ROS_ERROR("Position Command for Joint %d is %d", i, joint_position_command_[i]);
         sim_joints_[i]->SetPosition(0, joint_position_command_[i], true);
         break;
       case ControlMethod::VELOCITY:
         if (gz_physics_type_.compare("ode") == 0)
         {
           sim_joints_[i]->SetParam("vel", 0, joint_velocity_command_[i]);
+          sim_joints_[i]->SetVelocity(0, joint_velocity_command_[i]);
         }
         else
         {

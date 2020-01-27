@@ -29,7 +29,7 @@ ArmHW::ArmHW(const std::string& name,
              const std::string& urdf_str)
   : name_(std::move(name)),
     urdf_string_(std::move(urdf_str)),
-    num_joints_(4)
+    num_joints_(5)
 {
   joint_types_.resize(num_joints_);
   joint_control_method_.resize(num_joints_);

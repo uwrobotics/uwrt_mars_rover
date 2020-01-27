@@ -1,6 +1,9 @@
 <?xml version="1.0" ?>
 <launch>
-  <arg name="sim" default="false"/>
+  <arg name="debug"           default="true"/>
+  <arg name="sim"             default="false"/>
+  <arg name="moveit_pipeline" default="ompl"/>
+
   <group unless="$(arg sim)">
     <!-- The CAN device on which arm feedback/states are written to/from -->
     <arg name="can_device" default="can0"/>
@@ -10,12 +13,34 @@
 
   <!-- Load Joint Names for the arm -->
   <rosparam command="load" file="$(find uwrt_arm_control)/config/joint_names.yaml"/>
-  <rosparam command="load" file="$(find uwrt_arm_control)/config/controllers.yaml"/>
+  <!-- Load the ros_controller controller parameters listed in the moveit generated configurations -->
+  <rosparam command="load" file="$(find uwrt_arm_control)/config/ros_controllers.yaml"/>
 
-  <!-- Spawn the ros_control controllers -->
+  <!-- Spawn the ros_control controllers (enabled at startup) -->
   <node name="controller_spawner" pkg="controller_manager" type="spawner"
-        args="joint_state_controller position_trajectory_controller"
+        args="joint_state_controller
+              arm_velocity_controller"
         respawn="true" output="screen"/>
+
+  <!-- Spawn other ros_control controllers (disabled at startup) -->
+  <node name="controller_spawner_stopped" pkg="controller_manager" type="spawner"
+        args="--stopped arm_trajectory_controller arm_position_controller"
+        respawn="true" output="screen"/>
+
+  <!-- Run the main MoveIt! executable -->
+  <!-- For some reason, launching the move group through this launch file causes some weird issues.
+       Not sure if there are some race conditions. To order of launching right now is:
+        - Launch this file to spawn the ros controller manager
+        - Launch real hardware driver / simulation (gazebo)
+        - Launch the move group launch file afterwards
+        TODO(someshdaga): Figure out a fix for this weird behaviour -->
+  <!-- <include file="$(find uwrt_arm_control)/launch/moveit/move_group.launch">
+    <arg name="allow_trajectory_execution" value="true"/>
+    <arg name="load_robot_description"     value="true"/>
+    <arg name="info" value="true"/>
+    <arg name="debug" value="$(arg debug)"/>
+    <arg name="pipeline" value="$(arg moveit_pipeline)"/>
+  </include> -->
 
   <!-- Run Real Interfaces -->
   <group unless="$(arg sim)">

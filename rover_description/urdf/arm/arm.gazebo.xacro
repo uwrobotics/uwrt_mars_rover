@@ -15,6 +15,12 @@
       <selfCollide>true</selfCollide>
     </gazebo>
 
+    <gazebo reference="${name}_shoulder_revolute_link">
+      <static>false</static>
+      <gravity>true</gravity>
+      <selfCollide>true</selfCollide>
+    </gazebo>
+    
     <gazebo reference="${name}_bicep_link">
       <static>false</static>
       <gravity>true</gravity>

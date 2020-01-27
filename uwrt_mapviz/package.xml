@@ -11,9 +11,9 @@
   <buildtool_depend>catkin</buildtool_depend>
 
 
-  <build_depend>mapviz</build_depend>
-  <build_depend>nmea_msgs</build_depend>
-  <build_depend>nmea_navsat_driver</build_depend>
+  <exec_depend>mapviz</exec_depend>
+  <exec_depend>nmea_msgs</exec_depend>
+  <exec_depend>nmea_navsat_driver</exec_depend>
   
 
 </package>

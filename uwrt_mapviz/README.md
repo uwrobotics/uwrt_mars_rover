@@ -4,11 +4,6 @@
 
 ## Installing mapviz
 
-### Install from Ros-binaries
-```
-$ sudo apt-get install ros-kinetic-mapviz ros-kinetic-mapviz-plugins ros-kinetic-tile-map
-```
-
 #############################################################
 
 **WARNING1:** If you have any error after rosdep install like:
@@ -26,11 +21,6 @@ Err:3 http:/
 
 ## Installing USB GPS Device
 
-### Installing from ros binaries
-```
-$ sudo apt-get install ros-kinetic-nmea-msgs
-$ sudo apt-get install ros-kinetic-nmea-navsat-driver
-```
 
 **WARNING:** If it gives error, no devices named /dev/ttyUSB0, then try to check whether your system detects the plugged GPS. 
 ```

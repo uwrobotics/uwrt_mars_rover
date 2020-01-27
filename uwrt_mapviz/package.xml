@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>uwrt_mapviz</name>
+  <version>0.0.0</version>
+  <description>Package containing mapviz and nmea_navsat packages to use mapviz with GPS data</description>
+
+  <maintainer email="sami.alperen.akgun@gmail.com">Sami Alperen Akgun</maintainer>
+
+  <license>MIT</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+
+  <build_depend>mapviz</build_depend>
+  <build_depend>nmea_msgs</build_depend>
+  <build_depend>nmea_navsat_driver</build_depend>
+  
+
+</package>

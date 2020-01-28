@@ -10,11 +10,19 @@ jobs:
           # Formatting Jobs
           - {ROS_DISTRO: melodic, ROS_REPO: main, CLANG_FORMAT_CHECK: file}
 
-          # Build Jobs
-          - {ROS_DISTRO: melodic, ROS_REPO: main, CATKIN_LINT: pedantic, CLANG_TIDY: pedantic}
-          - {ROS_DISTRO: melodic, ROS_REPO: testing, CATKIN_LINT: pedantic, CLANG_TIDY: pedantic}
-    runs-on: ubuntu-latest
+          # amd64 Build Jobs
+          - {ROS_DISTRO: melodic, ROS_REPO: main, CATKIN_LINT: pedantic, CLANG_TIDY: pedantic, UPSTREAM_WORKSPACE: "uwrt.rosinstall"}
+          - {ROS_DISTRO: melodic, ROS_REPO: testing, UPSTREAM_WORKSPACE: "uwrt.rosinstall"}
+
+          # Jetson Build Jobs
+          - {DOCKER_IMAGE: "arm64v8/ros:melodic-perception", ADDITIONAL_DEBS: "build-essential python-catkin-tools python-pip", BEFORE_INIT: "echo -e This test should run on aarch64. It is running on: $(uname -p) && [[ $(uname -p) == aarch64 ]]", UPSTREAM_WORKSPACE: "uwrt.rosinstall"}
+
+    runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v1
+      - name: Install Qemu and Start Qemu Docker
+        run: |
+          sudo apt install qemu-user-static
+          docker run --rm --privileged multiarch/qemu-user-static --reset --credential yes --persistent yes
       - uses: 'ros-industrial/industrial_ci@master'
         env: ${{matrix.env}}

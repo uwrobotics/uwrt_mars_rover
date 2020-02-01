@@ -38,7 +38,11 @@ void MarsRoverHWControlLoop::update(const ros::Time& time_now) {
 
   rover_hw_->read(time_now, control_loop_period);
 
-  bool reset_controllers = (last_control_loop_time_.toSec() > controller_watchdog_timeout_);
+  bool reset_controllers = (control_loop_period.toSec() > controller_watchdog_timeout_);
+  ROS_WARN_STREAM_COND_NAMED(reset_controllers, name_,
+                             "Control loop period exceeded watchdog timeout by "
+                                 << (control_loop_period.toSec() - controller_watchdog_timeout_)
+                                 << " seconds. Restarting controllers.");
   controller_manager_->update(time_now, control_loop_period, reset_controllers);
 
   rover_hw_->write(time_now, control_loop_period);

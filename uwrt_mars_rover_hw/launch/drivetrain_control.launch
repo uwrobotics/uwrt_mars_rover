@@ -6,9 +6,9 @@
         <node name="uwrt_mars_rover_hw_node" pkg="uwrt_mars_rover_hw" type="node"
               output="screen"/>
         <!-- load the controllers -->
-        <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
-              output="screen"
-              args="rover_state_controller"/>
+        <node name="controller_spawner_test" pkg="controller_manager" type="spawner" respawn="false"
+              output="screen" args="rover_state_controller
+                                    drivetrain_velocity_controller"/>
 
 
         <!--    &lt;!&ndash; convert joint states to TF transforms for rviz, etc &ndash;&gt;-->

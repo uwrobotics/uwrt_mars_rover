@@ -21,8 +21,10 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
         INCLUDE_DIRS
         include
+        drivers/roboteq_driver/include
         LIBRARIES
         ${PROJECT_NAME}
+        roboteq_driver
         CATKIN_DEPENDS
         controller_manager
         hardware_interface
@@ -38,6 +40,7 @@ catkin_package(
 ## Your package locations should be listed before other locations
 include_directories(
         include
+        drivers/roboteq_driver/include
         ${catkin_INCLUDE_DIRS}
 )
 
@@ -47,7 +50,11 @@ add_library(${PROJECT_NAME}
         src/${PROJECT_NAME}_control_loop_real.cpp
         src/${PROJECT_NAME}_drivetrain.cpp
         src/${PROJECT_NAME}_drivetrain_real.cpp
+        )
 
+add_library(roboteq_driver
+        drivers/roboteq_driver/src/roboteq_controller.cpp
+        drivers/roboteq_driver/src/canopen_comm.cpp
         )
 
 ## Declare a C++ executable
@@ -62,6 +69,7 @@ add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catk
 ## Specify libraries to link a library or executable target against
 target_link_libraries(${PROJECT_NAME}_node
         ${PROJECT_NAME}
+        roboteq_driver
         ${catkin_LIBRARIES}
         )
 

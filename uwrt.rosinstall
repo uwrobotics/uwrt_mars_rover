@@ -2,7 +2,8 @@
 # Use this to download source-code dependencies.
 # This should ONLY be used if the dependency is not available on index.ros.org. 
 
-- git:
-    uri: https://github.com/uwrobotics/roboteq_driver.git
-    local-name: uwrt_mars_rover_hw/drivers/roboteq_driver
-    version: 'basic_implementation'
+- git: #CI Fails when this file is empty. please remove this entry once there is another entry in this file
+    uri: https://github.com/ros/std_msgs.git
+    local-name: ros/std_msgs
+    version: 0.5.12
+

@@ -15,16 +15,16 @@ bool UWRTRoverHWDrivetrainReal::init(ros::NodeHandle& root_nh, ros::NodeHandle& 
   return true;
 }
 
-void UWRTRoverHWDrivetrainReal::read(const ros::Time& time, const ros::Duration& period) {
+void UWRTRoverHWDrivetrainReal::read(const ros::Time& /*time*/, const ros::Duration& /*period*/) {
   for (const auto& joint_name : joint_names_) {
     // TODO: change to use tpdos
-    joint_states_[joint_name].position = motor_controller_->ReadAbsoluteEncoderCount(joint_roboteq_index_[joint_name]);
-    joint_states_[joint_name].velocity = motor_controller_->ReadEncoderMotorSpeed(joint_roboteq_index_[joint_name]);
-    joint_states_[joint_name].effort = motor_controller_->ReadMotorAmps(joint_roboteq_index_[joint_name]) / 10.0;
+    joint_states[joint_name].position = motor_controller_->readAbsoluteEncoderCount(joint_roboteq_index_[joint_name]);
+    joint_states[joint_name].velocity = motor_controller_->readEncoderMotorSpeed(joint_roboteq_index_[joint_name]);
+    joint_states[joint_name].effort = motor_controller_->readMotorAmps(joint_roboteq_index_[joint_name]) / 10.0;
   }
 }
 
-void UWRTRoverHWDrivetrainReal::write(const ros::Time& time, const ros::Duration& period) {
+void UWRTRoverHWDrivetrainReal::write(const ros::Time& /*time*/, const ros::Duration& /*period*/) {
   for (const auto& joint_name : joint_names_) {
     bool successful_joint_write = false;
     switch (joint_commands_[joint_name].type) {
@@ -34,12 +34,12 @@ void UWRTRoverHWDrivetrainReal::write(const ros::Time& time, const ros::Duration
 
       case UWRTRoverHWDrivetrain::DrivetrainJointCommand::Type::POSITION:
         successful_joint_write =
-            motor_controller_->SetPosition(joint_commands_[joint_name].data, joint_roboteq_index_[joint_name]);
+            motor_controller_->setPosition(joint_commands_[joint_name].data, joint_roboteq_index_[joint_name]);
         break;
 
       case UWRTRoverHWDrivetrain::DrivetrainJointCommand::Type::VELOCITY:
         successful_joint_write =
-            motor_controller_->SetVelocity(joint_commands_[joint_name].data, joint_roboteq_index_[joint_name]);
+            motor_controller_->setVelocity(joint_commands_[joint_name].data, joint_roboteq_index_[joint_name]);
         break;
 
       case UWRTRoverHWDrivetrain::DrivetrainJointCommand::Type::EFFORT:

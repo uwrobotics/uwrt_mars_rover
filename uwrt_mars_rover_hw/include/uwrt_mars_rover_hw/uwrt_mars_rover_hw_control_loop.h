@@ -30,8 +30,8 @@ class MarsRoverHWControlLoop {
   std::unique_ptr<controller_manager::ControllerManager> controller_manager_;
 
   ros::Time last_control_loop_time_;
-  double controller_watchdog_timeout_;
-  double control_freq_;
+  double controller_watchdog_timeout_{0};
+  double control_freq_{0};
 };
 
 }  // namespace uwrt_mars_rover_hw

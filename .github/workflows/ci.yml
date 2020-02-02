@@ -31,6 +31,7 @@ jobs:
           git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1
 
       - name: Install Qemu and Start Qemu Docker
+        shell: bash
         run: |
           sudo apt install qemu-user-static
           docker run --rm --privileged multiarch/qemu-user-static --reset --credential yes --persistent yes

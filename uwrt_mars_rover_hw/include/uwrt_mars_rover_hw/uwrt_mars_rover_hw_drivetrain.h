@@ -49,7 +49,7 @@ class UWRTRoverHWDrivetrain : public hardware_interface::RobotHW {
   hardware_interface::EffortJointInterface joint_effort_interface_;
 
   // Joint states and commands associated with joint names
-  std::map<std::string, DrivetrainJointState> joint_states_;
+  std::map<std::string, DrivetrainJointState> joint_states;
   std::map<std::string, DrivetrainJointCommand> joint_commands_;
 };
 

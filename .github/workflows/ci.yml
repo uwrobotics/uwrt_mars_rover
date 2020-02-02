@@ -20,10 +20,21 @@ jobs:
 
     runs-on: ubuntu-18.04
     steps:
-      - uses: actions/checkout@v1
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Checkout submodules
+        shell: bash
+        run: |
+          auth_header="$(git config --local --get http.https://github.com/.extraheader)"
+          git submodule sync --recursive
+          git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1
+
       - name: Install Qemu and Start Qemu Docker
         run: |
           sudo apt install qemu-user-static
           docker run --rm --privileged multiarch/qemu-user-static --reset --credential yes --persistent yes
-      - uses: 'ros-industrial/industrial_ci@master'
+
+      - name: Run ROS Industrial CI
+        uses: 'ros-industrial/industrial_ci@master'
         env: ${{matrix.env}}

@@ -1,0 +1,38 @@
+<launch>
+  <env name="ROSCONSOLE_FORMAT" value="[${thread}] [${node}/${function}:${line}]: ${message}"/>
+
+  <node pkg="tf" type="static_transform_publisher" name="swri_transform" args="0 0 0 1.5708 0 0 /world /map 100"  />
+
+  <node pkg="mapviz" type="mapviz" name="$(anon mapviz)" required="true" output="log"/>
+
+  <node pkg="swri_transform_util" type="initialize_origin.py" name="initialize_origin" output="screen">
+    <param name="local_xy_frame" value="/world"/>
+    <param name="local_xy_origin" value="auto"/> <!-- "auto" setting will set the origin to the first gps fix that it recieves -->
+    <remap from="gps" to="/gps/fix"/>
+    <rosparam param="local_xy_origins">
+      [{ name: jackal,
+         latitude: 49.9000002583,
+         longitude: 8.90000135593,
+         altitude: 33.719,
+         heading: 0},
+
+       { name: ryerson,
+         latitude: 43.65871322509997,
+         longitude: -79.37881708145142,
+         altitude: 30.0,
+         heading: 0.0},
+
+       { name: hanksville,
+         latitude: 38.36857886877816,
+         longitude: -110.71678161621094,
+         altitude: 30.0,
+         heading: 0.0}]
+    </rosparam>
+  </node>
+
+
+  <!-- Needed only for searching for services -->
+  <node pkg="rosapi" type="rosapi_node" name="rosapi"/>
+
+
+</launch>

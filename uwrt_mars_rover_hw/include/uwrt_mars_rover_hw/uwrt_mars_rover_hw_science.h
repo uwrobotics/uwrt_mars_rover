@@ -18,10 +18,10 @@ class UWRTRoverHWScience : public hardware_interface::RobotHW {
   };
 
   struct ScienceJointCmd {
-    enum class ScienceCmdType { NONE, POS, VEL, EFF };
+    enum class Type { NONE, POS, VEL, EFF };
 
     double data;
-    ScienceCmdType type;
+    Type type;
   };
 
   // Overrides
@@ -31,7 +31,6 @@ class UWRTRoverHWScience : public hardware_interface::RobotHW {
   virtual void doSwitch(const std::list<hardware_interface::ControllerInfo>& start_list,
                         const std::list<hardware_interface::ControllerInfo>& stop_list) override;
 
-  // Get the name of the controller
   inline std::string getName() const {
     return name_;
   }
@@ -42,6 +41,9 @@ class UWRTRoverHWScience : public hardware_interface::RobotHW {
   // Short name for this class
   const std::string name_;
 
+  // Joint names
+  std::vector<std::string> joint_names_;
+
   // Hardware state interfaces
   hardware_interface::JointStateInterface joint_state_interface_;
 
@@ -50,13 +52,8 @@ class UWRTRoverHWScience : public hardware_interface::RobotHW {
   hardware_interface::VelocityJointInterface joint_vel_interface_;
   hardware_interface::EffortJointInterface joint_eff_interface_;
 
-  // Joint names
-  std::vector<std::string> joint_names_;
-
-  // States
+  // Joint states and commands
   std::map<std::string, ScienceJointState> joint_states_;
-
-  // Commands
   std::map<std::string, ScienceJointCmd> joint_cmds_;
 };
 }  // namespace uwrt_mars_rover_hw

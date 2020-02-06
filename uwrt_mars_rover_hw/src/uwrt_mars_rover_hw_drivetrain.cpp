@@ -2,8 +2,6 @@
 
 namespace uwrt_mars_rover_hw {
 
-UWRTRoverHWDrivetrain::UWRTRoverHWDrivetrain() : UWRTRoverHWDrivetrain("UWRTRoverHWDrivetrain") {}
-
 bool UWRTRoverHWDrivetrain::init(ros::NodeHandle& /*root_nh*/, ros::NodeHandle& robot_hw_nh) {
   bool param_fetched = robot_hw_nh.getParam("joints", joint_names_);
   if (!param_fetched) {

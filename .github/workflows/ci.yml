@@ -2,6 +2,7 @@ name: CI
 
 on: [push, pull_request]
 
+#Todo: there should be 3 rosinstall files. one for required thirdparty source ros pkgs that do not have a binary with the required features(in upstream ws of all builds), one for amd64/arm64 required libraries (in targetws for all builds), and one for thirdparty source ros pkgs that do not have an arm64 binary(in upstream ws for arms64 builds)
 jobs:
   amd64_build:
     strategy:

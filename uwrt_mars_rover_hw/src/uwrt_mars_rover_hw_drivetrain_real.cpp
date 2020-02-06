@@ -1,6 +1,6 @@
 #include "uwrt_mars_rover_hw/uwrt_mars_rover_hw_drivetrain_real.h"
 
-#include "canopen_comm.hpp"
+#include "CanopenInterface.hpp"
 
 namespace uwrt_mars_rover_hw {
 
@@ -10,8 +10,8 @@ bool UWRTRoverHWDrivetrainReal::init(ros::NodeHandle& root_nh, ros::NodeHandle& 
   }
 
   // TODO: controller to switch the roboteq communication mode
-  std::unique_ptr<roboteq::i_comm> comm = std::make_unique<roboteq::canopen_comm>(0x01, "can0");
-  motor_controller_ = std::make_unique<roboteq::roboteq_controller>(std::move(comm));
+  std::unique_ptr<roboteq::CommunicationInterface> comm = std::make_unique<roboteq::CanopenInterface>(0x01, "can0");
+  motor_controller_ = std::make_unique<roboteq::RoboteqController>(std::move(comm));
   return true;
 }
 

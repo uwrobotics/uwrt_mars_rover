@@ -9,7 +9,7 @@ namespace uwrt_mars_rover_hw {
 
 class UWRTRoverHWDrivetrain : public hardware_interface::RobotHW {
  public:
-  explicit UWRTRoverHWDrivetrain();
+  explicit UWRTRoverHWDrivetrain() : UWRTRoverHWDrivetrain("UWRTRoverHWDrivetrain"){};
 
   struct DrivetrainJointState {
     double position;
@@ -24,18 +24,17 @@ class UWRTRoverHWDrivetrain : public hardware_interface::RobotHW {
   };
 
   bool init(ros::NodeHandle& root_nh, ros::NodeHandle& robot_hw_nh) override;
-  virtual void read(const ros::Time& time, const ros::Duration& period) override;
-  virtual void write(const ros::Time& time, const ros::Duration& period) override;
-
-  virtual void doSwitch(const std::list<hardware_interface::ControllerInfo>& start_list,
-                        const std::list<hardware_interface::ControllerInfo>& stop_list) override;
+  void read(const ros::Time& time, const ros::Duration& period) override;
+  void write(const ros::Time& time, const ros::Duration& period) override;
+  void doSwitch(const std::list<hardware_interface::ControllerInfo>& start_list,
+                const std::list<hardware_interface::ControllerInfo>& stop_list) override;
 
   inline std::string getName() const {
     return name_;
   }
 
  protected:
-  explicit UWRTRoverHWDrivetrain(const std::string& name) : name_(std::move(name)) {}
+  explicit UWRTRoverHWDrivetrain(std::string name) : name_(std::move(name)) {}
   const std::string name_;
 
   std::vector<std::string> joint_names_;

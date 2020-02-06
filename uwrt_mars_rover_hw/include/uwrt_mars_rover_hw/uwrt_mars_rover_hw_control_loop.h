@@ -13,7 +13,10 @@ namespace uwrt_mars_rover_hw {
 class MarsRoverHWControlLoop {
  public:
   MarsRoverHWControlLoop(std::string name, const ros::NodeHandle& nh = ros::NodeHandle());
-
+  MarsRoverHWControlLoop(MarsRoverHWControlLoop&&) = delete;
+  MarsRoverHWControlLoop(const MarsRoverHWControlLoop&) = delete;
+  MarsRoverHWControlLoop& operator=(const MarsRoverHWControlLoop&&) = delete;
+  MarsRoverHWControlLoop& operator=(const MarsRoverHWControlLoop&) = delete;
   virtual ~MarsRoverHWControlLoop() = default;
 
   virtual bool init();

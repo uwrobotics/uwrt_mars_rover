@@ -53,8 +53,8 @@ add_library(${PROJECT_NAME}
         )
 
 add_library(roboteq_driver
-        drivers/roboteq_driver/src/canopen_comm.cpp
-        drivers/roboteq_driver/src/roboteq_controller.cpp
+        drivers/roboteq_driver/src/CanopenInterface.cpp
+        drivers/roboteq_driver/src/RoboteqController.cpp
         )
 
 ## Declare a C++ executable

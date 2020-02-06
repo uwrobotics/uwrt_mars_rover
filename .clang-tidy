@@ -13,13 +13,7 @@ Checks:  '-*,
           -cppcoreguidelines-pro-type-union-access,
           -modernize-use-trailing-return-type,'
 
-WarningsAsErrors: 'boost-*,
-                   bugprone-*,
-                   cppcoreguidelines-*,
-                   misc-*,
-                   modernize-*,
-                   performance-*,
-                   readability-*,'
+WarningsAsErrors: '*'
 
 CheckOptions:
   # Type names

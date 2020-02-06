@@ -2,26 +2,18 @@ name: CI
 
 on: [push, pull_request]
 
-#Todo: there should be 3 rosinstall files. one for required thirdparty source ros pkgs that do not have a binary with the required features(in upstream ws of all builds), one for amd64/arm64 required libraries (in targetws for all builds), and one for thirdparty source ros pkgs that do not have an arm64 binary(in upstream ws for arms64 builds)
 jobs:
   amd64_build:
     strategy:
       matrix:
         env:
-          - {ROS_DISTRO: melodic, ROS_REPO: main, CMAKE_ARGS: "-Wall -Wextra -Wpedantic -Werror", UPSTREAM_WORKSPACE: "uwrt.rosinstall"}
-          - {ROS_DISTRO: melodic, ROS_REPO: testing, CMAKE_ARGS: "-Wall -Wextra -Wpedantic -Werror", UPSTREAM_WORKSPACE: "uwrt.rosinstall"}
+          - {ROS_DISTRO: melodic, ROS_REPO: main, CMAKE_ARGS: "-Wall -Wextra -Wpedantic -Werror", TARGET_WORKSPACE: "$TARGET_REPO_PATH metapackage_dependencies.rosinstall"}
+          - {ROS_DISTRO: melodic, ROS_REPO: testing, CMAKE_ARGS: "-Wall -Wextra -Wpedantic -Werror", TARGET_WORKSPACE: "$TARGET_REPO_PATH metapackage_dependencies.rosinstall"}
 
     runs-on: ubuntu-18.04
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-
-      - name: Checkout submodules
-        shell: bash
-        run: |
-          auth_header="$(git config --local --get http.https://github.com/.extraheader)"
-          git submodule sync --recursive
-          git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1
 
       - name: Run ROS Industrial CI
         uses: 'ros-industrial/industrial_ci@master'
@@ -46,19 +38,12 @@ jobs:
     strategy:
       matrix:
         env:
-          - {ROS_DISTRO: melodic, ROS_REPO: main, CLANG_TIDY: pedantic, UPSTREAM_WORKSPACE: "uwrt.rosinstall"}
+          - {ROS_DISTRO: melodic, ROS_REPO: main, CLANG_TIDY: pedantic, TARGET_WORKSPACE: "$TARGET_REPO_PATH metapackage_dependencies.rosinstall"}
 
     runs-on: ubuntu-18.04
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-
-      - name: Checkout submodules
-        shell: bash
-        run: |
-          auth_header="$(git config --local --get http.https://github.com/.extraheader)"
-          git submodule sync --recursive
-          git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1
 
       - name: Run ROS Industrial CI
         uses: 'ros-industrial/industrial_ci@master'
@@ -68,19 +53,12 @@ jobs:
     strategy:
       matrix:
         env:
-          - {ROS_DISTRO: melodic, ROS_REPO: main, CATKIN_LINT: pedantic, UPSTREAM_WORKSPACE: "uwrt.rosinstall"}
+          - {ROS_DISTRO: melodic, ROS_REPO: main, CATKIN_LINT: pedantic, TARGET_WORKSPACE: "$TARGET_REPO_PATH metapackage_dependencies.rosinstall"}
 
     runs-on: ubuntu-18.04
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-
-      - name: Checkout submodules
-        shell: bash
-        run: |
-          auth_header="$(git config --local --get http.https://github.com/.extraheader)"
-          git submodule sync --recursive
-          git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1
 
       - name: Run ROS Industrial CI
         uses: 'ros-industrial/industrial_ci@master'
@@ -90,19 +68,12 @@ jobs:
     strategy:
       matrix:
         env:
-          - {DOCKER_IMAGE: "arm64v8/ros:melodic-perception", ADDITIONAL_DEBS: "build-essential python-catkin-tools python-pip", BEFORE_INIT: "echo -e This test should run on aarch64. It is running on: $(uname -p) && [[ $(uname -p) == aarch64 ]]", CMAKE_ARGS: "-Wall -Wextra -Wpedantic -Werror", UPSTREAM_WORKSPACE: "uwrt.rosinstall"}
+          - {DOCKER_IMAGE: "arm64v8/ros:melodic-perception", ADDITIONAL_DEBS: "build-essential python-catkin-tools python-pip", BEFORE_INIT: "echo -e This test should run on aarch64. It is running on: $(uname -p) && [[ $(uname -p) == aarch64 ]]", CMAKE_ARGS: "-Wall -Wextra -Wpedantic -Werror", TARGET_WORKSPACE: "$TARGET_REPO_PATH metapackage_dependencies.rosinstall"}
 
     runs-on: ubuntu-18.04
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-
-      - name: Checkout submodules
-        shell: bash
-        run: |
-          auth_header="$(git config --local --get http.https://github.com/.extraheader)"
-          git submodule sync --recursive
-          git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1
 
       - name: Install Qemu and Start Qemu Docker
         shell: bash

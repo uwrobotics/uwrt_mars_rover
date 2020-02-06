@@ -3,20 +3,93 @@ name: CI
 on: [push, pull_request]
 
 jobs:
-  industrial_ci:
+  amd64_build:
     strategy:
       matrix:
         env:
-          # TODO: CMAKE args for treating warnings as errors
-          # Formatting Jobs
+          - {ROS_DISTRO: melodic, ROS_REPO: main, CMAKE_ARGS: "-Wall -Wextra -Wpedantic -Werror", UPSTREAM_WORKSPACE: "uwrt.rosinstall"}
+          - {ROS_DISTRO: melodic, ROS_REPO: testing, CMAKE_ARGS: "-Wall -Wextra -Wpedantic -Werror", UPSTREAM_WORKSPACE: "uwrt.rosinstall"}
+
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Checkout submodules
+        shell: bash
+        run: |
+          auth_header="$(git config --local --get http.https://github.com/.extraheader)"
+          git submodule sync --recursive
+          git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1
+
+      - name: Run ROS Industrial CI
+        uses: 'ros-industrial/industrial_ci@master'
+        env: ${{matrix.env}}
+
+  clang-format:
+    strategy:
+      matrix:
+        env:
           - {ROS_DISTRO: melodic, ROS_REPO: main, CLANG_FORMAT_CHECK: file}
 
-          # amd64 Build Jobs
-          - {ROS_DISTRO: melodic, ROS_REPO: main, CATKIN_LINT: pedantic, CLANG_TIDY: pedantic, UPSTREAM_WORKSPACE: "uwrt.rosinstall"}
-          - {ROS_DISTRO: melodic, ROS_REPO: testing, UPSTREAM_WORKSPACE: "uwrt.rosinstall"}
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-          # Jetson Build Jobs
-          - {DOCKER_IMAGE: "arm64v8/ros:melodic-perception", ADDITIONAL_DEBS: "build-essential python-catkin-tools python-pip", BEFORE_INIT: "echo -e This test should run on aarch64. It is running on: $(uname -p) && [[ $(uname -p) == aarch64 ]]", UPSTREAM_WORKSPACE: "uwrt.rosinstall"}
+      - name: Run ROS Industrial CI
+        uses: 'ros-industrial/industrial_ci@master'
+        env: ${{matrix.env}}
+
+  clang-tidy:
+    strategy:
+      matrix:
+        env:
+          - {ROS_DISTRO: melodic, ROS_REPO: main, CLANG_TIDY: pedantic, UPSTREAM_WORKSPACE: "uwrt.rosinstall"}
+
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Checkout submodules
+        shell: bash
+        run: |
+          auth_header="$(git config --local --get http.https://github.com/.extraheader)"
+          git submodule sync --recursive
+          git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1
+
+      - name: Run ROS Industrial CI
+        uses: 'ros-industrial/industrial_ci@master'
+        env: ${{matrix.env}}
+
+  catkin_lint:
+    strategy:
+      matrix:
+        env:
+          - {ROS_DISTRO: melodic, ROS_REPO: main, CATKIN_LINT: pedantic, UPSTREAM_WORKSPACE: "uwrt.rosinstall"}
+
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Checkout submodules
+        shell: bash
+        run: |
+          auth_header="$(git config --local --get http.https://github.com/.extraheader)"
+          git submodule sync --recursive
+          git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1
+
+      - name: Run ROS Industrial CI
+        uses: 'ros-industrial/industrial_ci@master'
+        env: ${{matrix.env}}
+
+  arm64_build:
+    strategy:
+      matrix:
+        env:
+          - {DOCKER_IMAGE: "arm64v8/ros:melodic-perception", ADDITIONAL_DEBS: "build-essential python-catkin-tools python-pip", BEFORE_INIT: "echo -e This test should run on aarch64. It is running on: $(uname -p) && [[ $(uname -p) == aarch64 ]]", CMAKE_ARGS: "-Wall -Wextra -Wpedantic -Werror", UPSTREAM_WORKSPACE: "uwrt.rosinstall"}
 
     runs-on: ubuntu-18.04
     steps:

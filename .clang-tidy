@@ -10,9 +10,17 @@ Checks:  '-*,
           -cppcoreguidelines-pro-bounds-array-to-pointer-decay,
           -cppcoreguidelines-pro-bounds-constant-array-index,
           -cppcoreguidelines-pro-type-vararg,
-          -cppcoreguidelines-pro-type-union-access'
+          -cppcoreguidelines-pro-type-union-access,
+          -modernize-use-trailing-return-type,'
 
-WarningsAsErrors: '*'
+WarningsAsErrors: 'boost-*,
+                   bugprone-*,
+                   cppcoreguidelines-*,
+                   misc-*,
+                   modernize-*,
+                   performance-*,
+                   readability-*,'
+
 CheckOptions:
   # Type names
   - key:    readability-identifier-naming.ClassCase
@@ -22,8 +30,8 @@ CheckOptions:
   - key:    readability-identifier-naming.UnionCase
     value:  CamelCase
 
-  # Method names
-  - key:    readability-identifier-naming.MethodCase
+  # Function names
+  - key:    readability-identifier-naming.FunctionCase
     value:  camelBack
 
   # Variable names
@@ -32,14 +40,12 @@ CheckOptions:
   - key:    readability-identifier-naming.ClassMemberSuffix
     value:  '_'
 
-  # Const static or global variables are UPPER_CASE
-  - key:    readability-identifier-naming.EnumConstantCase
+  # Globals, Static Constants and Enum Values are UPPER_CASE
+  - key:    readability-identifier-naming.GlobalVariableCase
     value:  UPPER_CASE
   - key:    readability-identifier-naming.StaticConstantCase
     value:  UPPER_CASE
-  - key:    readability-identifier-naming.ClassConstantCase
-    value:  UPPER_CASE
-  - key:    readability-identifier-naming.GlobalVariableCase
+  - key:    readability-identifier-naming.EnumConstantCase
     value:  UPPER_CASE
 
   # Ensure parameters are named exactly identical

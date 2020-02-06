@@ -2,5 +2,5 @@
 BasedOnStyle: Google
 ColumnLimit: 120
 AllowShortFunctionsOnASingleLine: Empty
+CommentPragmas: '^ NOLINT'
 ---
-

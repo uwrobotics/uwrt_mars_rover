@@ -20,7 +20,7 @@ void UWRTRoverHWDrivetrainReal::read(const ros::Time& /*time*/, const ros::Durat
     // TODO: change to use tpdos
     joint_states[joint_name].position = motor_controller_->readAbsoluteEncoderCount(joint_roboteq_index_[joint_name]);
     joint_states[joint_name].velocity = motor_controller_->readEncoderMotorSpeed(joint_roboteq_index_[joint_name]);
-    joint_states[joint_name].effort = motor_controller_->readMotorAmps(joint_roboteq_index_[joint_name]) / 10.0;
+    joint_states[joint_name].effort = motor_controller_->readMotorAmps(joint_roboteq_index_[joint_name]);
   }
 }
 
@@ -33,13 +33,13 @@ void UWRTRoverHWDrivetrainReal::write(const ros::Time& /*time*/, const ros::Dura
         break;
 
       case UWRTRoverHWDrivetrain::DrivetrainJointCommand::Type::POSITION:
-        successful_joint_write =
-            motor_controller_->setPosition(joint_commands_[joint_name].data, joint_roboteq_index_[joint_name]);
+        successful_joint_write = motor_controller_->setPosition(static_cast<int32_t>(joint_commands_[joint_name].data),
+                                                                joint_roboteq_index_[joint_name]);
         break;
 
       case UWRTRoverHWDrivetrain::DrivetrainJointCommand::Type::VELOCITY:
-        successful_joint_write =
-            motor_controller_->setVelocity(joint_commands_[joint_name].data, joint_roboteq_index_[joint_name]);
+        successful_joint_write = motor_controller_->setVelocity(static_cast<int32_t>(joint_commands_[joint_name].data),
+                                                                joint_roboteq_index_[joint_name]);
         break;
 
       case UWRTRoverHWDrivetrain::DrivetrainJointCommand::Type::EFFORT:

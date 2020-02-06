@@ -1,6 +1,9 @@
 #include "uwrt_mars_rover_hw/uwrt_mars_rover_hw_control_loop.h"
 
 namespace uwrt_mars_rover_hw {
+// static constexpr class members must have definitions outside of their class to compile. This can be removed in C++17
+constexpr double MarsRoverHWControlLoop::DEFAULT_CONTROL_FREQUENCY_;
+constexpr double MarsRoverHWControlLoop::DEFAULT_CONTROLLER_WATCHDOG_TIMEOUT_;
 
 MarsRoverHWControlLoop::MarsRoverHWControlLoop(std::string name, const ros::NodeHandle& nh)
     : name_(std::move(name)), nh_(nh) {}
@@ -8,11 +11,12 @@ MarsRoverHWControlLoop::MarsRoverHWControlLoop(std::string name, const ros::Node
 bool MarsRoverHWControlLoop::init() {
   ros::NodeHandle loop_nh(nh_, name_);
   // TODO: utils package with rosparam errors on not finding param_name
-  bool param_retrieved = loop_nh.param<double>("control_frequency", control_freq_, 50.0);
+  bool param_retrieved = loop_nh.param<double>("control_frequency", control_freq_, DEFAULT_CONTROL_FREQUENCY_);
   ROS_ERROR_STREAM_COND_NAMED(!param_retrieved, name_,
                               loop_nh.getNamespace()
                                   << "/control_frequency could not be found and loaded from parameter server.");
-  param_retrieved = loop_nh.param<double>("controllers_watchdog_timeout", controller_watchdog_timeout_, 5.0);
+  param_retrieved = loop_nh.param<double>("controllers_watchdog_timeout", controller_watchdog_timeout_,
+                                          DEFAULT_CONTROLLER_WATCHDOG_TIMEOUT_);
   ROS_ERROR_STREAM_COND_NAMED(
       !param_retrieved, name_,
       loop_nh.getNamespace() << "/controllers_watchdog_timeout could not be found and loaded from parameter server.");

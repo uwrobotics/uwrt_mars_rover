@@ -6,3 +6,4 @@
     uri: https://github.com/ros/std_msgs.git
     local-name: ros/std_msgs
     version: 0.5.12
+

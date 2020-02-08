@@ -1,0 +1,8 @@
+# client sends gps goal to action server
+sensor_msgs/NavSatFix gps_goal
+---
+# server responds whether the robot arrived or not
+bool arrived
+---
+# server gives Twist as feedback
+geometry_msgs/Twist go_to_goal

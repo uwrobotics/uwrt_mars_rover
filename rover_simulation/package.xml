@@ -11,7 +11,7 @@
   <buildtool_depend>catkin</buildtool_depend>
 
   <exec_depend>gazebo_ros</exec_depend>
-  <exec_depend>rover_description</exec_depend>
+  <exec_depend>uwrt_arm_description</exec_depend>
 
   <test_depend>roslaunch</test_depend>
 

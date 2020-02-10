@@ -6,7 +6,7 @@
   <arg name="spawn_yaw" default="0"/>
 
   <!-- Launch the Robot/Joint State Publishers and add the Robot Description to the Parameter Server -->
-  <include file="$(find rover_description)/launch/description.launch"/>
+  <include file="$(find uwrt_arm_description)/launch/description.launch"/>
 
   <!-- Spawn the robot in Gazebo -->
   <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model"

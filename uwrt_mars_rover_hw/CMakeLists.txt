@@ -7,6 +7,7 @@ find_package(catkin REQUIRED COMPONENTS
         hardware_interface
         joint_limits_interface
         roscpp
+        transmission_interface
         )
 
 ###################################
@@ -30,6 +31,7 @@ catkin_package(
         hardware_interface
         joint_limits_interface
         roscpp
+        transmission_interface
 )
 
 ###########

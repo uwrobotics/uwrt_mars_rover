@@ -5,8 +5,13 @@ uwrt_mars_rover:
 
   UWRTRoverHWDrivetrain:
     joints:
-      - left_drive_joint
-      - right_drive_joint
+      - name: left_drive_joint
+        transmission_reduction: 43.8311688312
+        roboteq_index: 1
+
+      - name: right_drive_joint
+        transmission_reduction: 43.8311688312
+        roboteq_index: 0
 
 
   rover_state_controller:
@@ -25,7 +30,7 @@ uwrt_mars_rover:
     # Wheel separation and diameter. These are both optional.
     # diff_drive_controller will attempt to read either one or both from the
     # URDF if not specified as a parameter
-    wheel_separation: 1.0 #TODO: Update
+    wheel_separation: 0.762
     wheel_radius: 0.1524
 
     # Velocity commands timeout [s], default 0.5

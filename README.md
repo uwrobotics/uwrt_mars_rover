@@ -49,7 +49,7 @@ dependencies.
 
 In the event that you cannot use the binaries (ex. we rely on a feature that has not been released), the package source 
 code should be cloned outside of our metapackage, so that our CI doesn't run linting/formatting checks on it. To do 
-this, declare the source dependency in `uwrt.rosinstall`. If using unreleased features(ie. cloning 3rd party master branch), 
+this, declare the source dependency in `upstream_dependencies.rosinstall`. If using unreleased features(ie. cloning 3rd party master branch), 
 please pin the rosinstall entry to a commit hash, rather than the branch. `rosinstall` will take care of cloning the 
 source dependencies declared in `upstream_dependencies.rosinstall`. 
 

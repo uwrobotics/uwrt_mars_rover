@@ -58,8 +58,21 @@ target_link_libraries(gazebo_${PROJECT_NAME}
   ${catkin_LIBRARIES}
 )
 
+# Compile the Real Arm HW Interface Node
+add_executable(${PROJECT_NAME}_real
+  src/arm_control_loop.cpp
+  src/arm_hw.cpp
+  src/arm_hw_real.cpp
+  src/arm_hw_real_node.cpp
+  src/real_arm_control.cpp
+)
+
+target_link_libraries(${PROJECT_NAME}_real
+  ${catkin_LIBRARIES}
+)
+
 install(
-  TARGETS gazebo_${PROJECT_NAME}
+  TARGETS gazebo_${PROJECT_NAME} ${PROJECT_NAME}_real
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}

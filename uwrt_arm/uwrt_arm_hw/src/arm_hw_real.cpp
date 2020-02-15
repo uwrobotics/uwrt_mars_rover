@@ -40,7 +40,7 @@ bool ArmHWReal::init(ros::NodeHandle& nh,
   // Get the CAN Device(s) to use for arm control/feedback
   if (!use_any_can_device_)
   {
-    if (!nh_.getParam("can_dev", can_device_))
+    if (!arm_hw_nh_.getParam("can_dev", can_device_))
     {
       ROS_FATAL_NAMED("arm_hw_real",
                       "[ArmHWReal] ROS Parameter 'can_dev' not found! "
@@ -79,18 +79,18 @@ bool ArmHWReal::init(ros::NodeHandle& nh,
   bind(can_socket_handle_, (struct sockaddr *)&can_address_, sizeof(can_address_));
 
   ROS_INFO_NAMED("arm_hw_real",
-                 "[ArmHWReal] Successfully initialized the Arm Interface!");
+                 "[ArmHWReal] Successfully initialized the Real Arm Interface!");
   return true;
 }
 
-void ArmHW::read(const ros::Time& time,
-                 const ros::Duration& duration)
+void ArmHWReal::read(const ros::Time& time,
+                     const ros::Duration& duration)
 {
   // TODO(someshdaga): Implement
 }
 
-void ArmHW::write(const ros::Time& time,
-                  const ros::Duration& duration)
+void ArmHWReal::write(const ros::Time& time,
+                      const ros::Duration& duration)
 {
   // TODO(someshdaga): Implement
 }

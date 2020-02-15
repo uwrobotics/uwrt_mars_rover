@@ -40,8 +40,17 @@ bool ArmControlLoop::init()
     return false;
   }
 
+  // Get local namespace for arm hw
+  std::string arm_hw_ns;
+  if (!nh_.getParam("arm_hw_ns", arm_hw_ns))
+  {
+    ROS_FATAL_NAMED(name_,
+                    "Failed to read ROS parameter 'arm_hw_ns'!");
+    return false;
+  }
+
   // Initialize the ArmHW
-  ros::NodeHandle arm_nh(nh_, arm_hw_->getName());
+  ros::NodeHandle arm_nh(nh_, arm_hw_ns);
   if (!arm_hw_->init(nh_, arm_nh))
   {
     ROS_FATAL_NAMED(name_,

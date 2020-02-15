@@ -8,6 +8,7 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 #include "uwrt_arm_hw/arm_hw_real.h"
+#include "uwrt_arm_hw/can_config.h"
 
 #include <ros/ros.h>
 
@@ -68,11 +69,26 @@ bool ArmHWReal::init(ros::NodeHandle& nh,
   can_address_.can_family = AF_CAN;
   can_address_.can_ifindex = can_ifr_.ifr_ifindex;
   // Set filter(s) for CAN socket
-  struct can_filter filter[1];
-  // Filter based on the CAN ID associated with PC Arm Feedback
+  struct can_filter filter[8];
+  // Filter based on the CAN IDs associated with PC Arm Feedback
   //    - Match Condition: <received_can_id> & mask == can_id & mask
-  filter[0].can_id = 0x000;  // Set the can id(s) for PC arm feedback
-  filter[0].can_mask = CAN_SFF_MASK;  // Allows both SFF and EFF Frames w/ can id
+  filter[0].can_id = static_cast<canid_t>(can_id::Get::ARM_ERROR);
+  filter[0].can_mask = (CAN_EFF_FLAG | CAN_RTR_FLAG | CAN_SFF_MASK);
+  filter[1].can_id = can_id::Get::TURNTABLE_POSITION;
+  filter[1].can_mask = (CAN_EFF_FLAG | CAN_RTR_FLAG | CAN_SFF_MASK);
+  filter[2].can_id = can_id::Get::SHOULDER_POSITION;
+  filter[2].can_mask = (CAN_EFF_FLAG | CAN_RTR_FLAG | CAN_SFF_MASK);
+  filter[3].can_id = can_id::Get::ELBOW_POSITION;
+  filter[3].can_mask = (CAN_EFF_FLAG | CAN_RTR_FLAG | CAN_SFF_MASK);
+  filter[4].can_id = can_id::Get::WRIST_PITCH_POSITION;
+  filter[4].can_mask = (CAN_EFF_FLAG | CAN_RTR_FLAG | CAN_SFF_MASK);
+  filter[5].can_id = can_id::Get::WRIST_ROLL_POSITION;
+  filter[5].can_mask = (CAN_EFF_FLAG | CAN_RTR_FLAG | CAN_SFF_MASK);
+  filter[6].can_id = can_id::Get::CLAW_POSITION;
+  filter[6].can_mask = (CAN_EFF_FLAG | CAN_RTR_FLAG | CAN_SFF_MASK);
+  filter[7].can_id = can_id::Get::FORCE_SENSOR_VALUE;
+  filter[7].can_mask = (CAN_EFF_FLAG | CAN_RTR_FLAG | CAN_SFF_MASK);
+
   setsockopt(can_socket_handle_, SOL_CAN_RAW, CAN_RAW_FILTER,
              &filter, sizeof(filter));
   // Lastly, bind the CAN socket to the CAN address

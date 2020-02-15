@@ -110,7 +110,7 @@ void ArmHW::doSwitch(const std::list<hardware_interface::ControllerInfo>& start_
       {
         uint8_t joint_index = joint_index_map_[resource];
         joint_control_method_[joint_index] = ControlMethod::NONE;
-        joint_position_command_[joint_index] = 0.0;
+        joint_position_command_[joint_index] = joint_position_[joint_index];
         joint_velocity_command_[joint_index] = 0.0;
         joint_effort_command_[joint_index] = 0.0;
       }

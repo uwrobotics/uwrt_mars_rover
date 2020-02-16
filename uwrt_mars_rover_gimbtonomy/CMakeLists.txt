@@ -1,11 +1,8 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(uwrt_mars_rover_hw)
+project(uwrt_mars_rover_gimbtonomy)
 
 ## Find catkin macros and libraries
 find_package(catkin REQUIRED COMPONENTS
-        controller_manager
-        hardware_interface
-        joint_limits_interface
         roscpp
         )
 
@@ -21,14 +18,9 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
         INCLUDE_DIRS
         include
-        drivers/roboteq_driver/include
         LIBRARIES
         ${PROJECT_NAME}
-        roboteq_driver
         CATKIN_DEPENDS
-        controller_manager
-        hardware_interface
-        joint_limits_interface
         roscpp
 )
 
@@ -40,22 +32,15 @@ catkin_package(
 ## Your package locations should be listed before other locations
 include_directories(
         include
-        drivers/roboteq_driver/include
         ${catkin_INCLUDE_DIRS}
 )
 
 ## Declare a C++ library
 add_library(${PROJECT_NAME}
-        src/${PROJECT_NAME}_control_loop.cpp
-        src/${PROJECT_NAME}_control_loop_real.cpp
-        src/${PROJECT_NAME}_drivetrain.cpp
-        src/${PROJECT_NAME}_drivetrain_real.cpp
+        src/${PROJECT_NAME}_gimbtonomy_can.cpp
+        src/${PROJECT_NAME}_gimbtonomy_neopixel.cpp
         )
 
-add_library(roboteq_driver
-        drivers/roboteq_driver/src/CanopenInterface.cpp
-        drivers/roboteq_driver/src/RoboteqController.cpp
-        )
 
 ## Declare a C++ executable
 add_executable(${PROJECT_NAME}_node src/${PROJECT_NAME}_node.cpp)
@@ -69,7 +54,6 @@ add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catk
 ## Specify libraries to link a library or executable target against
 target_link_libraries(${PROJECT_NAME}_node
         ${PROJECT_NAME}
-        roboteq_driver
         ${catkin_LIBRARIES}
         )
 
@@ -90,7 +74,6 @@ install(TARGETS ${PROJECT_NAME}_node
 
 ## Mark libraries for installation
 install(TARGETS
-        roboteq_driver
         ${PROJECT_NAME}
         ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
         LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
@@ -99,7 +82,6 @@ install(TARGETS
 
 ## Mark cpp header files for installation
 install(DIRECTORY
-        drivers/roboteq_driver/include/
         include/${PROJECT_NAME}/
         DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
         FILES_MATCHING

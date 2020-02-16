@@ -2,7 +2,7 @@
 
 neopixel_can::neopixel_can(int can_id, int dlc, char* ifname) : packet.can_id(can_id), packet.can_dlc(dlc), ifname(ifname){
     if((s = socket(PF_CAN, SOCK_RAW, CAN_RAW)) < 0) {
-		printf("Error while opening socket\n");
+		ROS_INFO("Error while opening socket\n");
 		throw -1;
 	}
 
@@ -15,7 +15,7 @@ neopixel_can::neopixel_can(int can_id, int dlc, char* ifname) : packet.can_id(ca
 	//printf("%s at index %d\n", ifname, ifr.ifr_ifindex);
 	// Bind socket CAN to an interface
 	if(bind(s, (struct sockaddr *)&addr, sizeof(addr)) < 0) {
-		printf("Error in socket bind");
+		ROS_INFO("Error in socket bind");
 		throw -2;
 	}
 }

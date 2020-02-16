@@ -1,5 +1,4 @@
 #pragma once
-// Delete this
 
 #include "uwrt_mars_rover_hw_control_loop.h"
 #include "uwrt_mars_rover_hw_drivetrain_real.h"

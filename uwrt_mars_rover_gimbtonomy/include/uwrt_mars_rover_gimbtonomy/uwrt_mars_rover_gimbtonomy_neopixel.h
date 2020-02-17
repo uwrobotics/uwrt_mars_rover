@@ -1,6 +1,7 @@
+#pragma once
+#include "uwrt_mars_rover_gimbtonomy/uwrt_mars_rover_gimbtonomy_can.h"
 #define NEOPIXEL_CAN_ID 0x794
 #define FRAME_PAYLOAD_LENGTH 4
-
 class neopixel{
 private:
     // State of neopixels {0:solid_red, 1:solid_blue, 2:flashing_green}
@@ -11,8 +12,6 @@ private:
     ros::ServiceServer neopixel_service;
     // Loop rate controls speed of while loop
     ros::Rate loop_rate;
-    // Callback function for ROS service
-    void set_state(const int& s);
     // Create a CAN object to send the can message
     neopixel_can neopixel_can_msg(NEOPIXEL_CAN_ID, FRAME_PAYLOAD_LENGTH, "vcan0");
 public:

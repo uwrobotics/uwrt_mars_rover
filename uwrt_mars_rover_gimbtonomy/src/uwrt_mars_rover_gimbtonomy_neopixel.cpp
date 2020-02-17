@@ -10,7 +10,7 @@ neopixel::neopixel(int argc, char **argv) : loop_rate(1){
 }
 void neopixel::run(){
     while(ros::ok()){
-        neopixel_can.sendCAN(state);
+        neopixel_can_msg.sendCAN(state);
         ros::spinOnce();
         loop_rate.sleep();
     }  

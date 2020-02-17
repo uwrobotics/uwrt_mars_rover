@@ -37,8 +37,8 @@ include_directories(
 
 ## Declare a C++ library
 add_library(${PROJECT_NAME}
-        src/${PROJECT_NAME}_gimbtonomy_can.cpp
-        src/${PROJECT_NAME}_gimbtonomy_neopixel.cpp
+        src/${PROJECT_NAME}_can.cpp
+        src/${PROJECT_NAME}_neopixel.cpp
         )
 
 

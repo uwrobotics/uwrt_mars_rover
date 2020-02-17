@@ -4,11 +4,11 @@ class neopixel_can{
 private:
     int s;
 	// Build the CAN Socket
-	struct sockaddr_can addr;
+	sockaddr_can addr;
 	// Build my CAN packet
-	struct can_frame packet;
+	can_frame packet;
 	// What is this for?
-	struct ifreq ifr;
+	ifreq ifr;
     const char* ifname;
 public:
     // Constructor for my CAN class

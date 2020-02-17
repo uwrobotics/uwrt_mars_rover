@@ -11,6 +11,8 @@
 #include <linux/can.h>
 #include <linux/can/raw.h>
 
+#include "ros/ros.h"
+
 #include "uwrt_mars_rover_gimbtonomy/uwrt_mars_rover_gimbtonomy_can.h"
 #include "uwrt_mars_rover_gimbtonomy/uwrt_mars_rover_gimbtonomy_neopixel.h"
 

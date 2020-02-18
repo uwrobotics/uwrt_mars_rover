@@ -4,6 +4,8 @@ project(uwrt_mars_rover_gimbtonomy)
 ## Find catkin macros and libraries
 find_package(catkin REQUIRED COMPONENTS
         roscpp
+        message_generation
+        uwrt_mars_rover_msgs
         )
 
 ###################################
@@ -22,6 +24,7 @@ catkin_package(
         ${PROJECT_NAME}
         CATKIN_DEPENDS
         roscpp
+        uwrt_mars_rover_msgs
 )
 
 ###########

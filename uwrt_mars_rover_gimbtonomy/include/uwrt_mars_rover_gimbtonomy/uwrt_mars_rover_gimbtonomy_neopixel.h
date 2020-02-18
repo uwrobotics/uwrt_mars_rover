@@ -12,13 +12,20 @@ private:
     ros::ServiceServer neopixel_service;
     // Loop rate controls speed of while loop
     ros::Rate loop_rate;
+    // CLI arg count
+    int arg_count;
+    // CLI arg list
+    char **arg_list;
     // Create a CAN object to send the can message
     neopixel_can neopixel_can_msg(NEOPIXEL_CAN_ID, FRAME_PAYLOAD_LENGTH, "vcan0");
 public:
     // neopixel constructor
     neopixel(int argc, char **argv);
     // Sets the state var
-    void set_state(const int& s);
+    bool set_state(uwrt_mars_rover_msgs::set_state::Request &req,
+                   uwrt_mars_rover_msgs::set_state::Response &res);
+    // Initializes the neopixels
+    void initialize_neopixels();
     // Runs the while loop
     void run();
 };

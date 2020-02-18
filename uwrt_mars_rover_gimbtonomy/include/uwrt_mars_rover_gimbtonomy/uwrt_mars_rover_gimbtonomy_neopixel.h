@@ -1,4 +1,6 @@
 #pragma once
+#include "uwrt_mars_rover_msgs/set_state.h"
+#include "uwrt_mars_rover_msgs/NeopixelArrayMode.h"
 #include "uwrt_mars_rover_gimbtonomy/uwrt_mars_rover_gimbtonomy_can.h"
 #define NEOPIXEL_CAN_ID 0x794
 #define FRAME_PAYLOAD_LENGTH 4

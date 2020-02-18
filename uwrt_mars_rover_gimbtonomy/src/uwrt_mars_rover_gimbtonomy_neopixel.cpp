@@ -2,8 +2,7 @@
 
 bool set_state(uwrt_mars_rover_msgs::set_state::Request &req,
                uwrt_mars_rover_msgs::set_state::Response &res){
-    res.state = req.input;
-    state = res.state;
+    state = req.requested_mode;
     return true;
 }
 neopixel::neopixel(int argc, char **argv) : loop_rate(1), arg_count(argc), arg_list(argv){

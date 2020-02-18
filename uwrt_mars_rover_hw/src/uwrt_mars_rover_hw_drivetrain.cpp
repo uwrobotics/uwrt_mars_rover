@@ -7,6 +7,7 @@ bool UWRTRoverHWDrivetrain::init(ros::NodeHandle& /*root_nh*/, ros::NodeHandle& 
   if (!param_fetched) {
     ROS_WARN_STREAM_NAMED(name_, robot_hw_nh.getNamespace()
                                      << "/joints could not be found and loaded from parameter server.");
+    // TODO fail init?
   } else {
     ROS_DEBUG_STREAM_NAMED(name_, robot_hw_nh.getNamespace() << "/joints loaded from parameter server.");
   }

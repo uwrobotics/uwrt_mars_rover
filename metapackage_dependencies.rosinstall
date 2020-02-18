@@ -1,0 +1,9 @@
+# This file should contain any source dependencies that are required for this metapackage to build. If the dependency is
+# available on index.ros.org, a binary dependency declared in the relevant package.xml's should be used instead.
+# NOTE: local-name paths should be relative to the catkin workspace's src folder(i.e. the parent folder of this metapackage's root).
+
+- git:
+    uri: https://github.com/uwrobotics/roboteq_driver.git
+    local-name: uwrt_mars_rover/uwrt_mars_rover_hw/drivers/roboteq_driver/
+    version: 6137ced0eac5b74f3533e4e66c9baee183396ef4
+

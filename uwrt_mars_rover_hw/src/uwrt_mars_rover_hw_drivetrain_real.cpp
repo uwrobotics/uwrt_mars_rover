@@ -30,6 +30,8 @@ void UWRTRoverHWDrivetrainReal::read(const ros::Time & /*time*/, const ros::Dura
         motor_controller_->readMotorAmps(roboteq_actuator_index_[joint_name]);
   }
   actuator_to_joint_state_interface_.propagate();
+
+  // TODO: read status flags
 }
 
 void UWRTRoverHWDrivetrainReal::write(const ros::Time & /*time*/, const ros::Duration & /*period*/) {

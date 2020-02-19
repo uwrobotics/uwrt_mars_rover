@@ -102,10 +102,68 @@ bool ArmHWReal::init(ros::NodeHandle& nh,
   return true;
 }
 
+template <class T>
+T ArmHWReal::convertCanData(const uint8_t* data,
+                            uint8_t data_len,
+                            bool swap_endianness)
+{
+  uint64_t out_data = 0;
+
+  if (swap_endianness) 
+    for (int i = 0; i < data_len; i++)
+      out_data |= (static_cast<uint64_t>(data[i]) << (8 * (data_len - 1 - i)));
+  else
+    for (int i = 0; i < data_len; i++)
+      out_data |= (static_cast<uint64_t>(data[i]) << (8 * i));
+  
+  return *(reinterpret_cast<T*>(&out_data));
+}
+
 void ArmHWReal::read(const ros::Time& time,
                      const ros::Duration& duration)
 {
   // TODO(someshdaga): Implement
+  // Read all messages from the socket buffer
+  // struct can_frame frame;
+  // int n_bytes;
+  // int joint_idx;
+  // do
+  // {
+  //   n_bytes = recv(can_socket_handle_, &frame, sizeof(struct can_frame), 0);
+
+  //   if (n_bytes == sizeof(struct can_frame))
+  //   {
+  //     switch (frame.can_id)
+  //     {
+  //       case can_id::Get::ARM_ERROR:
+  //         // Do something with this
+  //         break;
+  //       case can_id::Get::TURNTABLE_POSITION:
+  //         // Get joint index
+  //         joint_idx = joint_index_map_["arm_base_turntable_joint"];
+  //         joint_position_[joint_idx] =
+  //           convertCanData<double>(frame.data,
+  //                                  sizeof(frame.data),
+  //                                  true);
+  //         ROS_WARN("[ArmHWReal] Turntable Position: %f",
+  //                  joint_position_[joint_idx]);
+  //         break;
+  //       case can_id::Get::SHOULDER_POSITION:
+  //         break;
+  //       case can_id::Get::ELBOW_POSITION:
+  //         break;
+  //       case can_id::Get::WRIST_PITCH_POSITION:
+  //         break;
+  //       case can_id::Get::WRIST_ROLL_POSITION:
+  //         break;
+  //       default:
+  //         ROS_ERROR_THROTTLE(1.0,
+  //                            "[ArmHWReal][read] Unexpected CAN ID: %d",
+  //                            frame.can_id);
+  //     }
+  //   }
+  // }
+  // while (n_bytes == sizeof(struct can_frame));
 }
 
 void ArmHWReal::write(const ros::Time& time,
@@ -138,8 +196,9 @@ void ArmHWReal::write(const ros::Time& time,
       case ControlMethod::EFFORT:
         break;
       case ControlMethod::VOLTAGE:
-        data_ptr = reinterpret_cast<uint64_t*>(frame.data);
-        *data_ptr = *(reinterpret_cast<uint64_t*>(&joint_voltage_command_[i]));
+        *data_ptr = convertCanData<uint64_t>(frame.data, sizeof(frame.data), true);
+        // data_ptr = reinterpret_cast<uint64_t*>(frame.data);
+        // *data_ptr = *(reinterpret_cast<uint64_t*>(&joint_voltage_command_[i]));
         break;
       case ControlMethod::NONE:
         break;
@@ -148,9 +207,9 @@ void ArmHWReal::write(const ros::Time& time,
     }
 
     // Switch Endianness of data
-    *data_ptr = ((*data_ptr & 0x00000000FFFFFFFFull) << 32) | ((*data_ptr & 0xFFFFFFFF00000000ull) >> 32);
-    *data_ptr = ((*data_ptr & 0x0000FFFF0000FFFFull) << 16) | ((*data_ptr & 0xFFFF0000FFFF0000ull) >> 16);
-    *data_ptr = ((*data_ptr & 0x00FF00FF00FF00FFull) << 8)  | ((*data_ptr & 0xFF00FF00FF00FF00ull) >> 8);
+    // *data_ptr = ((*data_ptr & 0x00000000FFFFFFFFull) << 32) | ((*data_ptr & 0xFFFFFFFF00000000ull) >> 32);
+    // *data_ptr = ((*data_ptr & 0x0000FFFF0000FFFFull) << 16) | ((*data_ptr & 0xFFFF0000FFFF0000ull) >> 16);
+    // *data_ptr = ((*data_ptr & 0x00FF00FF00FF00FFull) << 8)  | ((*data_ptr & 0xFF00FF00FF00FF00ull) >> 8);
 
     writeCanFrame(frame);
   }
@@ -202,11 +261,15 @@ void ArmHWReal::doSwitch(const std::list<hardware_interface::ControllerInfo>& st
       {
         frame.data[0] = 2;
       }
+      else if (claimed.hardware_interface == "hardware_interface::JointStateInterface")
+      {
+        // Do nothing
+      }
       else
       {
         frame.data[0] = 0;
-        ROS_ERROR_NAMED("arm_hw",
-                        "[ArmHW] Invalid hardware interface '%s' specified",
+        ROS_ERROR_NAMED("arm_hw_real",
+                        "[ArmHWReal] Invalid hardware interface '%s' specified",
                         claimed.hardware_interface.c_str());
       }
 

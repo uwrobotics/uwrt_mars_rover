@@ -45,6 +45,10 @@ private:
 
   // Utility functions
   void writeCanFrame(const struct can_frame& frame);
+  template <class T>
+  T convertCanData(const uint8_t* data,
+                   uint8_t data_len,
+                   bool swap_endianness = false);
 };  // class ArmHWReal
 }  // namespace arm
 }  // namespace uwrt

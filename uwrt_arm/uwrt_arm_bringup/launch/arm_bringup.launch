@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <launch>
-  <arg name="sim" default="false"/>
+  <arg name="can_device" default="can0"/>
+  <arg name="debug"      default="false"/>
+  <arg name="sim"        default="false"/>
 
   <param name="use_sim_time" value="$(arg sim)"/>
 
@@ -9,6 +11,8 @@
 
   <!-- Launch Arm Controllers and Planners -->
   <include file="$(find uwrt_arm_control)/launch/arm_control.launch">
-    <arg name="sim" value="$(arg sim)"/>
+    <arg name="can_device" value="$(arg can_device)"/>
+    <arg name="debug"      value="$(arg debug)"/>
+    <arg name="sim"        value="$(arg sim)"/>
   </include>
 </launch>

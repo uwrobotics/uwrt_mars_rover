@@ -2,6 +2,7 @@
 
 #include <controller_manager/controller_manager.h>
 #include <ros/ros.h>
+#include <combined_robot_hw/combined_robot_hw.h>
 
 #include <memory>
 #include <string>
@@ -28,7 +29,7 @@ class MarsRoverHWControlLoop {
 
   ros::NodeHandle nh_;
 
-  std::unique_ptr<UWRTRoverHWDrivetrain> rover_hw_;
+  std::unique_ptr<combined_robot_hw::CombinedRobotHW> rover_hw_;
 
   std::unique_ptr<controller_manager::ControllerManager> controller_manager_;
 

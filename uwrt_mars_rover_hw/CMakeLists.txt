@@ -3,6 +3,7 @@ project(uwrt_mars_rover_hw)
 
 ## Find catkin macros and libraries
 find_package(catkin REQUIRED COMPONENTS
+        combined_robot_hw
         controller_manager
         hardware_interface
         joint_limits_interface
@@ -27,6 +28,7 @@ catkin_package(
         ${PROJECT_NAME}
         roboteq_driver
         CATKIN_DEPENDS
+        combined_robot_hw
         controller_manager
         hardware_interface
         joint_limits_interface
@@ -109,3 +111,9 @@ install(DIRECTORY
         PATTERN "*.hpp"
         PATTERN ".svn" EXCLUDE
         )
+
+## Mark plugins for installation
+install(FILES
+        ${PROJECT_NAME}_plugin.xml
+        DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
+)

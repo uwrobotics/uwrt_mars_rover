@@ -1,7 +1,0 @@
-robot_hardware:
-  - uwrt_mars_rover_hw_drivetrain
-uwrt_mars_rover_hw_drivetrain:
-  type: uwrt_mars_rover_hw/UWRTRoverHWDrivetrain
-  joints:
-    - left_drive_joint
-    - right_drive_joint

@@ -1,5 +1,7 @@
 #include "uwrt_mars_rover_hw/uwrt_mars_rover_hw_drivetrain_real.h"
 
+#include <pluginlib/class_list_macros.hpp>
+
 #include "CanopenInterface.hpp"
 
 namespace uwrt_mars_rover_hw {
@@ -9,12 +11,13 @@ bool UWRTRoverHWDrivetrainReal::init(ros::NodeHandle &root_nh, ros::NodeHandle &
     return false;
   }
 
-  if (!loadRoboteqIndicesFromParameterServer(robot_hw_nh)) {
+  if (!loadRoboteqConfigFromParamServer(robot_hw_nh)) {
     return false;
   }
 
   // TODO: controller to switch the roboteq communication mode
-  std::unique_ptr<roboteq::CommunicationInterface> comm = std::make_unique<roboteq::CanopenInterface>(0x01, "can0");
+  std::unique_ptr<roboteq::CommunicationInterface> comm =
+      std::make_unique<roboteq::CanopenInterface>(roboteq_canopen_id_, root_nh.param<std::string>("can_interface_name", "can0"));
   motor_controller_ = std::make_unique<roboteq::RoboteqController>(std::move(comm));
   return true;
 }
@@ -58,8 +61,8 @@ void UWRTRoverHWDrivetrainReal::write(const ros::Time & /*time*/, const ros::Dur
         break;
 
       case UWRTRoverHWDrivetrain::DrivetrainActuatorJointCommand::Type::NONE:
-        ROS_WARN_STREAM_NAMED(name_, joint_name << " has a " << actuator_joint_commands_[joint_name].type
-                                                << " command type_. Sending Stop Command to Roboteq Controller!");
+        ROS_DEBUG_STREAM_NAMED(name_, joint_name << " has a " << actuator_joint_commands_[joint_name].type
+                                                 << " command type. Sending Stop Command to Roboteq Controller!");
         successful_joint_write = motor_controller_->stopInAllModes(roboteq_actuator_index_[joint_name]);
         break;
 
@@ -70,14 +73,18 @@ void UWRTRoverHWDrivetrainReal::write(const ros::Time & /*time*/, const ros::Dur
                               << ",which is an unknown command type. Sending Stop Command to Roboteq Controller!");
         successful_joint_write = motor_controller_->stopInAllModes(roboteq_actuator_index_[joint_name]);
     }
-    if (!successful_joint_write) {
+    if (!successful_joint_write && actuator_joint_commands_[joint_name].type !=
+                                       UWRTRoverHWDrivetrain::DrivetrainActuatorJointCommand::Type::NONE) {
       ROS_ERROR_STREAM_NAMED(name_, "Failed to write " << actuator_joint_commands_[joint_name].type << " command to "
                                                        << joint_name << ".");
     }
   }
 }
 
-bool UWRTRoverHWDrivetrainReal::loadRoboteqIndicesFromParameterServer(ros::NodeHandle &robot_hw_nh) {
+bool UWRTRoverHWDrivetrainReal::loadRoboteqConfigFromParamServer(ros::NodeHandle &robot_hw_nh) {
+  roboteq_canopen_id_ = robot_hw_nh.param<int>("roboteq_canopen_id", 0x01);
+
+  // Get joint list info
   XmlRpc::XmlRpcValue joints_list;
   bool param_fetched = robot_hw_nh.getParam("joints", joints_list);
   if (!param_fetched) {
@@ -86,7 +93,6 @@ bool UWRTRoverHWDrivetrainReal::loadRoboteqIndicesFromParameterServer(ros::NodeH
   }
   ROS_DEBUG_STREAM_NAMED(name_, robot_hw_nh.getNamespace() << "/joints loaded from parameter server.");
   ROS_ASSERT(joints_list.getType() == XmlRpc::XmlRpcValue::TypeArray);
-
   // NOLINTNEXTLINE(modernize-loop-convert): iterator only valid for XmlRpcValue::TypeStruct
   for (size_t joint_index = 0; joint_index < joints_list.size(); joint_index++) {
     ROS_ASSERT(joints_list[joint_index].getType() == XmlRpc::XmlRpcValue::TypeStruct);
@@ -101,3 +107,4 @@ bool UWRTRoverHWDrivetrainReal::loadRoboteqIndicesFromParameterServer(ros::NodeH
   return true;
 }
 }  // namespace uwrt_mars_rover_hw
+PLUGINLIB_EXPORT_CLASS(uwrt_mars_rover_hw::UWRTRoverHWDrivetrainReal, hardware_interface::RobotHW)

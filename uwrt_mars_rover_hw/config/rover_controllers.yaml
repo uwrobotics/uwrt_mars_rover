@@ -1,18 +1,4 @@
 uwrt_mars_rover:
-  robot_hw_control_loop_real:
-    control_frequency: 50.0
-    controllers_watchdog_timeout: 1.0
-
-  UWRTRoverHWDrivetrain:
-    joints:
-      - name: left_drive_joint
-        transmission_reduction: 43.8311688312
-        roboteq_index: 1
-
-      - name: right_drive_joint
-        transmission_reduction: 43.8311688312
-        roboteq_index: 0
-
 
   rover_state_controller:
     type: joint_state_controller/JointStateController
@@ -24,6 +10,7 @@ uwrt_mars_rover:
     right_wheel: right_drive_joint
     publish_rate: 50.0
     publish_cmd: True
+    allow_multiple_cmd_vel_publishers : False
     pose_covariance_diagonal: [0.001, 0.001, 1000000.0, 1000000.0, 1000000.0, 1000.0]
     twist_covariance_diagonal: [0.001, 0.001, 1000000.0, 1000000.0, 1000000.0, 1000.0]
 

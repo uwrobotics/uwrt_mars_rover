@@ -1,0 +1,15 @@
+<library path="lib/libuwrt_arm_hw_voltage_controllers">
+
+  <class name="voltage_controllers/JointVoltageController" type="voltage_controllers::JointVoltageController" base_class_type="controller_interface::ControllerBase">
+    <description>
+      The JointVoltageController sends open-loop voltage/pwm commands. It expects a VoltageJointInterface type of hardware interface.
+    </description>
+  </class>
+
+  <class name="voltage_controllers/JointGroupVoltageController" type="voltage_controllers::JointGroupVoltageController" base_class_type="controller_interface::ControllerBase">
+    <description>
+      The JointGroupVoltageController sends open-loop voltage/pwm commands for a set of joints. It expects a VoltageJointInterface type of hardware interface.
+    </description>
+  </class>
+
+</library>

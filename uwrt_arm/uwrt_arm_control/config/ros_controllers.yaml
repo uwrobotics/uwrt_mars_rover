@@ -59,6 +59,15 @@ arm_trajectory_controller:
       i: 1
       i_clamp: 1
 
+arm_voltage_controller:
+  type: voltage_controllers/JointGroupVoltageController
+  joints:
+    - arm_base_turntable_joint
+    - arm_shoulder_joint
+    - arm_elbow_joint
+    - arm_wrist_roll_joint
+    - arm_wrist_pitch_joint
+
 arm_position_controller:
   type: position_controllers/JointGroupPositionController
   joints:

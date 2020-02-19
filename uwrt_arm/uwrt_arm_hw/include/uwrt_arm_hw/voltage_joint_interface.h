@@ -1,3 +1,4 @@
+
 /**
 Copyright (c) 2020 Somesh Daga <s2daga@uwaterloo.ca>
 
@@ -9,42 +10,11 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 */
 #pragma once
 
-#include "uwrt_arm_hw/arm_hw.h"
+#include <hardware_interface/joint_command_interface.h>
 
-#include <ros/ros.h>
-
-#include <linux/can.h>
-#include <net/if.h>
-#include <string>
-
-namespace uwrt
+namespace hardware_interface
 {
-namespace arm
-{
-class ArmHWReal : public ArmHW
-{
-public:
-  explicit ArmHWReal(const std::string& urdf_str);
-
-  ArmHWReal(const std::string& name, const std::string& urdf_str);
-
-  virtual bool init(ros::NodeHandle& nh,
-                    ros::NodeHandle& arm_hw_nh);
-  virtual void read(const ros::Time& time, const ros::Duration& period);
-  virtual void write(const ros::Time& time, const ros::Duration& period);
-  void doSwitch(const std::list<hardware_interface::ControllerInfo>& start_list,
-                const std::list<hardware_interface::ControllerInfo>& stop_list) override;
-
-private:
-  // CAN variables/parameters
-  std::string can_device_;
-  int can_socket_handle_;
-  struct sockaddr_can can_address_;
-  struct ifreq can_ifr_;
-  const bool use_any_can_device_;
-
-  // Utility functions
-  void writeCanFrame(const struct can_frame& frame);
-};  // class ArmHWReal
-}  // namespace arm
-}  // namespace uwrt
+/// JointCommandInterface for commanding voltage-based joints.
+class VoltageJointInterface : public JointCommandInterface
+{};  // class VoltageJointInterface
+}  // namespace hardware_interface

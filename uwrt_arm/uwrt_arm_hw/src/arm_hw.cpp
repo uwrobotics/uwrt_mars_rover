@@ -8,6 +8,7 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 #include "uwrt_arm_hw/arm_hw.h"
+#include "uwrt_arm_hw/voltage_joint_interface.h"
 
 #include <joint_limits_interface/joint_limits_urdf.h>
 #include <ros/ros.h>
@@ -39,6 +40,7 @@ ArmHW::ArmHW(const std::string& name,
   joint_velocity_command_.resize(num_joints_, 0.0);
   joint_effort_.resize(num_joints_, 0.0);
   joint_effort_command_.resize(num_joints_, 0.0);
+  joint_voltage_command_.resize(num_joints_, 0.0);
   joint_lower_limits_.resize(num_joints_, 0.0);
   joint_upper_limits_.resize(num_joints_, 0.0);
   joint_effort_limits_.resize(num_joints_, 0.0);
@@ -110,9 +112,10 @@ void ArmHW::doSwitch(const std::list<hardware_interface::ControllerInfo>& start_
       {
         uint8_t joint_index = joint_index_map_[resource];
         joint_control_method_[joint_index] = ControlMethod::NONE;
-        joint_position_command_[joint_index] = 0.0;
+        joint_position_command_[joint_index] = joint_position_[joint_index];
         joint_velocity_command_[joint_index] = 0.0;
         joint_effort_command_[joint_index] = 0.0;
+        joint_voltage_command_[joint_index] = 0.0;
       }
     }
   }
@@ -135,6 +138,10 @@ void ArmHW::doSwitch(const std::list<hardware_interface::ControllerInfo>& start_
         else if (claimed.hardware_interface == "hardware_interface::EffortJointInterface")
         {
           joint_control_method_[joint_index] = ControlMethod::EFFORT;
+        }
+        else if (claimed.hardware_interface == "hardware_interface::VoltageJointInterface")
+        {
+          joint_control_method_[joint_index] = ControlMethod::VOLTAGE;
         }
         else
         {
@@ -171,18 +178,22 @@ void ArmHW::registerInterfaces(const urdf::Model& urdf_model)
     // Create Joint Handles for position, velocity and effort for the given joint
     hardware_interface::JointHandle joint_handle_position,
                                     joint_handle_velocity,
-                                    joint_handle_effort;
+                                    joint_handle_effort,
+                                    joint_handle_voltage;
     joint_handle_position = hardware_interface::JointHandle(joint_state_interface_.getHandle(joint_names_[i]),
                                                             &joint_position_command_[i]);
     joint_handle_velocity = hardware_interface::JointHandle(joint_state_interface_.getHandle(joint_names_[i]),
                                                             &joint_velocity_command_[i]);
     joint_handle_effort = hardware_interface::JointHandle(joint_state_interface_.getHandle(joint_names_[i]),
                                                           &joint_effort_command_[i]);
+    joint_handle_voltage = hardware_interface::JointHandle(joint_state_interface_.getHandle(joint_names_[i]),
+                                                           &joint_voltage_command_[i]);
 
     // Register the handles for the given joint with the required interfaces
     joint_position_interface_.registerHandle(joint_handle_position);
     joint_velocity_interface_.registerHandle(joint_handle_velocity);
     joint_effort_interface_.registerHandle(joint_handle_effort);
+    joint_voltage_interface_.registerHandle(joint_handle_voltage);
 
     // Register the Joint Limit Handles for the given joint
     registerJointLimits(joint_names_[i],
@@ -200,6 +211,7 @@ void ArmHW::registerInterfaces(const urdf::Model& urdf_model)
   registerInterface(&joint_position_interface_);
   registerInterface(&joint_velocity_interface_);
   registerInterface(&joint_effort_interface_);
+  registerInterface(&joint_voltage_interface_);
 }
 
 void ArmHW::registerJointLimits(const std::string& joint_name,

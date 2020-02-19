@@ -7,11 +7,14 @@ add_compile_options(-std=c++11)
 find_package(catkin REQUIRED
   COMPONENTS
     angles
+    controller_interface
     controller_manager
+    forward_command_controller
     gazebo_dev
     gazebo_ros_control
     hardware_interface
     joint_limits_interface
+    pluginlib
     roscpp
     roslint
     transmission_interface
@@ -28,13 +31,17 @@ catkin_package(
   INCLUDE_DIRS
     include
   LIBRARIES
+    ${PROJECT_NAME}_voltage_controllers
     gazebo_${PROJECT_NAME}
   CATKIN_DEPENDS
     angles
+    controller_interface
     controller_manager
+    forward_command_controller
     gazebo_ros_control
     hardware_interface
     joint_limits_interface
+    pluginlib
     roscpp
     transmission_interface
     urdf
@@ -44,6 +51,11 @@ catkin_package(
 include_directories(
   include
   ${catkin_INCLUDE_DIRS}
+)
+
+add_library(${PROJECT_NAME}_voltage_controllers
+  src/joint_group_voltage_controller.cpp
+  src/joint_voltage_controller.cpp
 )
 
 # Compile the Gazebo Plugin
@@ -56,6 +68,7 @@ add_library(gazebo_${PROJECT_NAME} SHARED
 
 target_link_libraries(gazebo_${PROJECT_NAME}
   ${catkin_LIBRARIES}
+  ${PROJECT_NAME}_voltage_controllers
 )
 
 # Compile the Real Arm HW Interface Node
@@ -69,10 +82,14 @@ add_executable(${PROJECT_NAME}_real
 
 target_link_libraries(${PROJECT_NAME}_real
   ${catkin_LIBRARIES}
+  ${PROJECT_NAME}_voltage_controllers
 )
 
 install(
-  TARGETS gazebo_${PROJECT_NAME} ${PROJECT_NAME}_real
+  TARGETS
+    gazebo_${PROJECT_NAME}
+    ${PROJECT_NAME}_real
+    ${PROJECT_NAME}_voltage_controllers
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
@@ -83,4 +100,8 @@ install(
   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
   FILES_MATCHING PATTERN "*.h"
   PATTERN ".svn" EXCLUDE
+)
+
+install(FILES voltage_controllers_plugins.xml
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 )

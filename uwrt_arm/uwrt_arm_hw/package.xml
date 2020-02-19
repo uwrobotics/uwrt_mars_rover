@@ -14,14 +14,18 @@
   <build_depend>roslint</build_depend>
 
   <depend>angles</depend>
+  <depend>controller_interface</depend>
   <depend>controller_manager</depend>
+  <depend>forward_command_controller</depend>
   <depend>gazebo_ros_control</depend>
   <depend>hardware_interface</depend>
   <depend>joint_limits_interface</depend>
+  <depend>pluginlib</depend>
   <depend>roscpp</depend>
   <depend>transmission_interface</depend>
   <depend>urdf</depend>
 
   <export>
+    <controller_interface plugin="${prefix}/voltage_controllers_plugins.xml"/>
   </export>
 </package>

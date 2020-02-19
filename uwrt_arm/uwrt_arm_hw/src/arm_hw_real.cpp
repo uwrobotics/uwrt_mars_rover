@@ -8,6 +8,7 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 #include "uwrt_arm_hw/arm_hw_real.h"
+#include "uwrt_arm_hw/can_config.h"
 
 #include <ros/ros.h>
 
@@ -61,22 +62,40 @@ bool ArmHWReal::init(ros::NodeHandle& nh,
   // Initialize SocketCAN and required filters
   // TODO(someshdaga): Consider usage of CAN_BCM instead of CAN_RAW
   //                   for advanced CAN features (e.g. throttling, cycling etc)
-  can_socket_handle_ = socket(PF_CAN, SOCK_DGRAM, CAN_RAW);
+  can_socket_handle_ = socket(PF_CAN, SOCK_RAW, CAN_RAW);
   snprintf(can_ifr_.ifr_name, can_device_.length() + 1,
            "%s", can_device_.c_str());
   ioctl(can_socket_handle_, SIOCGIFINDEX, &can_ifr_);
   can_address_.can_family = AF_CAN;
   can_address_.can_ifindex = can_ifr_.ifr_ifindex;
   // Set filter(s) for CAN socket
-  struct can_filter filter[1];
-  // Filter based on the CAN ID associated with PC Arm Feedback
+  struct can_filter filter[8];
+  // Filter based on the CAN IDs associated with PC Arm Feedback
   //    - Match Condition: <received_can_id> & mask == can_id & mask
-  filter[0].can_id = 0x000;  // Set the can id(s) for PC arm feedback
-  filter[0].can_mask = CAN_SFF_MASK;  // Allows both SFF and EFF Frames w/ can id
+  filter[0].can_id = can_id::Get::ARM_ERROR;
+  filter[0].can_mask = (CAN_EFF_FLAG | CAN_RTR_FLAG | CAN_SFF_MASK);
+  filter[1].can_id = can_id::Get::TURNTABLE_POSITION;
+  filter[1].can_mask = (CAN_EFF_FLAG | CAN_RTR_FLAG | CAN_SFF_MASK);
+  filter[2].can_id = can_id::Get::SHOULDER_POSITION;
+  filter[2].can_mask = (CAN_EFF_FLAG | CAN_RTR_FLAG | CAN_SFF_MASK);
+  filter[3].can_id = can_id::Get::ELBOW_POSITION;
+  filter[3].can_mask = (CAN_EFF_FLAG | CAN_RTR_FLAG | CAN_SFF_MASK);
+  filter[4].can_id = can_id::Get::WRIST_PITCH_POSITION;
+  filter[4].can_mask = (CAN_EFF_FLAG | CAN_RTR_FLAG | CAN_SFF_MASK);
+  filter[5].can_id = can_id::Get::WRIST_ROLL_POSITION;
+  filter[5].can_mask = (CAN_EFF_FLAG | CAN_RTR_FLAG | CAN_SFF_MASK);
+  filter[6].can_id = can_id::Get::CLAW_POSITION;
+  filter[6].can_mask = (CAN_EFF_FLAG | CAN_RTR_FLAG | CAN_SFF_MASK);
+  filter[7].can_id = can_id::Get::FORCE_SENSOR_VALUE;
+  filter[7].can_mask = (CAN_EFF_FLAG | CAN_RTR_FLAG | CAN_SFF_MASK);
+
   setsockopt(can_socket_handle_, SOL_CAN_RAW, CAN_RAW_FILTER,
              &filter, sizeof(filter));
   // Lastly, bind the CAN socket to the CAN address
-  bind(can_socket_handle_, (struct sockaddr *)&can_address_, sizeof(can_address_));
+  if (bind(can_socket_handle_, (struct sockaddr *)&can_address_, sizeof(can_address_)) < 0)
+  {
+    ROS_ERROR("Failed to bind to socket");
+  }
 
   ROS_INFO_NAMED("arm_hw_real",
                  "[ArmHWReal] Successfully initialized the Real Arm Interface!");
@@ -92,7 +111,117 @@ void ArmHWReal::read(const ros::Time& time,
 void ArmHWReal::write(const ros::Time& time,
                       const ros::Duration& duration)
 {
-  // TODO(someshdaga): Implement
+  for (std::size_t i = 0; i < num_joints_; i++)
+  {
+    struct can_frame frame {};
+    if (joint_names_[i] == "arm_base_turntable_joint")
+      frame.can_id = can_id::Set::TURNTABLE_POSITION;
+    else if (joint_names_[i] == "arm_shoulder_joint")
+      frame.can_id = can_id::Set::SHOULDER_POSITION;
+    else if (joint_names_[i] == "arm_elbow_joint")
+      frame.can_id = can_id::Set::ELBOW_POSITION;
+    else if (joint_names_[i] == "arm_wrist_pitch_joint")
+      frame.can_id = can_id::Set::WRIST_PITCH_POSITION;
+    else if (joint_names_[i] == "arm_wrist_roll_joint")
+      frame.can_id = can_id::Set::WRIST_ROLL_POSITION;
+    else
+      ROS_ERROR_STREAM("Invalid joint: " << joint_names_[i]);
+    frame.can_dlc = 8;
+
+    uint64_t* data_ptr;
+    switch (joint_control_method_[i])
+    {
+      case ControlMethod::POSITION:
+        break;
+      case ControlMethod::VELOCITY:
+        break;
+      case ControlMethod::EFFORT:
+        break;
+      case ControlMethod::VOLTAGE:
+        data_ptr = reinterpret_cast<uint64_t*>(frame.data);
+        *data_ptr = *(reinterpret_cast<uint64_t*>(&joint_voltage_command_[i]));
+        break;
+      case ControlMethod::NONE:
+        break;
+      default:
+        break;
+    }
+
+    // Switch Endianness of data
+    *data_ptr = ((*data_ptr & 0x00000000FFFFFFFFull) << 32) | ((*data_ptr & 0xFFFFFFFF00000000ull) >> 32);
+    *data_ptr = ((*data_ptr & 0x0000FFFF0000FFFFull) << 16) | ((*data_ptr & 0xFFFF0000FFFF0000ull) >> 16);
+    *data_ptr = ((*data_ptr & 0x00FF00FF00FF00FFull) << 8)  | ((*data_ptr & 0xFF00FF00FF00FF00ull) >> 8);
+
+    writeCanFrame(frame);
+  }
+}
+
+void ArmHWReal::writeCanFrame(const struct can_frame& frame)
+{
+  int bytes_written =
+    send(can_socket_handle_, &frame, sizeof(struct can_frame), 0);
+
+  if (bytes_written != sizeof(struct can_frame))
+  {
+    ROS_ERROR_STREAM("Failed to send CAN data for " <<
+                     "\nID: " << frame.can_id <<
+                     "\nDLC: " << static_cast<unsigned>(frame.can_dlc) <<
+                     "\ndata[0]: " << static_cast<unsigned>(frame.data[0]) <<
+                     "\ndata[1]: " << static_cast<unsigned>(frame.data[1]) <<
+                     "\ndata[2]: " << static_cast<unsigned>(frame.data[2]) <<
+                     "\ndata[3]: " << static_cast<unsigned>(frame.data[3]) <<
+                     "\ndata[4]: " << static_cast<unsigned>(frame.data[4]) <<
+                     "\ndata[5]: " << static_cast<unsigned>(frame.data[5]) <<
+                     "\ndata[6]: " << static_cast<unsigned>(frame.data[6]) <<
+                     "\ndata[7]: " << static_cast<unsigned>(frame.data[7]) <<
+                     "\nBytes Written: " << bytes_written);
+  }
+}
+
+void ArmHWReal::doSwitch(const std::list<hardware_interface::ControllerInfo>& start_list,
+                         const std::list<hardware_interface::ControllerInfo>& stop_list)
+{
+  ArmHW::doSwitch(start_list, stop_list);
+
+  // Switch the real hardware to the appropriate control modes
+  struct can_frame frame {};
+  frame.can_dlc = CAN_FRAME_SIZE_BYTES_;
+  for (const auto& controller : start_list)
+  {
+    for (const auto& claimed : controller.claimed_resources)
+    {
+      if (claimed.hardware_interface == "hardware_interface::PositionJointInterface")
+      {
+        frame.data[0] = 0;
+      }
+      else if (claimed.hardware_interface == "hardware_interface::VelocityJointInterface")
+      {
+        frame.data[0] = 1;
+      }
+      else if (claimed.hardware_interface == "hardware_interface::VoltageJointInterface")
+      {
+        frame.data[0] = 2;
+      }
+      else
+      {
+        frame.data[0] = 0;
+        ROS_ERROR_NAMED("arm_hw",
+                        "[ArmHW] Invalid hardware interface '%s' specified",
+                        claimed.hardware_interface.c_str());
+      }
+
+      frame.can_id = can_id::Set::TURNTABLE_CONTROL_MODE;
+      writeCanFrame(frame);
+      frame.can_id = can_id::Set::SHOULDER_CONTROL_MODE;
+      writeCanFrame(frame);
+      frame.can_id = can_id::Set::ELBOW_CONTROL_MODE;
+      writeCanFrame(frame);
+      frame.can_id = can_id::Set::WRIST_CONTROL_MODE;
+      writeCanFrame(frame);
+      frame.can_id = can_id::Set::CLAW_CONTROL_MODE;
+      writeCanFrame(frame);
+    }
+  }
 }
 
 }  // namespace arm

@@ -9,6 +9,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 */
 #pragma once
 
+#include "uwrt_arm_hw/voltage_joint_interface.h"
+
 #include <hardware_interface/controller_info.h>
 #include <hardware_interface/joint_command_interface.h>
 #include <hardware_interface/joint_state_interface.h>
@@ -45,7 +47,7 @@ public:
   std::string getName() const;
 
 protected:
-  enum ControlMethod {NONE, POSITION, VELOCITY, EFFORT};
+  enum ControlMethod {NONE, POSITION, VELOCITY, EFFORT, VOLTAGE};
 
   ros::NodeHandle nh_;
   ros::NodeHandle arm_hw_nh_;
@@ -65,7 +67,8 @@ protected:
     joint_velocity_,
     joint_velocity_command_,
     joint_effort_,
-    joint_effort_command_;
+    joint_effort_command_,
+    joint_voltage_command_;
   std::vector<ControlMethod> joint_control_method_;
   std::map<std::string, uint8_t> joint_index_map_;
   std::vector<int> joint_types_;
@@ -75,6 +78,7 @@ protected:
   hardware_interface::PositionJointInterface joint_position_interface_;
   hardware_interface::VelocityJointInterface joint_velocity_interface_;
   hardware_interface::EffortJointInterface   joint_effort_interface_;
+  hardware_interface::VoltageJointInterface  joint_voltage_interface_;
 
   // Joint Limit Interfaces
   joint_limits_interface::PositionJointSaturationInterface position_sat_interface_;

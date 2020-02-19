@@ -1,8 +1,8 @@
 #pragma once
 
+#include <combined_robot_hw/combined_robot_hw.h>
 #include <controller_manager/controller_manager.h>
 #include <ros/ros.h>
-#include <combined_robot_hw/combined_robot_hw.h>
 
 #include <memory>
 #include <string>

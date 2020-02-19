@@ -16,8 +16,8 @@ bool UWRTRoverHWDrivetrainReal::init(ros::NodeHandle &root_nh, ros::NodeHandle &
   }
 
   // TODO: controller to switch the roboteq communication mode
-  std::unique_ptr<roboteq::CommunicationInterface> comm =
-      std::make_unique<roboteq::CanopenInterface>(roboteq_canopen_id_, root_nh.param<std::string>("can_interface_name", "can0"));
+  std::unique_ptr<roboteq::CommunicationInterface> comm = std::make_unique<roboteq::CanopenInterface>(
+      roboteq_canopen_id_, root_nh.param<std::string>("can_interface_name", "can0"));
   motor_controller_ = std::make_unique<roboteq::RoboteqController>(std::move(comm));
   return true;
 }

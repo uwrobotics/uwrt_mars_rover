@@ -116,4 +116,4 @@ install(DIRECTORY
 install(FILES
         ${PROJECT_NAME}_plugin.xml
         DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
-)
+        )

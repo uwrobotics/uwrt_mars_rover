@@ -30,12 +30,12 @@ struct Set
   static const canid_t WRIST_CONTROL_MODE     = 0x743;
   static const canid_t CLAW_CONTROL_MODE      = 0x744;
 
-  static const canid_t TURNTABLE_POSITION     = 0x745;
-  static const canid_t SHOULDER_POSITION      = 0x746;
-  static const canid_t ELBOW_POSITION         = 0x747;
-  static const canid_t WRIST_PITCH_POSITION   = 0x748;
-  static const canid_t WRIST_ROLL_POSITION    = 0x749;
-  static const canid_t CLAW_POSITION          = 0x74A;
+  static const canid_t TURNTABLE_COMMAND      = 0x745;
+  static const canid_t SHOULDER_COMMAND       = 0x746;
+  static const canid_t ELBOW_COMMAND          = 0x747;
+  static const canid_t WRIST_PITCH_COMMAND    = 0x748;
+  static const canid_t WRIST_ROLL_COMMAND     = 0x749;
+  static const canid_t CLAW_COMMAND           = 0x74A;
   static const canid_t TOOLTIP_DEPLOY         = 0x74B;
 
   static const canid_t PID_TUNING_MODE        = 0x750;

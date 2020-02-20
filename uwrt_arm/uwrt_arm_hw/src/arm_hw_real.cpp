@@ -109,61 +109,96 @@ T ArmHWReal::convertCanData(const uint8_t* data,
 {
   uint64_t out_data = 0;
 
-  if (swap_endianness) 
+  if (swap_endianness)
+  {
     for (int i = 0; i < data_len; i++)
       out_data |= (static_cast<uint64_t>(data[i]) << (8 * (data_len - 1 - i)));
+  }
   else
     for (int i = 0; i < data_len; i++)
       out_data |= (static_cast<uint64_t>(data[i]) << (8 * i));
-  
-  return *(reinterpret_cast<T*>(&out_data));
+
+  return reinterpret_cast<T&>(out_data);
 }
 
 void ArmHWReal::read(const ros::Time& time,
                      const ros::Duration& duration)
 {
-  // TODO(someshdaga): Implement
   // Read all messages from the socket buffer
-  // struct can_frame frame;
-  // int n_bytes;
-  // int joint_idx;
-  // do
-  // {
-  //   n_bytes = recv(can_socket_handle_, &frame, sizeof(struct can_frame), 0);
+  struct can_frame frame;
+  int n_bytes;
+  int joint_idx;
+  float value;  // Feedback is sent back as floats
+  FeedbackType fb = FeedbackType::GENERAL;
+  do
+  {
+    // Read
+    n_bytes = recv(can_socket_handle_, &frame, sizeof(struct can_frame), 0);
 
-  //   if (n_bytes == sizeof(struct can_frame))
-  //   {
-  //     switch (frame.can_id)
-  //     {
-  //       case can_id::Get::ARM_ERROR:
-  //         // Do something with this
-  //         break;
-  //       case can_id::Get::TURNTABLE_POSITION:
-  //         // Get joint index
-  //         joint_idx = joint_index_map_["arm_base_turntable_joint"];
-  //         joint_position_[joint_idx] =
-  //           convertCanData<double>(frame.data,
-  //                                  sizeof(frame.data),
-  //                                  true);
-  //         ROS_WARN("[ArmHWReal] Turntable Position: %f",
-  //                  joint_position_[joint_idx]);
-  //         break;
-  //       case can_id::Get::SHOULDER_POSITION:
-  //         break;
-  //       case can_id::Get::ELBOW_POSITION:
-  //         break;
-  //       case can_id::Get::WRIST_PITCH_POSITION:
-  //         break;
-  //       case can_id::Get::WRIST_ROLL_POSITION:
-  //         break;
-  //       default:
-  //         ROS_ERROR_THROTTLE(1.0,
-  //                            "[ArmHWReal][read] Unexpected CAN ID: %d",
-  //                            frame.can_id);
-  //     }
-  //   }
-  // }
-  // while (n_bytes == sizeof(struct can_frame));
+    // Check if have gotten a full CAN frame
+    if (n_bytes == sizeof(struct can_frame))
+    {
+      switch (frame.can_id)
+      {
+        case can_id::Get::ARM_ERROR:
+          // Do something with this
+          fb = FeedbackType::GENERAL;
+          break;
+        case can_id::Get::TURNTABLE_POSITION:
+          fb = FeedbackType::POSITION;
+          joint_idx = joint_index_map_["arm_base_turntable_joint"];
+          break;
+        case can_id::Get::SHOULDER_POSITION:
+          fb = FeedbackType::POSITION;
+          joint_idx = joint_index_map_["arm_shoulder_joint"];
+          break;
+        case can_id::Get::ELBOW_POSITION:
+          fb = FeedbackType::POSITION;
+          joint_idx = joint_index_map_["arm_elbow_joint"];
+          break;
+        case can_id::Get::WRIST_PITCH_POSITION:
+          fb = FeedbackType::POSITION;
+          joint_idx = joint_index_map_["arm_wrist_pitch_joint"];
+          break;
+        case can_id::Get::WRIST_ROLL_POSITION:
+          fb = FeedbackType::POSITION;
+          joint_idx = joint_index_map_["arm_wrist_roll_joint"];
+          break;
+        default:
+          ROS_ERROR_THROTTLE(1.0,
+                             "[ArmHWReal][read] Unexpected CAN ID: %d",
+                             frame.can_id);
+          break;
+      }
+
+      // Based on the feedback type, set the joint states
+      if (fb == FeedbackType::POSITION)
+      {
+        joint_position_[joint_idx] = static_cast<double>(
+          convertCanData<float>(frame.data,
+                                sizeof(frame.data),
+                                false)
+          );
+      }
+      else if (fb == FeedbackType::VELOCITY)
+      {
+        joint_velocity_[joint_idx] = static_cast<double>(
+          convertCanData<float>(frame.data,
+                                sizeof(frame.data),
+                                false)
+          );
+      }
+      else if (fb == FeedbackType::EFFORT)
+      {
+        joint_effort_[joint_idx] = static_cast<double>(
+          convertCanData<float>(frame.data,
+                                sizeof(frame.data),
+                                false)
+          );
+      }
+    }
+  }
+  while (n_bytes == sizeof(struct can_frame));
 }
 
 void ArmHWReal::write(const ros::Time& time,
@@ -172,45 +207,53 @@ void ArmHWReal::write(const ros::Time& time,
   for (std::size_t i = 0; i < num_joints_; i++)
   {
     struct can_frame frame {};
-    if (joint_names_[i] == "arm_base_turntable_joint")
-      frame.can_id = can_id::Set::TURNTABLE_POSITION;
-    else if (joint_names_[i] == "arm_shoulder_joint")
-      frame.can_id = can_id::Set::SHOULDER_POSITION;
-    else if (joint_names_[i] == "arm_elbow_joint")
-      frame.can_id = can_id::Set::ELBOW_POSITION;
-    else if (joint_names_[i] == "arm_wrist_pitch_joint")
-      frame.can_id = can_id::Set::WRIST_PITCH_POSITION;
-    else if (joint_names_[i] == "arm_wrist_roll_joint")
-      frame.can_id = can_id::Set::WRIST_ROLL_POSITION;
-    else
-      ROS_ERROR_STREAM("Invalid joint: " << joint_names_[i]);
-    frame.can_dlc = 8;
 
-    uint64_t* data_ptr;
+    // Figure out the CAN ID based on the
+    // name of the joint
+    // TODO(someshdaga): Streamline mapping of can ids
+    //                   to joint indexes/joint names
+    if (joint_names_[i] == "arm_base_turntable_joint")
+      frame.can_id = can_id::Set::TURNTABLE_COMMAND;
+    else if (joint_names_[i] == "arm_shoulder_joint")
+      frame.can_id = can_id::Set::SHOULDER_COMMAND;
+    else if (joint_names_[i] == "arm_elbow_joint")
+      frame.can_id = can_id::Set::ELBOW_COMMAND;
+    else if (joint_names_[i] == "arm_wrist_pitch_joint")
+      frame.can_id = can_id::Set::WRIST_PITCH_COMMAND;
+    else if (joint_names_[i] == "arm_wrist_roll_joint")
+      frame.can_id = can_id::Set::WRIST_ROLL_COMMAND;
+    else
+      ROS_ERROR_STREAM("[ArmHWReal][write] Invalid joint: " << joint_names_[i]);
+
+    // Firmware uses floats for commands
+    float command;
+    frame.can_dlc = sizeof(command);
+
+    // Cast doubles to floats to match the data type expected by the firmware
     switch (joint_control_method_[i])
     {
       case ControlMethod::POSITION:
+        command = static_cast<float>(joint_position_command_[i]);
         break;
       case ControlMethod::VELOCITY:
+        command = static_cast<float>(joint_velocity_command_[i]);
         break;
       case ControlMethod::EFFORT:
+        command = static_cast<float>(joint_effort_command_[i]);
         break;
       case ControlMethod::VOLTAGE:
-        *data_ptr = convertCanData<uint64_t>(frame.data, sizeof(frame.data), true);
-        // data_ptr = reinterpret_cast<uint64_t*>(frame.data);
-        // *data_ptr = *(reinterpret_cast<uint64_t*>(&joint_voltage_command_[i]));
-        break;
-      case ControlMethod::NONE:
-        break;
-      default:
+        command = static_cast<float>(joint_voltage_command_[i]);
         break;
     }
 
-    // Switch Endianness of data
-    // *data_ptr = ((*data_ptr & 0x00000000FFFFFFFFull) << 32) | ((*data_ptr & 0xFFFFFFFF00000000ull) >> 32);
-    // *data_ptr = ((*data_ptr & 0x0000FFFF0000FFFFull) << 16) | ((*data_ptr & 0xFFFF0000FFFF0000ull) >> 16);
-    // *data_ptr = ((*data_ptr & 0x00FF00FF00FF00FFull) << 8)  | ((*data_ptr & 0xFF00FF00FF00FF00ull) >> 8);
+    // Create pointer to the data field for the CAN Frame
+    uint64_t* data_ptr = reinterpret_cast<uint64_t*>(frame.data);
 
+    // Assign the data to the CAN Frame
+    *data_ptr = convertCanData<uint64_t>(reinterpret_cast<uint8_t*>(&command),
+                                          sizeof(command),
+                                          false);
+    // Write the CAN Frame to the CAN Bus
     writeCanFrame(frame);
   }
 }
@@ -222,19 +265,23 @@ void ArmHWReal::writeCanFrame(const struct can_frame& frame)
 
   if (bytes_written != sizeof(struct can_frame))
   {
-    ROS_ERROR_STREAM("Failed to send CAN data for " <<
-                     "\nID: " << frame.can_id <<
-                     "\nDLC: " << static_cast<unsigned>(frame.can_dlc) <<
-                     "\ndata[0]: " << static_cast<unsigned>(frame.data[0]) <<
-                     "\ndata[1]: " << static_cast<unsigned>(frame.data[1]) <<
-                     "\ndata[2]: " << static_cast<unsigned>(frame.data[2]) <<
-                     "\ndata[3]: " << static_cast<unsigned>(frame.data[3]) <<
-                     "\ndata[4]: " << static_cast<unsigned>(frame.data[4]) <<
-                     "\ndata[5]: " << static_cast<unsigned>(frame.data[5]) <<
-                     "\ndata[6]: " << static_cast<unsigned>(frame.data[6]) <<
-                     "\ndata[7]: " << static_cast<unsigned>(frame.data[7]) <<
-                     "\nBytes Written: " << bytes_written);
+    ROS_ERROR_STREAM_NAMED("[arm_hw_real]",
+                           "Failed to write CAN Frame!\n" <<
+                           canFrameToString(frame));
   }
+}
+
+std::string ArmHWReal::canFrameToString(const struct can_frame& frame)
+{
+  std::stringstream ss;
+  // Print ID in hex as it is typically how CAN IDs are read
+  ss << "ID: " << std::hex << frame.can_id << std::dec <<
+        "\nDLC: " << static_cast<unsigned>(frame.can_dlc);
+  
+  for (int i = 0; i < frame.can_dlc; i++)
+    ss << "\ndata[" << i << "] = " << static_cast<unsigned>(frame.data[i]);
+
+  return ss.str();
 }
 
 void ArmHWReal::doSwitch(const std::list<hardware_interface::ControllerInfo>& start_list,

@@ -24,6 +24,7 @@ namespace arm
 class ArmHWReal : public ArmHW
 {
 public:
+  enum FeedbackType {GENERAL, POSITION, VELOCITY, EFFORT};
   explicit ArmHWReal(const std::string& urdf_str);
 
   ArmHWReal(const std::string& name, const std::string& urdf_str);
@@ -44,6 +45,7 @@ private:
   const bool use_any_can_device_;
 
   // Utility functions
+  std::string canFrameToString(const struct can_frame& frame);
   void writeCanFrame(const struct can_frame& frame);
   template <class T>
   T convertCanData(const uint8_t* data,

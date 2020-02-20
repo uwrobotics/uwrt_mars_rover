@@ -47,7 +47,7 @@ public:
   std::string getName() const;
 
 protected:
-  enum ControlMethod {NONE, POSITION, VELOCITY, EFFORT, VOLTAGE};
+  enum ControlMethod {POSITION, VELOCITY, EFFORT, VOLTAGE};
 
   ros::NodeHandle nh_;
   ros::NodeHandle arm_hw_nh_;

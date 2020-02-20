@@ -111,7 +111,7 @@ void ArmHW::doSwitch(const std::list<hardware_interface::ControllerInfo>& start_
       for (const auto& resource : claimed.resources)
       {
         uint8_t joint_index = joint_index_map_[resource];
-        joint_control_method_[joint_index] = ControlMethod::NONE;
+        joint_control_method_[joint_index] = ControlMethod::VOLTAGE;
         joint_position_command_[joint_index] = joint_position_[joint_index];
         joint_velocity_command_[joint_index] = 0.0;
         joint_effort_command_[joint_index] = 0.0;
@@ -150,7 +150,9 @@ void ArmHW::doSwitch(const std::list<hardware_interface::ControllerInfo>& start_
                           "for resource '%s'",
                           claimed.hardware_interface.c_str(),
                           resource.c_str());
-          joint_control_method_[joint_index] = ControlMethod::NONE;
+          ROS_WARN("[ArmHW] Setting resource '%s' to voltage control mode", resource.c_str());
+          // Default to open-loop (voltage) control
+          joint_control_method_[joint_index] = ControlMethod::VOLTAGE;
         }
       }
     }

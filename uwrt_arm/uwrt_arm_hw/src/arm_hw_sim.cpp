@@ -112,9 +112,8 @@ void ArmHWSim::write(const ros::Time& time, const ros::Duration& period)
       case ControlMethod::EFFORT:
         sim_joints_[i]->SetForce(0, joint_effort_command_[i]);
         break;
-      case ControlMethod::NONE:
-      default:
-        // Don't think we need to do anything in this case
+      case ControlMethod::VOLTAGE:
+        ROS_WARN("[ArmHWSim] Voltage Control Mode not currently supported in simulation!");
         break;
     }
   }

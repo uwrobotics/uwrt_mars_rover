@@ -3,26 +3,22 @@
 #include "uwrt_mars_rover_msgs/NeopixelArrayMode.h"
 #include "uwrt_mars_rover_gimbtonomy/uwrt_mars_rover_gimbtonomy_can.h"
 
-constexpr uint16_t NEOPIXEL_CAN_ID = 0x794;
-constexpr uint8_t FRAME_PAYLOAD_LENGTH = 4;
-const char* VCAN_NUM = "vcan0";
-
 class neopixel{
 private:
     // State of neopixels {0:solid_red, 1:solid_blue, 2:flashing_green}
-    int state_var;
+    uint8_t state;
     // Create handle for process
     ros::NodeHandle neopixel_node;
     // Create service
     ros::ServiceServer neopixel_service;
     // Loop rate controls speed of while loop
     ros::Rate loop_rate;
-    // CLI arg count
-    int arg_count;
-    // CLI arg list
+    // CLI arg count needed for intiliaze_neopixels
+    uint8_t arg_count;
+    // CLI arg list needed for intiliaze_neopixels
     char **arg_list;
     // Create a CAN object to send the can message
-    neopixel_can neopixel_can_msg(NEOPIXEL_CAN_ID, FRAME_PAYLOAD_LENGTH, VCAN_NUM);
+    neopixel_can neopixel_can_msg;
 public:
     // neopixel constructor
     neopixel(int argc, char **argv);

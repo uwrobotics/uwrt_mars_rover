@@ -1,11 +1,16 @@
 #include "uwrt_mars_rover_gimbtonomy/uwrt_mars_rover_gimbtonomy_neopixel.h"
 
-bool set_state(uwrt_mars_rover_msgs::set_state::Request &req,
+constexpr uint16_t NEOPIXEL_CAN_ID = 0x794;
+constexpr uint8_t FRAME_PAYLOAD_LENGTH = 4;
+const char* VCAN = "vcan0";
+
+bool neopixel::set_state(uwrt_mars_rover_msgs::set_state::Request &req,
                uwrt_mars_rover_msgs::set_state::Response &res){
-    state_var = req.requested_mode;
+    state = req.requested_mode.value;
     return true;
 }
-neopixel::neopixel(int argc, char **argv) : loop_rate(1), arg_count(argc), arg_list(argv){
+neopixel::neopixel(int argc, char **argv) : loop_rate(1), arg_count(argc), arg_list(argv),
+                                            neopixel_can_msg(NEOPIXEL_CAN_ID, FRAME_PAYLOAD_LENGTH, VCAN){
         ros::init(argc, argv, "neopixel_set_server");   
 }
 void neopixel::initialize_neopixels(){

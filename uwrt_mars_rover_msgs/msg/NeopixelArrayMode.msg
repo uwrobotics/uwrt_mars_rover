@@ -1,7 +1,7 @@
 uint8 value
 
 # Value Constants
-uint8 autonomous_operation     = 0
-uint8 teleoperated_operation   = 1
-uint8 autonomous_goal_reached  = 2
-uint8 idle                     = 3
+uint8 AUTONOMOUS_OPERATION     = 0
+uint8 TELEOPERATED_OPERATION   = 1
+uint8 AUTONOMOUS_GOAL_REACHED  = 2
+uint8 OFF                      = 3

@@ -23,7 +23,7 @@
 
         <!-- load all the available controllers -->
         <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
-              output="screen" args="rover_state_controller
+              output="screen" args="rover_joint_state_controller
                                     drivetrain_velocity_controller"/>
     </group>
 

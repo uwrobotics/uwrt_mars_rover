@@ -21,7 +21,7 @@ class UWRTRoverHWDrivetrainReal : public UWRTRoverHWDrivetrain {
 
   std::map<std::string, uint8_t> roboteq_actuator_index_;
   std::unique_ptr<roboteq::RoboteqController> motor_controller_;
-  uint8_t roboteq_canopen_id_;
+  uint8_t roboteq_canopen_id_{0};
 };
 
 }  // namespace uwrt_mars_rover_hw

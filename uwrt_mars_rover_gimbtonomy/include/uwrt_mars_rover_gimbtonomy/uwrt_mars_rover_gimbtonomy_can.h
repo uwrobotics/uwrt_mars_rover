@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 // Some includes needed for the CAN lib
 #include <stdio.h>
 #include <stdlib.h>
@@ -28,7 +29,7 @@ private:
     const char* ifname;
 public:
     // Constructor for my CAN class
-    neopixel_can(int c_i, int fpl, char* name);
+    neopixel_can(uint16_t c_i, uint8_t fpl, const char* name);
     // sendCAN function that only sends 1 integer for neopixels
     void sendCAN(unsigned const int data) const;
 };

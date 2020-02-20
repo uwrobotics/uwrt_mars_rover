@@ -31,5 +31,5 @@ public:
     // Constructor for my CAN class
     neopixel_can(uint16_t c_i, uint8_t fpl, const char* name);
     // sendCAN function that only sends 1 integer for neopixels
-    void sendCAN(unsigned const int data) const;
+    void sendCAN(unsigned const int data);
 };

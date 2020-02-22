@@ -12,9 +12,12 @@ class UWRTRoverHWDrivetrainReal : public UWRTRoverHWDrivetrain {
   void read(const ros::Time& time, const ros::Duration& period) override;
   void write(const ros::Time& time, const ros::Duration& period) override;
 
+  // TODO: doswitch to change control modes on roboteq
+
  private:
-  // TODO: load this from a yaml and/or rosparam?
-  std::map<std::string, uint8_t> joint_roboteq_index_ = {{"right_drive_joint", 0}, {"left_drive_joint", 1}};
+  bool loadRoboteqIndicesFromParameterServer(ros::NodeHandle& robot_hw_nh);
+
+  std::map<std::string, uint8_t> roboteq_actuator_index_;
   std::unique_ptr<roboteq::RoboteqController> motor_controller_;
 };
 

@@ -17,19 +17,19 @@
 
 // This is a library the Neopixel Node uses to send messages over CAN.
 // If a general CAN library is added to the repo, delete this and use the general CAN library.
-class neopixel_can{
+class neopixelCan{
 private:
-    int s;
+    int _s;
 	// Build the CAN Socket
-	sockaddr_can addr;
+	sockaddr_can _addr;
 	// Build my CAN packet
-	can_frame packet;
+	can_frame _packet;
 	// What is this for?
-	ifreq ifr;
-    const char* ifname;
+	ifreq _ifr;
+    const char* _ifname;
 public:
     // Constructor for my CAN class
-    neopixel_can(uint16_t c_i, uint8_t fpl, const char* name);
+    neopixelCan(uint16_t c_i, uint8_t fpl, const char* name);
     // sendCAN function that only sends 1 integer for neopixels
     void sendCAN(unsigned const int data);
 };

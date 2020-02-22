@@ -1,31 +1,31 @@
 #include "uwrt_mars_rover_neopixel/uwrt_mars_rover_neopixel_can.h"
 
-neopixel_can::neopixel_can(uint16_t c_i, uint8_t fpl, const char* name){
-	packet.can_id = c_i;
-	packet.can_dlc = fpl;
-	ifname = name;
+neopixelCan::neopixelCan(uint16_t c_i, uint8_t fpl, const char* name){
+	_packet.can_id = c_i;
+	_packet.can_dlc = fpl;
+	_ifname = name;
 	
-    if((s = socket(PF_CAN, SOCK_RAW, CAN_RAW)) < 0) {
+    if((_s = socket(PF_CAN, SOCK_RAW, CAN_RAW)) < 0) {
 		ROS_ERROR("Error while opening socket\n");
 		throw -1;
 	}
 
-	strcpy(ifr.ifr_name, ifname);
-	ioctl(s, SIOCGIFINDEX, &ifr);
+	strcpy(_ifr.ifr_name, _ifname);
+	ioctl(_s, SIOCGIFINDEX, &_ifr);
 	
-	addr.can_family  = AF_CAN;
-	addr.can_ifindex = ifr.ifr_ifindex;
+	_addr.can_family  = AF_CAN;
+	_addr.can_ifindex = _ifr.ifr_ifindex;
 
 	//printf("%s at index %d\n", ifname, ifr.ifr_ifindex);
 	// Bind socket CAN to an interface
-	if(bind(s, (struct sockaddr *)&addr, sizeof(addr)) < 0) {
+	if(bind(_s, (struct sockaddr *)&_addr, sizeof(_addr)) < 0) {
 		ROS_ERROR("Error in socket bind");
 		throw -2;
 	}
 }
-void neopixel_can::sendCAN(unsigned int data){
+void neopixelCan::sendCAN(unsigned int data){
     // Store data into the data potion of the CAN packet
-    packet.data[0] = data;
+    _packet.data[0] = data;
     // Send out the CAN packet
-    write(s, &packet, sizeof(packet));
+    write(_s, &_packet, sizeof(_packet));
 }

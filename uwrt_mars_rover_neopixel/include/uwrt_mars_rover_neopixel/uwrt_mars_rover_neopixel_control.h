@@ -6,19 +6,19 @@
 class neopixel{
 private:
     // State of neopixels {0:solid_red, 1:solid_blue, 2:flashing_green}
-    uint8_t state;
+    uint8_t _state;
     // Create handle for process
-    ros::NodeHandle neopixel_node;
+    ros::NodeHandle _neopixel_node;
     // Create service
-    ros::ServiceServer neopixel_service;
+    ros::ServiceServer _neopixel_service;
     // Loop rate controls speed of while loop
-    ros::Rate loop_rate;
+    ros::Rate _loop_rate;
     // CLI arg count needed for intiliaze_neopixels
-    uint8_t arg_count;
+    uint8_t _arg_count;
     // CLI arg list needed for intiliaze_neopixels
-    char **arg_list;
+    char **_arg_list;
     // Create a CAN object to send the can message
-    neopixel_can neopixel_can_msg;
+    neopixelCan _neopixel_can_msg;
 public:
     // neopixel constructor
     neopixel(int argc, char **argv);

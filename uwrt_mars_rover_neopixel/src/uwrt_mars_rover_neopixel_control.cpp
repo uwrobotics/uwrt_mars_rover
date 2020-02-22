@@ -1,4 +1,4 @@
-#include "uwrt_mars_rover_gimbtonomy/uwrt_mars_rover_gimbtonomy_neopixel.h"
+#include "uwrt_mars_rover_neopixel/uwrt_mars_rover_neopixel_control.h"
 
 constexpr uint16_t NEOPIXEL_CAN_ID = 0x794;
 constexpr uint8_t FRAME_PAYLOAD_LENGTH = 4;

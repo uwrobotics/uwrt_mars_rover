@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(uwrt_mars_rover_gimbtonomy)
+project(uwrt_mars_rover_neopixel)
 
 ## Find catkin macros and libraries
 find_package(catkin REQUIRED COMPONENTS
@@ -41,7 +41,7 @@ include_directories(
 ## Declare a C++ library
 add_library(${PROJECT_NAME}
         src/${PROJECT_NAME}_can.cpp
-        src/${PROJECT_NAME}_neopixel.cpp
+        src/${PROJECT_NAME}_control.cpp
         )
 
 

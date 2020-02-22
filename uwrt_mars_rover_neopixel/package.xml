@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package format="2">
-    <name>uwrt_mars_rover_gimbtonomy</name>
+    <name>uwrt_mars_rover_neopixel</name>
     <version>0.0.0</version>
     <description>Package for ROS implementation of neopixels</description>
 

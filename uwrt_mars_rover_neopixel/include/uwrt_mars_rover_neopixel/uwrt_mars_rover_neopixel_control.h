@@ -1,7 +1,7 @@
 #pragma once
 #include "uwrt_mars_rover_msgs/set_state.h"
 #include "uwrt_mars_rover_msgs/NeopixelArrayMode.h"
-#include "uwrt_mars_rover_gimbtonomy/uwrt_mars_rover_gimbtonomy_can.h"
+#include "uwrt_mars_rover_neopixel/uwrt_mars_rover_neopixel_can.h"
 
 class neopixel{
 private:

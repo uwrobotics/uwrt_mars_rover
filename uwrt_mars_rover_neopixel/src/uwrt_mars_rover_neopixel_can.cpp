@@ -1,4 +1,4 @@
-#include "uwrt_mars_rover_gimbtonomy/uwrt_mars_rover_gimbtonomy_can.h"
+#include "uwrt_mars_rover_neopixel/uwrt_mars_rover_neopixel_can.h"
 
 neopixel_can::neopixel_can(uint16_t c_i, uint8_t fpl, const char* name){
 	packet.can_id = c_i;

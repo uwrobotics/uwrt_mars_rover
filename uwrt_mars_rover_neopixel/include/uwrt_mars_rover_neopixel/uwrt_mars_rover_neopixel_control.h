@@ -23,10 +23,10 @@ public:
     // neopixel constructor
     neopixel(int argc, char **argv);
     // Sets the state var
-    bool set_state(uwrt_mars_rover_msgs::set_state::Request &req,
+    bool setState(uwrt_mars_rover_msgs::set_state::Request &req,
                    uwrt_mars_rover_msgs::set_state::Response &res);
     // Initializes the neopixels
-    void initialize_neopixels();
+    void initializeNeopixels();
     // Runs the while loop
     void run();
 };

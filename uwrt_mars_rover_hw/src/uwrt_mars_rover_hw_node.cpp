@@ -8,6 +8,7 @@ int main(int argc, char **argv) {
   ros::init(argc, argv, "uwrt_mars_rover_base");
   ros::NodeHandle nh;
 
+  // Startup enough spinners to automatically match number of CPU cores
   ros::AsyncSpinner async_spinner(0);
   async_spinner.start();
 

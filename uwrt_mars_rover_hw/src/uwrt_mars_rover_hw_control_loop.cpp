@@ -21,14 +21,10 @@ bool MarsRoverHWControlLoop::init() {
       !param_retrieved, name_,
       loop_nh.getNamespace() << "/controllers_watchdog_timeout could not be found and loaded from parameter server.");
 
-  if (!rover_hw_) {
-    ROS_WARN_NAMED(name_, "No Derived RoverHW initialized, falling back on default base class");
-    rover_hw_ = std::make_unique<UWRTRoverHWDrivetrain>();
-  }
-
-  ros::NodeHandle rover_nh(nh_, rover_hw_->getName());
-  if (!rover_hw_->init(nh_, rover_nh)) {
-    ROS_FATAL_STREAM_NAMED(name_, "Failed to initialize " << rover_hw_->getName());
+  ros::NodeHandle rover_hw_nh(nh_, "combined_robot_hw");
+  rover_hw_ = std::make_unique<combined_robot_hw::CombinedRobotHW>();
+  if (!rover_hw_->init(nh_, rover_hw_nh)) {
+    ROS_FATAL_STREAM_NAMED(name_, "Failed to initialize combined_robot_hw");
     return false;
   }
 

@@ -3,7 +3,6 @@ namespace uwrt_mars_rover_hw {
 
 MarsRoverHWControlLoopReal::MarsRoverHWControlLoopReal(const ros::NodeHandle& nh)
     : MarsRoverHWControlLoop("robot_hw_control_loop_real", nh) {
-  this->rover_hw_ = std::make_unique<UWRTRoverHWDrivetrainReal>();
   if (!this->init()) {
     throw std::runtime_error("Failed to initialize RobotHW");
   }

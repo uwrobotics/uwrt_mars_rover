@@ -104,7 +104,7 @@ class TeleopTurtle{
 		nh_.param("right_stick_angular_scale", right_stick_left_right_scale_, right_stick_left_right_scale_);
 		
 		drivetrain_twist_publisher_ = nh_.advertise<geometry_msgs::Twist>("/uwrt_mars_rover/drivetrain_velocity_controller/cmd_vel", 1);
-		arm_publisher = nh_.advertise<std_msgs::Float64MultiArray>("/uwrt_mars_rover/arm_voltage_control/command", 1);
+		arm_publisher = nh_.advertise<std_msgs::Float64MultiArray>("/arm_voltage_controller/command", 1);
 		claw_publisher = nh_.advertise<geometry_msgs::Twist>("turtle1/cmd_vel", 1);
 		camera_publisher = nh_.advertise<geometry_msgs::Twist>("turtle1/cmd_vel", 1);
 
@@ -158,39 +158,39 @@ class TeleopTurtle{
 					shoulder_vel = -(-joy->axes[RT_] + 1) / 2.0 ;//down
 				}
 
-				double elbow_vel = joy->axes[cross_key_up_down_];
-				double turntable_vel = joy->axes[cross_key_left_right_];
-				std::vector <double> arm_vec = {turntable_vel,shoulder_vel,elbow_vel};
+				double elbow_vel = joy->axes[cross_key_up_down_] * 0.4;
+				double turntable_vel = joy->axes[cross_key_left_right_] * 0.25;
+			        double claw_rotate = 0;
+			        // rotate left/right
+			        if(joy->buttons[X_]){
+				    claw_rotate = 1.0;
+			        }else if (joy->buttons[B_]){
+				    claw_rotate = -1.0;
+			        }
+			        double claw_up_down = 0.0;
+			        //claw up / down
+			        if(joy->buttons[LB_]){
+				claw_up_down = -1.0;
+			        }else if (joy->buttons[RB_]){
+				    claw_up_down = 1.0;
+			        }  
+				std::vector <double> arm_vec = {turntable_vel,shoulder_vel,elbow_vel,claw_rotate,claw_up_down};
 				arm_openloop_MultiArray.data.insert(arm_openloop_MultiArray.data.end(), arm_vec.begin(), arm_vec.end());
 				arm_publisher.publish(arm_openloop_MultiArray);
 			}
 
 			//claw twist
 			std_msgs::Float64MultiArray claw_MultiArray;
-			int claw_rotate = 0;
-			// rotate left/right
-			if(joy->buttons[X_]){
-				claw_rotate = 1;
-			}else if (joy->buttons[B_]){
-				claw_rotate = -1;
-			}
-			int claw_up_down = 0;
-			//claw up / down
-			if(joy->buttons[LB_]){
-				claw_up_down = -1;
-			}else if (joy->buttons[RB_]){
-				claw_up_down = 1;
-			}
 
 			//open close claw
-			int claw_open_close = 0;
+			double claw_open_close = 0.0;
 			if(joy-> buttons[A_]){
-				claw_open_close = 1;
+				claw_open_close = 1.0;
 			}else if(joy->buttons[Y_]){
-				claw_open_close = -1;
+				claw_open_close = -1.0;
 			}
-			std::vector <double> claw_vec = {claw_rotate,claw_up_down,claw_open_close};
-			claw_MultiArray.data.insert(arm_openloop_MultiArray.data.end(), claw_vec.begin(), claw_vec.end());
+			std::vector <double> claw_vec = {claw_open_close};
+			claw_MultiArray.data.insert(claw_MultiArray.data.end(), claw_vec.begin(), claw_vec.end());
 			claw_publisher.publish(claw_MultiArray);
 
 

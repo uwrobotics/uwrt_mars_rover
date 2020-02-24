@@ -12,4 +12,9 @@
     </description>
   </class>
 
+  <class name="voltage_controllers/GripperActionController" type="voltage_controllers::GripperActionController" base_class_type="controller_interface::ControllerBase">
+    <description>
+      The GripperActionController sends open-loop voltage/pwm commands for a single dof joint. It expects a VoltageJointInterface type of hardware interface.
+    </description>
+  </class>
 </library>

@@ -12,6 +12,7 @@ find_package(catkin REQUIRED
     forward_command_controller
     gazebo_dev
     gazebo_ros_control
+    gripper_action_controller
     hardware_interface
     joint_limits_interface
     pluginlib
@@ -39,6 +40,7 @@ catkin_package(
     controller_manager
     forward_command_controller
     gazebo_ros_control
+    gripper_action_controller
     hardware_interface
     joint_limits_interface
     pluginlib

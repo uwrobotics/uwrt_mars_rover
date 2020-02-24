@@ -18,6 +18,7 @@
   <depend>controller_manager</depend>
   <depend>forward_command_controller</depend>
   <depend>gazebo_ros_control</depend>
+  <depend>gripper_action_controller</depend>
   <depend>hardware_interface</depend>
   <depend>joint_limits_interface</depend>
   <depend>pluginlib</depend>

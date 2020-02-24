@@ -23,7 +23,7 @@ private:
 	// Build the CAN Socket
 	sockaddr_can _addr;
 	// Build my CAN packet
-	can_frame _packet;
+	can_frame _packet{};
 	// What is this for?
 	ifreq _ifr;
     const char* _ifname;
@@ -31,5 +31,5 @@ public:
     // Constructor for my CAN class
     neopixelCan(uint16_t c_i, uint8_t fpl, const char* name);
     // sendCAN function that only sends 1 integer for neopixels
-    void sendCAN(unsigned const int data);
+    void sendCAN(const uint8_t data);
 };

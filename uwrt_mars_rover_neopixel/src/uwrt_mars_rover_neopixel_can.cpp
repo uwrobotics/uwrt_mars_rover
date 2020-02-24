@@ -23,7 +23,7 @@ neopixelCan::neopixelCan(uint16_t c_i, uint8_t fpl, const char* name){
 		throw -2;
 	}
 }
-void neopixelCan::sendCAN(unsigned const int data){
+void neopixelCan::sendCAN(const uint8_t data){
     // Store data into the data potion of the CAN packet
     _packet.data[0] = data;
     // Send out the CAN packet

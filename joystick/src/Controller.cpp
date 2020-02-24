@@ -160,32 +160,39 @@ class TeleopTurtle{
 
 				double elbow_vel = joy->axes[cross_key_up_down_];
 				double turntable_vel = joy->axes[cross_key_left_right_];
-				std::vector <double> vec = {shoulder_vel,elbow_vel,turntable_vel};
-				arm_openloop_MultiArray.data.insert(arm_openloop_MultiArray.data.end(), vec.begin(), vec.end());
+				std::vector <double> arm_vec = {turntable_vel,shoulder_vel,elbow_vel};
+				arm_openloop_MultiArray.data.insert(arm_openloop_MultiArray.data.end(), arm_vec.begin(), arm_vec.end());
 				arm_publisher.publish(arm_openloop_MultiArray);
 			}
 
 			//claw twist
-			geometry_msgs::Twist claw_twist;
+			std_msgs::Float64MultiArray claw_MultiArray;
+			int claw_rotate = 0;
 			// rotate left/right
 			if(joy->buttons[X_]){
-				claw_twist.angular.x = 1;
+				claw_rotate = 1;
 			}else if (joy->buttons[B_]){
-				claw_twist.angular.x = -1;
+				claw_rotate = -1;
 			}
+			int claw_up_down = 0;
 			//claw up / down
 			if(joy->buttons[LB_]){
-				claw_twist.linear.z = -1;
+				claw_up_down = -1;
 			}else if (joy->buttons[RB_]){
-				claw_twist.angular.z = 1;
+				claw_up_down = 1;
 			}
+
 			//open close claw
+			int claw_open_close = 0;
 			if(joy-> buttons[A_]){
-				claw_twist.linear.y = 1;
+				claw_open_close = 1;
 			}else if(joy->buttons[Y_]){
-				claw_twist.linear.y = -1;
+				claw_open_close = -1;
 			}
-			claw_publisher.publish(claw_twist);
+			std::vector <double> claw_vec = {claw_rotate,claw_up_down,claw_open_close};
+			claw_MultiArray.data.insert(arm_openloop_MultiArray.data.end(), claw_vec.begin(), claw_vec.end());
+			claw_publisher.publish(claw_MultiArray);
+
 
 			//camera movement custom message
 			geometry_msgs::Twist camera_twist;

@@ -18,7 +18,7 @@ int main(int argc, char** argv)
   // Process callbacks in a separate thread
   // Using a callback queue in the main thread
   // leads to the deadlocking in the controller manager
-  ros::AsyncSpinner spinner(1);
+  ros::AsyncSpinner spinner(0);
   spinner.start();
 
   uwrt::arm::RealArmControl arm_control_loop;

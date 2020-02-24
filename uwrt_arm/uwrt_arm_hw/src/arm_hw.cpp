@@ -33,7 +33,7 @@ ArmHW::ArmHW(const std::string& name,
     num_joints_(5)
 {
   joint_types_.resize(num_joints_);
-  joint_control_method_.resize(num_joints_);
+  joint_control_method_.resize(num_joints_, ControlMethod::VOLTAGE);
   joint_position_.resize(num_joints_, 0.0);
   joint_position_command_.resize(num_joints_, 0.0);
   joint_velocity_.resize(num_joints_, 0.0);
@@ -127,6 +127,13 @@ void ArmHW::doSwitch(const std::list<hardware_interface::ControllerInfo>& start_
       for (const auto& resource : claimed.resources)
       {
         uint8_t joint_index = joint_index_map_[resource];
+
+        // Reset joint commands
+        joint_position_command_[joint_index] = joint_position_[joint_index];
+        joint_velocity_command_[joint_index] = 0.0;
+        joint_effort_command_[joint_index] = 0.0;
+        joint_voltage_command_[joint_index] = 0.0;
+
         if (claimed.hardware_interface == "hardware_interface::PositionJointInterface")
         {
           joint_control_method_[joint_index] = ControlMethod::POSITION;

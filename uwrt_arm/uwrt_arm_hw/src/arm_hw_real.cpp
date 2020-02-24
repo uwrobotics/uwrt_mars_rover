@@ -74,21 +74,25 @@ bool ArmHWReal::init(ros::NodeHandle& nh,
   //    - Match Condition: <received_can_id> & mask == can_id & mask
   filter[0].can_id = can_id::Get::ARM_ERROR;
   filter[0].can_mask = (CAN_EFF_FLAG | CAN_RTR_FLAG | CAN_SFF_MASK);
-  filter[1].can_id = can_id::Get::TURNTABLE_POSITION;
+  filter[1].can_id = can_id::Get::TURNTABLE_FEEDBACK;
   filter[1].can_mask = (CAN_EFF_FLAG | CAN_RTR_FLAG | CAN_SFF_MASK);
-  filter[2].can_id = can_id::Get::SHOULDER_POSITION;
+  filter[2].can_id = can_id::Get::SHOULDER_FEEDBACK;
   filter[2].can_mask = (CAN_EFF_FLAG | CAN_RTR_FLAG | CAN_SFF_MASK);
-  filter[3].can_id = can_id::Get::ELBOW_POSITION;
+  filter[3].can_id = can_id::Get::ELBOW_FEEDBACK;
   filter[3].can_mask = (CAN_EFF_FLAG | CAN_RTR_FLAG | CAN_SFF_MASK);
-  filter[4].can_id = can_id::Get::WRIST_PITCH_POSITION;
+  filter[4].can_id = can_id::Get::WRIST_PITCH_FEEDBACK;
   filter[4].can_mask = (CAN_EFF_FLAG | CAN_RTR_FLAG | CAN_SFF_MASK);
-  filter[5].can_id = can_id::Get::WRIST_ROLL_POSITION;
+  filter[5].can_id = can_id::Get::WRIST_ROLL_FEEDBACK;
   filter[5].can_mask = (CAN_EFF_FLAG | CAN_RTR_FLAG | CAN_SFF_MASK);
-  filter[6].can_id = can_id::Get::CLAW_POSITION;
+  filter[6].can_id = can_id::Get::CLAW_FEEDBACK;
   filter[6].can_mask = (CAN_EFF_FLAG | CAN_RTR_FLAG | CAN_SFF_MASK);
   filter[7].can_id = can_id::Get::FORCE_SENSOR_VALUE;
   filter[7].can_mask = (CAN_EFF_FLAG | CAN_RTR_FLAG | CAN_SFF_MASK);
-
+  struct timeval receive_timeout;
+  receive_timeout.tv_usec = 500;
+  setsockopt(can_socket_handle_, SOL_SOCKET,
+             SO_RCVTIMEO, &receive_timeout,
+             sizeof(receive_timeout));
   setsockopt(can_socket_handle_, SOL_CAN_RAW, CAN_RAW_FILTER,
              &filter, sizeof(filter));
   // Lastly, bind the CAN socket to the CAN address
@@ -127,7 +131,7 @@ void ArmHWReal::read(const ros::Time& time,
   // Read all messages from the socket buffer
   struct can_frame frame;
   int n_bytes;
-  int joint_idx;
+  int joint_idx = -1;
   float value;  // Feedback is sent back as floats
   FeedbackType fb = FeedbackType::GENERAL;
   do
@@ -144,57 +148,57 @@ void ArmHWReal::read(const ros::Time& time,
           // Do something with this
           fb = FeedbackType::GENERAL;
           break;
-        case can_id::Get::TURNTABLE_POSITION:
-          fb = FeedbackType::POSITION;
+        case can_id::Get::TURNTABLE_FEEDBACK:
+          fb = FeedbackType::POSVEL;
           joint_idx = joint_index_map_["arm_base_turntable_joint"];
           break;
-        case can_id::Get::SHOULDER_POSITION:
-          fb = FeedbackType::POSITION;
+        case can_id::Get::SHOULDER_FEEDBACK:
+          fb = FeedbackType::POSVEL;
           joint_idx = joint_index_map_["arm_shoulder_joint"];
           break;
-        case can_id::Get::ELBOW_POSITION:
-          fb = FeedbackType::POSITION;
+        case can_id::Get::ELBOW_FEEDBACK:
+          fb = FeedbackType::POSVEL;
           joint_idx = joint_index_map_["arm_elbow_joint"];
           break;
-        case can_id::Get::WRIST_PITCH_POSITION:
-          fb = FeedbackType::POSITION;
+        case can_id::Get::WRIST_PITCH_FEEDBACK:
+          fb = FeedbackType::POSVEL;
           joint_idx = joint_index_map_["arm_wrist_pitch_joint"];
           break;
-        case can_id::Get::WRIST_ROLL_POSITION:
-          fb = FeedbackType::POSITION;
+        case can_id::Get::WRIST_ROLL_FEEDBACK:
+          fb = FeedbackType::POSVEL;
           joint_idx = joint_index_map_["arm_wrist_roll_joint"];
           break;
+        case can_id::Get::CLAW_FEEDBACK:
+          fb = FeedbackType::POSVEL;
+          // TODO(someshdaga): Figure out what to do with the claw
+          break;
         default:
-          ROS_ERROR_THROTTLE(1.0,
-                             "[ArmHWReal][read] Unexpected CAN ID: %d",
-                             frame.can_id);
+          ROS_ERROR_STREAM_NAMED("arm_hw_real",
+                                 "[ArmHWReal][read] Unexpected CAN ID: " <<
+                                  std::hex << frame.can_id);
           break;
       }
 
       // Based on the feedback type, set the joint states
-      if (fb == FeedbackType::POSITION)
+      if (fb == FeedbackType::POSVEL && joint_idx >= 0)
       {
+        // Position is specified in degrees in can frame
         joint_position_[joint_idx] = static_cast<double>(
           convertCanData<float>(frame.data,
-                                sizeof(frame.data),
+                                sizeof(float),
                                 false)
-          );
-      }
-      else if (fb == FeedbackType::VELOCITY)
-      {
+          ) * M_PI / 180.0;
+
+        // Velocity is specified in degrees/sec in can frame
         joint_velocity_[joint_idx] = static_cast<double>(
-          convertCanData<float>(frame.data,
-                                sizeof(frame.data),
+          convertCanData<float>(&frame.data[4],
+                                sizeof(float),
                                 false)
-          );
-      }
-      else if (fb == FeedbackType::EFFORT)
-      {
-        joint_effort_[joint_idx] = static_cast<double>(
-          convertCanData<float>(frame.data,
-                                sizeof(frame.data),
-                                false)
-          );
+          ) * M_PI / 180.0;
+        ROS_ERROR("------");
+        ROS_ERROR("Joint: %s", joint_names_[joint_idx].c_str());
+        ROS_ERROR("Position: %f (deg)", joint_position_[joint_idx] * 180.0 / M_PI);
+        ROS_ERROR("Velocity: %f (deg/s)", joint_velocity_[joint_idx] * 180.0 / M_PI);
       }
     }
   }
@@ -233,10 +237,14 @@ void ArmHWReal::write(const ros::Time& time,
     switch (joint_control_method_[i])
     {
       case ControlMethod::POSITION:
-        command = static_cast<float>(joint_position_command_[i]);
+        // Specify position in degrees
+        command = static_cast<float>(joint_position_command_[i] *
+                                     180.0 / M_PI);
         break;
       case ControlMethod::VELOCITY:
-        command = static_cast<float>(joint_velocity_command_[i]);
+        // Specify velocity in degrees/sec
+        command = static_cast<float>(joint_velocity_command_[i] *
+                                     180.0 / M_PI);
         break;
       case ControlMethod::EFFORT:
         command = static_cast<float>(joint_effort_command_[i]);
@@ -262,7 +270,7 @@ void ArmHWReal::writeCanFrame(const struct can_frame& frame)
 {
   int bytes_written =
     send(can_socket_handle_, &frame, sizeof(struct can_frame), 0);
-
+  
   if (bytes_written != sizeof(struct can_frame))
   {
     ROS_ERROR_STREAM_NAMED("[arm_hw_real]",
@@ -291,14 +299,14 @@ void ArmHWReal::doSwitch(const std::list<hardware_interface::ControllerInfo>& st
 
   // Switch the real hardware to the appropriate control modes
   struct can_frame frame {};
-  frame.can_dlc = CAN_FRAME_SIZE_BYTES_;
+  frame.can_dlc = 1;
   for (const auto& controller : start_list)
   {
     for (const auto& claimed : controller.claimed_resources)
     {
       if (claimed.hardware_interface == "hardware_interface::PositionJointInterface")
       {
-        frame.data[0] = 0;
+        frame.data[0] = 2;
       }
       else if (claimed.hardware_interface == "hardware_interface::VelocityJointInterface")
       {
@@ -306,7 +314,7 @@ void ArmHWReal::doSwitch(const std::list<hardware_interface::ControllerInfo>& st
       }
       else if (claimed.hardware_interface == "hardware_interface::VoltageJointInterface")
       {
-        frame.data[0] = 2;
+        frame.data[0] = 0;
       }
       else if (claimed.hardware_interface == "hardware_interface::JointStateInterface")
       {

@@ -13,12 +13,12 @@ struct Get
 {
   static const canid_t ARM_ERROR              = 0x100;
 
-  static const canid_t TURNTABLE_POSITION     = 0x758;
-  static const canid_t SHOULDER_POSITION      = 0x759;
-  static const canid_t ELBOW_POSITION         = 0x75A;
-  static const canid_t WRIST_PITCH_POSITION   = 0x75B;
-  static const canid_t WRIST_ROLL_POSITION    = 0x75C;
-  static const canid_t CLAW_POSITION          = 0x75D;
+  static const canid_t TURNTABLE_FEEDBACK     = 0x758;
+  static const canid_t SHOULDER_FEEDBACK      = 0x759;
+  static const canid_t ELBOW_FEEDBACK         = 0x75A;
+  static const canid_t WRIST_PITCH_FEEDBACK   = 0x75B;
+  static const canid_t WRIST_ROLL_FEEDBACK    = 0x75C;
+  static const canid_t CLAW_FEEDBACK          = 0x75D;
   static const canid_t FORCE_SENSOR_VALUE     = 0x75E;
 };
 

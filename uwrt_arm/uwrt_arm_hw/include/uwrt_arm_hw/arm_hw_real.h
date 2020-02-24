@@ -24,7 +24,7 @@ namespace arm
 class ArmHWReal : public ArmHW
 {
 public:
-  enum FeedbackType {GENERAL, POSITION, VELOCITY, EFFORT};
+  enum FeedbackType {GENERAL, POSVEL};
   explicit ArmHWReal(const std::string& urdf_str);
 
   ArmHWReal(const std::string& name, const std::string& urdf_str);

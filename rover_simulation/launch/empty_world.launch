@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- Gazebo Configurations -->
+  <arg name="headless"     default="false"/>
+  <arg name="use_sim_time" default="true"/>
+  <arg name="world_name"   value="worlds/empty.world"/>
+
+  <!-- Robot Type -->
+  <arg name="robot"     default="rover"/>
+
+  <!-- Robot Spawn Position/Orientation -->
+  <arg name="spawn_x"   default="0"/>
+  <arg name="spawn_y"   default="0"/>
+  <arg name="spawn_yaw" default="0"/>
+
+  <!-- Launch the required Gazebo World -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="headless"     value="$(arg headless)"/>
+    <arg name="use_sim_time" value="$(arg use_sim_time)"/>
+    <arg name="world_name"   value="$(arg world_name)"/>
+  </include>
+
+  <!-- Load the robot description and joint/state publishers -->
+  <include file="$(find rover_simulation)/launch/include/$(arg robot).launch">
+    <arg name="spawn_x"   value="$(arg spawn_x)"/>
+    <arg name="spawn_y"   value="$(arg spawn_y)"/>
+    <arg name="spawn_yaw" value="$(arg spawn_yaw)"/>
+  </include>
+</launch>

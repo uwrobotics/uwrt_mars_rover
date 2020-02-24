@@ -1,0 +1,13 @@
+<?xml version="1.0" ?>
+<launch>
+  <arg name="urdf_file"            default="$(find uwrt_arm_description)/urdf/uwrt_arm.urdf.xacro"/>
+  
+  <!-- Load the robot_description -->
+  <param name="robot_description"  command="xacro $(arg urdf_file)"/>
+
+  <!-- Publish TFs based on the joint states reported by the simulated/real hardware
+       on the joint_sates (might be remapped) topic -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
+        respawn="true">
+  </node>
+</launch>

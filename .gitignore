@@ -47,5 +47,11 @@ qtcreator-*
 # Emacs
 .#*
 
+# Visual Studio Code
+**/.vscode
+
+# Dangling files
+*.swp
+
 # Catkin custom files
 CATKIN_IGNORE

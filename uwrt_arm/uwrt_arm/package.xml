@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>uwrt_arm</name>
+  <version>0.0.0</version>
+  <description>Metapackage for arm of UWRT Rover</description>
+
+  <maintainer email="s2daga@uwaterloo.ca">Somesh Daga</maintainer>
+  <license>MIT</license>
+  <author email="s2daga@uwaterloo.ca">Somesh Daga</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <exec_depend>uwrt_arm_control</exec_depend>
+  <exec_depend>uwrt_arm_description</exec_depend>
+  <exec_depend>uwrt_arm_hw</exec_depend>
+  <exec_depend>uwrt_arm_moveit_config</exec_depend>
+  <exec_depend>uwrt_arm_msgs</exec_depend>
+
+  <export>
+    <metapackage/>
+  </export>
+</package>

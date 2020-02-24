@@ -9,8 +9,8 @@ uwrt_mars_rover:
       joints:
         - name: left_drive_joint
           transmission_reduction: 43.8311688312
-          roboteq_index: 1
+          roboteq_index: 2
 
         - name: right_drive_joint
           transmission_reduction: 43.8311688312
-          roboteq_index: 0
+          roboteq_index: 1

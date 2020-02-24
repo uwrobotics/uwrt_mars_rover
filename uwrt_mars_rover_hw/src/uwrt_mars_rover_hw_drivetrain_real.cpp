@@ -1,5 +1,6 @@
 #include "uwrt_mars_rover_hw/uwrt_mars_rover_hw_drivetrain_real.h"
 
+#include <cmath>
 #include <pluginlib/class_list_macros.hpp>
 
 #include "CanopenInterface.hpp"
@@ -16,28 +17,36 @@ bool UWRTRoverHWDrivetrainReal::init(ros::NodeHandle &root_nh, ros::NodeHandle &
   }
 
   // TODO: controller to switch the roboteq communication mode
-  std::unique_ptr<roboteq::CommunicationInterface> comm = std::make_unique<roboteq::CanopenInterface>(
+  std::unique_ptr<roboteq::CanopenInterface> comm = std::make_unique<roboteq::CanopenInterface>(
       roboteq_canopen_id_, root_nh.param<std::string>("can_interface_name", "can0"));
   motor_controller_ = std::make_unique<roboteq::RoboteqController>(std::move(comm));
   return true;
 }
 
 void UWRTRoverHWDrivetrainReal::read(const ros::Time & /*time*/, const ros::Duration & /*period*/) {
+  static constexpr double MOTOR_READING_TO_AMPS_CONVERSION_FACTOR{10.0};
+  static constexpr double RPM_TO_RADIANS_PER_SECOND_FACTOR{2 * M_PI / 60};
+
   for (const auto &joint_name : joint_names_) {
     // TODO: change to use tpdos
-    actuator_joint_states_[joint_name].actuator_position =
-        motor_controller_->readAbsoluteEncoderCount(roboteq_actuator_index_[joint_name]);
+    actuator_joint_states_[joint_name].actuator_position = motor_controller_->readAbsoluteEncoderCount(
+        roboteq_actuator_index_[joint_name]);  // TODO: This is Encoder Counts? Convert to Rad?
     actuator_joint_states_[joint_name].actuator_velocity =
-        motor_controller_->readEncoderMotorSpeed(roboteq_actuator_index_[joint_name]);
+        motor_controller_->readEncoderMotorSpeed(roboteq_actuator_index_[joint_name]) *
+        RPM_TO_RADIANS_PER_SECOND_FACTOR;
     actuator_joint_states_[joint_name].actuator_effort =
-        motor_controller_->readMotorAmps(roboteq_actuator_index_[joint_name]);
+        motor_controller_->readMotorAmps(roboteq_actuator_index_[joint_name]) * MOTOR_READING_TO_AMPS_CONVERSION_FACTOR;
+
+    motor_controller_->readMotorStatusFlags(roboteq_actuator_index_[joint_name]);
   }
   actuator_to_joint_state_interface_.propagate();
 
-  // TODO: read status flags
+  motor_controller_->readFaultFlags();
 }
 
 void UWRTRoverHWDrivetrainReal::write(const ros::Time & /*time*/, const ros::Duration & /*period*/) {
+  static constexpr double RADIANS_PER_SECOND_TO_RPM_FACTOR{60/M_PI/2};
+
   for (const auto &joint_name : joint_names_) {
     bool successful_joint_write = false;
     switch (actuator_joint_commands_[joint_name].type) {
@@ -45,13 +54,13 @@ void UWRTRoverHWDrivetrainReal::write(const ros::Time & /*time*/, const ros::Dur
         joint_to_actuator_position_interface_.propagate();
         successful_joint_write =
             motor_controller_->setPosition(static_cast<int32_t>(actuator_joint_commands_[joint_name].actuator_data),
-                                           roboteq_actuator_index_[joint_name]);
+                                           roboteq_actuator_index_[joint_name]); //todo: units conversion?
         break;
 
       case UWRTRoverHWDrivetrain::DrivetrainActuatorJointCommand::Type::VELOCITY:
         joint_to_actuator_velocity_interface_.propagate();
         successful_joint_write =
-            motor_controller_->setVelocity(static_cast<int32_t>(actuator_joint_commands_[joint_name].actuator_data),
+            motor_controller_->setVelocity(static_cast<int32_t>(actuator_joint_commands_[joint_name].actuator_data * RADIANS_PER_SECOND_TO_RPM_FACTOR),
                                            roboteq_actuator_index_[joint_name]);
         break;
 

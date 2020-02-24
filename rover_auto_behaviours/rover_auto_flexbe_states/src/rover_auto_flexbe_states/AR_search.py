@@ -4,9 +4,11 @@ import rospy
 from flexbe_core import EventState, Logger
 
 
-class enter_gps_coords(EventState):
+class AR_search(EventState):
 	'''
-	Enter gps target from terminal
+	This should let the rover search for an AR
+	Method TBD.
+	Possible implementation: spiral
 
 	interface: TBD
 	--
@@ -15,9 +17,9 @@ class enter_gps_coords(EventState):
 
 	'''
 
-	def __init__(self,):
+	def __init__(self):
 		# Declare outcomes, input_keys, and output_keys by calling the super constructor with the corresponding arguments.
-		super(enter_gps_coords, self).__init__(outcomes = ['continue', 'failed'])
+		super(AR_search, self).__init__(outcomes = ['continue', 'failed'])
 
 
 	def execute(self, userdata):

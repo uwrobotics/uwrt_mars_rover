@@ -10,11 +10,11 @@
 			<param name="deadzone" value="0.25"/>
 		</node>
 
-	<!-- Axes -->
-		<param name="left_stick_vertical_scale_fast" value="5" type="int"/>
-		<param name="left_stick_vertical_scale_slow" value="1" type="int"/>
-		<param name="left_stick_angular_scale_fast" value="5" type="int"/>
-		<param name="left_stick_angular_scale_slow" value="1" type="int"/>
+	<!-- Axes TODO: load from max velocity in controller-->
+		<param name="left_stick_vertical_scale_fast" value="2.2576" type="double"/>
+		<param name="left_stick_vertical_scale_slow" value="1.128765711" type="double"/>
+		<param name="left_stick_angular_scale_fast" value="5.925279" type="double"/>
+		<param name="left_stick_angular_scale_slow" value="2.9626" type="double"/>
 
 		<param name="right_stick_vertical_scale" value="1" type="int"/>
 		<param name="right_stick_angular_scale" value="1" type="int"/>

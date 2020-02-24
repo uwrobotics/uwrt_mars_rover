@@ -76,18 +76,18 @@ TeleopTurtle::TeleopTurtle()
   nh_.param("power", power_, power_);
   nh_.param("button_stick_left", button_stick_left_, button_stick_left_);
   nh_.param("button_stick_right", button_stick_right_, button_stick_right_);
-  nh_.param("left_stick_vertical_scale_fast", left_stick_up_down_scale_fast_, left_stick_up_down_scale_fast_);
-  nh_.param("left_stick_vertical_scale_slow", left_stick_up_down_scale_slow_, left_stick_up_down_scale_slow_);
-  nh_.param("left_stick_angular_scale_fast", left_stick_left_right_scale_fast_, left_stick_left_right_scale_fast_);
-  nh_.param("left_stick_angular_scale_slow", left_stick_left_right_scale_slow_, left_stick_left_right_scale_slow_);
-  nh_.param("right_stick_vertical_scale", right_stick_up_down_scale_, right_stick_up_down_scale_);
-  nh_.param("right_stick_angular_scale", right_stick_left_right_scale_, right_stick_left_right_scale_);
+  nh_.param<double>("left_stick_vertical_scale_fast", left_stick_up_down_scale_fast_, left_stick_up_down_scale_fast_);
+  nh_.param<double>("left_stick_vertical_scale_slow", left_stick_up_down_scale_slow_, left_stick_up_down_scale_slow_);
+  nh_.param<double>("left_stick_angular_scale_fast", left_stick_left_right_scale_fast_, left_stick_left_right_scale_fast_);
+  nh_.param<double>("left_stick_angular_scale_slow", left_stick_left_right_scale_slow_, left_stick_left_right_scale_slow_);
+  nh_.param<double>("right_stick_vertical_scale", right_stick_up_down_scale_, right_stick_up_down_scale_);
+  nh_.param<double>("right_stick_angular_scale", right_stick_left_right_scale_, right_stick_left_right_scale_);
 
   drivetrain_twist_publisher_ =
       nh_.advertise<geometry_msgs::Twist>("/uwrt_mars_rover/drivetrain_velocity_controller/cmd_vel", 1);
   arm_publisher = nh_.advertise<std_msgs::Float64MultiArray>("/uwrt_mars_rover/arm_voltage_control/command", 1);
-  claw_publisher = nh_.advertise<geometry_msgs::Twist>("turtle1/cmd_vel", 1);
-  camera_publisher = nh_.advertise<geometry_msgs::Twist>("turtle1/cmd_vel", 1);
+  //  claw_publisher = nh_.advertise<geometry_msgs::Twist>("turtle1/cmd_vel", 1);
+  //  camera_publisher = nh_.advertise<geometry_msgs::Twist>("turtle1/cmd_vel", 1);
 
   joy_sub_ = nh_.subscribe<sensor_msgs::Joy>("joy", 10, &TeleopTurtle::joyCallback, this);
 }
@@ -120,61 +120,61 @@ void TeleopTurtle::joyCallback(const sensor_msgs::Joy::ConstPtr& joy) {
   }
   drivetrain_twist_publisher_.publish(drivetrain_twist);
 
-//  // drive mode on
-//  if (drive_control_mode) {
-//    // arm twist
-//  }
-//
-//  // arm mode on
-//  std_msgs::Float64MultiArray arm_openloop_MultiArray;
-//  double shoulder_vel = 0;
-//  if (joy->axes[LT_] != 1 && joy->axes[RT_] == 1) {
-//    shoulder_vel = (-joy->axes[LT_] + 1) / 2.0;  // up
-//  }
-//  if (joy->axes[LT_] == 1 && joy->axes[RT_] != 1) {
-//    shoulder_vel = -(-joy->axes[RT_] + 1) / 2.0;  // down
-//  }
-//
-//  double elbow_vel = joy->axes[cross_key_up_down_];
-//  double turntable_vel = joy->axes[cross_key_left_right_];
-//  std::vector<double> arm_vec = {turntable_vel, shoulder_vel, elbow_vel};
-//  arm_openloop_MultiArray.data.insert(arm_openloop_MultiArray.data.end(), arm_vec.begin(), arm_vec.end());
-//  arm_publisher.publish(arm_openloop_MultiArray);
-//
-//  // claw twist
-//  std_msgs::Float64MultiArray claw_MultiArray;
-//  int claw_rotate = 0;
-//  // rotate left/right
-//  if (joy->buttons[X_]) {
-//    claw_rotate = 1;
-//  } else if (joy->buttons[B_]) {
-//    claw_rotate = -1;
-//  }
-//  int claw_up_down = 0;
-//  // claw up / down
-//  if (joy->buttons[LB_]) {
-//    claw_up_down = -1;
-//  } else if (joy->buttons[RB_]) {
-//    claw_up_down = 1;
-//  }
-//
-//  // open close claw
-//  int claw_open_close = 0;
-//  if (joy->buttons[A_]) {
-//    claw_open_close = 1;
-//  } else if (joy->buttons[Y_]) {
-//    claw_open_close = -1;
-//  }
-//  std::vector<double> claw_vec = {claw_rotate, claw_up_down, claw_open_close};
-//  claw_MultiArray.data.insert(arm_openloop_MultiArray.data.end(), claw_vec.begin(), claw_vec.end());
-//  claw_publisher.publish(claw_MultiArray);
+  //  // drive mode on
+  //  if (drive_control_mode) {
+  //    // arm twist
+  //  }
+  //
+  //  // arm mode on
+  //  std_msgs::Float64MultiArray arm_openloop_MultiArray;
+  //  double shoulder_vel = 0;
+  //  if (joy->axes[LT_] != 1 && joy->axes[RT_] == 1) {
+  //    shoulder_vel = (-joy->axes[LT_] + 1) / 2.0;  // up
+  //  }
+  //  if (joy->axes[LT_] == 1 && joy->axes[RT_] != 1) {
+  //    shoulder_vel = -(-joy->axes[RT_] + 1) / 2.0;  // down
+  //  }
+  //
+  //  double elbow_vel = joy->axes[cross_key_up_down_];
+  //  double turntable_vel = joy->axes[cross_key_left_right_];
+  //  std::vector<double> arm_vec = {turntable_vel, shoulder_vel, elbow_vel};
+  //  arm_openloop_MultiArray.data.insert(arm_openloop_MultiArray.data.end(), arm_vec.begin(), arm_vec.end());
+  //  arm_publisher.publish(arm_openloop_MultiArray);
+  //
+  //  // claw twist
+  //  std_msgs::Float64MultiArray claw_MultiArray;
+  //  int claw_rotate = 0;
+  //  // rotate left/right
+  //  if (joy->buttons[X_]) {
+  //    claw_rotate = 1;
+  //  } else if (joy->buttons[B_]) {
+  //    claw_rotate = -1;
+  //  }
+  //  int claw_up_down = 0;
+  //  // claw up / down
+  //  if (joy->buttons[LB_]) {
+  //    claw_up_down = -1;
+  //  } else if (joy->buttons[RB_]) {
+  //    claw_up_down = 1;
+  //  }
+  //
+  //  // open close claw
+  //  int claw_open_close = 0;
+  //  if (joy->buttons[A_]) {
+  //    claw_open_close = 1;
+  //  } else if (joy->buttons[Y_]) {
+  //    claw_open_close = -1;
+  //  }
+  //  std::vector<double> claw_vec = {claw_rotate, claw_up_down, claw_open_close};
+  //  claw_MultiArray.data.insert(arm_openloop_MultiArray.data.end(), claw_vec.begin(), claw_vec.end());
+  //  claw_publisher.publish(claw_MultiArray);
 
-//  // camera movement custom message
-//  geometry_msgs::Twist camera_twist;
-//  drivetrain_twist.angular.z = joy->axes[right_stick_left_right_];
-//  drivetrain_twist.angular.y = joy->axes[right_stick_up_down_];
-//
-//  camera_publisher.publish(camera_twist);
+  //  // camera movement custom message
+  //  geometry_msgs::Twist camera_twist;
+  //  drivetrain_twist.angular.z = joy->axes[right_stick_left_right_];
+  //  drivetrain_twist.angular.y = joy->axes[right_stick_up_down_];
+  //
+  //  camera_publisher.publish(camera_twist);
 }
 
 int main(int argc, char** argv) {

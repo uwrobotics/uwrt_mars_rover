@@ -45,7 +45,7 @@ void UWRTRoverHWDrivetrainReal::read(const ros::Time & /*time*/, const ros::Dura
 }
 
 void UWRTRoverHWDrivetrainReal::write(const ros::Time & /*time*/, const ros::Duration & /*period*/) {
-  static constexpr double RADIANS_PER_SECOND_TO_RPM_FACTOR{60/M_PI/2};
+  static constexpr double RADIANS_PER_SECOND_TO_RPM_FACTOR{60 / M_PI / 2};
 
   for (const auto &joint_name : joint_names_) {
     bool successful_joint_write = false;
@@ -54,14 +54,14 @@ void UWRTRoverHWDrivetrainReal::write(const ros::Time & /*time*/, const ros::Dur
         joint_to_actuator_position_interface_.propagate();
         successful_joint_write =
             motor_controller_->setPosition(static_cast<int32_t>(actuator_joint_commands_[joint_name].actuator_data),
-                                           roboteq_actuator_index_[joint_name]); //todo: units conversion?
+                                           roboteq_actuator_index_[joint_name]);  // todo: units conversion?
         break;
 
       case UWRTRoverHWDrivetrain::DrivetrainActuatorJointCommand::Type::VELOCITY:
         joint_to_actuator_velocity_interface_.propagate();
-        successful_joint_write =
-            motor_controller_->setVelocity(static_cast<int32_t>(actuator_joint_commands_[joint_name].actuator_data * RADIANS_PER_SECOND_TO_RPM_FACTOR),
-                                           roboteq_actuator_index_[joint_name]);
+        successful_joint_write = motor_controller_->setVelocity(
+            static_cast<int32_t>(actuator_joint_commands_[joint_name].actuator_data * RADIANS_PER_SECOND_TO_RPM_FACTOR),
+            roboteq_actuator_index_[joint_name]);
         break;
 
       case UWRTRoverHWDrivetrain::DrivetrainActuatorJointCommand::Type::EFFORT:

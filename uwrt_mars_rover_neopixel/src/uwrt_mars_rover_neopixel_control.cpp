@@ -2,19 +2,17 @@
 
 constexpr uint16_t NEOPIXEL_CAN_ID = 0x794;
 constexpr uint8_t FRAME_PAYLOAD_LENGTH = 1;
-const char* VCAN = "vcan0";
+const char* CAN_NAME = "can0";
 
 bool neopixel::setState(uwrt_mars_rover_msgs::set_state::Request &req,
-                         uwrt_mars_rover_msgs::set_state::Response &res){
-
-    // Add if statemetn                     
+                         uwrt_mars_rover_msgs::set_state::Response &res){     
     res.success = true;
     _state = req.requested_mode.value;
     ROS_INFO_STREAM("STATE in CB: " << static_cast<unsigned>(_state));
     return res.success;
 }
 neopixel::neopixel(int argc, char **argv) : _arg_count(argc), _arg_list(argv),
-                                            _neopixel_can_msg(NEOPIXEL_CAN_ID, FRAME_PAYLOAD_LENGTH, VCAN){
+                                            _neopixel_can_msg(NEOPIXEL_CAN_ID, FRAME_PAYLOAD_LENGTH, CAN_NAME){
         ros::init(argc, argv, "neopixel_set_server");   
 }
 /*void neopixel::initializeNeopixels(){
@@ -33,8 +31,8 @@ void neopixel::run(){
 
     ROS_INFO("Ready to update neopixel state.");
     while(ros::ok()){
-        ROS_INFO_STREAM("STATE b4 sendcan: " << static_cast<unsigned>(_state));
-        _neopixel_can_msg.sendCAN(_state);
+        ROS_INFO_STREAM("STATE b4 sendcan: " << static_cast<unsigned>(obj._state));
+        _neopixel_can_msg.sendCAN(obj._state);
         ros::spinOnce();
         _loop_rate.sleep();
     }  

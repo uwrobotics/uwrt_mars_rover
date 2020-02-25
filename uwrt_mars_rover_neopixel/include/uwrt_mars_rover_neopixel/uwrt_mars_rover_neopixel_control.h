@@ -6,7 +6,7 @@
 class neopixel{
 private:
     // State of neopixels {0:solid_red, 1:solid_blue, 2:flashing_green}
-    volatile uint8_t _state{0};
+    volatile uint8_t _state{3};
     // Create service
     ros::ServiceServer _neopixel_service;
     // CLI arg count needed for intiliaze_neopixels

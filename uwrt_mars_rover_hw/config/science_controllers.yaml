@@ -1,0 +1,22 @@
+uwrt_mars_rover:
+  robot_hw_control_loop_real:
+    control_frequency: 50.0
+    controllers_watchdog_timeout: 1.0
+
+  uwrt_mars_rover_hw_science:
+    indexer_joints:
+      - geneva_joint
+      #- gripper_joint
+      #- cover_joint
+    # TODO (wraftus) Add elevator and sensor joints
+
+
+  indexer_state_controller:
+    type: indexer_controller/IndexerStateController
+    publish_rate: 10
+
+  geneva_indexer_controller:
+    type: indexer_controller/IndexerCommandController
+    joint: geneva_joint
+    raw_pos: [0.0, 0.1, 0.2, 0.3, 0.4]
+    

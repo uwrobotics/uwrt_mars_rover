@@ -9,6 +9,8 @@ find_package(catkin REQUIRED COMPONENTS
         joint_limits_interface
         roscpp
         transmission_interface
+
+        indexer_controller
         )
 
 ###################################
@@ -34,6 +36,8 @@ catkin_package(
         joint_limits_interface
         roscpp
         transmission_interface
+
+        indexer_controller
 )
 
 ###########

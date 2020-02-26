@@ -1,7 +1,7 @@
 #pragma once
 
-#include <hardware_interface/joint_command_interface.h>
-#include <hardware_interface/joint_state_interface.h>
+#include <indexer_controller/indexer_state_interface.h>
+#include <indexer_controller/indexer_command_interface.h>
 #include <hardware_interface/robot_hw.h>
 #include <ros/ros.h>
 
@@ -10,19 +10,6 @@ namespace uwrt_mars_rover_hw {
 class UWRTRoverHWScience : public hardware_interface::RobotHW {
  public:
   explicit UWRTRoverHWScience() : UWRTRoverHWScience("uwrt_mars_rover_hw_science") {}
-
-  struct ScienceJointState {
-    double pos;
-    double vel;
-    double eff;
-  };
-
-  struct ScienceJointCmd {
-    enum class Type { NONE, POS, VEL, EFF };
-
-    double data;
-    Type type;
-  };
 
   // Overrides
   virtual bool init(ros::NodeHandle& root_nh, ros::NodeHandle& robot_hw_nh) override;
@@ -41,19 +28,17 @@ class UWRTRoverHWScience : public hardware_interface::RobotHW {
   // Short name for this class
   const std::string name_;
 
-  // Joint names
-  std::vector<std::string> joint_names_;
+  // Indexer joint names
+  std::vector<std::string> indexer_names_;
 
-  // Hardware state interfaces
-  hardware_interface::JointStateInterface joint_state_interface_;
+  // Indexer state interfaces
+  hardware_interface::IndexerStateInterface indexer_state_interface_;
 
-  // Hardware command interfaces
-  hardware_interface::PositionJointInterface joint_pos_interface_;
-  hardware_interface::VelocityJointInterface joint_vel_interface_;
-  hardware_interface::EffortJointInterface joint_eff_interface_;
+  // Indexer command interfaces
+  hardware_interface::IndexerCommandInterface indexer_cmd_interface_;
 
   // Joint states and commands
-  std::map<std::string, ScienceJointState> joint_states_;
-  std::map<std::string, ScienceJointCmd> joint_cmds_;
+  std::map<std::string, hardware_interface::IndexerStateHandle::IndexerState> indexer_states_;
+  std::map<std::string, float> indexer_cmds_;
 };
 }  // namespace uwrt_mars_rover_hw

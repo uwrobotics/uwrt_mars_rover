@@ -3,31 +3,26 @@
 namespace uwrt_mars_rover_hw {
 
 bool UWRTRoverHWScience::init(ros::NodeHandle& /*root_nh*/, ros::NodeHandle& robot_hw_nh) {
-  if (!robot_hw_nh.getParam("science_joints", joint_names_)) {
+  if (!robot_hw_nh.getParam("indexer_joints", indexer_names_)) {
     ROS_ERROR_STREAM_NAMED(name_, "could not find science joints from parameter server");
     return false;
   }
 
-  // connect and register the state and command interfaces
-  for (const auto& name : joint_names_) {
-    ROS_ERROR_STREAM_NAMED(name_, "found science joint: " << name);
+  // connect and register the state and command indexer interfaces
+  for (const auto& name : indexer_names_) {
+    ROS_INFO_STREAM_NAMED(name_, "found science indexer joint: " << name);
 
     // joint state interface
-    hardware_interface::JointStateHandle state_handle(name, &joint_states_[name].pos, &joint_states_[name].vel,
-                                                      &joint_states_[name].pos);
-    joint_state_interface_.registerHandle(state_handle);
+    hardware_interface::IndexerStateHandle indexer_state_handle(name, &indexer_states_[name]);
+    indexer_state_interface_.registerHandle(indexer_state_handle);
 
     // joint command interfaces
-    hardware_interface::JointHandle cmd_handle(joint_state_interface_.getHandle(name), &joint_cmds_[name].data);
-    joint_pos_interface_.registerHandle(cmd_handle);
-    joint_vel_interface_.registerHandle(cmd_handle);
-    joint_eff_interface_.registerHandle(cmd_handle);
+    hardware_interface::IndexerCommandHandle indexer_cmd_handle(indexer_state_interface_.getHandle(name), &indexer_cmds_[name]);
+    indexer_cmd_interface_.registerHandle(indexer_cmd_handle);
   }
 
-  registerInterface(&joint_state_interface_);
-  registerInterface(&joint_pos_interface_);
-  registerInterface(&joint_vel_interface_);
-  registerInterface(&joint_eff_interface_);
+  registerInterface(&indexer_state_interface_);
+  registerInterface(&indexer_cmd_interface_);
 
   return true;
 }
@@ -46,8 +41,9 @@ void UWRTRoverHWScience::doSwitch(const std::list<hardware_interface::Controller
   for (const auto& controller : stop_list) {
     for (const auto& claimed : controller.claimed_resources) {
       for (const auto& resource : claimed.resources) {
-        joint_cmds_[resource].type = ScienceJointCmd::Type::NONE;
-        joint_cmds_[resource].data = 0.0;
+        if (claimed.hardware_interface == "hardware_interface::IndexerCommandInterface") {
+
+        }
       }
     }
   }
@@ -55,15 +51,8 @@ void UWRTRoverHWScience::doSwitch(const std::list<hardware_interface::Controller
   for (const auto& controller : start_list) {
     for (const auto& claimed : controller.claimed_resources) {
       for (const auto& resource : claimed.resources) {
-        if (claimed.hardware_interface == "hardware_interface::PositionJointInterface") {
-          joint_cmds_[resource].type = ScienceJointCmd::Type::POS;
-          joint_cmds_[resource].data = joint_states_[resource].pos;
-        } else if (claimed.hardware_interface == "hardware_interface::VelocityJointInterface") {
-          joint_cmds_[resource].type = ScienceJointCmd::Type::VEL;
-          joint_cmds_[resource].data = 0.0;
-        } else if (claimed.hardware_interface == "hardware_interface::EffortJointInterface") {
-          joint_cmds_[resource].type = ScienceJointCmd::Type::EFF;
-          joint_cmds_[resource].data = 0.0;
+        if (claimed.hardware_interface == "hardware_interface::IndexerCommandInterface") {
+          
         }
       }
     }

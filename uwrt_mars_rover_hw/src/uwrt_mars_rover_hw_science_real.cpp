@@ -6,18 +6,30 @@ bool UWRTRoverHWScienceReal::init(ros::NodeHandle& root_nh, ros::NodeHandle& rob
     return false;
   }
 
-  // TODO (wraftus) init socketcan
+  // TODO (wraftus) init CAN library
 
   return true;
 }
 
+// TODO (wraftus) implement
 void UWRTRoverHWScienceReal::read(const ros::Time& time, const ros::Duration& period) {
-  // TODO (wraftus) read joint and sensor issue from science board, and update joint_state_
-}
-// TODO: Implement
-void UWRTRoverHWScienceReal::write(const ros::Time& time, const ros::Duration& period) {
+  for (const auto& name : joint_names_) {
+
+  }
+
   for (const auto& name : indexer_names_) {
-    ROS_INFO_STREAM_THROTTLE(1, "Sending " << indexer_cmds_[name] << " to " << name);
+    
+  }
+}
+
+// TODO (wraftus) implement
+void UWRTRoverHWScienceReal::write(const ros::Time& time, const ros::Duration& period) {
+  for (const auto& name : joint_names_) {
+
+  }
+
+  for (const auto& name : indexer_names_) {
+
   }
 }
 

@@ -7,7 +7,6 @@ namespace hardware_interface {
 
 class IndexerStateHandle {
 public:
-  // TODO (wraftus) maybe add max index to the IndexState
   struct IndexerState {
     uint16_t cur_index;
     float raw_pos;

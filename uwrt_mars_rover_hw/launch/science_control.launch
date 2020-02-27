@@ -7,8 +7,12 @@
               output="screen"/>
         <!-- load the controllers -->
         <node name="controller_spawner_test" pkg="controller_manager" type="spawner" respawn="false"
-              output="screen" args="indexer_state_controller
-                                    geneva_indexer_controller"/>
+              output="screen" args="joint_state_controller
+                                    indexer_state_controller
+                                    elevator_joint_controller
+                                    geneva_indexer_controller
+                                    scooper_indexer_controller
+                                    cover_indexer_controller"/>
 
 
         <!--    &lt;!&ndash; convert joint states to TF transforms for rviz, etc &ndash;&gt;-->

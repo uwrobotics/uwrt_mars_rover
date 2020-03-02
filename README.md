@@ -17,10 +17,10 @@ cd <catkin workspace location>/src
 git clone https://github.com/uwrobotics/uwrt_mars_rover.git
 
 # Install upstream source dependencies
-rosinstall --catkin . uwrt_mars_rover/upstream_dependencies.rosinstall
+sudo rosinstall --catkin . uwrt_mars_rover/upstream_dependencies.rosinstall
 
 # Install metapackage source dependencies
-rosinstall --catkin . uwrt_mars_rover/metapackage_dependencies.rosinstall
+sudo rosinstall --catkin . uwrt_mars_rover/metapackage_dependencies.rosinstall
 
 # Install all binary dependencies
 rosdep install --from-paths . --ignore-src -r -y
@@ -29,14 +29,14 @@ rosdep install --from-paths . --ignore-src -r -y
 If you're setting up the repository on the Nvidia Jetson, you also need to install the arm64 upstream dependencies:
 ```bash
 # Install upstream source dependencies for arm64
-rosinstall --catkin . uwrt_mars_rover/arm64_upstream_dependencies.rosinstall
+sudo rosinstall --catkin . uwrt_mars_rover/arm64_upstream_dependencies.rosinstall
 ```
 
 ## Updating Dependencies
 Commands to update dependencies:
 ```bash
 cd <catkin workspace location>/src
-rosinstall --catkin . 
+sudo rosinstall --catkin . uwrt_mars_rover/upstream_dependencies.rosinstall uwrt_mars_rover/metapackage_dependencies.rosinstall
 rosdep install --from-paths . --ignore-src -r -y
 ```
 

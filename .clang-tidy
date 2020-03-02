@@ -11,9 +11,13 @@ Checks:  '-*,
           -cppcoreguidelines-pro-bounds-constant-array-index,
           -cppcoreguidelines-pro-type-vararg,
           -cppcoreguidelines-pro-type-union-access,
+          -cppcoreguidelines-non-private-member-variables-in-classes,
+          -misc-non-private-member-variables-in-classes,
           -modernize-use-trailing-return-type,'
 
 WarningsAsErrors: '*'
+
+HeaderFilterRegex: '.*/src/uwrt_mars_rover/.*'
 
 CheckOptions:
   # Type names

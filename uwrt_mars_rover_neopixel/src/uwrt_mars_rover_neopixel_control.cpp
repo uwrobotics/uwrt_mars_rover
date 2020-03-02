@@ -2,37 +2,33 @@
 
 constexpr uint16_t NEOPIXEL_CAN_ID = 0x794;
 constexpr uint8_t FRAME_PAYLOAD_LENGTH = 1;
-const char* CAN_NAME = "can0";
+constexpr uint8_t LOOP_RATE = 1;
+
+neopixel::neopixel(int argc, char **argv, char* can_interface) : _arg_count(argc), _arg_list(argv),
+                   _can_interface(can_interface), 
+                   _neopixel_can_msg(NEOPIXEL_CAN_ID, FRAME_PAYLOAD_LENGTH, can_interface){
+        ros::init(argc, argv, "neopixel_set_server");   
+}
 
 bool neopixel::setState(uwrt_mars_rover_msgs::set_state::Request &req,
                          uwrt_mars_rover_msgs::set_state::Response &res){     
     res.success = true;
     _state = req.requested_mode.value;
+    _neopixel_can_msg.sendCAN(_state);
     ROS_INFO_STREAM("STATE in CB: " << static_cast<unsigned>(_state));
     return res.success;
 }
-neopixel::neopixel(int argc, char **argv) : _arg_count(argc), _arg_list(argv),
-                                            _neopixel_can_msg(NEOPIXEL_CAN_ID, FRAME_PAYLOAD_LENGTH, CAN_NAME){
-        ros::init(argc, argv, "neopixel_set_server");   
-}
-/*void neopixel::initializeNeopixels(){
-    neopixel obj(_arg_count, _arg_list);
-    _neopixel_service = _neopixel_node.advertiseService("neopixel_set", &neopixel::setState, &obj);
-    ROS_INFO("Ready to update neopixel state.");
-}*/
+
 void neopixel::run(){
     // Create handle for process
     ros::NodeHandle _neopixel_node;
     // Loop rate controls speed of while loop
-    ros::Rate _loop_rate = 1;
+    ros::Rate _loop_rate = LOOP_RATE;
     // object used for advertising service
-    neopixel obj(_arg_count, _arg_list);
+    neopixel obj(_arg_count, _arg_list, _can_interface);
     _neopixel_service = _neopixel_node.advertiseService("neopixel_set", &neopixel::setState, &obj);
-
     ROS_INFO("Ready to update neopixel state.");
     while(ros::ok()){
-        ROS_INFO_STREAM("STATE b4 sendcan: " << static_cast<unsigned>(obj._state));
-        _neopixel_can_msg.sendCAN(obj._state);
         ros::spinOnce();
         _loop_rate.sleep();
     }  

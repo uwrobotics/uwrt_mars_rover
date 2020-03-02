@@ -12,17 +12,17 @@ private:
     // CLI arg count needed for intiliaze_neopixels
     uint8_t _arg_count;
     // CLI arg list needed for intiliaze_neopixels
-    char **_arg_list;
+    char**_arg_list;
+    // CAN interface
+    char* _can_interface;
     // Create a CAN object to send the can message
     neopixelCan _neopixel_can_msg;
 public:
     // neopixel constructor
-    neopixel(int argc, char **argv);
+    neopixel(int argc, char **argv, char* _can_interface);
     // Sets the state var
     bool setState(uwrt_mars_rover_msgs::set_state::Request &req,
                    uwrt_mars_rover_msgs::set_state::Response &res);
-    // Initializes the neopixels
-    //void initializeNeopixels();
     // Runs the while loop
     void run();
 };

@@ -20,7 +20,7 @@ private:
 public:
     // neopixel constructor
     neopixel(int argc, char **argv, char* _can_interface);
-    // Sets the state var
+    // Call back function
     bool setState(uwrt_mars_rover_msgs::set_state::Request &req,
                    uwrt_mars_rover_msgs::set_state::Response &res);
     // Runs the while loop

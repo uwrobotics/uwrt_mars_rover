@@ -4,7 +4,8 @@
 #include "uwrt_mars_rover_neopixel/uwrt_mars_rover_neopixel_control.h"
 
 int main(int argc, char** argv){
-    neopixel neopixel_obj(argc, argv, "vcan0");
+    char* can_interface = "vcan0";
+    neopixel neopixel_obj(argc, argv, can_interface);
     neopixel_obj.run();
     return EXIT_SUCCESS;
 }

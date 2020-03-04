@@ -14,19 +14,20 @@ bool UWRTCANWrapper::init(const std::vector<canid_t>& ids){
     ROS_ERROR_STREAM_NAMED(name_, "Failed to initiate CAN socket for CAN wrapper " << name_);
     return false;
   }
-  strcpy(ifr_.ifr_name, device_.c_str());
+  strcpy(ifr_.ifr_name, interface_name_.c_str());
   ioctl(socket_handle_,SIOCGIFINDEX, &ifr_);
   sock_addr_.can_family = AF_CAN;
   sock_addr_.can_ifindex = ifr_.ifr_ifindex;
 
   // set software filters on can_id
-  // TODO (wraftus) not sure that passing them in as a vector is the best route
-  struct can_filter filters[ids.size()];
+  std::vector<struct can_filter> filters;
+  filters.resize(ids.size());
   for (int i = 0; i < ids.size(); i++) {
     filters[i].can_id = ids[i];
     filters[i].can_mask = (CAN_EFF_FLAG | CAN_RTR_FLAG | CAN_SFF_MASK);
   }
-  setsockopt(socket_handle_, SOL_CAN_RAW, CAN_RAW_FILTER, &filters, sizeof(filters));
+  setsockopt(socket_handle_, SOL_CAN_RAW, CAN_RAW_FILTER,
+             filters.data(), sizeof(struct can_filter) * filters.size());
 
   // set read timeout to be very small, so it's not blocking
   struct timeval timeout;
@@ -35,45 +36,45 @@ bool UWRTCANWrapper::init(const std::vector<canid_t>& ids){
 
   // finally bind can socket to can addr
   if (bind(socket_handle_, (struct sockaddr *)&sock_addr_, sizeof(sock_addr_)) < 0) {
-    ROS_ERROR_STREAM_NAMED(name_, "Failed to bin CAN socket to CAN address for CAN wrapper " << name_);
+    ROS_ERROR_STREAM_NAMED(name_, "Failed to bind CAN socket to CAN address for CAN wrapper " << name_);
     return false;
   }
 
   // start read thread
   read_thread_running_ = true;
-  read_thread_ = std::thread(&UWRTCANWrapper::rawRead, this);
-  read_thread_.detach();
+  read_thread_ = std::thread(&UWRTCANWrapper::readSocketTask, this);
 
   return true;
 }
 
-void UWRTCANWrapper::rawRead() {
+// TODO (wraftus) implement heartbeat logic for failover CAN
+void UWRTCANWrapper::readSocketTask() {
   struct can_frame frame;
-  int bytes;
+  int bytes_read;
 
   while(read_thread_running_) {
-    // keep preforming read until buffer is emptied
+    // keep performing read until buffer is emptied
     do {
-      bytes = recv(socket_handle_, &frame, sizeof(struct can_frame), 0);
-      if(bytes == sizeof(struct can_frame)) {
-        recv_map_mtx_.lock();
+      bytes_read = recv(socket_handle_, &frame, sizeof(struct can_frame), 0);
+      if(bytes_read == sizeof(struct can_frame)) {
+        if(!recv_map_mtx_.try_lock_for(MUTEX_LOCK_TIMEOUT)) return; //TODO (wraftus) handle this case better
         recv_map_[frame.can_id] = frame;
         recv_map_mtx_.unlock();
-      } else if (bytes > 0){
+      } else {
         // ruh roh
       }
-    } while (bytes == sizeof(struct can_frame)); 
+    } while (bytes_read == sizeof(struct can_frame)); 
 
     // buffer is emptied, lets wait
-    std::this_thread::sleep_for(delay_time_);
+    std::this_thread::sleep_for(thread_sleep_millis_);
   }
 }
 
 // TODO (wraftus) abstract struct can_frame away from user
-bool UWRTCANWrapper::read(struct can_frame *frame, canid_t id) {
+bool UWRTCANWrapper::getLatestFromID(struct can_frame *frame, canid_t id) {
   // check that we have new data to read at specified id
   std::map<canid_t, struct can_frame>::iterator it;
-  recv_map_mtx_.lock();
+  if(!recv_map_mtx_.try_lock_for(MUTEX_LOCK_TIMEOUT)) return false; //TODO (wraftus) handle this case better
   it = recv_map_.find(id);
   if (it == recv_map_.end()) {
     recv_map_mtx_.unlock();
@@ -88,7 +89,7 @@ bool UWRTCANWrapper::read(struct can_frame *frame, canid_t id) {
 }
 
 // TODO (wraftus) abstract struct can_frame away from user
-bool UWRTCANWrapper::write(const struct can_frame *frame) {
+bool UWRTCANWrapper::writeToID(const struct can_frame *frame) {
   int bytes = send(socket_handle_, frame, sizeof(struct can_frame), 0);
   
   if (bytes == sizeof(struct can_frame))

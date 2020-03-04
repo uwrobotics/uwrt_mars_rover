@@ -102,7 +102,9 @@ generate_messages(
 catkin_package(
         #  INCLUDE_DIRS include
         #  LIBRARIES uwrt_mars_rover_msgs
-        CATKIN_DEPENDS std_msgs message_runtime
+        CATKIN_DEPENDS 
+        message_runtime
+        std_msgs 
         #  DEPENDS system_lib
 )
 

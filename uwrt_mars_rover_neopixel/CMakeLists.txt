@@ -3,8 +3,8 @@ project(uwrt_mars_rover_neopixel)
 
 ## Find catkin macros and libraries
 find_package(catkin REQUIRED COMPONENTS
-        roscpp
         message_generation
+        roscpp
         uwrt_mars_rover_msgs
         )
 

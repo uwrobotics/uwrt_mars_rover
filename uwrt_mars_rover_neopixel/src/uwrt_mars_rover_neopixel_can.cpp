@@ -2,7 +2,7 @@
 
 constexpr uint16_t NEOPIXEL_CAN_ID_INCOMING = 0x785;
 
-neopixelCan::neopixelCan(uint16_t c_i, uint8_t fpl, const char* name){
+NeopixelCan::NeopixelCan(uint16_t c_i, uint8_t fpl, const char* name) : _addr{}, _ifr{}{
 	// Prepare the outgoing can packet
 	_outgoing_packet.can_id = c_i;
 	_outgoing_packet.can_dlc = fpl;
@@ -17,18 +17,18 @@ neopixelCan::neopixelCan(uint16_t c_i, uint8_t fpl, const char* name){
 	_addr.can_family  = AF_CAN;
 	_addr.can_ifindex = _ifr.ifr_ifindex;
 	// Bind socket CAN to an interface
-	if(bind(_s, (struct sockaddr *)&_addr, sizeof(_addr)) < 0) {
+	if(bind(_s, reinterpret_cast<struct sockaddr*>(&_addr), sizeof(_addr)) < 0) {
 		ROS_ERROR("Error in socket bind");
 		throw -2;
 	}
 }
-void neopixelCan::sendCAN(const uint8_t data){
+void NeopixelCan::sendCAN(const uint8_t data){
     // Store data into the data potion of the CAN packet
     _outgoing_packet.data[0] = data;
     // Send out the CAN packet
     write(_s, &_outgoing_packet, sizeof(_outgoing_packet));
 }
-bool neopixelCan::waitforAck(){
+bool NeopixelCan::waitforAck(){
 	ROS_INFO("Now waiting for acknowledgement message.");
 	bool first_pass = true;
 	do

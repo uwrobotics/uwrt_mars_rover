@@ -2,7 +2,7 @@
 <package format="2">
     <name>uwrt_mars_rover_neopixel</name>
     <version>0.0.0</version>
-    <description>Package for ROS implementation of neopixels</description>
+    <description>Neopixels</description>
 
     <maintainer email="yreda@uwaterloo.com">yreda1999</maintainer>
 

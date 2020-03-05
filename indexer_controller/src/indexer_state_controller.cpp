@@ -42,10 +42,10 @@ void IndexerStateController::update(const ros::Time& time, const ros::Duration& 
         last_pub_times_[i] = last_pub_times_[i] +  ros::Duration(1/publish_rate_);
 
         realtime_pubs_[i]->msg_.header.stamp = time;
-        realtime_pubs_[i]->msg_.cur_index = indexer_states_[i].getCurIndex();
         realtime_pubs_[i]->msg_.raw_pos = indexer_states_[i].getRawPos();
-        realtime_pubs_[i]->msg_.to_index = indexer_states_[i].getToIndex();
-        realtime_pubs_[i]->msg_.from_index = indexer_states_[i].getFromIndex();
+        realtime_pubs_[i]->msg_.high_index = 0;
+        realtime_pubs_[i]->msg_.low_index = 0;
+        realtime_pubs_[i]->msg_.percent_indexed = 0.0;
 
         realtime_pubs_[i]->unlockAndPublish();
       }

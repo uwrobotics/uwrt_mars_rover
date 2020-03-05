@@ -25,6 +25,10 @@ class UWRTRoverHWScience : public hardware_interface::RobotHW {
     double data;
   };
 
+  struct ScienceIndexerState {
+    float raw_pos;
+  };
+
   struct ScienceIndexerCommand {
     enum class Type { NONE, POS };
     Type type;
@@ -64,7 +68,7 @@ class UWRTRoverHWScience : public hardware_interface::RobotHW {
   std::map<std::string, ScienceJointState> joint_states_;
   std::map<std::string, ScienceJointCommand> joint_cmds_;
 
-  std::map<std::string, hardware_interface::IndexerStateHandle::IndexerState> indexer_states_;
+  std::map<std::string, ScienceIndexerState> indexer_states_;
   std::map<std::string, ScienceIndexerCommand> indexer_cmds_;
 };
 }  // namespace uwrt_mars_rover_hw

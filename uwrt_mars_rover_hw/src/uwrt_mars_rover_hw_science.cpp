@@ -34,7 +34,7 @@ bool UWRTRoverHWScience::init(ros::NodeHandle& /*root_nh*/, ros::NodeHandle& rob
     ROS_INFO_STREAM_NAMED(name_, "found science indexer: " << name);
 
     // Indexer state interface
-    hardware_interface::IndexerStateHandle indexer_state_handle(name, &indexer_states_[name]);
+    hardware_interface::IndexerStateHandle indexer_state_handle(name, &indexer_states_[name].raw_pos);
     indexer_state_interface_.registerHandle(indexer_state_handle);
 
     // Indexer command interfaces

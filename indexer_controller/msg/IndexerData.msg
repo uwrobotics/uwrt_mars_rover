@@ -1,6 +1,6 @@
 Header header
 
-uint16 cur_index
 float64 raw_pos
-uint16 to_index
-uint16 from_index
+uint16 high_index
+uint16 low_index
+float64 percent_indexed

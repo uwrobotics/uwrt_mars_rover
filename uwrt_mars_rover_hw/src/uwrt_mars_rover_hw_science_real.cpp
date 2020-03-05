@@ -1,5 +1,7 @@
 #include "uwrt_mars_rover_hw/uwrt_mars_rover_hw_science_real.h"
 
+#include <pluginlib/class_list_macros.hpp>
+
 namespace uwrt_mars_rover_hw {
 bool UWRTRoverHWScienceReal::init(ros::NodeHandle& root_nh, ros::NodeHandle& robot_hw_nh) {
   if (!UWRTRoverHWScience::init(root_nh, robot_hw_nh)) {
@@ -32,5 +34,5 @@ void UWRTRoverHWScienceReal::write(const ros::Time& time, const ros::Duration& p
 
   }
 }
-
 }  // namespace uwrt_mars_rover_hw
+PLUGINLIB_EXPORT_CLASS(uwrt_mars_rover_hw::UWRTRoverHWScienceReal, hardware_interface::RobotHW)

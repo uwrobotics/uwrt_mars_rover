@@ -14,3 +14,12 @@ uwrt_mars_rover:
         - name: right_drive_joint
           transmission_reduction: 43.8311688312
           roboteq_index: 1
+    science:
+      type: uwrt_mars_rover_hw/UWRTRoverHWScienceReal
+      joints:
+        - elevator_joint
+      indexers:
+        - geneva_indexer
+        - scooper_indexer
+        - cover_indexer
+        # TODO (wraftus) Add sensors

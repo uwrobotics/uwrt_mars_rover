@@ -8,7 +8,7 @@
 #include <ros/ros.h>
 
 namespace uwrt_mars_rover_hw {
-// A generic template for interfacing with the science firmware (real or simulated)
+  
 class UWRTRoverHWScience : public hardware_interface::RobotHW {
  public:
   explicit UWRTRoverHWScience() : UWRTRoverHWScience("uwrt_mars_rover_hw_science") {}

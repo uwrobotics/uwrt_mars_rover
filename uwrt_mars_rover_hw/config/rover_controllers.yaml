@@ -1,9 +1,15 @@
 uwrt_mars_rover:
 
+  # ----------------- State Controllers -----------------
   rover_joint_state_controller:
     type: joint_state_controller/JointStateController
     publish_rate: 50
 
+  rover_indexer_state_controller:
+    type: indexer_controller/IndexerStateController
+    publish_rate: 50
+
+  # ----------------- Drivetrain Joint Controllers -----------------
   drivetrain_velocity_controller:
     type: diff_drive_controller/DiffDriveController
     left_wheel: left_drive_joint
@@ -44,3 +50,23 @@ uwrt_mars_rover:
     #      max_acceleration: 1.5  # rad/s^2
     #      has_jerk_limits: true
     #      max_jerk: 2.5  # rad/s^3
+
+  # ----------------- Science Joint Controllers -----------------
+  science_elevator_joint_controller:
+    type: position_controllers/JointPositionController
+    joint: elevator_joint
+
+  science_geneva_indexer_controller:
+    type: indexer_controller/IndexerCommandController
+    joint: geneva_indexer
+    raw_pos: [0.0, 0.1, 0.2, 0.3, 0.4]
+
+  science_scooper_indexer_controller:
+    type: indexer_controller/IndexerCommandController
+    joint: scooper_indexer
+    raw_pos: [0.0, 0.1]
+
+  science_cover_indexer_controller:
+    type: indexer_controller/IndexerCommandController
+    joint: cover_indexer
+    raw_pos: [0.0, 0.1]

@@ -10,23 +10,25 @@
 
 namespace indexer_controller {
 class IndexerCommandController : public controller_interface::Controller<hardware_interface::IndexerCommandInterface> {
-public:
+ public:
   IndexerCommandController() = default;
-  ~IndexerCommandController() { cmd_sub_.shutdown(); }
+  ~IndexerCommandController() {
+    cmd_sub_.shutdown();
+  } override;
 
   bool init(hardware_interface::IndexerCommandInterface* hw, ros::NodeHandle& nh) override;
   void starting(const ros::Time& time) override;
   void update(const ros::Time& time, const ros::Duration& period) override;
 
-private:
+ private:
   hardware_interface::IndexerCommandHandle indexer_;
   realtime_tools::RealtimeBuffer<float> cmd_buffer_;
 
   std::vector<float> raw_pos_;
-  uint16_t start_index_;
+  uint16_t start_index_{};
 
   ros::Subscriber cmd_sub_;
   void commandCallback(const std_msgs::UInt16ConstPtr& msg);
 };
 
-} //namespace indexer_controller
+}  // namespace indexer_controller

@@ -1,14 +1,14 @@
 #pragma once
 
-#include <indexer_controller/indexer_state_interface.h>
-#include <indexer_controller/indexer_command_interface.h>
-#include <hardware_interface/joint_state_interface.h>
 #include <hardware_interface/joint_command_interface.h>
+#include <hardware_interface/joint_state_interface.h>
 #include <hardware_interface/robot_hw.h>
+#include <indexer_controller/indexer_command_interface.h>
+#include <indexer_controller/indexer_state_interface.h>
 #include <ros/ros.h>
 
 namespace uwrt_mars_rover_hw {
-  
+
 class UWRTRoverHWScience : public hardware_interface::RobotHW {
  public:
   explicit UWRTRoverHWScience() : UWRTRoverHWScience("uwrt_mars_rover_hw_science") {}
@@ -36,18 +36,18 @@ class UWRTRoverHWScience : public hardware_interface::RobotHW {
   };
 
   // Overrides
-  virtual bool init(ros::NodeHandle& root_nh, ros::NodeHandle& robot_hw_nh) override;
-  virtual void read(const ros::Time& time, const ros::Duration& period) override;
-  virtual void write(const ros::Time& time, const ros::Duration& period) override;
-  virtual void doSwitch(const std::list<hardware_interface::ControllerInfo>& start_list,
-                        const std::list<hardware_interface::ControllerInfo>& stop_list) override;
+  bool init(ros::NodeHandle& root_nh, ros::NodeHandle& robot_hw_nh) override;
+  void read(const ros::Time& time, const ros::Duration& period) override;
+  void write(const ros::Time& time, const ros::Duration& period) override;
+  void doSwitch(const std::list<hardware_interface::ControllerInfo>& start_list,
+                const std::list<hardware_interface::ControllerInfo>& stop_list) override;
 
   inline std::string getName() const {
     return name_;
   }
 
  protected:
-  explicit UWRTRoverHWScience(const std::string& name) : name_(std::move(name)) {}
+  explicit UWRTRoverHWScience(std::string name) : name_(std::move(name)) {}
 
   // Short name for this class
   const std::string name_;

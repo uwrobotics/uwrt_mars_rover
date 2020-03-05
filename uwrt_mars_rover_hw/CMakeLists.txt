@@ -6,11 +6,10 @@ find_package(catkin REQUIRED COMPONENTS
         combined_robot_hw
         controller_manager
         hardware_interface
+        indexer_controller
         joint_limits_interface
         roscpp
         transmission_interface
-
-        indexer_controller
         )
 
 ###################################
@@ -33,11 +32,10 @@ catkin_package(
         combined_robot_hw
         controller_manager
         hardware_interface
+        indexer_controller
         joint_limits_interface
         roscpp
         transmission_interface
-
-        indexer_controller
 )
 
 ###########

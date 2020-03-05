@@ -18,9 +18,8 @@ bool UWRTRoverHWScience::init(ros::NodeHandle& /*root_nh*/, ros::NodeHandle& rob
     ROS_INFO_STREAM_NAMED(name_, "found science joint: " << name);
 
     // Joint state interface
-    hardware_interface::JointStateHandle joint_state_handle(name, &joint_states_[name].pos,
-                                                                  &joint_states_[name].vel,
-                                                                  &joint_states_[name].eff);
+    hardware_interface::JointStateHandle joint_state_handle(name, &joint_states_[name].pos, &joint_states_[name].vel,
+                                                            &joint_states_[name].eff);
     joint_state_interface_.registerHandle(joint_state_handle);
 
     // Joint command interfaces
@@ -38,7 +37,8 @@ bool UWRTRoverHWScience::init(ros::NodeHandle& /*root_nh*/, ros::NodeHandle& rob
     indexer_state_interface_.registerHandle(indexer_state_handle);
 
     // Indexer command interfaces
-    hardware_interface::IndexerCommandHandle indexer_cmd_handle(indexer_state_interface_.getHandle(name), &indexer_cmds_[name].pos);
+    hardware_interface::IndexerCommandHandle indexer_cmd_handle(indexer_state_interface_.getHandle(name),
+                                                                &indexer_cmds_[name].pos);
     indexer_cmd_interface_.registerHandle(indexer_cmd_handle);
   }
 
@@ -51,11 +51,11 @@ bool UWRTRoverHWScience::init(ros::NodeHandle& /*root_nh*/, ros::NodeHandle& rob
   return true;
 }
 
-void UWRTRoverHWScience::read(const ros::Time& time, const ros::Duration& period) {
+void UWRTRoverHWScience::read(const ros::Time& /*time*/, const ros::Duration& /*period*/) {
   ROS_ERROR_STREAM_NAMED(name_, "Read called from base science_hw class, please only call from real or sim classes");
 }
 
-void UWRTRoverHWScience::write(const ros::Time& time, const ros::Duration& period) {
+void UWRTRoverHWScience::write(const ros::Time& /*time*/, const ros::Duration& /*period*/) {
   ROS_ERROR_STREAM_NAMED(name_, "Write called from base science_hw class, please only call from real or sim classes");
 }
 

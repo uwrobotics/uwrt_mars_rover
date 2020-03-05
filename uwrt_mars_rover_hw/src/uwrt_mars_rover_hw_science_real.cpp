@@ -4,34 +4,26 @@
 
 namespace uwrt_mars_rover_hw {
 bool UWRTRoverHWScienceReal::init(ros::NodeHandle& root_nh, ros::NodeHandle& robot_hw_nh) {
-  if (!UWRTRoverHWScience::init(root_nh, robot_hw_nh)) {
-    return false;
-  }
+  return UWRTRoverHWScience::init(root_nh, robot_hw_nh);
 
   // TODO (wraftus) init CAN library
-
-  return true;
 }
 
 // TODO (wraftus) implement
-void UWRTRoverHWScienceReal::read(const ros::Time& time, const ros::Duration& period) {
+void UWRTRoverHWScienceReal::read(const ros::Time& /*time*/, const ros::Duration& /*period*/) {
   for (const auto& name : joint_names_) {
-
   }
 
   for (const auto& name : indexer_names_) {
-    
   }
 }
 
 // TODO (wraftus) implement
-void UWRTRoverHWScienceReal::write(const ros::Time& time, const ros::Duration& period) {
+void UWRTRoverHWScienceReal::write(const ros::Time& /*time*/, const ros::Duration& /*period*/) {
   for (const auto& name : joint_names_) {
-
   }
 
   for (const auto& name : indexer_names_) {
-
   }
 }
 }  // namespace uwrt_mars_rover_hw

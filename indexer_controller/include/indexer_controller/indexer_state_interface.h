@@ -6,25 +6,28 @@
 namespace hardware_interface {
 
 class IndexerStateHandle {
-public:
-  IndexerStateHandle() : name_(), raw_pos_(nullptr) {}
-  IndexerStateHandle(const std::string& name, const float* raw_pos) : name_(name), raw_pos_(raw_pos){
-    if(!raw_pos_)
+ public:
+  IndexerStateHandle() : raw_pos_(nullptr) {}
+  IndexerStateHandle(std::string name, const float* raw_pos) : name_(std::move(name)), raw_pos_(raw_pos) {
+    if (raw_pos_ == nullptr) {
       throw HardwareInterfaceException("Cannot create indexer state handle, " + name_ + ". raw_pos_ pointer is null");
-  }  
+    }
+  }
 
-  std::string getName() const { return name_; }
+  std::string getName() const {
+    return name_;
+  }
 
   float getRawPos() const {
     assert(raw_pos_);
     return *raw_pos_;
   }
-    
-private:
-  std::string  name_;
-  const float* raw_pos_;
+
+ private:
+  std::string name_;
+  const float* raw_pos_{nullptr};
 };
 
 class IndexerStateInterface : public HardwareResourceManager<IndexerStateHandle> {};
 
-} // namespace hardware_interface
+}  // namespace hardware_interface

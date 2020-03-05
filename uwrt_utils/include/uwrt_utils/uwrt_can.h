@@ -1,6 +1,6 @@
 #include <string>
-#include<vector>
-#include<map>
+#include <vector>
+#include <map>
 #include <thread>
 #include <mutex>
 #include <chrono>
@@ -24,10 +24,22 @@ class UWRTCANWrapper {
     if (read_thread_.joinable()) read_thread_.join();
   }
 
-  bool init(const std::vector<canid_t>& ids);
+  enum class UWRTCANStatus {
+    STATUS_OK = 0,
+    SOCKET_CREATE_FAILED,
+    SOCKET_BIND_FAILED,
+    RECV_MUTEX_TIMEOUT,
+    RECV_SIZE_MISMATCH,
+    SEND_DATA_OVERSIZED,
+    SEND_DATA_FAILED
+  };
 
-  bool getLatestFromID(struct can_frame *frame, canid_t id);
-  bool writeToID(const struct can_frame *frame);
+  UWRTCANStatus init(const std::vector<canid_t>& ids);
+
+  template <class T>
+  UWRTCANStatus getLatestFromID(T& data, canid_t id);
+  template <class T>
+  UWRTCANStatus writeToID(const T& data, canid_t id);
   // TODO (wraftus) add write_and_wait function to write and wait for ack
 
  private:

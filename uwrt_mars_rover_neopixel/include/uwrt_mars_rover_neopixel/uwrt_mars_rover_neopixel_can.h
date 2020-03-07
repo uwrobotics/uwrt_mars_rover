@@ -12,7 +12,7 @@
 #include <cstring>
 // CAN lib includes done
 #include "ros/ros.h"
-
+#include <string>
 // This is a library the Neopixel Node uses to send messages over CAN.
 // If a general CAN library is added to the repo, delete this and use the general CAN library.
 class NeopixelCan {
@@ -22,14 +22,16 @@ class NeopixelCan {
   sockaddr_can _addr;
   // Build the outgoing CAN packet
   can_frame _outgoing_packet{};
+  // log filter
+  std::string _log_filter;
   // Build the incoming CAN packet
   can_frame _incoming_packet{};
   ifreq _ifr;
-  const char* _ifname;
+  std::string _ifname;
 
  public:
   // Constructor for my CAN class
-  NeopixelCan(uint16_t c_i, uint8_t fpl, const char* name);
+  NeopixelCan(uint16_t can_id_outgoing, uint8_t dlc, std::string name, std::string _log_filter);
   // sendCAN function that only sends 1 integer for neopixels
   void sendCAN(uint8_t data);
   // checks if the acknowledgement message was sent by the gimbtonomy board

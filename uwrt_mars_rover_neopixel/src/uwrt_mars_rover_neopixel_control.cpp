@@ -2,7 +2,7 @@
 
 constexpr uint8_t FRAME_PAYLOAD_LENGTH = 1;
 
-Neopixel::Neopixel(ros::NodeHandle &nh, uint8_t loop_rate, std::string can_interface, std::string log_filter,
+Neopixel::Neopixel(ros::NodeHandle &nh, uint8_t loop_rate, const std::string &can_interface, const std::string &log_filter,
                    uint16_t neopixel_can_id_outgoing)
     : _nh(nh),
       _loop_rate(loop_rate),

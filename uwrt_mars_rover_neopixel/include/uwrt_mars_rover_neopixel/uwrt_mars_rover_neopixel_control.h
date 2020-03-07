@@ -24,7 +24,7 @@ class Neopixel {
 
  public:
   // neopixel constructor
-  Neopixel(ros::NodeHandle &nh, uint8_t loop_rate, std::string can_interface, std::string log_filter,
+  Neopixel(ros::NodeHandle &nh, uint8_t loop_rate, const std::string &can_interface, const std::string &log_filter,
            uint16_t neopixel_can_id_outgoing);
   // Call back function
   bool setState(uwrt_mars_rover_msgs::set_state::Request &req, uwrt_mars_rover_msgs::set_state::Response &res);

@@ -31,7 +31,7 @@ class NeopixelCan {
 
  public:
   // Constructor for my CAN class
-  NeopixelCan(uint16_t can_id_outgoing, uint8_t dlc, std::string name, std::string _log_filter);
+  NeopixelCan(uint16_t can_id_outgoing, uint8_t dlc, const std::string &name, const std::string &log_filter);
   // sendCAN function that only sends 1 integer for neopixels
   void sendCAN(uint8_t data);
   // checks if the acknowledgement message was sent by the gimbtonomy board

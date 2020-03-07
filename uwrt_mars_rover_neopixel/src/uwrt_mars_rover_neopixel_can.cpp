@@ -2,13 +2,13 @@
 
 constexpr uint16_t NEOPIXEL_CAN_ID_INCOMING = 0x785;
 
-NeopixelCan::NeopixelCan(uint16_t can_id_outgoing, uint8_t dlc, std::string name, std::string log_filter)
-    : _addr{}, _ifr{}, _log_filter(log_filter) {
+NeopixelCan::NeopixelCan(uint16_t can_id_outgoing, uint8_t dlc, const std::string &name, const std::string &log_filter)
+    : _addr{}, _ifr{}, _log_filter(std::move(log_filter)) {
   // Prepare the outgoing can packet
   _outgoing_packet.can_id = can_id_outgoing;
   _outgoing_packet.can_dlc = dlc;
   // General work for socket binding
-  _ifname = name;
+  _ifname = std::move(name);
   if ((_s = socket(PF_CAN, SOCK_RAW, CAN_RAW)) < 0) {
     ROS_ERROR("Error while opening socket\n");
     throw - 1;
@@ -19,7 +19,7 @@ NeopixelCan::NeopixelCan(uint16_t can_id_outgoing, uint8_t dlc, std::string name
   _addr.can_ifindex = _ifr.ifr_ifindex;
   // Bind socket CAN to an interface
   // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast): reinterpret cast required by syscall
-  if (bind(_s, reinterpret_cast<struct sockaddr*>(&_addr), sizeof(_addr)) < 0) {
+  if (bind(_s, reinterpret_cast<struct sockaddr *>(&_addr), sizeof(_addr)) < 0) {
     ROS_ERROR("Error in socket bind");
     throw - 2;
   }

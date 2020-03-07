@@ -11,10 +11,6 @@ class Neopixel {
   ros::ServiceServer _ss;
   // ROS Node handle
   ros::NodeHandle _nh;
-  // CLI arg count needed for intiliaze_neopixels
-  uint8_t _arg_count;
-  // CLI arg list needed for intiliaze_neopixels
-  char **_arg_list;
   // CAN interface
   std::string _can_interface;
   // Filter for log messages
@@ -29,7 +25,7 @@ class Neopixel {
  public:
   // neopixel constructor
   Neopixel(ros::NodeHandle &nh, uint8_t loop_rate, std::string can_interface, std::string log_filter,
-           uint16_t neopixel_can_id_outgoing, int argc, char **argv);
+           uint16_t neopixel_can_id_outgoing);
   // Call back function
   bool setState(uwrt_mars_rover_msgs::set_state::Request &req, uwrt_mars_rover_msgs::set_state::Response &res);
   // Runs the while loop

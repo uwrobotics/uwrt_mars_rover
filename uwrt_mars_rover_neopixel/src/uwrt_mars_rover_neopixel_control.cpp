@@ -3,14 +3,12 @@
 constexpr uint8_t FRAME_PAYLOAD_LENGTH = 1;
 
 Neopixel::Neopixel(ros::NodeHandle &nh, uint8_t loop_rate, std::string can_interface, std::string log_filter,
-                   uint16_t neopixel_can_id_outgoing, int argc, char **argv)
+                   uint16_t neopixel_can_id_outgoing)
     : _nh(nh),
       _loop_rate(loop_rate),
       _can_interface(can_interface),
       _log_filter(log_filter),
       _neopixel_can_id_outgoing(neopixel_can_id_outgoing),
-      _arg_count(argc),
-      _arg_list(argv),
       _neopixel_can_msg(neopixel_can_id_outgoing, FRAME_PAYLOAD_LENGTH, can_interface, log_filter) {}
 bool Neopixel::setState(uwrt_mars_rover_msgs::set_state::Request &req, uwrt_mars_rover_msgs::set_state::Response &res) {
   ROS_INFO_NAMED(_log_filter, "Neopixel callback function triggered.");

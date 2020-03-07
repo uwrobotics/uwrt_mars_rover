@@ -11,8 +11,8 @@
 #include <cstdlib>
 #include <cstring>
 // CAN lib includes done
-#include "ros/ros.h"
 #include <string>
+#include "ros/ros.h"
 // This is a library the Neopixel Node uses to send messages over CAN.
 // If a general CAN library is added to the repo, delete this and use the general CAN library.
 class NeopixelCan {

@@ -1,0 +1,30 @@
+<launch>
+    <arg name="mode"
+         doc="Control mode that the rover should start in. Valid options are arm_mission, science_mission, arm_only, science_only, drivetrain_only"/>
+
+    <rosparam file="$(find uwrt_mars_rover_hw)/config/rover_hardware.yaml" command="load"/>
+    <rosparam file="$(find uwrt_mars_rover_hw)/config/rover_controllers.yaml" command="load"/>
+    <rosparam file="$(find uwrt_mars_rover_hw)/config/control_loop.yaml" command="load"/>
+
+    <group ns="/uwrt_mars_rover/">
+        <param name="mode" value="$(arg mode)"/>
+
+        <!-- load robot hw plugins based on mode -->
+        <arg name="hardware_list" value="[drivetrain, arm]" if="$(eval mode == 'arm_mission')"/>
+        <arg name="hardware_list" value="[drivetrain, science]" if="$(eval mode == 'science_mission')"/>
+        <arg name="hardware_list" value="[arm]" if="$(eval mode == 'arm_only')"/>
+        <arg name="hardware_list" value="[science]" if="$(eval mode == 'science_only')"/>
+        <arg name="hardware_list" value="[drivetrain]" if="$(eval mode == 'drivetrain_only')"/>
+
+        <rosparam param="combined_robot_hw/robot_hardware" subst_value="True">$(arg hardware_list)</rosparam>
+
+        <node name="uwrt_mars_rover_hw_node" pkg="uwrt_mars_rover_hw" type="node"
+              output="screen"/>
+
+        <!-- load all the available controllers -->
+        <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
+              output="screen" args="rover_joint_state_controller
+                                    drivetrain_velocity_controller"/>
+    </group>
+
+</launch>

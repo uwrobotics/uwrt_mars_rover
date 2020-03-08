@@ -1,0 +1,5 @@
+uwrt_mars_rover:
+
+  robot_hw_control_loop_real:
+    control_frequency: 50.0
+    controllers_watchdog_timeout: 1.0

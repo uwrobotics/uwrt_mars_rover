@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package format="2">
+    <name>uwrt_mars_rover_neopixel</name>
+    <version>0.0.0</version>
+    <description>Neopixels</description>
+
+    <maintainer email="yreda@uwaterloo.com">yreda1999</maintainer>
+
+    <license>MIT</license>
+
+
+    <build_depend>message_generation</build_depend>
+    <buildtool_depend>catkin</buildtool_depend>
+    <depend>uwrt_mars_rover_msgs</depend>
+    <exec_depend>message_runtime</exec_depend>
+
+    <depend>roscpp</depend>
+
+</package>

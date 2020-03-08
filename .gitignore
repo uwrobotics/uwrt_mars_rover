@@ -49,3 +49,6 @@ qtcreator-*
 
 # Catkin custom files
 CATKIN_IGNORE
+
+# Rosdeps
+uwrt_mars_rover_hw/drivers/*

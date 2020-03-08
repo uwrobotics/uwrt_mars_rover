@@ -2,8 +2,8 @@
 
 constexpr uint16_t NEOPIXEL_CAN_ID_INCOMING = 0x785;
 
-NeopixelCan::NeopixelCan(uint16_t can_id_outgoing, uint8_t dlc, const std::string &name, const std::string &log_filter)
-    : _addr{}, _ifr{}, _log_filter(log_filter) {
+NeopixelCan::NeopixelCan(uint16_t can_id_outgoing, uint8_t dlc, const std::string &name, std::string log_filter)
+    : _addr{}, _ifr{}, _log_filter(std::move(log_filter)) {
   // Prepare the outgoing can packet
   _outgoing_packet.can_id = can_id_outgoing;
   _outgoing_packet.can_dlc = dlc;

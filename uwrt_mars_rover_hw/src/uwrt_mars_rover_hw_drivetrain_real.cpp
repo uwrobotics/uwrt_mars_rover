@@ -52,9 +52,9 @@ void UWRTRoverHWDrivetrainReal::write(const ros::Time & /*time*/, const ros::Dur
     switch (actuator_joint_commands_[joint_name].type) {
       case UWRTRoverHWDrivetrain::DrivetrainActuatorJointCommand::Type::POSITION:
         joint_to_actuator_position_interface_.propagate();
-        successful_joint_write =
-            motor_controller_->setPosition(static_cast<int32_t>(actuator_joint_commands_[joint_name].actuator_data),
-                                           roboteq_actuator_index_[joint_name]);  // todo: units conversion?
+        successful_joint_write = motor_controller_->setPosition(
+            static_cast<int32_t>(actuator_joint_commands_[joint_name].actuator_data),
+            roboteq_actuator_index_[joint_name]);  // TODO(wmmc88): Does this need unit conversion
         break;
 
       case UWRTRoverHWDrivetrain::DrivetrainActuatorJointCommand::Type::VELOCITY:
@@ -62,11 +62,6 @@ void UWRTRoverHWDrivetrainReal::write(const ros::Time & /*time*/, const ros::Dur
         successful_joint_write = motor_controller_->setVelocity(
             static_cast<int32_t>(actuator_joint_commands_[joint_name].actuator_data * RADIANS_PER_SECOND_TO_RPM_FACTOR),
             roboteq_actuator_index_[joint_name]);
-        break;
-
-      case UWRTRoverHWDrivetrain::DrivetrainActuatorJointCommand::Type::EFFORT:
-        joint_to_actuator_effort_interface_.propagate();
-        // TODO: look into roboteq torque control
         break;
 
       case UWRTRoverHWDrivetrain::DrivetrainActuatorJointCommand::Type::NONE:

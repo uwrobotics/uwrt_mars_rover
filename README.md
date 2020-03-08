@@ -57,3 +57,65 @@ If you need to declare dependencies that are not ROS packages, typically you can
 a `package.xml`. If it is an unreleased source dependency, (ex. the roboteq c++ driver we wrote), declare it in the 
 `metapackage_dependencies.rosinstall`. Source code modules are still subject to the clangformat and clangtidy checks 
 because they should only consist of code the team has written. 
+
+## Git Workflow
+### Issues
+Before writing code, assign yourself the issue that pertains to the code you are going to write. If there is no GitHub issue created yet, create one for yourself! Try to keep all discussions related to the task within the issue.
+
+### Branch Naming
+To be able to quickly see work done by members, you should name you're branches with the following scheme:
+`user/<username>/#<issue number>/<issue name>`
+
+For example:
+`user/wmmc88/#2/update-readme-with-git-workflow`
+
+### Pull Requests
+To merge code into master, you must open a pull request. Branches must be up to date with the latest master to be able to merge. Choose people you think are familiar with your task to do code reviews of your code. 
+After your PR is merged, make sure you close the associated issue and delete the branch. Github will usually delete the branch automatically and you can automatically close the issue by mentioning `closes #<issue number>` in the PR or in one of the commits on the branch.
+
+If you have code that's not ready to merge, but you'd still like people thoughts on it, open a [draft pull request](https://github.blog/2019-02-14-introducing-draft-pull-requests/).
+
+## Running CI Stages Locally
+### Strict Build
+CI builds with extra cmake flags that can help catch common errors in code. Follow the instructions [here](https://github.com/uwrobotics/dev_tools) to install our `catkin_tools` profiles. It is highly encouraged for you to use this as your default `catkin_tools` profile when developing code. To build using our stricter build flags:
+```
+catkin clean -y
+catkin profile set strict
+catkin build 
+```
+
+### Clang Tidy
+Follow the instructions [here](https://github.com/uwrobotics/dev_tools) to install our `catkin_tools` profiles. You will also need to install `clang-tidy-9`
+```
+sudo apt install clang-tidy-9
+```
+To build and invoke clang-tidy:
+```
+catkin clean -y
+catkin profile set clang-tidy
+catkin build 
+```
+
+### Release Build
+The release build profile is a combination of stricter build flags, clang-tidy and `-O3` optimizations. This profile also installs the packages in an isolated install space. This is the profile you should use to build code for execution on the rover.
+Assuming you've installed our `catkin_tools` profiles and `clang-tidy-9`, to build in release mode:
+```
+catkin clean -y
+catkin profile set release
+catkin build 
+```
+
+### Clang Format
+You can install clang-format and run it on the files themselves, but the recommended way is to install a clang-format plugin for whatever IDE you're using. They typically automatically find and use the `.clang-format` file in our repo. 
+
+### Catkin Lint
+Catkin Lint ensures that the catkin-specific files are configured correctly. This includes the `package.xml`, `CMakeLists.txt` and more. To install `catkin_lint`:
+```
+sudo apt install python-catkin-lint
+```
+
+To run catkin lint:
+```
+cd <catkin_ws location>/src
+catkin_lint --strict -W2 uwrt_mars_rover
+```

@@ -5,5 +5,5 @@
 - git:
     uri: https://github.com/uwrobotics/roboteq_driver.git
     local-name: uwrt_mars_rover/uwrt_mars_rover_hw/drivers/roboteq_driver/
-    version: 6137ced0eac5b74f3533e4e66c9baee183396ef4
+    version: 04c0cccb8093bd3c9c3008b9b7d5b4c8cb0cd2e6
 

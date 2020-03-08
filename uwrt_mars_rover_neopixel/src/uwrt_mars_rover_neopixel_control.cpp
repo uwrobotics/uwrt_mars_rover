@@ -17,13 +17,13 @@ bool Neopixel::setState(uwrt_mars_rover_msgs::set_state::Request &req, uwrt_mars
   if (_neopixel_can_msg.waitforAck()) {
     ROS_DEBUG_NAMED(_log_filter, "Received acknowledgement from gimbtonomy board.");
     // git CI insists on using 1u
-    res.success = 1u;
+    res.success = 1U;
   } else {
     // As currently implemented, this will never run. See waitforAck() for more details
     ROS_ERROR("Unexpected acknowledgement message received.");
-    res.success = 0u;
+    res.success = 0U;
   }
-  return res.success != 0u;
+  return res.success != 0U;
 }
 void Neopixel::run() {
   // object used for advertising service

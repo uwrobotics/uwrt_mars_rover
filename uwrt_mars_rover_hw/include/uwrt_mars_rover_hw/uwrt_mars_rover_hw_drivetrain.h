@@ -24,7 +24,7 @@ class UWRTRoverHWDrivetrain : public hardware_interface::RobotHW {
   };
 
   struct DrivetrainActuatorJointCommand {
-    enum class Type { NONE, POSITION, VELOCITY, EFFORT };
+    enum class Type { NONE, POSITION, VELOCITY };
     Type type;
     double actuator_data;
     double joint_data;
@@ -76,6 +76,8 @@ class UWRTRoverHWDrivetrain : public hardware_interface::RobotHW {
 
  private:
   bool loadJointInfoFromParameterServer(ros::NodeHandle &robot_hw_nh);
+  void registerStateInterfacesAndTransmissions(const std::string &joint_name);
+  void registerCommandInterfacesAndTransmissions(const std::string &joint_name);
 };
 
 inline std::ostream &operator<<(std::ostream &os,
@@ -84,15 +86,15 @@ inline std::ostream &operator<<(std::ostream &os,
     case UWRTRoverHWDrivetrain::DrivetrainActuatorJointCommand::Type::NONE:
       os << "None";
       break;
+
     case UWRTRoverHWDrivetrain::DrivetrainActuatorJointCommand::Type::POSITION:
       os << "Position";
       break;
+
     case UWRTRoverHWDrivetrain::DrivetrainActuatorJointCommand::Type::VELOCITY:
       os << "Velocity";
       break;
-    case UWRTRoverHWDrivetrain::DrivetrainActuatorJointCommand::Type::EFFORT:
-      os << "Effort";
-      break;
+
     default:
       os.setstate(std::ios_base::failbit);
   }

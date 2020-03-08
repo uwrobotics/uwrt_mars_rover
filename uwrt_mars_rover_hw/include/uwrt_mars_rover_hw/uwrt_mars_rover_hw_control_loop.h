@@ -36,7 +36,7 @@ class MarsRoverHWControlLoop {
   ros::Time last_control_loop_time_;
   double controller_watchdog_timeout_{0};
   double control_freq_{0};
-  static constexpr double DEFAULT_CONTROL_FREQUENCY_{50.0};
-  static constexpr double DEFAULT_CONTROLLER_WATCHDOG_TIMEOUT_{5.0};
+  static constexpr double DEFAULT_CONTROL_FREQUENCY{50.0};
+  static constexpr double DEFAULT_CONTROLLER_WATCHDOG_TIMEOUT{5.0};
 };
 }  // namespace uwrt_mars_rover_hw

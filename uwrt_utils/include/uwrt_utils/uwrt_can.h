@@ -1,3 +1,4 @@
+#pragma once
 
 #include <linux/can.h>
 #include <linux/can/raw.h>
@@ -9,7 +10,7 @@
 #include <thread>
 #include <vector>
 
-namespace uwrt_can {
+namespace uwrt_utils {
 
 class UWRTCANWrapper {
  public:
@@ -68,12 +69,64 @@ class UWRTCANWrapper {
     SEND_DATA_FAILED
   };
 
-  UWRTCANStatus init(const std::vector<canid_t>& ids);
+  UWRTCANStatus init(const std::vector<uint32_t>& ids);
 
   template <class T>
-  UWRTCANStatus getLatestFromID(T& data, canid_t id);
+  UWRTCANStatus getLatestFromID(T& data, uint32_t id) {
+    // make sure we have been initialized
+    if (!initialized_) {
+      return UWRTCANWrapper::UWRTCANStatus::NOT_INITED;
+    }
+
+    // check that we have new data to read at specified id
+    std::map<canid_t, struct can_frame>::iterator it;
+    if (!recv_map_mtx_.try_lock_for(MUTEX_LOCK_TIMEOUT_)) {
+      return UWRTCANWrapper::UWRTCANStatus::RECV_MUTEX_TIMEOUT;
+    }
+    it = recv_map_.find((canid_t)id);
+    if (it == recv_map_.end()) {
+      recv_map_mtx_.unlock();
+      return UWRTCANWrapper::UWRTCANStatus::RECV_UNREGOCNIZED_ID;
+    }
+
+    // read and delete new data at specified id
+    struct can_frame frame = recv_map_[id];
+    recv_map_.erase((canid_t)id);
+    recv_map_mtx_.unlock();
+
+    // extract data from frame
+    if (frame.can_dlc != sizeof(data)) {
+      return UWRTCANWrapper::UWRTCANStatus::RECV_SIZE_MISMATCH;
+    }
+    memcpy(&data, frame.data, sizeof(T));
+    return UWRTCANWrapper::UWRTCANStatus::STATUS_OK;
+  }
+
   template <class T>
-  UWRTCANStatus writeToID(const T& data, canid_t id);
+    UWRTCANStatus writeToID(const T& data, uint32_t id) {
+    // make sure we have been initialized
+    if (!initialized_) {
+      return UWRTCANWrapper::UWRTCANStatus::NOT_INITED;
+    }
+
+    // make sure data isn't too big
+    if (sizeof(data) > CAN_MAX_DLEN) {
+      return UWRTCANWrapper::UWRTCANStatus::SEND_DATA_OVERSIZED;
+    }
+
+    // construct data frame
+    struct can_frame frame {};
+    frame.can_id = (canid_t) id;
+    frame.can_dlc = sizeof(data);
+    memcpy(frame.data, &data, sizeof(data));
+
+    int bytes_sent = send(socket_handle_, &frame, sizeof(struct can_frame), 0);
+
+    if (bytes_sent == sizeof(struct can_frame)) {
+      return UWRTCANWrapper::UWRTCANStatus::STATUS_OK;
+    }
+    return UWRTCANWrapper::UWRTCANStatus::SEND_DATA_FAILED;
+  }
   // TODO (wraftus) add write_and_wait function to write and wait for ack
 
  private:
@@ -99,4 +152,4 @@ class UWRTCANWrapper {
   void readSocketTask();
 };
 
-}  // namespace uwrt_can
+}  // namespace uwrt_utils

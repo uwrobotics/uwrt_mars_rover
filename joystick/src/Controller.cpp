@@ -3,9 +3,9 @@
 #include <std_msgs/Float64MultiArray.h>
 #include <sensor_msgs/Joy.h>
 #include <vector>
-class TeleopTurtle{
+class TeleopRobot{
 	public:
-	TeleopTurtle();
+	TeleopRobot();
 	
 	private:
 	void joyCallback(const sensor_msgs::Joy::ConstPtr& joy);
@@ -51,7 +51,7 @@ class TeleopTurtle{
 	ros::Subscriber joy_sub_;
 };
 
-	TeleopTurtle::TeleopTurtle():
+	TeleopRobot::TeleopRobot():
 		left_stick_up_down_(1),
 		left_stick_left_right_(0),
 		LT_(2),
@@ -108,11 +108,11 @@ class TeleopTurtle{
 		claw_publisher = nh_.advertise<geometry_msgs::Twist>("turtle1/cmd_vel", 1);
 		camera_publisher = nh_.advertise<geometry_msgs::Twist>("turtle1/cmd_vel", 1);
 
-		joy_sub_ = nh_.subscribe<sensor_msgs::Joy>("joy", 10, &TeleopTurtle::joyCallback, this);
+		joy_sub_ = nh_.subscribe<sensor_msgs::Joy>("joy", 10, &TeleopRobot::joyCallback, this);
 		
 }
 
-	void TeleopTurtle::joyCallback(const sensor_msgs::Joy::ConstPtr& joy){
+	void TeleopRobot::joyCallback(const sensor_msgs::Joy::ConstPtr& joy){
 		//control mode
 		bool drive_control_mode = true;
 		bool arm_control_mode = true;
@@ -127,6 +127,16 @@ class TeleopTurtle{
 		}
 
 		
+
+
+
+
+
+
+
+
+		]]
+		
 			//drivetrain twist
 			geometry_msgs::Twist drivetrain_twist;
 			
@@ -135,7 +145,7 @@ class TeleopTurtle{
 				drivetrain_twist.angular.z = left_stick_left_right_scale_fast_ * joy->axes[left_stick_left_right_];
 				drivetrain_twist.linear.x = left_stick_up_down_scale_fast_ * joy->axes[left_stick_up_down_];
 			}
-			if (joy->buttons[button_stick_left_ ]== 0) { //low gear
+			if (joy->buttons[button_stick_left_]== 0) { //low gear
 				drivetrain_twist.angular.z = left_stick_left_right_scale_slow_ * joy->axes[left_stick_left_right_];
 				drivetrain_twist.linear.x = left_stick_up_down_scale_slow_ * joy->axes[left_stick_up_down_];
 			}
@@ -167,14 +177,14 @@ class TeleopTurtle{
 
 			//claw twist
 			std_msgs::Float64MultiArray claw_MultiArray;
-			int claw_rotate = 0;
+			double claw_rotate = 0;
 			// rotate left/right
 			if(joy->buttons[X_]){
 				claw_rotate = 1;
 			}else if (joy->buttons[B_]){
 				claw_rotate = -1;
 			}
-			int claw_up_down = 0;
+			double claw_up_down = 0;
 			//claw up / down
 			if(joy->buttons[LB_]){
 				claw_up_down = -1;
@@ -183,7 +193,7 @@ class TeleopTurtle{
 			}
 
 			//open close claw
-			int claw_open_close = 0;
+			double claw_open_close = 0;
 			if(joy-> buttons[A_]){
 				claw_open_close = 1;
 			}else if(joy->buttons[Y_]){
@@ -205,8 +215,8 @@ class TeleopTurtle{
 }
 
 int main(int argc, char** argv){
-	ros::init(argc, argv, "teleop_turtle");
-	TeleopTurtle teleop_turtle;
+	ros::init(argc, argv, "teleop_robot");
+	TeleopRobot teleop_robot;
 	ros::spin();
 }
 

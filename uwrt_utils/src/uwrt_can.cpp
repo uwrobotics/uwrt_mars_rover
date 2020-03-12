@@ -9,7 +9,7 @@
 
 namespace uwrt_utils {
 
-// static constexpr need to be declared again in cpp file (another good one c++ 11)
+// static constexpr need to be declared again in cpp file (fixed in c++17)
 constexpr std::chrono::milliseconds UWRTCANWrapper::MUTEX_LOCK_TIMEOUT;
 
 UWRTCANWrapper::UWRTCANWrapper(std::string name, std::string interface_name, bool rcv_big_endian,
@@ -35,7 +35,7 @@ UWRTCANWrapper::UWRTCANWrapper(UWRTCANWrapper&& to_move)
     read_thread_ = std::thread(std::move(to_move.read_thread_));
     read_thread_running_ = to_move.read_thread_running_;
     if (!std::unique_lock<std::timed_mutex>(to_move.recv_map_mtx_, MUTEX_LOCK_TIMEOUT)) {
-      throw std::runtime_error("Timedout while trying to lock vector mutex");
+      throw std::runtime_error("Timed out while trying to lock vector mutex");
     }
     recv_map_ = std::move(to_move.recv_map_);
   }
@@ -66,7 +66,7 @@ UWRTCANWrapper& UWRTCANWrapper::operator=(UWRTCANWrapper&& to_move) {
       read_thread_ = std::thread(std::move(to_move.read_thread_));
       read_thread_running_ = to_move.read_thread_running_;
       if (!std::unique_lock<std::timed_mutex>(to_move.recv_map_mtx_, MUTEX_LOCK_TIMEOUT)) {
-        throw std::runtime_error("Timedout while trying to lock vector mutex");
+        throw std::runtime_error("Timed out while trying to lock vector mutex");
       }
       recv_map_ = std::move(to_move.recv_map_);
     }

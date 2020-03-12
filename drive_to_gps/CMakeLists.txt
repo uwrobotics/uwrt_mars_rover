@@ -112,8 +112,8 @@ generate_dynamic_reconfigure_options(
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
   INCLUDE_DIRS include
-#  LIBRARIES drive_to_gps
- CATKIN_DEPENDS message_runtime geometry_msgs
+  LIBRARIES drive_to_gps
+  CATKIN_DEPENDS message_runtime geometry_msgs
   sensor_msgs
   actionlib_msgs
 #  DEPENDS system_lib
@@ -131,14 +131,14 @@ include_directories(
 )
 
 ## Declare a C++ library
-# add_library(${PROJECT_NAME}
-#   src/${PROJECT_NAME}/drive_to_gps.cpp
-# )
+add_library(${PROJECT_NAME}
+  src/utils.cpp
+)
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
 ## either from message generation or dynamic reconfigure
-# add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
@@ -216,29 +216,18 @@ include_directories(
 # catkin_add_nosetests(test)
 
 add_executable(current_heading src/current_heading.cpp)
-target_link_libraries(current_heading ${catkin_LIBRARIES})
+target_link_libraries(current_heading ${catkin_LIBRARIES} drive_to_gps)
 add_dependencies(current_heading drive_to_gps_generate_messages_cpp ${PROJECT_NAME}_gencfg)
 
 add_executable(calculate_twist_server src/calculate_twist_server.cpp)
 
 target_link_libraries(
   calculate_twist_server
+  drive_to_gps
   ${catkin_LIBRARIES}
 )
 
 add_dependencies(
   calculate_twist_server
-  ${drive_to_gps_EXPORTED_TARGETS}
-)
-
-add_executable(turtle_client src/turtle_client.cpp)
-
-target_link_libraries(
-  turtle_client
-  ${catkin_LIBRARIES}
-)
-
-add_dependencies(
-  turtle_client
   ${drive_to_gps_EXPORTED_TARGETS}
 )

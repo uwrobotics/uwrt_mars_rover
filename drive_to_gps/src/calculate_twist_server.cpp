@@ -1,5 +1,4 @@
-#include "calculate_degrees.h"
-#include "drive_to_gps/dist_heading.h"
+#include "utils/utils.h"
 #include "drive_to_gps/heading.h"
 #include "geometry_msgs/Twist.h"
 #include "ros/ros.h"
@@ -61,7 +60,6 @@ void update_current_heading(const drive_to_gps::headingConstPtr &c_head) {
   if (curr_head == NULL)
     curr_head = drive_to_gps::headingPtr(new drive_to_gps::heading);
   curr_head->degrees = c_head->degrees;
-  curr_head->valid = c_head->valid;
 }
 
 void update_current_gps(const sensor_msgs::NavSatFixConstPtr &gps_current) {

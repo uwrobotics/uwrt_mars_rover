@@ -1,10 +1,11 @@
-#include "calculate_degrees.h"
+#include "utils/utils.h"
 #include <drive_to_gps/CurrentHeadingConfig.h>
 #include <drive_to_gps/heading.h>
 #include <dynamic_reconfigure/server.h>
 #include <math.h>
 #include <ros/ros.h>
 #include <sensor_msgs/NavSatFix.h>
+#include <stack>
 
 /*
 Current heading is calculated in degrees with 0 degrees at North and positive is
@@ -12,8 +13,12 @@ clockwise
 */
 
 ros::Publisher pub_curr_head;
-sensor_msgs::NavSatFixPtr prev_gps = NULL;
-int refresh_rate = 1; // initialize 1hz as the loop rate (can be changed)
+std::stack<sensor_msgs::NavSatFixPtr> gps_stack;
+int refresh_rate = 3; // configure the timer to publish curr heading every 3 seconds
+
+static inline double ewma(double value, double prev_val, double a = 0.5) {
+  return value*a + prev_val*a;
+}
 
 void reconfigure_callback(drive_to_gps::CurrentHeadingConfig &config,
                           uint32_t level) {
@@ -21,26 +26,52 @@ void reconfigure_callback(drive_to_gps::CurrentHeadingConfig &config,
   refresh_rate = config.refresh_rate;
 }
 
-// determine the current heading of the rover
-void determine_curr_heading(const sensor_msgs::NavSatFixConstPtr &curr_gps) {
-  // if there is no prev_gps coordinate return flag for unknown heading
-  drive_to_gps::heading msg;
-  if (prev_gps == NULL) {
-    prev_gps = sensor_msgs::NavSatFixPtr(new sensor_msgs::NavSatFix());
-    ROS_INFO("Prev GPS is NULL and curr GPS has latitude %lf and longitude %lf",
-             curr_gps->latitude, curr_gps->longitude);
-    msg.valid = false;
-    msg.degrees = 0;
-  } else {
-    ROS_INFO("Lat1 %lf, Lat2 %lf, Lon1 %lf, lon2 %lf", prev_gps->latitude,
-             curr_gps->latitude, prev_gps->longitude, curr_gps->longitude);
-    msg.valid = true;
-    ROS_INFO("Calculating degrees");
-    msg.degrees = calculate_degrees(curr_gps, prev_gps);
-    pub_curr_head.publish(msg);
+void add_gps_to_queue(const sensor_msgs::NavSatFixConstPtr &curr_gps) {
+  if (std::isnan(curr_gps->latitude) || std::isnan(curr_gps->longitude == NAN)) {
+    return;
   }
-  prev_gps->latitude = curr_gps->latitude;
-  prev_gps->longitude = curr_gps->longitude;
+  sensor_msgs::NavSatFixPtr item(new sensor_msgs::NavSatFix());
+  if (gps_stack.size() > 0) {
+    item->latitude = ewma(curr_gps->latitude, gps_stack.top()->latitude);
+    item->longitude = ewma(curr_gps->longitude, gps_stack.top()->longitude);
+  }
+  else {
+    item->latitude = curr_gps->latitude;
+    item->longitude = curr_gps->longitude;
+  }
+  item->header.stamp = curr_gps->header.stamp;
+  ROS_INFO_STREAM("Pushed to queue with lat " << item->latitude << " long " <<
+                  item->longitude << " and time stamp " << item->header.stamp);
+  gps_stack.push(item);
+}
+
+// determine the current heading of the rover
+void determine_curr_heading(const ros::TimerEvent& event) {
+  drive_to_gps::heading msg;
+  ROS_INFO("Called timer callback");
+  // check front of queue to make sure we can pop
+  if (gps_stack.size() > 0) {
+    ROS_INFO("Size queue big");
+    bool gps_after_time = false;
+    sensor_msgs::NavSatFixPtr curr(gps_stack.top());
+    gps_stack.pop();
+    sensor_msgs::NavSatFixPtr prev = NULL;
+    while (gps_stack.size() > 0) {
+      prev = gps_stack.top();
+      ROS_INFO("Went into loop");
+      //ROS_INFO_STREAM("Event real " << event.last_real << " temp stamp " << temp->header.stamp);
+      if (event.last_real >= prev->header.stamp && !gps_after_time) {
+        ROS_INFO_STREAM("Prev lat and long " << prev->latitude << " " << prev->longitude <<
+                        " curr lat and long " << curr->latitude << " " << curr->longitude);
+        msg.degrees = calculate_degrees(curr, prev);
+        ROS_INFO_STREAM("Published " << msg.degrees);
+        pub_curr_head.publish(msg);
+        gps_after_time = true;
+      }
+      gps_stack.pop();
+    }
+    gps_stack.push(curr);
+  }
 }
 
 int main(int argc, char **argv) {
@@ -50,20 +81,17 @@ int main(int argc, char **argv) {
   pub_curr_head = n.advertise<drive_to_gps::heading>("/heading/curr", 1);
 
   ros::Subscriber sub_heading =
-      n.subscribe("/gps/fix", 2, determine_curr_heading);
+      n.subscribe("/fix", 3, add_gps_to_queue);
+  
+  ros::Timer timer = n.createTimer(ros::Duration(4), determine_curr_heading);
   dynamic_reconfigure::Server<drive_to_gps::CurrentHeadingConfig> server;
   dynamic_reconfigure::Server<drive_to_gps::CurrentHeadingConfig>::CallbackType
       f;
 
-  ros::Rate loop_rate(1);
   f = boost::bind(&reconfigure_callback, _1, _2);
   server.setCallback(f);
 
-  while (ros::ok()) {
-    ros::spinOnce();
-    loop_rate = ros::Rate(refresh_rate);
-    loop_rate.sleep();
-  }
+  ros::spin();
 
   return 0;
 }

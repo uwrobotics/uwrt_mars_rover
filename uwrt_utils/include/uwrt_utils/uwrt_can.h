@@ -18,7 +18,7 @@ class UWRTCANWrapper {
  public:
   explicit UWRTCANWrapper() = default;
   explicit UWRTCANWrapper(std::string name, std::string interface_name, bool rcv_big_endian,
-                          int thread_sleep_millis = 1);
+                          int thread_sleep_millis = 10);
   explicit UWRTCANWrapper(const UWRTCANWrapper& to_copy) = delete;
   // NOLINTNEXTLINE(performance-noexcept-move-constructor, bugprone-exception-escape)
   explicit UWRTCANWrapper(UWRTCANWrapper&& to_move);
@@ -63,14 +63,15 @@ class UWRTCANWrapper {
     }
 
     // if not, we need to swap endianess
-    T swp_data;
-    auto swp_ptr = reinterpret_cast<uint8_t*>(&swp_data);      // NOLINT(cppcoreguidelines-pro-type-reinterpret-cast)
-    auto unswp_ptr = reinterpret_cast<const uint8_t*>(&data);  // NOLINT(cppcoreguidelines-pro-type-reinterpret-cast)
+    T swapped_data;
+    auto swapped_ptr =
+        reinterpret_cast<uint8_t*>(&swapped_data);                // NOLINT(cppcoreguidelines-pro-type-reinterpret-cast)
+    auto original_ptr = reinterpret_cast<const uint8_t*>(&data);  // NOLINT(cppcoreguidelines-pro-type-reinterpret-cast)
     for (int i = 0; i < sizeof(T); i++) {
       // NOLINTNEXTLINE(cppcoreguidelines-pro-bounds-pointer-arithmetic)
-      std::memcpy(&swp_ptr[i], &unswp_ptr[sizeof(T) - 1 - i], 1);
+      std::memcpy(&swapped_ptr[i], &original_ptr[sizeof(T) - 1 - i], 1);
     }
-    return swp_data;
+    return swapped_data;
   }
 
  public:
@@ -83,11 +84,10 @@ class UWRTCANWrapper {
     }
 
     // check that we have new data to read at specified id
-    std::map<canid_t, struct can_frame>::iterator it;
     if (!recv_map_mtx_.try_lock_for(MUTEX_LOCK_TIMEOUT)) {
-      throw std::runtime_error("Timedout while trying to lock read mutex");
+      throw std::runtime_error("Timed out while trying to lock read mutex");
     }
-    it = recv_map_.find((canid_t)id);
+    auto it = recv_map_.find((canid_t)id);
     if (it == recv_map_.end()) {
       recv_map_mtx_.unlock();
       return false;

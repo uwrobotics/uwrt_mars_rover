@@ -4,13 +4,13 @@ This package contains some useful libraries that are commonly used throughout `u
 
 ## CAN Libary
 
-This is the main way to interact with the CAN bus. It's essentially an socket can wrapper with a rx thread that constantly looks for new messages from the desired ids, populating a `map<id, data>` with the new data, and overwriting the older data. When a user reads from an id that message is cleared form the map, so there won't be any stale readings either. Interfacing with this wrapper works as follows:
+This is the main way to interact with the CAN bus. It's essentially an socket can wrapper with a rx thread that constantly looks for new messages from the desired ids, populating a `map<id, data>` with the new data, and overwriting the older data. When a user reads from an id that message is cleared from the map, so there won't be any stale readings either. Interfacing with this wrapper works as follows:
 
 `UWRTCANWrapper` - class for interacting with the CAN bus. Initialize it with:
-- `std::string name` - a name for the wrapper
+- `std::string name` - a name for the wrapper, should be the same as the node/plugin it's being used in
 - `std::string interface_name` - name of the CAN interface (normally can0)
 - `bool rcv_big_endian` - whether the device you are communicating with sends the data in big endian or not
-- `int thread_sleep_millis = 1` - (optional) the speed at which to run the rx thread
+- `int thread_sleep_millis = 10` - (optional) the speed at which to run the rx thread
 
 `void init()` - initializes the can socket and starts the rx thread
 - `std::vector<uint32_t> ids` - list of ids for the rx thread to pay attention to

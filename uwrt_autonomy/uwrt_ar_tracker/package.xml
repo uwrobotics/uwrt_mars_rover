@@ -2,7 +2,7 @@
 <package format="2">
   <name>uwrt_ar_tracker</name>
   <version>0.0.0</version>
-  <description>The uwrt_ar_tracker package enables tracking of an arbitrary number of AR tags given a pre-calibrated camera</description>
+  <description>This enables tracking of an arbitrary number of AR tags given a pre-calibrated camera</description>
 
   <maintainer email="hmahdi@uwaterloo.ca">hmahdi</maintainer>
 

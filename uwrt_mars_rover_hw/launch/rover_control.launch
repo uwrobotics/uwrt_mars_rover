@@ -26,7 +26,7 @@
                                            science_cover_indexer_controller" 
                                     if="$(eval mode == 'science_mission')"/>
         <arg name="controller_list" value="rover_joint_state_controller 
-                                           science_indexer_state_controller
+                                           rover_indexer_state_controller
                                            science_elevator_joint_controller
                                            science_geneva_indexer_controller
                                            science_scooper_indexer_controller

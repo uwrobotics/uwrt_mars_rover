@@ -11,7 +11,7 @@ namespace uwrt_mars_rover_hw {
 
 class UWRTRoverHWScience : public hardware_interface::RobotHW {
  public:
-  explicit UWRTRoverHWScience() : UWRTRoverHWScience("uwrt_mars_rover_hw_science") {}
+  explicit UWRTRoverHWScience() : UWRTRoverHWScience("UWRTRoverHWScience") {}
 
   struct ScienceJointState {
     double pos;

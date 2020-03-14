@@ -54,19 +54,19 @@ uwrt_mars_rover:
   # ----------------- Science Joint Controllers -----------------
   science_elevator_joint_controller:
     type: position_controllers/JointPositionController
-    joint: elevator_joint
+    joint: science_elevator_joint
 
   science_geneva_indexer_controller:
     type: indexer_controller/IndexerCommandController
-    joint: geneva_indexer
+    joint: science_geneva_indexer
     raw_pos: [0.0, 0.1, 0.2, 0.3, 0.4]
 
   science_scooper_indexer_controller:
     type: indexer_controller/IndexerCommandController
-    joint: scooper_indexer
+    joint: science_scooper_indexer
     raw_pos: [0.0, 0.1]
 
   science_cover_indexer_controller:
     type: indexer_controller/IndexerCommandController
-    joint: cover_indexer
+    joint: science_cover_indexer
     raw_pos: [0.0, 0.1]

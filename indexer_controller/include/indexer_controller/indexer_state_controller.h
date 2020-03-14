@@ -10,7 +10,6 @@ namespace indexer_controller {
 
 class IndexerStateController : public controller_interface::Controller<hardware_interface::IndexerStateInterface> {
  public:
-  // TODO (wraftus) make this not a random number
   IndexerStateController() = default;
 
   bool init(hardware_interface::IndexerStateInterface* hw, ros::NodeHandle& root_nh,
@@ -24,6 +23,7 @@ class IndexerStateController : public controller_interface::Controller<hardware_
   std::vector<hardware_interface::IndexerStateHandle> indexer_states_;
   std::vector<std::shared_ptr<RtPublisher>> realtime_pubs_;
   std::vector<ros::Time> last_pub_times_;
+  std::vector<std::vector<float>> raw_pos_lists_;
   double publish_rate_{};
 };
 

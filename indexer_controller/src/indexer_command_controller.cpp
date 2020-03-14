@@ -20,7 +20,7 @@ bool IndexerCommandController::init(hardware_interface::IndexerCommandInterface*
 
   // Get starting index
   int start_index;
-  if (!nh.getParam("start_index_", start_index)) {
+  if (!nh.getParam("start_index", start_index)) {
     ROS_WARN_STREAM("Did not specify a start index for " << joint_name << ", assuming 0");
     start_index = 0;
   }

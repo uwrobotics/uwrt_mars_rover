@@ -12,9 +12,9 @@ namespace indexer_controller {
 class IndexerCommandController : public controller_interface::Controller<hardware_interface::IndexerCommandInterface> {
  public:
   IndexerCommandController() = default;
-  ~IndexerCommandController() {
+  ~IndexerCommandController() override {
     cmd_sub_.shutdown();
-  } override;
+  }
 
   bool init(hardware_interface::IndexerCommandInterface* hw, ros::NodeHandle& nh) override;
   void starting(const ros::Time& time) override;

@@ -1,1 +1,3 @@
-# When this file starts getting used, add it to the options of the arm64_build stage
+# These are upstream source dependencies specific to arm64 builds(ex. NVIDIA Jetson TX2).
+
+# When this file starts getting used, add it to the options(UPSTREAM_WORKSPACE: "arm64_upstream_dependencies.rosinstall") of the arm64_build CI stage

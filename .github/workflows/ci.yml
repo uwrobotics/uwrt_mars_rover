@@ -7,8 +7,8 @@ jobs:
     strategy:
       matrix:
         env:
-          - {ROS_DISTRO: melodic, ROS_REPO: main, CMAKE_ARGS: "-Wall -Wextra -Wpedantic -Werror", TARGET_WORKSPACE: "$TARGET_REPO_PATH metapackage_dependencies.rosinstall"}
-          - {ROS_DISTRO: melodic, ROS_REPO: testing, CMAKE_ARGS: "-Wall -Wextra -Wpedantic -Werror", TARGET_WORKSPACE: "$TARGET_REPO_PATH metapackage_dependencies.rosinstall"}
+          - {ROS_DISTRO: melodic, ROS_REPO: main, CMAKE_ARGS: "-Wall -Wextra -Wpedantic -Werror", TARGET_WORKSPACE: "$TARGET_REPO_PATH"}
+          - {ROS_DISTRO: melodic, ROS_REPO: testing, CMAKE_ARGS: "-Wall -Wextra -Wpedantic -Werror", TARGET_WORKSPACE: "$TARGET_REPO_PATH"}
 
     runs-on: ubuntu-18.04
     steps:
@@ -38,7 +38,7 @@ jobs:
     strategy:
       matrix:
         env:
-          - {ROS_DISTRO: melodic, ROS_REPO: main, ADDITIONAL_DEBS: "clang-tidy-9", TARGET_CMAKE_ARGS: "-DCMAKE_CXX_CLANG_TIDY=clang-tidy-9", TARGET_WORKSPACE: "$TARGET_REPO_PATH metapackage_dependencies.rosinstall"}
+          - {ROS_DISTRO: melodic, ROS_REPO: main, ADDITIONAL_DEBS: "clang-tidy-9", TARGET_CMAKE_ARGS: "-DCMAKE_CXX_CLANG_TIDY=clang-tidy-9", TARGET_WORKSPACE: "$TARGET_REPO_PATH"}
 
     runs-on: ubuntu-18.04
     steps:
@@ -53,7 +53,7 @@ jobs:
     strategy:
       matrix:
         env:
-          - {ROS_DISTRO: melodic, ROS_REPO: main, CATKIN_LINT: pedantic, TARGET_WORKSPACE: "$TARGET_REPO_PATH metapackage_dependencies.rosinstall"}
+          - {ROS_DISTRO: melodic, ROS_REPO: main, CATKIN_LINT: pedantic, TARGET_WORKSPACE: "$TARGET_REPO_PATH"}
 
     runs-on: ubuntu-18.04
     steps:
@@ -68,7 +68,7 @@ jobs:
     strategy:
       matrix:
         env:
-          - {DOCKER_IMAGE: "arm64v8/ros:melodic-perception", ADDITIONAL_DEBS: "build-essential python-catkin-tools python-pip", BEFORE_INIT: "echo -e This test should run on aarch64. It is running on: $(uname -p) && [[ $(uname -p) == aarch64 ]]", CMAKE_ARGS: "-Wall -Wextra -Wpedantic -Werror", TARGET_WORKSPACE: "$TARGET_REPO_PATH metapackage_dependencies.rosinstall"}
+          - {DOCKER_IMAGE: "arm64v8/ros:melodic-perception", ADDITIONAL_DEBS: "build-essential python-catkin-tools python-pip", BEFORE_INIT: "echo -e This test should run on aarch64. It is running on: $(uname -p) && [[ $(uname -p) == aarch64 ]]", CMAKE_ARGS: "-Wall -Wextra -Wpedantic -Werror", TARGET_WORKSPACE: "$TARGET_REPO_PATH"}
 
     runs-on: ubuntu-18.04
     steps:

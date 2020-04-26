@@ -38,7 +38,7 @@ jobs:
     strategy:
       matrix:
         env:
-          - {ROS_DISTRO: melodic, ROS_REPO: main, CLANG_TIDY: pedantic, TARGET_WORKSPACE: "$TARGET_REPO_PATH"}
+          - {ROS_DISTRO: melodic, ROS_REPO: main, ADDITIONAL_DEBS: "clang-tidy-9", TARGET_CMAKE_ARGS: "-DCMAKE_CXX_CLANG_TIDY=clang-tidy-9", TARGET_WORKSPACE: "$TARGET_REPO_PATH"}
 
     runs-on: ubuntu-18.04
     steps:

@@ -17,8 +17,9 @@ namespace uwrt_utils {
 class UWRTCANWrapper {
  public:
   explicit UWRTCANWrapper() = default;
-  explicit UWRTCANWrapper(std::string name, std::string interface_name, bool rcv_big_endian,
-                          int thread_sleep_millis = 10);
+  explicit UWRTCANWrapper(
+      std::string name, std::string interface_name, bool rcv_big_endian,
+      int thread_sleep_millis = 10);  // NOLINT(cppcoreguidelines-avoid-magic-numbers, readability-magic-numbers)
   explicit UWRTCANWrapper(const UWRTCANWrapper& to_copy) = delete;
   // NOLINTNEXTLINE(performance-noexcept-move-constructor, bugprone-exception-escape)
   explicit UWRTCANWrapper(UWRTCANWrapper&& to_move);

@@ -82,8 +82,7 @@ const std::unordered_map<RuntimeQuery, uint16_t> CanopenInterface::QUERY_CANOPEN
 CanopenInterface::CanopenInterface(canid_t roboteq_can_id, const std::string& ifname)
     : roboteq_can_id_(roboteq_can_id) {
   if ((socket_handle_ = socket(PF_CAN, SOCK_RAW, CAN_RAW)) < 0) {
-    printf("Error while opening socket");
-    throw - 1;
+    throw StringException("Error while opening socket");
   }
 
   struct ifreq ifr {};
@@ -111,14 +110,14 @@ CanopenInterface::CanopenInterface(canid_t roboteq_can_id, const std::string& if
   int socket_opt_ret_val = setsockopt(socket_handle_, SOL_CAN_RAW, CAN_RAW_FILTER, can_receive_filter.data(),
                                       can_receive_filter.size() * sizeof(struct can_filter));
   if (socket_opt_ret_val != 0) {
-    throw - 1;
+    throw StringException("Error in socket filters");
   }
 
   // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast): reinterpret cast required by syscall
   if (bind(socket_handle_, reinterpret_cast<struct sockaddr*>(&addr), sizeof(addr)) < 0) {
-    printf("Error in socket bind");
-    throw - 1;
+    throw StringException("Error in socket bind");
   }
+  
 }
 
 template <typename DataType>
@@ -141,8 +140,8 @@ bool CanopenInterface::sendCommand(RuntimeCommand command, uint8_t subindex, Dat
 
   ssize_t bytes_written = write(roboteq::CanopenInterface::socket_handle_, &command_frame, sizeof(struct can_frame));
   if (bytes_written != sizeof(struct can_frame)) {
-    // TODO: throw error
-    return false;
+    throw StringException("Bytes to write is less than size of the CAN frame");
+    // return false;
   }
 
   struct can_frame response_frame = {};
@@ -161,18 +160,23 @@ bool CanopenInterface::sendCommand(RuntimeCommand command, uint8_t subindex, Dat
 
   if (bytes_read != sizeof(struct can_frame)) {
     // TODO: throw error
+    throw StringException("Bytes to read is less than size of the CAN frame");
     return false;  // NOLINT(readability-simplify-boolean-expr): temp until error todo is finished
   }
 
   // TODO: throw appropriate errors
   if ((response_frame.data[0] & RESPONSE_TYPE_MASK) != SUCCESSFUL_COMMAND_RESPONSE) {
-    std::cout << "Command unsuccessful response" << std::endl;
+    throw StringException("Command unsuccessful response");
+    // std::cout << "Command unsuccessful response" << std::endl;
   } else if ((command_frame.data[0] & UNUSED_BYTES_MASK) != (response_frame.data[0] & UNUSED_BYTES_MASK)) {
-    std::cout << "Command response mismatched unused bytes number" << std::endl;
+    throw StringException("Command response mismatched unused bytes number");
+    // std::cout << "Command response mismatched unused bytes number" << std::endl;
   } else if (command_frame.data[1] != response_frame.data[1] || command_frame.data[2] != response_frame.data[2]) {
-    std::cout << "Command response mismatched index" << std::endl;
+    throw StringException("Command response mismatched index");
+    // std::cout << "Command response mismatched index" << std::endl;
   } else if (command_frame.data[3] != response_frame.data[3]) {
-    std::cout << "Command response mismatched subindex" << std::endl;
+    throw StringException("Command response mismatched subindex");
+    // std::cout << "Command response mismatched subindex" << std::endl;
   } else {
     return true;
   }
@@ -218,18 +222,23 @@ bool CanopenInterface::sendCommand<empty_data_payload>(RuntimeCommand command, u
 
   if (bytes_read != sizeof(struct can_frame)) {
     // TODO: throw error
-    return false;  // NOLINT(readability-simplify-boolean-expr): temp until error todo is finished
+    throw StringException("Bytes to read is less than size of the CAN frame");
+    // return false;  // NOLINT(readability-simplify-boolean-expr): temp until error todo is finished
   }
-
+  
   // TODO: throw appropriate errors
   if ((response_frame.data[0] & RESPONSE_TYPE_MASK) != SUCCESSFUL_COMMAND_RESPONSE) {
-    std::cout << "Command unsuccessful response" << std::endl;
+    throw StringException("Command unsuccessful response");
+    // std::cout << "Command unsuccessful response" << std::endl;
   } else if ((command_frame.data[0] & UNUSED_BYTES_MASK) != (response_frame.data[0] & UNUSED_BYTES_MASK)) {
-    std::cout << "Command response mismatched unused bytes number" << std::endl;
+    throw StringException("Command response mismatched unused bytes number");
+    // std::cout << "Command response mismatched unused bytes number" << std::endl;
   } else if (command_frame.data[1] != response_frame.data[1] || command_frame.data[2] != response_frame.data[2]) {
-    std::cout << "Command response mismatched index" << std::endl;
+    throw StringException("Command response mismatched index");
+    // std::cout << "Command response mismatched index" << std::endl;
   } else if (command_frame.data[3] != response_frame.data[3]) {
-    std::cout << "Command response mismatched subindex" << std::endl;
+    throw StringException("Command response mismatched subindex");
+    // std::cout << "Command response mismatched subindex" << std::endl;
   } else {
     return true;
   }
@@ -254,36 +263,46 @@ DataType CanopenInterface::sendQuery(RuntimeQuery query, uint8_t subindex) {
 
   ssize_t bytes_written = write(roboteq::CanopenInterface::socket_handle_, &query_frame, sizeof(struct can_frame));
   if (bytes_written != sizeof(struct can_frame)) {
-    // TODO: throw error
+    throw StringException("Need more bytes to write");
     return 0;
   }
 
   struct can_frame response_frame = {};
   ssize_t bytes_read = read(roboteq::CanopenInterface::socket_handle_, &response_frame, sizeof(struct can_frame));
 
-  //  std::cout << std::hex << response_frame.can_id << "\t" << static_cast<unsigned>(response_frame.can_dlc) << "\t"
-  //            << static_cast<unsigned>(response_frame.data[0]) << "\t" <<
-  //            static_cast<unsigned>(response_frame.data[1])
-  //            << "\t" << static_cast<unsigned>(response_frame.data[2]) << "\t"
-  //            << static_cast<unsigned>(response_frame.data[3]) << "\t" <<
-  //            static_cast<unsigned>(response_frame.data[4])
-  //            << "\t" << static_cast<unsigned>(response_frame.data[5]) << "\t"
-  //            << static_cast<unsigned>(response_frame.data[6]) << "\t" <<
-  //            static_cast<unsigned>(response_frame.data[7])
-  //            << std::endl;
+   std::cout << std::hex << response_frame.can_id << "\t" 
+             << static_cast<unsigned>(response_frame.can_dlc) << "\t"
+             << static_cast<unsigned>(response_frame.data[0]) << "\t" <<
+             static_cast<unsigned>(response_frame.data[1])
+             << "\t" << static_cast<unsigned>(response_frame.data[2]) << "\t"
+             << static_cast<unsigned>(response_frame.data[3]) << "\t" <<
+             static_cast<unsigned>(response_frame.data[4])
+             << "\t" << static_cast<unsigned>(response_frame.data[5]) << "\t"
+             << static_cast<unsigned>(response_frame.data[6]) << "\t" <<
+             static_cast<unsigned>(response_frame.data[7])
+             << std::endl;
 
   if (bytes_read != sizeof(struct can_frame)) {
-    // TODO: throw error
-    return 0;
+    // std::cout << "bytes_read: " << bytes_read << "\n" << std::endl;
+    throw StringException("Bytes to read is less than size of the CAN frame");
+  }
+
+  if (static_cast<unsigned>(response_frame.can_dlc) != CAN_FRAME_SIZE_BYTES) {
+    // std::cout << "Size of CAN Frame: " << sizeof(struct can_frame) << std::endl;
+    // std::cout << "Size of DLC: " << static_cast<unsigned>(response_frame.can_dlc) << std::endl;
+    throw StringException("Need more data in DLC payload");
   }
 
   // TODO: throw appropriate errors
   if ((response_frame.data[0] & RESPONSE_TYPE_MASK) != SUCCESSFUL_QUERY_RESPONSE) {
-    std::cout << "Query unsuccessful response" << std::endl;
+    throw StringException("Query unsuccessful response");
+    // std::cout << "Query unsuccessful response" << std::endl;
   } else if (query_frame.data[1] != response_frame.data[1] || query_frame.data[2] != response_frame.data[2]) {
-    std::cout << "Query response mismatched index" << std::endl;
+    throw StringException("Query response mismatched index");
+    // std::cout << "Query response mismatched index" << std::endl;
   } else if (query_frame.data[3] != response_frame.data[3]) {
-    std::cout << "Query response mismatched subindex" << std::endl;
+      throw StringException("Query response mismatched subindex");
+    // std::cout << "Query response mismatched subindex" << std::endl;
   } else {
     const size_t data_response_size = SDO_MAX_DATA_SIZE - ((response_frame.data[0] & UNUSED_BYTES_MASK) >> 2);
 

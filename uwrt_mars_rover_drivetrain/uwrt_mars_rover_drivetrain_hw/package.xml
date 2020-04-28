@@ -15,6 +15,9 @@
     <depend>hardware_interface</depend>
     <depend>joint_limits_interface</depend>
     <depend>transmission_interface</depend>
+    <depend>roscpp</depend>
+
+    <depend>uwrt_open_loop_position_controller</depend>
 
     <export>
         <hardware_interface plugin="${prefix}/uwrt_mars_rover_drivetrain_hw_plugin.xml"/>

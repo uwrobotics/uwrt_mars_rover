@@ -29,24 +29,73 @@ namespace uwrt
 {
 namespace arm
 {
+/**
+ * Base class for the Arm hardware interface required by ros_control
+ */ 
 class ArmHW : public hardware_interface::RobotHW
 {
 public:
+  /**
+   * \brief Constructor
+   * 
+   * \param urdf_str URDF of the arm in string format
+   */
   explicit ArmHW(const std::string& urdf_str);
 
+  /**
+   * \brief: Constructor
+   * 
+   * \param name Arbitrary name for an instance of this class
+   * \param urdf_str URDF of the arm in string format
+   */
   ArmHW(const std::string& name, const std::string& urdf_str);
 
+  /**
+   * \brief Initializes the hardware interface by registering all joints and interfaces
+   * 
+   * \param nh Nodehandle for the root of the arm namespace
+   * \param arm_hw_nh Nodehandle in the namespace of the arm hardware interface
+   */ 
   bool init(ros::NodeHandle& nh,
             ros::NodeHandle& arm_hw_nh) override;
+  /**
+   * \brief Starts/Stops controllers based on controller manager service calls
+   * 
+   * \param start_list Controllers to start
+   * \param stop_list Controllers to stop
+   */
   void doSwitch(const std::list<hardware_interface::ControllerInfo>& start_list,
                 const std::list<hardware_interface::ControllerInfo>& stop_list) override;
+  /**
+   * \brief Reads data from the arm
+   * 
+   * \param time The current time
+   * \param period The time passes since last call to read
+   */
   virtual void read(const ros::Time& time, const ros::Duration& period) = 0;
+  /**
+   * \brief Writes data to the arm
+   * 
+   * \param time The current time
+   * \param period The time passes since last call to write
+   */
   virtual void write(const ros::Time& time, const ros::Duration& period) = 0;
 
+  /**
+   * \brief Enforces predefined limits on controller outputs
+   * 
+   * \param period Control period
+   */
   void enforceLimits(ros::Duration period);
+  /**
+   * \brief Get the name of the hardware interface object
+   */
   std::string getName() const;
 
 protected:
+  /**
+   * \brief Enum for the mode of control for a joint
+   */
   enum ControlMethod {POSITION, VELOCITY, EFFORT, VOLTAGE};
 
   ros::NodeHandle nh_;
@@ -70,7 +119,7 @@ protected:
     joint_effort_command_,
     joint_voltage_command_;
   std::vector<ControlMethod> joint_control_method_;
-  std::map<std::string, uint8_t> joint_index_map_;
+  std::map<std::string, uint8_t> joint_index_map_;  ///< Mapping from joint name to an index
   std::vector<int> joint_types_;
 
   // Hardware Interfaces
@@ -87,8 +136,6 @@ protected:
   joint_limits_interface::VelocityJointSoftLimitsInterface velocity_limits_interface_;
   joint_limits_interface::EffortJointSaturationInterface   effort_sat_interface_;
   joint_limits_interface::EffortJointSoftLimitsInterface   effort_limits_interface_;
-
-  // std::vector<transmission_interface::TransmissionInfo> transmissions_;
 
 private:
   void registerJointLimits(const std::string& joint_name,

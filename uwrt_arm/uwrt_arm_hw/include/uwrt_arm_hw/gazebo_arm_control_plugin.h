@@ -22,6 +22,9 @@ namespace uwrt
 {
 namespace arm
 {
+/**
+ * Gazebo Plugin for simulated Arm Control Loop
+ */
 class GazeboArmControlPlugin : public ArmControlLoop, public gazebo::ModelPlugin
 {
 public:

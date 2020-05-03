@@ -1,0 +1,195 @@
+\hypertarget{classuwrt_1_1arm_1_1_arm_h_w_real}{}\section{uwrt\+:\+:arm\+:\+:Arm\+H\+W\+Real Class Reference}
+\label{classuwrt_1_1arm_1_1_arm_h_w_real}\index{uwrt\+::arm\+::\+Arm\+H\+W\+Real@{uwrt\+::arm\+::\+Arm\+H\+W\+Real}}
+
+
+{\ttfamily \#include $<$arm\+\_\+hw\+\_\+real.\+h$>$}
+
+
+
+Inheritance diagram for uwrt\+:\+:arm\+:\+:Arm\+H\+W\+Real\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=199pt]{classuwrt_1_1arm_1_1_arm_h_w_real__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for uwrt\+:\+:arm\+:\+:Arm\+H\+W\+Real\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=320pt]{classuwrt_1_1arm_1_1_arm_h_w_real__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+enum \hyperlink{classuwrt_1_1arm_1_1_arm_h_w_real_ab0b3eb7330f9aa0f1101506fde2a889a}{Feedback\+Type} \{ \hyperlink{classuwrt_1_1arm_1_1_arm_h_w_real_ab0b3eb7330f9aa0f1101506fde2a889aa64a4abb154db9a6878c1d2e6053bd852}{G\+E\+N\+E\+R\+AL}, 
+\hyperlink{classuwrt_1_1arm_1_1_arm_h_w_real_ab0b3eb7330f9aa0f1101506fde2a889aaded4c5ee9a1b43522d0a529e952bc21b}{P\+O\+S\+V\+EL}
+ \}\begin{DoxyCompactList}\small\item\em Enum to distinguish between the type of feedback received over the C\+AN interface. \end{DoxyCompactList}
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classuwrt_1_1arm_1_1_arm_h_w_real_ad7edcfcf86fd221726402cbbf0f7a6d3}{Arm\+H\+W\+Real} (const std\+::string \&urdf\+\_\+str)
+\begin{DoxyCompactList}\small\item\em Constructor. \end{DoxyCompactList}\item 
+\hyperlink{classuwrt_1_1arm_1_1_arm_h_w_real_aa79a19f491094474cb91e6a07eecf0ee}{Arm\+H\+W\+Real} (const std\+::string \&name, const std\+::string \&urdf\+\_\+str)
+\begin{DoxyCompactList}\small\item\em \+: Constructor \end{DoxyCompactList}\item 
+virtual bool \hyperlink{classuwrt_1_1arm_1_1_arm_h_w_real_ab2556fef8e4666cb970113130e21a690}{init} (ros\+::\+Node\+Handle \&nh, ros\+::\+Node\+Handle \&arm\+\_\+hw\+\_\+nh)
+\begin{DoxyCompactList}\small\item\em Initializes the hardware interface by registering all joints and interfaces. \end{DoxyCompactList}\item 
+virtual void \hyperlink{classuwrt_1_1arm_1_1_arm_h_w_real_a7a4704f71c0652269a2e9c10907ca8b1}{read} (const ros\+::\+Time \&time, const ros\+::\+Duration \&period)
+\begin{DoxyCompactList}\small\item\em Reads data from the arm. \end{DoxyCompactList}\item 
+virtual void \hyperlink{classuwrt_1_1arm_1_1_arm_h_w_real_a25ab702964a8b1db7ea58b040189b820}{write} (const ros\+::\+Time \&time, const ros\+::\+Duration \&period)
+\begin{DoxyCompactList}\small\item\em Writes data to the arm. \end{DoxyCompactList}\item 
+void \hyperlink{classuwrt_1_1arm_1_1_arm_h_w_real_a5bc11742cda0b7826e45a12217c89965}{do\+Switch} (const std\+::list$<$ hardware\+\_\+interface\+::\+Controller\+Info $>$ \&start\+\_\+list, const std\+::list$<$ hardware\+\_\+interface\+::\+Controller\+Info $>$ \&stop\+\_\+list) override
+\begin{DoxyCompactList}\small\item\em Starts/\+Stops controllers based on controller manager service calls. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+\subsection{Detailed Description}
+Hardware Interface for the real Arm 
+
+\subsection{Member Enumeration Documentation}
+\mbox{\Hypertarget{classuwrt_1_1arm_1_1_arm_h_w_real_ab0b3eb7330f9aa0f1101506fde2a889a}\label{classuwrt_1_1arm_1_1_arm_h_w_real_ab0b3eb7330f9aa0f1101506fde2a889a}} 
+\index{uwrt\+::arm\+::\+Arm\+H\+W\+Real@{uwrt\+::arm\+::\+Arm\+H\+W\+Real}!Feedback\+Type@{Feedback\+Type}}
+\index{Feedback\+Type@{Feedback\+Type}!uwrt\+::arm\+::\+Arm\+H\+W\+Real@{uwrt\+::arm\+::\+Arm\+H\+W\+Real}}
+\subsubsection{\texorpdfstring{Feedback\+Type}{FeedbackType}}
+{\footnotesize\ttfamily enum \hyperlink{classuwrt_1_1arm_1_1_arm_h_w_real_ab0b3eb7330f9aa0f1101506fde2a889a}{uwrt\+::arm\+::\+Arm\+H\+W\+Real\+::\+Feedback\+Type}}
+
+
+
+Enum to distinguish between the type of feedback received over the C\+AN interface. 
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{G\+E\+N\+E\+R\+AL@{G\+E\+N\+E\+R\+AL}!uwrt\+::arm\+::\+Arm\+H\+W\+Real@{uwrt\+::arm\+::\+Arm\+H\+W\+Real}}\index{uwrt\+::arm\+::\+Arm\+H\+W\+Real@{uwrt\+::arm\+::\+Arm\+H\+W\+Real}!G\+E\+N\+E\+R\+AL@{G\+E\+N\+E\+R\+AL}}}\mbox{\Hypertarget{classuwrt_1_1arm_1_1_arm_h_w_real_ab0b3eb7330f9aa0f1101506fde2a889aa64a4abb154db9a6878c1d2e6053bd852}\label{classuwrt_1_1arm_1_1_arm_h_w_real_ab0b3eb7330f9aa0f1101506fde2a889aa64a4abb154db9a6878c1d2e6053bd852}} 
+G\+E\+N\+E\+R\+AL&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{P\+O\+S\+V\+EL@{P\+O\+S\+V\+EL}!uwrt\+::arm\+::\+Arm\+H\+W\+Real@{uwrt\+::arm\+::\+Arm\+H\+W\+Real}}\index{uwrt\+::arm\+::\+Arm\+H\+W\+Real@{uwrt\+::arm\+::\+Arm\+H\+W\+Real}!P\+O\+S\+V\+EL@{P\+O\+S\+V\+EL}}}\mbox{\Hypertarget{classuwrt_1_1arm_1_1_arm_h_w_real_ab0b3eb7330f9aa0f1101506fde2a889aaded4c5ee9a1b43522d0a529e952bc21b}\label{classuwrt_1_1arm_1_1_arm_h_w_real_ab0b3eb7330f9aa0f1101506fde2a889aaded4c5ee9a1b43522d0a529e952bc21b}} 
+P\+O\+S\+V\+EL&\\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classuwrt_1_1arm_1_1_arm_h_w_real_ad7edcfcf86fd221726402cbbf0f7a6d3}\label{classuwrt_1_1arm_1_1_arm_h_w_real_ad7edcfcf86fd221726402cbbf0f7a6d3}} 
+\index{uwrt\+::arm\+::\+Arm\+H\+W\+Real@{uwrt\+::arm\+::\+Arm\+H\+W\+Real}!Arm\+H\+W\+Real@{Arm\+H\+W\+Real}}
+\index{Arm\+H\+W\+Real@{Arm\+H\+W\+Real}!uwrt\+::arm\+::\+Arm\+H\+W\+Real@{uwrt\+::arm\+::\+Arm\+H\+W\+Real}}
+\subsubsection{\texorpdfstring{Arm\+H\+W\+Real()}{ArmHWReal()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily uwrt\+::arm\+::\+Arm\+H\+W\+Real\+::\+Arm\+H\+W\+Real (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{urdf\+\_\+str }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+
+
+Constructor. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em urdf\+\_\+str} & U\+R\+DF of the arm in string format \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classuwrt_1_1arm_1_1_arm_h_w_real_aa79a19f491094474cb91e6a07eecf0ee}\label{classuwrt_1_1arm_1_1_arm_h_w_real_aa79a19f491094474cb91e6a07eecf0ee}} 
+\index{uwrt\+::arm\+::\+Arm\+H\+W\+Real@{uwrt\+::arm\+::\+Arm\+H\+W\+Real}!Arm\+H\+W\+Real@{Arm\+H\+W\+Real}}
+\index{Arm\+H\+W\+Real@{Arm\+H\+W\+Real}!uwrt\+::arm\+::\+Arm\+H\+W\+Real@{uwrt\+::arm\+::\+Arm\+H\+W\+Real}}
+\subsubsection{\texorpdfstring{Arm\+H\+W\+Real()}{ArmHWReal()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily uwrt\+::arm\+::\+Arm\+H\+W\+Real\+::\+Arm\+H\+W\+Real (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{name,  }\item[{const std\+::string \&}]{urdf\+\_\+str }\end{DoxyParamCaption})}
+
+
+
+\+: Constructor 
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & Arbitrary name for an instance of this class \\
+\hline
+{\em urdf\+\_\+str} & U\+R\+DF of the arm in string format \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classuwrt_1_1arm_1_1_arm_h_w_real_a5bc11742cda0b7826e45a12217c89965}\label{classuwrt_1_1arm_1_1_arm_h_w_real_a5bc11742cda0b7826e45a12217c89965}} 
+\index{uwrt\+::arm\+::\+Arm\+H\+W\+Real@{uwrt\+::arm\+::\+Arm\+H\+W\+Real}!do\+Switch@{do\+Switch}}
+\index{do\+Switch@{do\+Switch}!uwrt\+::arm\+::\+Arm\+H\+W\+Real@{uwrt\+::arm\+::\+Arm\+H\+W\+Real}}
+\subsubsection{\texorpdfstring{do\+Switch()}{doSwitch()}}
+{\footnotesize\ttfamily void uwrt\+::arm\+::\+Arm\+H\+W\+Real\+::do\+Switch (\begin{DoxyParamCaption}\item[{const std\+::list$<$ hardware\+\_\+interface\+::\+Controller\+Info $>$ \&}]{start\+\_\+list,  }\item[{const std\+::list$<$ hardware\+\_\+interface\+::\+Controller\+Info $>$ \&}]{stop\+\_\+list }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}}
+
+
+
+Starts/\+Stops controllers based on controller manager service calls. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em start\+\_\+list} & Controllers to start \\
+\hline
+{\em stop\+\_\+list} & Controllers to stop \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classuwrt_1_1arm_1_1_arm_h_w_real_ab2556fef8e4666cb970113130e21a690}\label{classuwrt_1_1arm_1_1_arm_h_w_real_ab2556fef8e4666cb970113130e21a690}} 
+\index{uwrt\+::arm\+::\+Arm\+H\+W\+Real@{uwrt\+::arm\+::\+Arm\+H\+W\+Real}!init@{init}}
+\index{init@{init}!uwrt\+::arm\+::\+Arm\+H\+W\+Real@{uwrt\+::arm\+::\+Arm\+H\+W\+Real}}
+\subsubsection{\texorpdfstring{init()}{init()}}
+{\footnotesize\ttfamily bool uwrt\+::arm\+::\+Arm\+H\+W\+Real\+::init (\begin{DoxyParamCaption}\item[{ros\+::\+Node\+Handle \&}]{nh,  }\item[{ros\+::\+Node\+Handle \&}]{arm\+\_\+hw\+\_\+nh }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Initializes the hardware interface by registering all joints and interfaces. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em nh} & Nodehandle for the root of the arm namespace \\
+\hline
+{\em arm\+\_\+hw\+\_\+nh} & Nodehandle in the namespace of the arm hardware interface \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classuwrt_1_1arm_1_1_arm_h_w_real_a7a4704f71c0652269a2e9c10907ca8b1}\label{classuwrt_1_1arm_1_1_arm_h_w_real_a7a4704f71c0652269a2e9c10907ca8b1}} 
+\index{uwrt\+::arm\+::\+Arm\+H\+W\+Real@{uwrt\+::arm\+::\+Arm\+H\+W\+Real}!read@{read}}
+\index{read@{read}!uwrt\+::arm\+::\+Arm\+H\+W\+Real@{uwrt\+::arm\+::\+Arm\+H\+W\+Real}}
+\subsubsection{\texorpdfstring{read()}{read()}}
+{\footnotesize\ttfamily void uwrt\+::arm\+::\+Arm\+H\+W\+Real\+::read (\begin{DoxyParamCaption}\item[{const ros\+::\+Time \&}]{time,  }\item[{const ros\+::\+Duration \&}]{period }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Reads data from the arm. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em time} & The current time \\
+\hline
+{\em period} & The time passes since last call to read \\
+\hline
+\end{DoxyParams}
+
+
+Implements \hyperlink{classuwrt_1_1arm_1_1_arm_h_w_af2164103badfa99373f787b8a3cecb6b}{uwrt\+::arm\+::\+Arm\+HW}.
+
+\mbox{\Hypertarget{classuwrt_1_1arm_1_1_arm_h_w_real_a25ab702964a8b1db7ea58b040189b820}\label{classuwrt_1_1arm_1_1_arm_h_w_real_a25ab702964a8b1db7ea58b040189b820}} 
+\index{uwrt\+::arm\+::\+Arm\+H\+W\+Real@{uwrt\+::arm\+::\+Arm\+H\+W\+Real}!write@{write}}
+\index{write@{write}!uwrt\+::arm\+::\+Arm\+H\+W\+Real@{uwrt\+::arm\+::\+Arm\+H\+W\+Real}}
+\subsubsection{\texorpdfstring{write()}{write()}}
+{\footnotesize\ttfamily void uwrt\+::arm\+::\+Arm\+H\+W\+Real\+::write (\begin{DoxyParamCaption}\item[{const ros\+::\+Time \&}]{time,  }\item[{const ros\+::\+Duration \&}]{period }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Writes data to the arm. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em time} & The current time \\
+\hline
+{\em period} & The time passes since last call to write \\
+\hline
+\end{DoxyParams}
+
+
+Implements \hyperlink{classuwrt_1_1arm_1_1_arm_h_w_a934119487836109e24d9054f10e9832f}{uwrt\+::arm\+::\+Arm\+HW}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+uwrt\+\_\+arm\+\_\+hw/include/uwrt\+\_\+arm\+\_\+hw/\hyperlink{arm__hw__real_8h}{arm\+\_\+hw\+\_\+real.\+h}\item 
+uwrt\+\_\+arm\+\_\+hw/src/\hyperlink{arm__hw__real_8cpp}{arm\+\_\+hw\+\_\+real.\+cpp}\end{DoxyCompactItemize}

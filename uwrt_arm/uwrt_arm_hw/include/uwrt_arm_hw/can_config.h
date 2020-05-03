@@ -6,9 +6,12 @@ namespace uwrt
 {
 namespace arm
 {
-const uint8_t CAN_FRAME_SIZE_BYTES_ = 8;
+const uint8_t CAN_FRAME_SIZE_BYTES_ = 8;  ///< Maximum number of bytes for data field of the CAN frame
 namespace can_id
 {
+/**
+ * CAN IDs for feedback/reads
+ */
 struct Get
 {
   static const canid_t ARM_ERROR              = 0x100;
@@ -22,6 +25,9 @@ struct Get
   static const canid_t FORCE_SENSOR_VALUE     = 0x75E;
 };
 
+/**
+ * CAN IDs for commands/writes
+ */
 struct Set
 {
   static const canid_t TURNTABLE_CONTROL_MODE = 0x740;
@@ -46,6 +52,9 @@ struct Set
   static const canid_t PID_BIAS               = 0x755;
 };
 
+/**
+ * CAN IDs for calibration procedures
+ */
 struct Calibrate
 {
   static const canid_t WRIST                  = 0x74C;

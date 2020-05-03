@@ -1,0 +1,491 @@
+\hypertarget{classuwrt_1_1arm_1_1_arm_h_w}{}\section{uwrt\+:\+:arm\+:\+:Arm\+HW Class Reference}
+\label{classuwrt_1_1arm_1_1_arm_h_w}\index{uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}}
+
+
+{\ttfamily \#include $<$arm\+\_\+hw.\+h$>$}
+
+
+
+Inheritance diagram for uwrt\+:\+:arm\+:\+:Arm\+HW\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=334pt]{classuwrt_1_1arm_1_1_arm_h_w__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for uwrt\+:\+:arm\+:\+:Arm\+HW\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=320pt]{classuwrt_1_1arm_1_1_arm_h_w__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classuwrt_1_1arm_1_1_arm_h_w_a715621a4a3f913beac7d6e4f16b40c11}{Arm\+HW} (const std\+::string \&urdf\+\_\+str)
+\begin{DoxyCompactList}\small\item\em Constructor. \end{DoxyCompactList}\item 
+\hyperlink{classuwrt_1_1arm_1_1_arm_h_w_a03495dca1c1616fb09184541713f0670}{Arm\+HW} (const std\+::string \&name, const std\+::string \&urdf\+\_\+str)
+\begin{DoxyCompactList}\small\item\em \+: Constructor \end{DoxyCompactList}\item 
+bool \hyperlink{classuwrt_1_1arm_1_1_arm_h_w_a2b8c89b8498c70d8b627fefd17267e40}{init} (ros\+::\+Node\+Handle \&nh, ros\+::\+Node\+Handle \&arm\+\_\+hw\+\_\+nh) override
+\begin{DoxyCompactList}\small\item\em Initializes the hardware interface by registering all joints and interfaces. \end{DoxyCompactList}\item 
+void \hyperlink{classuwrt_1_1arm_1_1_arm_h_w_ae5bbb33ef19c7e27fa0e3888fda5b372}{do\+Switch} (const std\+::list$<$ hardware\+\_\+interface\+::\+Controller\+Info $>$ \&start\+\_\+list, const std\+::list$<$ hardware\+\_\+interface\+::\+Controller\+Info $>$ \&stop\+\_\+list) override
+\begin{DoxyCompactList}\small\item\em Starts/\+Stops controllers based on controller manager service calls. \end{DoxyCompactList}\item 
+virtual void \hyperlink{classuwrt_1_1arm_1_1_arm_h_w_af2164103badfa99373f787b8a3cecb6b}{read} (const ros\+::\+Time \&time, const ros\+::\+Duration \&period)=0
+\begin{DoxyCompactList}\small\item\em Reads data from the arm. \end{DoxyCompactList}\item 
+virtual void \hyperlink{classuwrt_1_1arm_1_1_arm_h_w_a934119487836109e24d9054f10e9832f}{write} (const ros\+::\+Time \&time, const ros\+::\+Duration \&period)=0
+\begin{DoxyCompactList}\small\item\em Writes data to the arm. \end{DoxyCompactList}\item 
+void \hyperlink{classuwrt_1_1arm_1_1_arm_h_w_aef2643b05e4070ab7142eca2be62ddd1}{enforce\+Limits} (ros\+::\+Duration period)
+\begin{DoxyCompactList}\small\item\em Enforces predefined limits on controller outputs. \end{DoxyCompactList}\item 
+std\+::string \hyperlink{classuwrt_1_1arm_1_1_arm_h_w_a2ded1550eac19e0ea4ac4830fe196ad5}{get\+Name} () const
+\begin{DoxyCompactList}\small\item\em Get the name of the hardware interface object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Protected Types}
+\begin{DoxyCompactItemize}
+\item 
+enum \hyperlink{classuwrt_1_1arm_1_1_arm_h_w_aef42f10e04f7f426b3d06f91d0897b6b}{Control\+Method} \{ \hyperlink{classuwrt_1_1arm_1_1_arm_h_w_aef42f10e04f7f426b3d06f91d0897b6ba7e141378d3029e25ce86b40cc794e8d6}{P\+O\+S\+I\+T\+I\+ON}, 
+\hyperlink{classuwrt_1_1arm_1_1_arm_h_w_aef42f10e04f7f426b3d06f91d0897b6ba143f6d42adf4ed0f7b4f776bac5fc645}{V\+E\+L\+O\+C\+I\+TY}, 
+\hyperlink{classuwrt_1_1arm_1_1_arm_h_w_aef42f10e04f7f426b3d06f91d0897b6ba5de839ecc8d975a1ebb795e0439e1904}{E\+F\+F\+O\+RT}, 
+\hyperlink{classuwrt_1_1arm_1_1_arm_h_w_aef42f10e04f7f426b3d06f91d0897b6ba0ba2d8d7f2e958362c284ffbcf7a686f}{V\+O\+L\+T\+A\+GE}
+ \}\begin{DoxyCompactList}\small\item\em Enum for the mode of control for a joint. \end{DoxyCompactList}
+\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+ros\+::\+Node\+Handle \hyperlink{classuwrt_1_1arm_1_1_arm_h_w_a80bff071cccf662191970b5088619a29}{nh\+\_\+}
+\item 
+ros\+::\+Node\+Handle \hyperlink{classuwrt_1_1arm_1_1_arm_h_w_a47b8fb1ffec74c5699b3d32827b4f5b6}{arm\+\_\+hw\+\_\+nh\+\_\+}
+\item 
+const std\+::string \hyperlink{classuwrt_1_1arm_1_1_arm_h_w_a94577174f3c73549997c501acb28810a}{name\+\_\+}
+\item 
+const std\+::string \hyperlink{classuwrt_1_1arm_1_1_arm_h_w_a0708e51d21f05e20129b7bc99e42eead}{urdf\+\_\+string\+\_\+}
+\item 
+urdf\+::\+Model \hyperlink{classuwrt_1_1arm_1_1_arm_h_w_a356557f068878c9464f4d47eb6381ae3}{urdf\+\_\+model\+\_\+}
+\item 
+const int8\+\_\+t \hyperlink{classuwrt_1_1arm_1_1_arm_h_w_ab1263af2b5e65e88876efdb45025080c}{num\+\_\+joints\+\_\+}
+\item 
+std\+::vector$<$ std\+::string $>$ \hyperlink{classuwrt_1_1arm_1_1_arm_h_w_a0bba123f549c158be6dbfc365e42853d}{joint\+\_\+names\+\_\+}
+\item 
+std\+::vector$<$ double $>$ \hyperlink{classuwrt_1_1arm_1_1_arm_h_w_a08c5d50dddb1a3552b43bfff0d07ffa9}{joint\+\_\+lower\+\_\+limits\+\_\+}
+\item 
+std\+::vector$<$ double $>$ \hyperlink{classuwrt_1_1arm_1_1_arm_h_w_a4073badaad21458259a93fb66f510a9e}{joint\+\_\+upper\+\_\+limits\+\_\+}
+\item 
+std\+::vector$<$ double $>$ \hyperlink{classuwrt_1_1arm_1_1_arm_h_w_ab6f08fdf70a33a99af148bc5ce0f56ad}{joint\+\_\+effort\+\_\+limits\+\_\+}
+\item 
+std\+::vector$<$ double $>$ \hyperlink{classuwrt_1_1arm_1_1_arm_h_w_ac6612898a4add151094f92b87cc8ded7}{joint\+\_\+position\+\_\+}
+\item 
+std\+::vector$<$ double $>$ \hyperlink{classuwrt_1_1arm_1_1_arm_h_w_ab7b253782896e1bc6a1879dcbae60c47}{joint\+\_\+position\+\_\+command\+\_\+}
+\item 
+std\+::vector$<$ double $>$ \hyperlink{classuwrt_1_1arm_1_1_arm_h_w_abbf5caed643c4c897c4bf5a0c209bff7}{joint\+\_\+velocity\+\_\+}
+\item 
+std\+::vector$<$ double $>$ \hyperlink{classuwrt_1_1arm_1_1_arm_h_w_aa4acfb5b9cf32153470bc9e384e2fb85}{joint\+\_\+velocity\+\_\+command\+\_\+}
+\item 
+std\+::vector$<$ double $>$ \hyperlink{classuwrt_1_1arm_1_1_arm_h_w_aed887286b800a8852217146876a9bb6b}{joint\+\_\+effort\+\_\+}
+\item 
+std\+::vector$<$ double $>$ \hyperlink{classuwrt_1_1arm_1_1_arm_h_w_a9e0792faa7682cd234cfa518e976e79c}{joint\+\_\+effort\+\_\+command\+\_\+}
+\item 
+std\+::vector$<$ double $>$ \hyperlink{classuwrt_1_1arm_1_1_arm_h_w_acaa46956d8f97421c96c9b5a9b51200f}{joint\+\_\+voltage\+\_\+command\+\_\+}
+\item 
+std\+::vector$<$ \hyperlink{classuwrt_1_1arm_1_1_arm_h_w_aef42f10e04f7f426b3d06f91d0897b6b}{Control\+Method} $>$ \hyperlink{classuwrt_1_1arm_1_1_arm_h_w_ad19ee0c5fe04b8e8366f036010927fc4}{joint\+\_\+control\+\_\+method\+\_\+}
+\item 
+std\+::map$<$ std\+::string, uint8\+\_\+t $>$ \hyperlink{classuwrt_1_1arm_1_1_arm_h_w_afec1b4685b242f4d7e821f6e6c479302}{joint\+\_\+index\+\_\+map\+\_\+}
+\begin{DoxyCompactList}\small\item\em Mapping from joint name to an index. \end{DoxyCompactList}\item 
+std\+::vector$<$ int $>$ \hyperlink{classuwrt_1_1arm_1_1_arm_h_w_a69c250992873f9451b2d0e45fb1fc41e}{joint\+\_\+types\+\_\+}
+\item 
+hardware\+\_\+interface\+::\+Joint\+State\+Interface \hyperlink{classuwrt_1_1arm_1_1_arm_h_w_af7b1df1eb7f6e3badcc369be49af7978}{joint\+\_\+state\+\_\+interface\+\_\+}
+\item 
+hardware\+\_\+interface\+::\+Position\+Joint\+Interface \hyperlink{classuwrt_1_1arm_1_1_arm_h_w_ac0e4f2bbeaac8437cafa891602a7e0a0}{joint\+\_\+position\+\_\+interface\+\_\+}
+\item 
+hardware\+\_\+interface\+::\+Velocity\+Joint\+Interface \hyperlink{classuwrt_1_1arm_1_1_arm_h_w_af0a297190b6a67aee4f86fb7f44c36d2}{joint\+\_\+velocity\+\_\+interface\+\_\+}
+\item 
+hardware\+\_\+interface\+::\+Effort\+Joint\+Interface \hyperlink{classuwrt_1_1arm_1_1_arm_h_w_a5d2464c0da77d58da43af0baa5d7c2a4}{joint\+\_\+effort\+\_\+interface\+\_\+}
+\item 
+\hyperlink{classhardware__interface_1_1_voltage_joint_interface}{hardware\+\_\+interface\+::\+Voltage\+Joint\+Interface} \hyperlink{classuwrt_1_1arm_1_1_arm_h_w_aec35c81c5c9a7f32fe38ea3cdfbb8b6d}{joint\+\_\+voltage\+\_\+interface\+\_\+}
+\item 
+joint\+\_\+limits\+\_\+interface\+::\+Position\+Joint\+Saturation\+Interface \hyperlink{classuwrt_1_1arm_1_1_arm_h_w_ad940f7d5b2561be5ff6c3350480e20b5}{position\+\_\+sat\+\_\+interface\+\_\+}
+\item 
+joint\+\_\+limits\+\_\+interface\+::\+Position\+Joint\+Soft\+Limits\+Interface \hyperlink{classuwrt_1_1arm_1_1_arm_h_w_a84a73ead7105311112f7fe8ae7eda096}{position\+\_\+limits\+\_\+interface\+\_\+}
+\item 
+joint\+\_\+limits\+\_\+interface\+::\+Velocity\+Joint\+Saturation\+Interface \hyperlink{classuwrt_1_1arm_1_1_arm_h_w_a461fd5b0255bf2d1eecfb384ff7f1987}{velocity\+\_\+sat\+\_\+interface\+\_\+}
+\item 
+joint\+\_\+limits\+\_\+interface\+::\+Velocity\+Joint\+Soft\+Limits\+Interface \hyperlink{classuwrt_1_1arm_1_1_arm_h_w_a8e2811fbe4adfcbcce9efbee3756ea8f}{velocity\+\_\+limits\+\_\+interface\+\_\+}
+\item 
+joint\+\_\+limits\+\_\+interface\+::\+Effort\+Joint\+Saturation\+Interface \hyperlink{classuwrt_1_1arm_1_1_arm_h_w_a6272ed655471405069584b1afd4de5a7}{effort\+\_\+sat\+\_\+interface\+\_\+}
+\item 
+joint\+\_\+limits\+\_\+interface\+::\+Effort\+Joint\+Soft\+Limits\+Interface \hyperlink{classuwrt_1_1arm_1_1_arm_h_w_ac1add3b1c8d7423339d24de09a706485}{effort\+\_\+limits\+\_\+interface\+\_\+}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Base class for the Arm hardware interface required by ros\+\_\+control 
+
+\subsection{Member Enumeration Documentation}
+\mbox{\Hypertarget{classuwrt_1_1arm_1_1_arm_h_w_aef42f10e04f7f426b3d06f91d0897b6b}\label{classuwrt_1_1arm_1_1_arm_h_w_aef42f10e04f7f426b3d06f91d0897b6b}} 
+\index{uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}!Control\+Method@{Control\+Method}}
+\index{Control\+Method@{Control\+Method}!uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}}
+\subsubsection{\texorpdfstring{Control\+Method}{ControlMethod}}
+{\footnotesize\ttfamily enum \hyperlink{classuwrt_1_1arm_1_1_arm_h_w_aef42f10e04f7f426b3d06f91d0897b6b}{uwrt\+::arm\+::\+Arm\+H\+W\+::\+Control\+Method}\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Enum for the mode of control for a joint. 
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{P\+O\+S\+I\+T\+I\+ON@{P\+O\+S\+I\+T\+I\+ON}!uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}}\index{uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}!P\+O\+S\+I\+T\+I\+ON@{P\+O\+S\+I\+T\+I\+ON}}}\mbox{\Hypertarget{classuwrt_1_1arm_1_1_arm_h_w_aef42f10e04f7f426b3d06f91d0897b6ba7e141378d3029e25ce86b40cc794e8d6}\label{classuwrt_1_1arm_1_1_arm_h_w_aef42f10e04f7f426b3d06f91d0897b6ba7e141378d3029e25ce86b40cc794e8d6}} 
+P\+O\+S\+I\+T\+I\+ON&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{V\+E\+L\+O\+C\+I\+TY@{V\+E\+L\+O\+C\+I\+TY}!uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}}\index{uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}!V\+E\+L\+O\+C\+I\+TY@{V\+E\+L\+O\+C\+I\+TY}}}\mbox{\Hypertarget{classuwrt_1_1arm_1_1_arm_h_w_aef42f10e04f7f426b3d06f91d0897b6ba143f6d42adf4ed0f7b4f776bac5fc645}\label{classuwrt_1_1arm_1_1_arm_h_w_aef42f10e04f7f426b3d06f91d0897b6ba143f6d42adf4ed0f7b4f776bac5fc645}} 
+V\+E\+L\+O\+C\+I\+TY&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{E\+F\+F\+O\+RT@{E\+F\+F\+O\+RT}!uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}}\index{uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}!E\+F\+F\+O\+RT@{E\+F\+F\+O\+RT}}}\mbox{\Hypertarget{classuwrt_1_1arm_1_1_arm_h_w_aef42f10e04f7f426b3d06f91d0897b6ba5de839ecc8d975a1ebb795e0439e1904}\label{classuwrt_1_1arm_1_1_arm_h_w_aef42f10e04f7f426b3d06f91d0897b6ba5de839ecc8d975a1ebb795e0439e1904}} 
+E\+F\+F\+O\+RT&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{V\+O\+L\+T\+A\+GE@{V\+O\+L\+T\+A\+GE}!uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}}\index{uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}!V\+O\+L\+T\+A\+GE@{V\+O\+L\+T\+A\+GE}}}\mbox{\Hypertarget{classuwrt_1_1arm_1_1_arm_h_w_aef42f10e04f7f426b3d06f91d0897b6ba0ba2d8d7f2e958362c284ffbcf7a686f}\label{classuwrt_1_1arm_1_1_arm_h_w_aef42f10e04f7f426b3d06f91d0897b6ba0ba2d8d7f2e958362c284ffbcf7a686f}} 
+V\+O\+L\+T\+A\+GE&\\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classuwrt_1_1arm_1_1_arm_h_w_a715621a4a3f913beac7d6e4f16b40c11}\label{classuwrt_1_1arm_1_1_arm_h_w_a715621a4a3f913beac7d6e4f16b40c11}} 
+\index{uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}!Arm\+HW@{Arm\+HW}}
+\index{Arm\+HW@{Arm\+HW}!uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}}
+\subsubsection{\texorpdfstring{Arm\+H\+W()}{ArmHW()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily uwrt\+::arm\+::\+Arm\+H\+W\+::\+Arm\+HW (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{urdf\+\_\+str }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+
+
+Constructor. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em urdf\+\_\+str} & U\+R\+DF of the arm in string format \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classuwrt_1_1arm_1_1_arm_h_w_a03495dca1c1616fb09184541713f0670}\label{classuwrt_1_1arm_1_1_arm_h_w_a03495dca1c1616fb09184541713f0670}} 
+\index{uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}!Arm\+HW@{Arm\+HW}}
+\index{Arm\+HW@{Arm\+HW}!uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}}
+\subsubsection{\texorpdfstring{Arm\+H\+W()}{ArmHW()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily uwrt\+::arm\+::\+Arm\+H\+W\+::\+Arm\+HW (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{name,  }\item[{const std\+::string \&}]{urdf\+\_\+str }\end{DoxyParamCaption})}
+
+
+
+\+: Constructor 
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & Arbitrary name for an instance of this class \\
+\hline
+{\em urdf\+\_\+str} & U\+R\+DF of the arm in string format \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classuwrt_1_1arm_1_1_arm_h_w_ae5bbb33ef19c7e27fa0e3888fda5b372}\label{classuwrt_1_1arm_1_1_arm_h_w_ae5bbb33ef19c7e27fa0e3888fda5b372}} 
+\index{uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}!do\+Switch@{do\+Switch}}
+\index{do\+Switch@{do\+Switch}!uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}}
+\subsubsection{\texorpdfstring{do\+Switch()}{doSwitch()}}
+{\footnotesize\ttfamily void uwrt\+::arm\+::\+Arm\+H\+W\+::do\+Switch (\begin{DoxyParamCaption}\item[{const std\+::list$<$ hardware\+\_\+interface\+::\+Controller\+Info $>$ \&}]{start\+\_\+list,  }\item[{const std\+::list$<$ hardware\+\_\+interface\+::\+Controller\+Info $>$ \&}]{stop\+\_\+list }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}}
+
+
+
+Starts/\+Stops controllers based on controller manager service calls. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em start\+\_\+list} & Controllers to start \\
+\hline
+{\em stop\+\_\+list} & Controllers to stop \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classuwrt_1_1arm_1_1_arm_h_w_aef2643b05e4070ab7142eca2be62ddd1}\label{classuwrt_1_1arm_1_1_arm_h_w_aef2643b05e4070ab7142eca2be62ddd1}} 
+\index{uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}!enforce\+Limits@{enforce\+Limits}}
+\index{enforce\+Limits@{enforce\+Limits}!uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}}
+\subsubsection{\texorpdfstring{enforce\+Limits()}{enforceLimits()}}
+{\footnotesize\ttfamily void uwrt\+::arm\+::\+Arm\+H\+W\+::enforce\+Limits (\begin{DoxyParamCaption}\item[{ros\+::\+Duration}]{period }\end{DoxyParamCaption})}
+
+
+
+Enforces predefined limits on controller outputs. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em period} & Control period \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classuwrt_1_1arm_1_1_arm_h_w_a2ded1550eac19e0ea4ac4830fe196ad5}\label{classuwrt_1_1arm_1_1_arm_h_w_a2ded1550eac19e0ea4ac4830fe196ad5}} 
+\index{uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}!get\+Name@{get\+Name}}
+\index{get\+Name@{get\+Name}!uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}}
+\subsubsection{\texorpdfstring{get\+Name()}{getName()}}
+{\footnotesize\ttfamily std\+::string uwrt\+::arm\+::\+Arm\+H\+W\+::get\+Name (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Get the name of the hardware interface object. 
+
+\mbox{\Hypertarget{classuwrt_1_1arm_1_1_arm_h_w_a2b8c89b8498c70d8b627fefd17267e40}\label{classuwrt_1_1arm_1_1_arm_h_w_a2b8c89b8498c70d8b627fefd17267e40}} 
+\index{uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}!init@{init}}
+\index{init@{init}!uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}}
+\subsubsection{\texorpdfstring{init()}{init()}}
+{\footnotesize\ttfamily bool uwrt\+::arm\+::\+Arm\+H\+W\+::init (\begin{DoxyParamCaption}\item[{ros\+::\+Node\+Handle \&}]{nh,  }\item[{ros\+::\+Node\+Handle \&}]{arm\+\_\+hw\+\_\+nh }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}}
+
+
+
+Initializes the hardware interface by registering all joints and interfaces. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em nh} & Nodehandle for the root of the arm namespace \\
+\hline
+{\em arm\+\_\+hw\+\_\+nh} & Nodehandle in the namespace of the arm hardware interface \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classuwrt_1_1arm_1_1_arm_h_w_af2164103badfa99373f787b8a3cecb6b}\label{classuwrt_1_1arm_1_1_arm_h_w_af2164103badfa99373f787b8a3cecb6b}} 
+\index{uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}!read@{read}}
+\index{read@{read}!uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}}
+\subsubsection{\texorpdfstring{read()}{read()}}
+{\footnotesize\ttfamily virtual void uwrt\+::arm\+::\+Arm\+H\+W\+::read (\begin{DoxyParamCaption}\item[{const ros\+::\+Time \&}]{time,  }\item[{const ros\+::\+Duration \&}]{period }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Reads data from the arm. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em time} & The current time \\
+\hline
+{\em period} & The time passes since last call to read \\
+\hline
+\end{DoxyParams}
+
+
+Implemented in \hyperlink{classuwrt_1_1arm_1_1_arm_h_w_real_a7a4704f71c0652269a2e9c10907ca8b1}{uwrt\+::arm\+::\+Arm\+H\+W\+Real}, and \hyperlink{classuwrt_1_1arm_1_1_arm_h_w_sim_a78eb2303fba768155763a25797c0eecf}{uwrt\+::arm\+::\+Arm\+H\+W\+Sim}.
+
+\mbox{\Hypertarget{classuwrt_1_1arm_1_1_arm_h_w_a934119487836109e24d9054f10e9832f}\label{classuwrt_1_1arm_1_1_arm_h_w_a934119487836109e24d9054f10e9832f}} 
+\index{uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}!write@{write}}
+\index{write@{write}!uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}}
+\subsubsection{\texorpdfstring{write()}{write()}}
+{\footnotesize\ttfamily virtual void uwrt\+::arm\+::\+Arm\+H\+W\+::write (\begin{DoxyParamCaption}\item[{const ros\+::\+Time \&}]{time,  }\item[{const ros\+::\+Duration \&}]{period }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Writes data to the arm. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em time} & The current time \\
+\hline
+{\em period} & The time passes since last call to write \\
+\hline
+\end{DoxyParams}
+
+
+Implemented in \hyperlink{classuwrt_1_1arm_1_1_arm_h_w_real_a25ab702964a8b1db7ea58b040189b820}{uwrt\+::arm\+::\+Arm\+H\+W\+Real}, and \hyperlink{classuwrt_1_1arm_1_1_arm_h_w_sim_aa334fca03f76265ca8ec2da3be53991f}{uwrt\+::arm\+::\+Arm\+H\+W\+Sim}.
+
+
+
+\subsection{Member Data Documentation}
+\mbox{\Hypertarget{classuwrt_1_1arm_1_1_arm_h_w_a47b8fb1ffec74c5699b3d32827b4f5b6}\label{classuwrt_1_1arm_1_1_arm_h_w_a47b8fb1ffec74c5699b3d32827b4f5b6}} 
+\index{uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}!arm\+\_\+hw\+\_\+nh\+\_\+@{arm\+\_\+hw\+\_\+nh\+\_\+}}
+\index{arm\+\_\+hw\+\_\+nh\+\_\+@{arm\+\_\+hw\+\_\+nh\+\_\+}!uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}}
+\subsubsection{\texorpdfstring{arm\+\_\+hw\+\_\+nh\+\_\+}{arm\_hw\_nh\_}}
+{\footnotesize\ttfamily ros\+::\+Node\+Handle uwrt\+::arm\+::\+Arm\+H\+W\+::arm\+\_\+hw\+\_\+nh\+\_\+\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{classuwrt_1_1arm_1_1_arm_h_w_ac1add3b1c8d7423339d24de09a706485}\label{classuwrt_1_1arm_1_1_arm_h_w_ac1add3b1c8d7423339d24de09a706485}} 
+\index{uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}!effort\+\_\+limits\+\_\+interface\+\_\+@{effort\+\_\+limits\+\_\+interface\+\_\+}}
+\index{effort\+\_\+limits\+\_\+interface\+\_\+@{effort\+\_\+limits\+\_\+interface\+\_\+}!uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}}
+\subsubsection{\texorpdfstring{effort\+\_\+limits\+\_\+interface\+\_\+}{effort\_limits\_interface\_}}
+{\footnotesize\ttfamily joint\+\_\+limits\+\_\+interface\+::\+Effort\+Joint\+Soft\+Limits\+Interface uwrt\+::arm\+::\+Arm\+H\+W\+::effort\+\_\+limits\+\_\+interface\+\_\+\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{classuwrt_1_1arm_1_1_arm_h_w_a6272ed655471405069584b1afd4de5a7}\label{classuwrt_1_1arm_1_1_arm_h_w_a6272ed655471405069584b1afd4de5a7}} 
+\index{uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}!effort\+\_\+sat\+\_\+interface\+\_\+@{effort\+\_\+sat\+\_\+interface\+\_\+}}
+\index{effort\+\_\+sat\+\_\+interface\+\_\+@{effort\+\_\+sat\+\_\+interface\+\_\+}!uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}}
+\subsubsection{\texorpdfstring{effort\+\_\+sat\+\_\+interface\+\_\+}{effort\_sat\_interface\_}}
+{\footnotesize\ttfamily joint\+\_\+limits\+\_\+interface\+::\+Effort\+Joint\+Saturation\+Interface uwrt\+::arm\+::\+Arm\+H\+W\+::effort\+\_\+sat\+\_\+interface\+\_\+\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{classuwrt_1_1arm_1_1_arm_h_w_ad19ee0c5fe04b8e8366f036010927fc4}\label{classuwrt_1_1arm_1_1_arm_h_w_ad19ee0c5fe04b8e8366f036010927fc4}} 
+\index{uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}!joint\+\_\+control\+\_\+method\+\_\+@{joint\+\_\+control\+\_\+method\+\_\+}}
+\index{joint\+\_\+control\+\_\+method\+\_\+@{joint\+\_\+control\+\_\+method\+\_\+}!uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}}
+\subsubsection{\texorpdfstring{joint\+\_\+control\+\_\+method\+\_\+}{joint\_control\_method\_}}
+{\footnotesize\ttfamily std\+::vector$<$\hyperlink{classuwrt_1_1arm_1_1_arm_h_w_aef42f10e04f7f426b3d06f91d0897b6b}{Control\+Method}$>$ uwrt\+::arm\+::\+Arm\+H\+W\+::joint\+\_\+control\+\_\+method\+\_\+\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{classuwrt_1_1arm_1_1_arm_h_w_aed887286b800a8852217146876a9bb6b}\label{classuwrt_1_1arm_1_1_arm_h_w_aed887286b800a8852217146876a9bb6b}} 
+\index{uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}!joint\+\_\+effort\+\_\+@{joint\+\_\+effort\+\_\+}}
+\index{joint\+\_\+effort\+\_\+@{joint\+\_\+effort\+\_\+}!uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}}
+\subsubsection{\texorpdfstring{joint\+\_\+effort\+\_\+}{joint\_effort\_}}
+{\footnotesize\ttfamily std\+::vector$<$double$>$ uwrt\+::arm\+::\+Arm\+H\+W\+::joint\+\_\+effort\+\_\+\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{classuwrt_1_1arm_1_1_arm_h_w_a9e0792faa7682cd234cfa518e976e79c}\label{classuwrt_1_1arm_1_1_arm_h_w_a9e0792faa7682cd234cfa518e976e79c}} 
+\index{uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}!joint\+\_\+effort\+\_\+command\+\_\+@{joint\+\_\+effort\+\_\+command\+\_\+}}
+\index{joint\+\_\+effort\+\_\+command\+\_\+@{joint\+\_\+effort\+\_\+command\+\_\+}!uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}}
+\subsubsection{\texorpdfstring{joint\+\_\+effort\+\_\+command\+\_\+}{joint\_effort\_command\_}}
+{\footnotesize\ttfamily std\+::vector$<$double$>$ uwrt\+::arm\+::\+Arm\+H\+W\+::joint\+\_\+effort\+\_\+command\+\_\+\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{classuwrt_1_1arm_1_1_arm_h_w_a5d2464c0da77d58da43af0baa5d7c2a4}\label{classuwrt_1_1arm_1_1_arm_h_w_a5d2464c0da77d58da43af0baa5d7c2a4}} 
+\index{uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}!joint\+\_\+effort\+\_\+interface\+\_\+@{joint\+\_\+effort\+\_\+interface\+\_\+}}
+\index{joint\+\_\+effort\+\_\+interface\+\_\+@{joint\+\_\+effort\+\_\+interface\+\_\+}!uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}}
+\subsubsection{\texorpdfstring{joint\+\_\+effort\+\_\+interface\+\_\+}{joint\_effort\_interface\_}}
+{\footnotesize\ttfamily hardware\+\_\+interface\+::\+Effort\+Joint\+Interface uwrt\+::arm\+::\+Arm\+H\+W\+::joint\+\_\+effort\+\_\+interface\+\_\+\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{classuwrt_1_1arm_1_1_arm_h_w_ab6f08fdf70a33a99af148bc5ce0f56ad}\label{classuwrt_1_1arm_1_1_arm_h_w_ab6f08fdf70a33a99af148bc5ce0f56ad}} 
+\index{uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}!joint\+\_\+effort\+\_\+limits\+\_\+@{joint\+\_\+effort\+\_\+limits\+\_\+}}
+\index{joint\+\_\+effort\+\_\+limits\+\_\+@{joint\+\_\+effort\+\_\+limits\+\_\+}!uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}}
+\subsubsection{\texorpdfstring{joint\+\_\+effort\+\_\+limits\+\_\+}{joint\_effort\_limits\_}}
+{\footnotesize\ttfamily std\+::vector$<$double$>$ uwrt\+::arm\+::\+Arm\+H\+W\+::joint\+\_\+effort\+\_\+limits\+\_\+\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{classuwrt_1_1arm_1_1_arm_h_w_afec1b4685b242f4d7e821f6e6c479302}\label{classuwrt_1_1arm_1_1_arm_h_w_afec1b4685b242f4d7e821f6e6c479302}} 
+\index{uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}!joint\+\_\+index\+\_\+map\+\_\+@{joint\+\_\+index\+\_\+map\+\_\+}}
+\index{joint\+\_\+index\+\_\+map\+\_\+@{joint\+\_\+index\+\_\+map\+\_\+}!uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}}
+\subsubsection{\texorpdfstring{joint\+\_\+index\+\_\+map\+\_\+}{joint\_index\_map\_}}
+{\footnotesize\ttfamily std\+::map$<$std\+::string, uint8\+\_\+t$>$ uwrt\+::arm\+::\+Arm\+H\+W\+::joint\+\_\+index\+\_\+map\+\_\+\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Mapping from joint name to an index. 
+
+\mbox{\Hypertarget{classuwrt_1_1arm_1_1_arm_h_w_a08c5d50dddb1a3552b43bfff0d07ffa9}\label{classuwrt_1_1arm_1_1_arm_h_w_a08c5d50dddb1a3552b43bfff0d07ffa9}} 
+\index{uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}!joint\+\_\+lower\+\_\+limits\+\_\+@{joint\+\_\+lower\+\_\+limits\+\_\+}}
+\index{joint\+\_\+lower\+\_\+limits\+\_\+@{joint\+\_\+lower\+\_\+limits\+\_\+}!uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}}
+\subsubsection{\texorpdfstring{joint\+\_\+lower\+\_\+limits\+\_\+}{joint\_lower\_limits\_}}
+{\footnotesize\ttfamily std\+::vector$<$double$>$ uwrt\+::arm\+::\+Arm\+H\+W\+::joint\+\_\+lower\+\_\+limits\+\_\+\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{classuwrt_1_1arm_1_1_arm_h_w_a0bba123f549c158be6dbfc365e42853d}\label{classuwrt_1_1arm_1_1_arm_h_w_a0bba123f549c158be6dbfc365e42853d}} 
+\index{uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}!joint\+\_\+names\+\_\+@{joint\+\_\+names\+\_\+}}
+\index{joint\+\_\+names\+\_\+@{joint\+\_\+names\+\_\+}!uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}}
+\subsubsection{\texorpdfstring{joint\+\_\+names\+\_\+}{joint\_names\_}}
+{\footnotesize\ttfamily std\+::vector$<$std\+::string$>$ uwrt\+::arm\+::\+Arm\+H\+W\+::joint\+\_\+names\+\_\+\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{classuwrt_1_1arm_1_1_arm_h_w_ac6612898a4add151094f92b87cc8ded7}\label{classuwrt_1_1arm_1_1_arm_h_w_ac6612898a4add151094f92b87cc8ded7}} 
+\index{uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}!joint\+\_\+position\+\_\+@{joint\+\_\+position\+\_\+}}
+\index{joint\+\_\+position\+\_\+@{joint\+\_\+position\+\_\+}!uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}}
+\subsubsection{\texorpdfstring{joint\+\_\+position\+\_\+}{joint\_position\_}}
+{\footnotesize\ttfamily std\+::vector$<$double$>$ uwrt\+::arm\+::\+Arm\+H\+W\+::joint\+\_\+position\+\_\+\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{classuwrt_1_1arm_1_1_arm_h_w_ab7b253782896e1bc6a1879dcbae60c47}\label{classuwrt_1_1arm_1_1_arm_h_w_ab7b253782896e1bc6a1879dcbae60c47}} 
+\index{uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}!joint\+\_\+position\+\_\+command\+\_\+@{joint\+\_\+position\+\_\+command\+\_\+}}
+\index{joint\+\_\+position\+\_\+command\+\_\+@{joint\+\_\+position\+\_\+command\+\_\+}!uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}}
+\subsubsection{\texorpdfstring{joint\+\_\+position\+\_\+command\+\_\+}{joint\_position\_command\_}}
+{\footnotesize\ttfamily std\+::vector$<$double$>$ uwrt\+::arm\+::\+Arm\+H\+W\+::joint\+\_\+position\+\_\+command\+\_\+\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{classuwrt_1_1arm_1_1_arm_h_w_ac0e4f2bbeaac8437cafa891602a7e0a0}\label{classuwrt_1_1arm_1_1_arm_h_w_ac0e4f2bbeaac8437cafa891602a7e0a0}} 
+\index{uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}!joint\+\_\+position\+\_\+interface\+\_\+@{joint\+\_\+position\+\_\+interface\+\_\+}}
+\index{joint\+\_\+position\+\_\+interface\+\_\+@{joint\+\_\+position\+\_\+interface\+\_\+}!uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}}
+\subsubsection{\texorpdfstring{joint\+\_\+position\+\_\+interface\+\_\+}{joint\_position\_interface\_}}
+{\footnotesize\ttfamily hardware\+\_\+interface\+::\+Position\+Joint\+Interface uwrt\+::arm\+::\+Arm\+H\+W\+::joint\+\_\+position\+\_\+interface\+\_\+\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{classuwrt_1_1arm_1_1_arm_h_w_af7b1df1eb7f6e3badcc369be49af7978}\label{classuwrt_1_1arm_1_1_arm_h_w_af7b1df1eb7f6e3badcc369be49af7978}} 
+\index{uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}!joint\+\_\+state\+\_\+interface\+\_\+@{joint\+\_\+state\+\_\+interface\+\_\+}}
+\index{joint\+\_\+state\+\_\+interface\+\_\+@{joint\+\_\+state\+\_\+interface\+\_\+}!uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}}
+\subsubsection{\texorpdfstring{joint\+\_\+state\+\_\+interface\+\_\+}{joint\_state\_interface\_}}
+{\footnotesize\ttfamily hardware\+\_\+interface\+::\+Joint\+State\+Interface uwrt\+::arm\+::\+Arm\+H\+W\+::joint\+\_\+state\+\_\+interface\+\_\+\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{classuwrt_1_1arm_1_1_arm_h_w_a69c250992873f9451b2d0e45fb1fc41e}\label{classuwrt_1_1arm_1_1_arm_h_w_a69c250992873f9451b2d0e45fb1fc41e}} 
+\index{uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}!joint\+\_\+types\+\_\+@{joint\+\_\+types\+\_\+}}
+\index{joint\+\_\+types\+\_\+@{joint\+\_\+types\+\_\+}!uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}}
+\subsubsection{\texorpdfstring{joint\+\_\+types\+\_\+}{joint\_types\_}}
+{\footnotesize\ttfamily std\+::vector$<$int$>$ uwrt\+::arm\+::\+Arm\+H\+W\+::joint\+\_\+types\+\_\+\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{classuwrt_1_1arm_1_1_arm_h_w_a4073badaad21458259a93fb66f510a9e}\label{classuwrt_1_1arm_1_1_arm_h_w_a4073badaad21458259a93fb66f510a9e}} 
+\index{uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}!joint\+\_\+upper\+\_\+limits\+\_\+@{joint\+\_\+upper\+\_\+limits\+\_\+}}
+\index{joint\+\_\+upper\+\_\+limits\+\_\+@{joint\+\_\+upper\+\_\+limits\+\_\+}!uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}}
+\subsubsection{\texorpdfstring{joint\+\_\+upper\+\_\+limits\+\_\+}{joint\_upper\_limits\_}}
+{\footnotesize\ttfamily std\+::vector$<$double$>$ uwrt\+::arm\+::\+Arm\+H\+W\+::joint\+\_\+upper\+\_\+limits\+\_\+\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{classuwrt_1_1arm_1_1_arm_h_w_abbf5caed643c4c897c4bf5a0c209bff7}\label{classuwrt_1_1arm_1_1_arm_h_w_abbf5caed643c4c897c4bf5a0c209bff7}} 
+\index{uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}!joint\+\_\+velocity\+\_\+@{joint\+\_\+velocity\+\_\+}}
+\index{joint\+\_\+velocity\+\_\+@{joint\+\_\+velocity\+\_\+}!uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}}
+\subsubsection{\texorpdfstring{joint\+\_\+velocity\+\_\+}{joint\_velocity\_}}
+{\footnotesize\ttfamily std\+::vector$<$double$>$ uwrt\+::arm\+::\+Arm\+H\+W\+::joint\+\_\+velocity\+\_\+\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{classuwrt_1_1arm_1_1_arm_h_w_aa4acfb5b9cf32153470bc9e384e2fb85}\label{classuwrt_1_1arm_1_1_arm_h_w_aa4acfb5b9cf32153470bc9e384e2fb85}} 
+\index{uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}!joint\+\_\+velocity\+\_\+command\+\_\+@{joint\+\_\+velocity\+\_\+command\+\_\+}}
+\index{joint\+\_\+velocity\+\_\+command\+\_\+@{joint\+\_\+velocity\+\_\+command\+\_\+}!uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}}
+\subsubsection{\texorpdfstring{joint\+\_\+velocity\+\_\+command\+\_\+}{joint\_velocity\_command\_}}
+{\footnotesize\ttfamily std\+::vector$<$double$>$ uwrt\+::arm\+::\+Arm\+H\+W\+::joint\+\_\+velocity\+\_\+command\+\_\+\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{classuwrt_1_1arm_1_1_arm_h_w_af0a297190b6a67aee4f86fb7f44c36d2}\label{classuwrt_1_1arm_1_1_arm_h_w_af0a297190b6a67aee4f86fb7f44c36d2}} 
+\index{uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}!joint\+\_\+velocity\+\_\+interface\+\_\+@{joint\+\_\+velocity\+\_\+interface\+\_\+}}
+\index{joint\+\_\+velocity\+\_\+interface\+\_\+@{joint\+\_\+velocity\+\_\+interface\+\_\+}!uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}}
+\subsubsection{\texorpdfstring{joint\+\_\+velocity\+\_\+interface\+\_\+}{joint\_velocity\_interface\_}}
+{\footnotesize\ttfamily hardware\+\_\+interface\+::\+Velocity\+Joint\+Interface uwrt\+::arm\+::\+Arm\+H\+W\+::joint\+\_\+velocity\+\_\+interface\+\_\+\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{classuwrt_1_1arm_1_1_arm_h_w_acaa46956d8f97421c96c9b5a9b51200f}\label{classuwrt_1_1arm_1_1_arm_h_w_acaa46956d8f97421c96c9b5a9b51200f}} 
+\index{uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}!joint\+\_\+voltage\+\_\+command\+\_\+@{joint\+\_\+voltage\+\_\+command\+\_\+}}
+\index{joint\+\_\+voltage\+\_\+command\+\_\+@{joint\+\_\+voltage\+\_\+command\+\_\+}!uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}}
+\subsubsection{\texorpdfstring{joint\+\_\+voltage\+\_\+command\+\_\+}{joint\_voltage\_command\_}}
+{\footnotesize\ttfamily std\+::vector$<$double$>$ uwrt\+::arm\+::\+Arm\+H\+W\+::joint\+\_\+voltage\+\_\+command\+\_\+\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{classuwrt_1_1arm_1_1_arm_h_w_aec35c81c5c9a7f32fe38ea3cdfbb8b6d}\label{classuwrt_1_1arm_1_1_arm_h_w_aec35c81c5c9a7f32fe38ea3cdfbb8b6d}} 
+\index{uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}!joint\+\_\+voltage\+\_\+interface\+\_\+@{joint\+\_\+voltage\+\_\+interface\+\_\+}}
+\index{joint\+\_\+voltage\+\_\+interface\+\_\+@{joint\+\_\+voltage\+\_\+interface\+\_\+}!uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}}
+\subsubsection{\texorpdfstring{joint\+\_\+voltage\+\_\+interface\+\_\+}{joint\_voltage\_interface\_}}
+{\footnotesize\ttfamily \hyperlink{classhardware__interface_1_1_voltage_joint_interface}{hardware\+\_\+interface\+::\+Voltage\+Joint\+Interface} uwrt\+::arm\+::\+Arm\+H\+W\+::joint\+\_\+voltage\+\_\+interface\+\_\+\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{classuwrt_1_1arm_1_1_arm_h_w_a94577174f3c73549997c501acb28810a}\label{classuwrt_1_1arm_1_1_arm_h_w_a94577174f3c73549997c501acb28810a}} 
+\index{uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}!name\+\_\+@{name\+\_\+}}
+\index{name\+\_\+@{name\+\_\+}!uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}}
+\subsubsection{\texorpdfstring{name\+\_\+}{name\_}}
+{\footnotesize\ttfamily const std\+::string uwrt\+::arm\+::\+Arm\+H\+W\+::name\+\_\+\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{classuwrt_1_1arm_1_1_arm_h_w_a80bff071cccf662191970b5088619a29}\label{classuwrt_1_1arm_1_1_arm_h_w_a80bff071cccf662191970b5088619a29}} 
+\index{uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}!nh\+\_\+@{nh\+\_\+}}
+\index{nh\+\_\+@{nh\+\_\+}!uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}}
+\subsubsection{\texorpdfstring{nh\+\_\+}{nh\_}}
+{\footnotesize\ttfamily ros\+::\+Node\+Handle uwrt\+::arm\+::\+Arm\+H\+W\+::nh\+\_\+\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{classuwrt_1_1arm_1_1_arm_h_w_ab1263af2b5e65e88876efdb45025080c}\label{classuwrt_1_1arm_1_1_arm_h_w_ab1263af2b5e65e88876efdb45025080c}} 
+\index{uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}!num\+\_\+joints\+\_\+@{num\+\_\+joints\+\_\+}}
+\index{num\+\_\+joints\+\_\+@{num\+\_\+joints\+\_\+}!uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}}
+\subsubsection{\texorpdfstring{num\+\_\+joints\+\_\+}{num\_joints\_}}
+{\footnotesize\ttfamily const int8\+\_\+t uwrt\+::arm\+::\+Arm\+H\+W\+::num\+\_\+joints\+\_\+\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{classuwrt_1_1arm_1_1_arm_h_w_a84a73ead7105311112f7fe8ae7eda096}\label{classuwrt_1_1arm_1_1_arm_h_w_a84a73ead7105311112f7fe8ae7eda096}} 
+\index{uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}!position\+\_\+limits\+\_\+interface\+\_\+@{position\+\_\+limits\+\_\+interface\+\_\+}}
+\index{position\+\_\+limits\+\_\+interface\+\_\+@{position\+\_\+limits\+\_\+interface\+\_\+}!uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}}
+\subsubsection{\texorpdfstring{position\+\_\+limits\+\_\+interface\+\_\+}{position\_limits\_interface\_}}
+{\footnotesize\ttfamily joint\+\_\+limits\+\_\+interface\+::\+Position\+Joint\+Soft\+Limits\+Interface uwrt\+::arm\+::\+Arm\+H\+W\+::position\+\_\+limits\+\_\+interface\+\_\+\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{classuwrt_1_1arm_1_1_arm_h_w_ad940f7d5b2561be5ff6c3350480e20b5}\label{classuwrt_1_1arm_1_1_arm_h_w_ad940f7d5b2561be5ff6c3350480e20b5}} 
+\index{uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}!position\+\_\+sat\+\_\+interface\+\_\+@{position\+\_\+sat\+\_\+interface\+\_\+}}
+\index{position\+\_\+sat\+\_\+interface\+\_\+@{position\+\_\+sat\+\_\+interface\+\_\+}!uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}}
+\subsubsection{\texorpdfstring{position\+\_\+sat\+\_\+interface\+\_\+}{position\_sat\_interface\_}}
+{\footnotesize\ttfamily joint\+\_\+limits\+\_\+interface\+::\+Position\+Joint\+Saturation\+Interface uwrt\+::arm\+::\+Arm\+H\+W\+::position\+\_\+sat\+\_\+interface\+\_\+\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{classuwrt_1_1arm_1_1_arm_h_w_a356557f068878c9464f4d47eb6381ae3}\label{classuwrt_1_1arm_1_1_arm_h_w_a356557f068878c9464f4d47eb6381ae3}} 
+\index{uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}!urdf\+\_\+model\+\_\+@{urdf\+\_\+model\+\_\+}}
+\index{urdf\+\_\+model\+\_\+@{urdf\+\_\+model\+\_\+}!uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}}
+\subsubsection{\texorpdfstring{urdf\+\_\+model\+\_\+}{urdf\_model\_}}
+{\footnotesize\ttfamily urdf\+::\+Model uwrt\+::arm\+::\+Arm\+H\+W\+::urdf\+\_\+model\+\_\+\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{classuwrt_1_1arm_1_1_arm_h_w_a0708e51d21f05e20129b7bc99e42eead}\label{classuwrt_1_1arm_1_1_arm_h_w_a0708e51d21f05e20129b7bc99e42eead}} 
+\index{uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}!urdf\+\_\+string\+\_\+@{urdf\+\_\+string\+\_\+}}
+\index{urdf\+\_\+string\+\_\+@{urdf\+\_\+string\+\_\+}!uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}}
+\subsubsection{\texorpdfstring{urdf\+\_\+string\+\_\+}{urdf\_string\_}}
+{\footnotesize\ttfamily const std\+::string uwrt\+::arm\+::\+Arm\+H\+W\+::urdf\+\_\+string\+\_\+\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{classuwrt_1_1arm_1_1_arm_h_w_a8e2811fbe4adfcbcce9efbee3756ea8f}\label{classuwrt_1_1arm_1_1_arm_h_w_a8e2811fbe4adfcbcce9efbee3756ea8f}} 
+\index{uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}!velocity\+\_\+limits\+\_\+interface\+\_\+@{velocity\+\_\+limits\+\_\+interface\+\_\+}}
+\index{velocity\+\_\+limits\+\_\+interface\+\_\+@{velocity\+\_\+limits\+\_\+interface\+\_\+}!uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}}
+\subsubsection{\texorpdfstring{velocity\+\_\+limits\+\_\+interface\+\_\+}{velocity\_limits\_interface\_}}
+{\footnotesize\ttfamily joint\+\_\+limits\+\_\+interface\+::\+Velocity\+Joint\+Soft\+Limits\+Interface uwrt\+::arm\+::\+Arm\+H\+W\+::velocity\+\_\+limits\+\_\+interface\+\_\+\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{classuwrt_1_1arm_1_1_arm_h_w_a461fd5b0255bf2d1eecfb384ff7f1987}\label{classuwrt_1_1arm_1_1_arm_h_w_a461fd5b0255bf2d1eecfb384ff7f1987}} 
+\index{uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}!velocity\+\_\+sat\+\_\+interface\+\_\+@{velocity\+\_\+sat\+\_\+interface\+\_\+}}
+\index{velocity\+\_\+sat\+\_\+interface\+\_\+@{velocity\+\_\+sat\+\_\+interface\+\_\+}!uwrt\+::arm\+::\+Arm\+HW@{uwrt\+::arm\+::\+Arm\+HW}}
+\subsubsection{\texorpdfstring{velocity\+\_\+sat\+\_\+interface\+\_\+}{velocity\_sat\_interface\_}}
+{\footnotesize\ttfamily joint\+\_\+limits\+\_\+interface\+::\+Velocity\+Joint\+Saturation\+Interface uwrt\+::arm\+::\+Arm\+H\+W\+::velocity\+\_\+sat\+\_\+interface\+\_\+\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+uwrt\+\_\+arm\+\_\+hw/include/uwrt\+\_\+arm\+\_\+hw/\hyperlink{arm__hw_8h}{arm\+\_\+hw.\+h}\item 
+uwrt\+\_\+arm\+\_\+hw/src/\hyperlink{arm__hw_8cpp}{arm\+\_\+hw.\+cpp}\end{DoxyCompactItemize}

@@ -1,0 +1,150 @@
+\hypertarget{classuwrt_1_1arm_1_1_arm_h_w_sim}{}\section{uwrt\+:\+:arm\+:\+:Arm\+H\+W\+Sim Class Reference}
+\label{classuwrt_1_1arm_1_1_arm_h_w_sim}\index{uwrt\+::arm\+::\+Arm\+H\+W\+Sim@{uwrt\+::arm\+::\+Arm\+H\+W\+Sim}}
+
+
+{\ttfamily \#include $<$arm\+\_\+hw\+\_\+sim.\+h$>$}
+
+
+
+Inheritance diagram for uwrt\+:\+:arm\+:\+:Arm\+H\+W\+Sim\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=196pt]{classuwrt_1_1arm_1_1_arm_h_w_sim__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for uwrt\+:\+:arm\+:\+:Arm\+H\+W\+Sim\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=320pt]{classuwrt_1_1arm_1_1_arm_h_w_sim__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classuwrt_1_1arm_1_1_arm_h_w_sim_aaa787422131f1db3f639e5905545a839}{Arm\+H\+W\+Sim} (gazebo\+::physics\+::\+Model\+Ptr model, const std\+::string \&urdf\+\_\+str)
+\begin{DoxyCompactList}\small\item\em Constructor. \end{DoxyCompactList}\item 
+\hyperlink{classuwrt_1_1arm_1_1_arm_h_w_sim_ac0764d307f3b885dccc49c36545dfcd3}{Arm\+H\+W\+Sim} (const std\+::string \&name, gazebo\+::physics\+::\+Model\+Ptr model, const std\+::string \&urdf\+\_\+str)
+\begin{DoxyCompactList}\small\item\em Constructor. \end{DoxyCompactList}\item 
+virtual bool \hyperlink{classuwrt_1_1arm_1_1_arm_h_w_sim_ab099f7bf8a4a9b27d8699f61c71ad30e}{init} (ros\+::\+Node\+Handle \&nh, ros\+::\+Node\+Handle \&arm\+\_\+hw\+\_\+nh)
+\begin{DoxyCompactList}\small\item\em Initializes the hardware interface by registering all joints and interfaces. \end{DoxyCompactList}\item 
+virtual void \hyperlink{classuwrt_1_1arm_1_1_arm_h_w_sim_a78eb2303fba768155763a25797c0eecf}{read} (const ros\+::\+Time \&time, const ros\+::\+Duration \&period)
+\begin{DoxyCompactList}\small\item\em Reads data from the arm. \end{DoxyCompactList}\item 
+virtual void \hyperlink{classuwrt_1_1arm_1_1_arm_h_w_sim_aa334fca03f76265ca8ec2da3be53991f}{write} (const ros\+::\+Time \&time, const ros\+::\+Duration \&period)
+\begin{DoxyCompactList}\small\item\em Writes data to the arm. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+\subsection{Detailed Description}
+Hardware Interface for Gazebo simulation of the Arm 
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classuwrt_1_1arm_1_1_arm_h_w_sim_aaa787422131f1db3f639e5905545a839}\label{classuwrt_1_1arm_1_1_arm_h_w_sim_aaa787422131f1db3f639e5905545a839}} 
+\index{uwrt\+::arm\+::\+Arm\+H\+W\+Sim@{uwrt\+::arm\+::\+Arm\+H\+W\+Sim}!Arm\+H\+W\+Sim@{Arm\+H\+W\+Sim}}
+\index{Arm\+H\+W\+Sim@{Arm\+H\+W\+Sim}!uwrt\+::arm\+::\+Arm\+H\+W\+Sim@{uwrt\+::arm\+::\+Arm\+H\+W\+Sim}}
+\subsubsection{\texorpdfstring{Arm\+H\+W\+Sim()}{ArmHWSim()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily uwrt\+::arm\+::\+Arm\+H\+W\+Sim\+::\+Arm\+H\+W\+Sim (\begin{DoxyParamCaption}\item[{gazebo\+::physics\+::\+Model\+Ptr}]{model,  }\item[{const std\+::string \&}]{urdf\+\_\+str }\end{DoxyParamCaption})}
+
+
+
+Constructor. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em model} & Pointer to the simulated arm object in gazebo \\
+\hline
+{\em urdf\+\_\+str} & U\+R\+DF of the Arm in string format \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classuwrt_1_1arm_1_1_arm_h_w_sim_ac0764d307f3b885dccc49c36545dfcd3}\label{classuwrt_1_1arm_1_1_arm_h_w_sim_ac0764d307f3b885dccc49c36545dfcd3}} 
+\index{uwrt\+::arm\+::\+Arm\+H\+W\+Sim@{uwrt\+::arm\+::\+Arm\+H\+W\+Sim}!Arm\+H\+W\+Sim@{Arm\+H\+W\+Sim}}
+\index{Arm\+H\+W\+Sim@{Arm\+H\+W\+Sim}!uwrt\+::arm\+::\+Arm\+H\+W\+Sim@{uwrt\+::arm\+::\+Arm\+H\+W\+Sim}}
+\subsubsection{\texorpdfstring{Arm\+H\+W\+Sim()}{ArmHWSim()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily uwrt\+::arm\+::\+Arm\+H\+W\+Sim\+::\+Arm\+H\+W\+Sim (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{name,  }\item[{gazebo\+::physics\+::\+Model\+Ptr}]{model,  }\item[{const std\+::string \&}]{urdf\+\_\+str }\end{DoxyParamCaption})}
+
+
+
+Constructor. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & Arbitrary name for an instance of this class \\
+\hline
+{\em model} & Pointer to the simulated arm object in gazebo \\
+\hline
+{\em urdf\+\_\+str} & U\+R\+DF of the Arm in string format \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classuwrt_1_1arm_1_1_arm_h_w_sim_ab099f7bf8a4a9b27d8699f61c71ad30e}\label{classuwrt_1_1arm_1_1_arm_h_w_sim_ab099f7bf8a4a9b27d8699f61c71ad30e}} 
+\index{uwrt\+::arm\+::\+Arm\+H\+W\+Sim@{uwrt\+::arm\+::\+Arm\+H\+W\+Sim}!init@{init}}
+\index{init@{init}!uwrt\+::arm\+::\+Arm\+H\+W\+Sim@{uwrt\+::arm\+::\+Arm\+H\+W\+Sim}}
+\subsubsection{\texorpdfstring{init()}{init()}}
+{\footnotesize\ttfamily bool uwrt\+::arm\+::\+Arm\+H\+W\+Sim\+::init (\begin{DoxyParamCaption}\item[{ros\+::\+Node\+Handle \&}]{nh,  }\item[{ros\+::\+Node\+Handle \&}]{arm\+\_\+hw\+\_\+nh }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Initializes the hardware interface by registering all joints and interfaces. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em nh} & Nodehandle for the root of the arm namespace \\
+\hline
+{\em arm\+\_\+hw\+\_\+nh} & Nodehandle in the namespace of the arm hardware interface \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classuwrt_1_1arm_1_1_arm_h_w_sim_a78eb2303fba768155763a25797c0eecf}\label{classuwrt_1_1arm_1_1_arm_h_w_sim_a78eb2303fba768155763a25797c0eecf}} 
+\index{uwrt\+::arm\+::\+Arm\+H\+W\+Sim@{uwrt\+::arm\+::\+Arm\+H\+W\+Sim}!read@{read}}
+\index{read@{read}!uwrt\+::arm\+::\+Arm\+H\+W\+Sim@{uwrt\+::arm\+::\+Arm\+H\+W\+Sim}}
+\subsubsection{\texorpdfstring{read()}{read()}}
+{\footnotesize\ttfamily void uwrt\+::arm\+::\+Arm\+H\+W\+Sim\+::read (\begin{DoxyParamCaption}\item[{const ros\+::\+Time \&}]{time,  }\item[{const ros\+::\+Duration \&}]{period }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Reads data from the arm. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em time} & The current time \\
+\hline
+{\em period} & The time passes since last call to read \\
+\hline
+\end{DoxyParams}
+
+
+Implements \hyperlink{classuwrt_1_1arm_1_1_arm_h_w_af2164103badfa99373f787b8a3cecb6b}{uwrt\+::arm\+::\+Arm\+HW}.
+
+\mbox{\Hypertarget{classuwrt_1_1arm_1_1_arm_h_w_sim_aa334fca03f76265ca8ec2da3be53991f}\label{classuwrt_1_1arm_1_1_arm_h_w_sim_aa334fca03f76265ca8ec2da3be53991f}} 
+\index{uwrt\+::arm\+::\+Arm\+H\+W\+Sim@{uwrt\+::arm\+::\+Arm\+H\+W\+Sim}!write@{write}}
+\index{write@{write}!uwrt\+::arm\+::\+Arm\+H\+W\+Sim@{uwrt\+::arm\+::\+Arm\+H\+W\+Sim}}
+\subsubsection{\texorpdfstring{write()}{write()}}
+{\footnotesize\ttfamily void uwrt\+::arm\+::\+Arm\+H\+W\+Sim\+::write (\begin{DoxyParamCaption}\item[{const ros\+::\+Time \&}]{time,  }\item[{const ros\+::\+Duration \&}]{period }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Writes data to the arm. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em time} & The current time \\
+\hline
+{\em period} & The time passes since last call to write \\
+\hline
+\end{DoxyParams}
+
+
+Implements \hyperlink{classuwrt_1_1arm_1_1_arm_h_w_a934119487836109e24d9054f10e9832f}{uwrt\+::arm\+::\+Arm\+HW}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+uwrt\+\_\+arm\+\_\+hw/include/uwrt\+\_\+arm\+\_\+hw/\hyperlink{arm__hw__sim_8h}{arm\+\_\+hw\+\_\+sim.\+h}\item 
+uwrt\+\_\+arm\+\_\+hw/src/\hyperlink{arm__hw__sim_8cpp}{arm\+\_\+hw\+\_\+sim.\+cpp}\end{DoxyCompactItemize}

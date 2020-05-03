@@ -15,18 +15,33 @@ namespace uwrt
 {
 namespace arm
 {
+/**
+ * Arm Control Loop for the real Arm hardware
+ */
 class RealArmControl : public ArmControlLoop
 {
 public:
+  /**
+   * \brief Constructor
+   */
   RealArmControl();
+  /**
+   * \brief Destructor
+   */
   ~RealArmControl();
 
+  /**
+   * \brief Read, Write and perform controller updates based on control period
+   */ 
   void spinOnce();
+  /**
+   * Blocking loop of reads, writes and controller updates
+   */
   void spin();
 
 private:
   int loop_hz_;
-  ros::Duration control_period_;
+  ros::Duration control_period_;  ///< The rate at which to perform controller updates
 };  // class RealArmControl
 }  // namespace arm
 }  // namespace uwrt

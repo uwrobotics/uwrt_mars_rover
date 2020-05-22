@@ -1,0 +1,5 @@
+float gain
+bool velocity
+uint8_t actuatorID
+---
+bool success

@@ -1,6 +1,6 @@
 #pragma once
 
-namespace ROS_CONSTANTS{
+namespace FW_CONSTANTS{
     namespace ARM{
         namespace ACTUATOR{
             enum{
@@ -16,7 +16,9 @@ namespace ROS_CONSTANTS{
             enum{
                 P,
                 I,
-                D
+                D,
+                DEADZONE,
+                BIAS
             };
         }
     }

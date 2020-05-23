@@ -8,7 +8,6 @@
 
     <license>MIT</license>
 
-
     <build_depend>message_generation</build_depend>
     <buildtool_depend>catkin</buildtool_depend>
     <depend>uwrt_mars_rover_msgs</depend>

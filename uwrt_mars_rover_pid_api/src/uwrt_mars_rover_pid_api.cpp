@@ -13,6 +13,7 @@ pidApi::pidApi(const ros::NodeHandle &nh, uint8_t loop_rate) : _nh(nh), _loop_ra
     CANMsg.init(dontmergethis);
 }
 
+// put these in fw_config.h
 std::string pidApi::stringifyParam(uint8_t param) {
   switch(param) {
     case(FW_CONSTANTS::ARM::PID::P): return 'P';
@@ -39,17 +40,19 @@ std::string pidApi::stringifyActuatorID(uint8_t actuatorID) {
     default: return "ERROR";
   }
 }
+// END
 
 void pidApi::updatePIDGain(const uwrt_mars_rover_msgs::pid_api::Request &req, uwrt_mars_rover_msgs::pid_api::Response &res) {
     ROS_INFO_NAMED(LOG_FILTER, "Updating PID gains: {gain : %f, parameter : %s, vel/pos : %s, actuator : %s}", 
                    req.gain, stringifyParam(req.parameter), stringifyVelPos(req.vel_pos), stringifyActuatorID(req.actuatorID));
     uint16_t canID = req.paramater;
-    // DO NOT MERGE: this struct is declared in the fw and the sw. should it be in the interface config file
+    // PUT THIS IN FW_CONFIG.H
     struct __attribute__((__packed__)) payload_st{
       float value;
       bool velocity;
       uint8_t actuatorID;
     };
+    // END
     payload_st payload = {req.gain, req.vel_pos, req.actuatorID};
     res.success = CANMsg.writeToID<payload_st>(payload, canID);
 }

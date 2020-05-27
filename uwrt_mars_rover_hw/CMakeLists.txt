@@ -9,6 +9,7 @@ find_package(catkin REQUIRED COMPONENTS
         joint_limits_interface
         roscpp
         transmission_interface
+        diff_drive_controller
         )
 
 ###################################
@@ -34,6 +35,7 @@ catkin_package(
         joint_limits_interface
         roscpp
         transmission_interface
+        diff_drive_controller
 )
 
 ###########

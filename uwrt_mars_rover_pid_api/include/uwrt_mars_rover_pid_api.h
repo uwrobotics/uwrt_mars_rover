@@ -1,6 +1,5 @@
 #pragma once
 #include "uwrt_can.h"
-#include "fw_config.h"
 #include "ros/ros.h"
 
 #define PID_API_TESTING

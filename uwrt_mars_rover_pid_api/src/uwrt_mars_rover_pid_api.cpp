@@ -13,35 +13,6 @@ pidApi::pidApi(const ros::NodeHandle &nh, uint8_t loop_rate) : _nh(nh), _loop_ra
     CANMsg.init(dontmergethis);
 }
 
-// put these in fw_config.h
-std::string pidApi::stringifyParam(uint8_t param) {
-  switch(param) {
-    case(FW_CONSTANTS::ARM::PID::P): return 'P';
-    case(FW_CONSTANTS::ARM::PID::I): return'I';
-    case(FW_CONSTANTS::ARM::PID::D): return 'D';
-    case(FW_CONSTANTS::ARM::PID::DEADZONE): return "DEADZONE";
-    case(FW_CONSTANTS::ARM::PID::BIAS): return "BIAS";
-    default: return "ERROR";
-  }
-}
-
-std::string pidApi::stringifyVelPos(bool vel_pos) {
-  return vel_pos ? "velocity" : "position";
-}
-
-std::string pidApi::stringifyActuatorID(uint8_t actuatorID) {
-  switch(actuatorID) {
-    case(FW_CONSTANTS::ARM::ACTUATOR::TURNTABLE): return "TURNTABLE";
-    case(FW_CONSTANTS::ARM::ACTUATOR::SHOULDER): return"SHOULDER";
-    case(FW_CONSTANTS::ARM::ACTUATOR::ELBOW): return "ELBOW";
-    case(FW_CONSTANTS::ARM::ACTUATOR::WRISTLEFT): return "WRISTLEFT";
-    case(FW_CONSTANTS::ARM::ACTUATOR::WRISTRIGHT): return "WRISTRIGHT";
-    case(FW_CONSTANTS::ARM::ACTUATOR::CLAW) : return "CLAW";
-    default: return "ERROR";
-  }
-}
-// END
-
 void pidApi::updatePIDGain(const uwrt_mars_rover_msgs::pid_api::Request &req, uwrt_mars_rover_msgs::pid_api::Response &res) {
     ROS_INFO_NAMED(LOG_FILTER, "Updating PID gains: {gain : %f, parameter : %s, vel/pos : %s, actuator : %s}", 
                    req.gain, stringifyParam(req.parameter), stringifyVelPos(req.vel_pos), stringifyActuatorID(req.actuatorID));

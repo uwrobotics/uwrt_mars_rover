@@ -40,7 +40,8 @@ include_directories(
 
 ## Declare a C++ library
 add_library(${PROJECT_NAME}
-        src/${PROJECT_NAME}_control.cpp
+        src/${PROJECT_NAME}.cpp
+        ../uwrt_utils/src/uwrt_can.cpp
         )
 
 ## Declare a C++ executable

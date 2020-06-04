@@ -49,12 +49,14 @@ find_package(catkin REQUIRED COMPONENTS
 add_message_files(
   FILES
   NeopixelArrayMode.msg
+  pid_api_message.msg
 )
 
 ## Generate services in the 'srv' folder
 add_service_files(
   FILES
   set_state.srv
+  pid_api_service.srv
 )
 
 ## Generate actions in the 'action' folder

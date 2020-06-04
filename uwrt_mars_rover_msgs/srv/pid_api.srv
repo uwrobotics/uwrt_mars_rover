@@ -1,6 +1,0 @@
-float32 gain
-bool vel_pos
-uint16 parameter
-uint8 actuatorID
----
-bool success

@@ -18,7 +18,7 @@
     <depend>transmission_interface</depend>
     <depend>roscpp</depend>
 
-    <depend>diff_drive_controller</depend>
+    <depend>uwrt_diff_drive_controller</depend>
 
     <export>
         <hardware_interface plugin="${prefix}/uwrt_mars_rover_hw_plugin.xml"/>

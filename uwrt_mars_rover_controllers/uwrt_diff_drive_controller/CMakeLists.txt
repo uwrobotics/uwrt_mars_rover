@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(diff_drive_controller)
+project(uwrt_diff_drive_controller)
 
 # Default to C++14
 if(NOT CMAKE_CXX_STANDARD)

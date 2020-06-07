@@ -11,7 +11,8 @@
 
     <buildtool_depend>catkin</buildtool_depend>
 
-    <exec_depend>diff_drive_controller</exec_depend>
+    <exec_depend>uwrt_diff_drive_controller</exec_depend>
+    <exec_depend>position_controllers</exec_depend>
 
     <export>
         <metapackage/>

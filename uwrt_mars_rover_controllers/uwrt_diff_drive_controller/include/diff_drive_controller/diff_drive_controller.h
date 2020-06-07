@@ -54,7 +54,7 @@
 #include <realtime_tools/realtime_publisher.h>
 #include <tf/tfMessage.h>
 
-#include "uwrt_mars_rover_msgs/OpenLoopVelCmd.h"
+#include "uwrt_mars_rover_msgs/UWRTDiffDriveVelCmd.h"
 
 namespace diff_drive_controller{
 
@@ -67,11 +67,11 @@ namespace diff_drive_controller{
    *  - a wheel collision geometry is a cylinder or sphere in the urdf
    *  - a wheel joint frame center's vertical projection on the floor must lie within the contact patch
    */
-  class DiffDriveController
+  class OpenLoopDiffDriveController
       : public controller_interface::Controller<hardware_interface::VelocityJointInterface>
   {
   public:
-    DiffDriveController();
+    OpenLoopDiffDriveController();
 
     /**
      * \brief Initialize controller
@@ -249,7 +249,7 @@ namespace diff_drive_controller{
      * \brief Velocity command callback
      * \param command Velocity command message (twist)
      */
-    void cmdVelCallback(const uwrt_mars_rover_msgs::OpenLoopVelCmd& command);
+    void cmdVelCallback(const uwrt_mars_rover_msgs::UWRTDiffDriveVelCmd& command);
 
     /**
      * \brief Get the wheel names from a wheel param
@@ -312,5 +312,5 @@ namespace diff_drive_controller{
                           double right_wheel_radius);
   };
 
-  PLUGINLIB_EXPORT_CLASS(diff_drive_controller::DiffDriveController, controller_interface::ControllerBase);
+  PLUGINLIB_EXPORT_CLASS(diff_drive_controller::OpenLoopDiffDriveController, controller_interface::ControllerBase);
 } // namespace diff_drive_controller

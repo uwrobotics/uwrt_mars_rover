@@ -5,7 +5,7 @@ uwrt_mars_rover:
     publish_rate: 50
 
   drivetrain_velocity_controller:
-    type: diff_drive_controller/DiffDriveController
+    type: uwrt_diff_drive_controller/UWRTLoopDiffDriveController
     left_wheel: left_drive_joint
     right_wheel: right_drive_joint
     publish_rate: 50.0

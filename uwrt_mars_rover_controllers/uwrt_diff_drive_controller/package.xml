@@ -1,5 +1,5 @@
 <package format="2">
-  <name>diff_drive_controller</name>
+  <name>uwrt_diff_drive_controller</name>
   <version>0.17.0</version>
   <description>Controller for a differential drive mobile base.</description>
   <maintainer email="bence.magyar.robotics@gmail.com">Bence Magyar</maintainer>
@@ -33,6 +33,6 @@
   <test_depend>xacro</test_depend>
 
   <export>
-    <controller_interface plugin="${prefix}/diff_drive_controller_plugins.xml"/>
+    <controller_interface plugin="${prefix}/uwrt_diff_drive_controller_plugins.xml"/>
   </export>
 </package>

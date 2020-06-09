@@ -10,9 +10,11 @@ class pidApi {
     private:
     ros::NodeHandle _nh;
     ros::Rate _loop_rate;
+    std::string _log_filter;
     uwrt_utils::UWRTCANWrapper CANMsg;
-    public:
+    //public:
     bool updatePIDParam(uwrt_mars_rover_msgs::pid_api_service::Request &req, uwrt_mars_rover_msgs::pid_api_service::Response &res);
-    pidApi(const ros::NodeHandle &nh, uint8_t loop_rate);
+    public:
+    pidApi(const ros::NodeHandle &nh, uint8_t loop_rate, std::string log_filter = "pidApiServiceServer");
     void run();
 };

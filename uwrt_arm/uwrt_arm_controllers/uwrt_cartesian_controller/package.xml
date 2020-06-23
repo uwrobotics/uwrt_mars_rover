@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>uwrt_cartesian_controller</name>
+  <version>0.0.0</version>
+  <description>Contains ros_control configurations and launch settings for arm</description>
+
+  <maintainer email="akeaveny@uwaterloo.ca">Aidan Keaveny</maintainer>
+  <license>MIT</license>
+  <author email="akeaveny@uwaterloo.ca">Aidan Keaveny</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>roscpp</build_depend>
+  <build_depend>roslint</build_depend>
+  <build_depend>kdl</build_depend>
+  <build_depend>kdl_parser</build_depend>
+  <build_depend>control_toolbox</build_depend>
+  <build_depend>controller_interface</build_depend>
+  <build_depend>hardware_interface</build_depend>
+  <build_depend>realtime_tools</build_depend>
+  <build_depend>joint_trajectory_controller</build_depend>
+  <build_depend>eigen</build_depend>
+
+  <exec_depend>eigen</exec_depend>
+  <exec_depend>roscpp</exec_depend>
+  <exec_depend>control_toolbox</exec_depend>
+  <exec_depend>controller_interface</exec_depend>
+  <exec_depend>hardware_interface</exec_depend>
+  <exec_depend>realtime_tools</exec_depend>
+  <exec_depend>joint_trajectory_controller</exec_depend>
+  <exec_depend>kdl</exec_depend>
+  <exec_depend>kdl_parser</exec_depend>
+  <exec_depend>uwrt_arm_hw</exec_depend>
+
+  <depend>control_msgs</depend>
+  <depend>uwrt_arm_msgs</depend>
+  <depend>uwrt_arm_description</depend>
+
+  <export>
+	 <controller_interface plugin="${prefix}/uwrt_cartesian_controller_plugins.xml"/>
+  </export>
+
+</package>

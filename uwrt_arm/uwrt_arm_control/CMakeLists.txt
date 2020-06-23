@@ -9,6 +9,8 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   roslint
   uwrt_arm_msgs
+  uwrt_arm_description
+  uwrt_cartesian_controller
 )
 
 # Roslint
@@ -19,6 +21,8 @@ catkin_package(
   CATKIN_DEPENDS
     control_msgs
     uwrt_arm_msgs
+    uwrt_arm_description
+    uwrt_cartesian_controller
 )
 
 include_directories(

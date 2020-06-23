@@ -12,6 +12,7 @@
 
   <build_depend>roscpp</build_depend>
   <build_depend>roslint</build_depend>
+  <build_depend>uwrt_cartesian_controller</build_depend>
 
   <exec_depend>controller_manager</exec_depend>
   <exec_depend>joint_trajectory_controller</exec_depend>
@@ -23,9 +24,11 @@
   <exec_depend>velocity_controllers</exec_depend>
   <exec_depend>uwrt_arm_hw</exec_depend>
   <exec_depend>uwrt_arm_moveit_config</exec_depend>
+  <exec_depend>uwrt_cartesian_controller</exec_depend>
 
   <depend>control_msgs</depend>
   <depend>uwrt_arm_msgs</depend>
+  <depend>uwrt_arm_description</depend>
 
   <test_depend>roslaunch</test_depend>
 

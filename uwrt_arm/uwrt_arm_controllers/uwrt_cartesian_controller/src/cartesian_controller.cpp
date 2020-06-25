@@ -11,35 +11,32 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #include "uwrt_cartesian_controller/cartesian_controller.h"
 
 #include <ros/ros.h>
-#include <ros/console.h>
 
 #include <pluginlib/class_list_macros.h>
 
 #include <kdl_parser/kdl_parser.hpp>
 
-namespace uwrt
-{
-namespace arm
+namespace velocity_controllers
 {
 bool CartesianController::init(hardware_interface::VelocityJointInterface* hw, ros::NodeHandle& nh)
-  {
+  { 
+    if(!nh.searchParam("/robot_description", robot_description_)){
+        ROS_ERROR("Failed to get robot_description parameter");
+        return false;
+      }
     
-    // TODO: rosparam through launch file
-    nh.param<std::string>("root_name_", root_name_, "world");
-    nh.param<std::string>("tip_name_", tip_name_, "arm_wrist_link");
-    nh.param<std::string>("urdf_file_path_", urdf_file_path_, "/home/akeaveny/catkin_ws/src/uwrt_mars_rover/uwrt_arm/uwrt_arm_description/urdf/uwrt_arm.urdf");
-    
-    if (!kdl_parser::treeFromFile("/uwrt_cartesian_controller/urdf_file_path_", kdl_tree_)){
-      ROS_ERROR("Failed to construct kdl tree");
+    if (!kdl_parser::treeFromParam(robot_description_, kdl_tree_)){
+      ROS_ERROR("Failed to construct kdl tree from robot description parameter");
       return false;
     }
 
-    if (!nh.getParam("/uwrt_cartesian_controller/root_name", root_name_)){
+    if (!nh.getParam("/arm_cartesian_controller/root_name", root_name_)){
       ROS_ERROR("Failed to get root_name parameter");
       return false;
     }
 
-    if (!nh.getParam("/uwrt_cartesian_controller/tip_name", tip_name_)){
+
+    if (!nh.getParam("/arm_cartesian_controller/tip_name", tip_name_)){
       ROS_ERROR("Failed to get tip_name parameter");
       return false;
     }
@@ -49,17 +46,20 @@ bool CartesianController::init(hardware_interface::VelocityJointInterface* hw, r
 
       ROS_ERROR_STREAM("Failed to get KDL chain from tree: ");
       ROS_ERROR_STREAM("  "<<root_name_<<" --> "<<tip_name_);
+      
       ROS_ERROR_STREAM("  Tree has "<<kdl_tree_.getNrOfJoints()<<" joints");
+      ROS_ERROR_STREAM("  The joint names are:");
+      for(std::vector<KDL::Segment>::const_iterator it = kdl_chain_.segments.begin(); it != kdl_chain_.segments.end(); ++it) {
+        ROS_ERROR_STREAM("    "<<it->getJoint().getName());
+      }
+
       ROS_ERROR_STREAM("  Tree has "<<kdl_tree_.getNrOfSegments()<<" segments");
       ROS_ERROR_STREAM("  The segments are:");
 
       KDL::SegmentMap segment_map = kdl_tree_.getSegments();
       KDL::SegmentMap::iterator it;
 
-      for( it=segment_map.begin();
-          it != segment_map.end();
-          it++ )
-      {
+      for( it=segment_map.begin(); it != segment_map.end(); it++ ){
         ROS_ERROR_STREAM( "    "<<(*it).first);
       }
 
@@ -69,7 +69,11 @@ bool CartesianController::init(hardware_interface::VelocityJointInterface* hw, r
     // Get joint handles for all of the joints in the chain
     for(std::vector<KDL::Segment>::const_iterator it = kdl_chain_.segments.begin(); it != kdl_chain_.segments.end(); ++it)
     {
-      joint_handles_.push_back(hw->getHandle(it->getJoint().getName()));
+      // WE DON'T WANT AN INTERFACE FOR "arm_shoulder_bicep_joint"
+      if(it->getJoint().getName().compare("arm_shoulder_bicep_joint")){
+        joint_handles_.push_back(hw->getHandle(it->getJoint().getName()));
+        // ROS_INFO_STREAM(it->getJoint().getName());
+      }
     }
 
     // KDL solvers
@@ -83,7 +87,7 @@ bool CartesianController::init(hardware_interface::VelocityJointInterface* hw, r
                                                                   this);
 
     double dead_man_timeout;
-    nh.param<double>("dead_man_timeout", dead_man_timeout, 0.2);
+    nh.param<double>("dead_man_timeout", dead_man_timeout, 10);
     dead_man_timeout_ = ros::Duration(dead_man_timeout);
 
     return true;
@@ -104,6 +108,11 @@ bool CartesianController::init(hardware_interface::VelocityJointInterface* hw, r
     cmd_angular_twist_.rot(0) = arm_command->twist.angular.x;
     cmd_angular_twist_.rot(1) = arm_command->twist.angular.y;
     cmd_angular_twist_.rot(2) = arm_command->twist.angular.z;
+
+    for (unsigned int i = 0; i < kdl_chain_.getNrOfJoints(); i++)
+    {
+      joint_handles_[i].setCommand(cmd_linear_twist_(i)); // TODO (akeaveny): ONLY TESTING LINEAR COMMANDS
+    }
   }
 
   void CartesianController::starting(const ros::Time& time)
@@ -133,89 +142,76 @@ bool CartesianController::init(hardware_interface::VelocityJointInterface* hw, r
 
   void CartesianController::update(const ros::Time& time, const ros::Duration& period)
   {
-    if(got_msg_) 
+    if((time - last_msg_) >= dead_man_timeout_) 
     {
-      if((time - last_msg_) >= dead_man_timeout_) 
-      {
-        cmd_linear_twist_[0] = 0.0;
-        cmd_linear_twist_[1] = 0.0;
-        cmd_linear_twist_[2] = 0.0;
-        cmd_linear_twist_[3] = 0.0;
-        cmd_linear_twist_[4] = 0.0;
-        cmd_linear_twist_[5] = 0.0;
+      cmd_linear_twist_[0] = 0.0;
+      cmd_linear_twist_[1] = 0.0;
+      cmd_linear_twist_[2] = 0.0;
+      cmd_linear_twist_[3] = 0.0;
+      cmd_linear_twist_[4] = 0.0;
+      cmd_linear_twist_[5] = 0.0;
 
-        cmd_angular_twist_[0] = 0.0;
-        cmd_angular_twist_[1] = 0.0;
-        cmd_angular_twist_[2] = 0.0;
-        cmd_angular_twist_[3] = 0.0;
-        cmd_angular_twist_[4] = 0.0;
-        cmd_angular_twist_[5] = 0.0;
+      cmd_angular_twist_[0] = 0.0;
+      cmd_angular_twist_[1] = 0.0;
+      cmd_angular_twist_[2] = 0.0;
+      cmd_angular_twist_[3] = 0.0;
+      cmd_angular_twist_[4] = 0.0;
+      cmd_angular_twist_[5] = 0.0;
 
-        got_msg_ = false;
+      got_msg_ = false;
 
-        for (unsigned int i = 0; i < kdl_chain_.getNrOfJoints(); i++)
-        {
-            joint_handles_[i].setCommand(0.0);
-        }
-
-        return;
-      }
-
-      // get joint positions
-      KDL::JntArray  q(joint_handles_.size());
-      for(size_t i=0; i<joint_handles_.size(); i++)
-      {
-        q(i) = joint_handles_[i].getPosition();
-      }
-
-      KDL::Frame frame_tip_pose;
-
-      if(chain_fk_solver_->JntToCart(q, frame_tip_pose) < 0)
-      {
-        ROS_ERROR("Unable to compute forward kinematic.");
-        for (unsigned int i = 0; i < kdl_chain_.getNrOfJoints(); i++)
-        {
-            joint_handles_[i].setCommand(0.0);
-        }
-
-        return;
-      }
-
-      KDL::Frame frame_tip_pose_inv = frame_tip_pose.Inverse();
-
-      KDL::Twist linear_twist = frame_tip_pose_inv * cmd_linear_twist_;
-      KDL::Twist angular_twist = frame_tip_pose_inv.M * cmd_angular_twist_;
-
-      KDL::Twist twist(linear_twist.vel, angular_twist.rot);
-
-      KDL::JntArray joint_vel(joint_handles_.size());
-      if(chain_ik_solver_vel_->CartToJnt(q, twist, joint_vel) < 0)
-      {
-        ROS_ERROR("Unable to compute cartesian to joint velocity.");
-        for (unsigned int i = 0; i < kdl_chain_.getNrOfJoints(); i++)
-        {
-            joint_handles_[i].setCommand(0.0);
-        }
-
-        return;
-      }
-
-      // Convert the wrench into joint efforts
-      for (unsigned int i = 0; i < kdl_chain_.getNrOfJoints(); i++)
-      {
-        joint_handles_[i].setCommand(joint_vel(i));
-      }
-    }
-
-    else
-    {
       for (unsigned int i = 0; i < kdl_chain_.getNrOfJoints(); i++)
       {
           joint_handles_[i].setCommand(0.0);
       }
+
+      return;
+    }
+
+    // get joint positions
+    KDL::JntArray  q(joint_handles_.size());
+    for(size_t i=0; i<joint_handles_.size(); i++)
+    {
+      q(i) = joint_handles_[i].getPosition();
+    }
+
+    KDL::Frame frame_tip_pose;
+    if(chain_fk_solver_->JntToCart(q, frame_tip_pose) < 0)
+    {
+      ROS_ERROR("Unable to compute forward kinematic.");
+      for (unsigned int i = 0; i < kdl_chain_.getNrOfJoints(); i++)
+      {
+          joint_handles_[i].setCommand(0.0);
+      }
+
+      return;
+    }
+
+    KDL::Frame frame_tip_pose_inv = frame_tip_pose.Inverse();
+
+    KDL::Twist linear_twist = frame_tip_pose_inv * cmd_linear_twist_;
+    KDL::Twist angular_twist = frame_tip_pose_inv.M * cmd_angular_twist_;
+
+    KDL::Twist twist(linear_twist.vel, angular_twist.rot);
+
+    KDL::JntArray joint_vel(joint_handles_.size());
+    if(chain_ik_solver_vel_->CartToJnt(q, twist, joint_vel) < 0)
+    {
+      ROS_ERROR("Unable to compute cartesian to joint velocity.");
+      for (unsigned int i = 0; i < kdl_chain_.getNrOfJoints(); i++)
+      {
+          joint_handles_[i].setCommand(0.0);
+      }
+
+      return;
+    }
+
+    // Convert the wrench into joint efforts
+    for (unsigned int i = 0; i < kdl_chain_.getNrOfJoints(); i++)
+    {
+      joint_handles_[i].setCommand(joint_vel(i));
     }
   }
-}  // namespace arm
-}  // namespace uwrt
+}  // namespace velocity_controllers
 
-PLUGINLIB_EXPORT_CLASS(uwrt::arm::CartesianController, controller_interface::ControllerBase)
+PLUGINLIB_EXPORT_CLASS(velocity_controllers::CartesianController, controller_interface::ControllerBase)

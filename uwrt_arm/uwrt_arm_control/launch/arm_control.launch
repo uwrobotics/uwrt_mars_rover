@@ -22,16 +22,22 @@
   <!-- Spawn the ros_control controllers (enabled at startup) -->
   <node name="controller_spawner" pkg="controller_manager" type="spawner"
         args="joint_state_controller
-              arm_voltage_controller"
+	      arm_cartesian_controller"
         respawn="true" output="screen"/>
 
   <!-- Spawn other ros_control controllers (disabled at startup) -->
-  <node name="controller_spawner_stopped" pkg="controller_manager" type="spawner"
+	<node name="controller_spawner_stopped" pkg="controller_manager" type="spawner"
         args="--stopped
+		arm_position_controller"
+        respawn="true" output="screen"/>
+
+  <!-- Spawn other ros_control controllers (disabled at startup) -->
+   <!--  <node name="controller_spawner_stopped" pkg="controller_manager" type="spawner"
+        args="stopped
               arm_trajectory_controller
               arm_position_controller
-              arm_velocity_controller"
-        respawn="true" output="screen"/>
+	      arm_cartesian_controller"
+        respawn="true" output="screen"/>  -->
 
   <!-- Run Real Interface -->
   <group unless="$(arg sim)">

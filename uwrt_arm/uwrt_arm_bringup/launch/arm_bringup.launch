@@ -3,7 +3,6 @@
   <arg name="can_device" default="can0"/>
   <arg name="debug"      default="false"/>
   <arg name="sim"        default="false"/>
-
   <param name="use_sim_time" value="$(arg sim)"/>
 
   <!-- Load arm URDF to the parameter server and start robot state publisher-->

@@ -11,6 +11,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #pragma once
 
 #include "uwrt_arm_msgs/UWRTArmTwist.h"
+#include <geometry_msgs/TwistStamped.h>
 
 #include <ros/ros.h>
 
@@ -30,9 +31,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #include <kdl/chainfksolver.hpp>
 #include <kdl/chainfksolverpos_recursive.hpp>
 
-namespace uwrt
-{
-namespace arm
+namespace velocity_controllers
 {
 class CartesianController : public controller_interface::Controller<hardware_interface::VelocityJointInterface>
 {
@@ -47,7 +46,7 @@ public:
 
 private:
 
-  std::string root_name_, tip_name_, urdf_file_path_;
+  std::string robot_description_, root_name_, tip_name_;
    
   hardware_interface::JointHandle joint_;
   std::vector<hardware_interface::JointHandle> joint_handles_;
@@ -71,5 +70,4 @@ private:
   void armCommandCallback(const uwrt_arm_msgs::UWRTArmTwistConstPtr& arm_command);
 
 };  // class CartesianController
-}  // namespace arm
-}  // namespace uwrt
+}  // namespace velocity_controllers

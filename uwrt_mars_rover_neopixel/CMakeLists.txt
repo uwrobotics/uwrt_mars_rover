@@ -36,14 +36,12 @@ catkin_package(
 include_directories(
         include
         ${catkin_INCLUDE_DIRS}
-        ../uwrt_mars_rover_hw_bridge_pkg/uwrt_mars_rover_hw_bridge/config
 )
 
 ## Declare a C++ library
 add_library(${PROJECT_NAME}
         src/${PROJECT_NAME}_can.cpp
         src/${PROJECT_NAME}_control.cpp
-        ../uwrt_mars_rover_hw_bridge_pkg/uwrt_mars_rover_hw_bridge/config/hw_bridge.cpp
         )
 
 

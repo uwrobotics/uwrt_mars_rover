@@ -24,6 +24,22 @@ class CanopenInterface : public CommunicationInterface {
   template <typename DataType>
   DataType sendQuery(RuntimeQuery query, uint8_t subindex = 0);
 
+  class StringException{
+    public:
+      StringException(std::string error)
+        : error_msg_(error)
+      {
+      }
+
+    const char* getError(){
+      return error_msg_.c_str();
+      }
+      
+    private:
+      std::string error_msg_;
+
+  }; 
+
  private:
   static inline constexpr unsigned bytesToBits(const unsigned num_bytes) {
     constexpr unsigned BITS_PER_BYTE = 8;

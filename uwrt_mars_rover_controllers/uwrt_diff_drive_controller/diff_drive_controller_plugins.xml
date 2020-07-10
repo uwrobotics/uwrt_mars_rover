@@ -1,9 +1,0 @@
-<library path="lib/libdiff_drive_controller">
-
-  <class name="uwrt_diff_drive_controller/OpenLoopDiffDriveController" type="diff_drive_controller::OpenLoopDiffDriveController" base_class_type="controller_interface::ControllerBase">
-    <description>
-      The DiffDriveController tracks velocity commands. It expects 2 VelocityJointInterface type of hardware interfaces.
-    </description>
-  </class>
-
-</library>

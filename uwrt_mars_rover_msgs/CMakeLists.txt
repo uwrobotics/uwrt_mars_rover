@@ -49,9 +49,6 @@ find_package(catkin REQUIRED COMPONENTS
 add_message_files(
   FILES
   NeopixelArrayMode.msg
-  UWRTDiffDriveVelCmd.msg
-  Vector3.msg
-  UWRTRoverPosCmd.msg
 )
 
 ## Generate services in the 'srv' folder

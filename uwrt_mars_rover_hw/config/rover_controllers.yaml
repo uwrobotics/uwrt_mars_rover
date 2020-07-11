@@ -4,8 +4,22 @@ uwrt_mars_rover:
     type: joint_state_controller/JointStateController
     publish_rate: 50
 
+  drivetrain_position_controller:
+    type: position_controllers/UWRTOpenLoopPositionController
+    left_wheel: left_drive_joint
+    right_wheel: right_drive_joint
+
+    # Wheel separation and diameter. These are both optional.
+    # diff_drive_controller will attempt to read either one or both from the
+    # URDF if not specified as a parameter
+    wheel_separation: 0.762
+    wheel_radius: 0.1524
+
+    # Velocity commands timeout [s], default 0.5
+    cmd_pos_timeout: 1
+
   drivetrain_velocity_controller:
-    type: uwrt_diff_drive_controller/UWRTLoopDiffDriveController
+    type: diff_drive_controller/UWRTOpenLoopDiffDriveController
     left_wheel: left_drive_joint
     right_wheel: right_drive_joint
     publish_rate: 50.0

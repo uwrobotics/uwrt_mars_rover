@@ -38,7 +38,6 @@
 
 #pragma once
 
-
 #include <control_msgs/JointTrajectoryControllerState.h>
 #include <controller_interface/controller.h>
 #include <diff_drive_controller/DiffDriveControllerConfig.h>
@@ -67,11 +66,11 @@ namespace diff_drive_controller{
    *  - a wheel collision geometry is a cylinder or sphere in the urdf
    *  - a wheel joint frame center's vertical projection on the floor must lie within the contact patch
    */
-  class OpenLoopDiffDriveController
+  class UWRTOpenLoopDiffDriveController
       : public controller_interface::Controller<hardware_interface::VelocityJointInterface>
   {
   public:
-    OpenLoopDiffDriveController();
+    UWRTOpenLoopDiffDriveController();
 
     /**
      * \brief Initialize controller
@@ -312,5 +311,5 @@ namespace diff_drive_controller{
                           double right_wheel_radius);
   };
 
-  PLUGINLIB_EXPORT_CLASS(diff_drive_controller::OpenLoopDiffDriveController, controller_interface::ControllerBase);
+  PLUGINLIB_EXPORT_CLASS(diff_drive_controller::UWRTOpenLoopDiffDriveController, controller_interface::ControllerBase);
 } // namespace diff_drive_controller

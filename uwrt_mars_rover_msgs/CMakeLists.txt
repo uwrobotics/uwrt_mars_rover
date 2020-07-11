@@ -51,7 +51,7 @@ add_message_files(
   NeopixelArrayMode.msg
   UWRTDiffDriveVelCmd.msg
   Vector3.msg
-  UWRTRoverPosCmd.msg
+  UWRTOpenLoopPosCmd.msg
 )
 
 ## Generate services in the 'srv' folder

@@ -1,8 +1,13 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(position_controllers)
+project(uwrt_open_loop_position_controller)
 
 # Load catkin and all dependencies required for this package
-find_package(catkin REQUIRED COMPONENTS controller_interface forward_command_controller pluginlib)
+find_package(catkin REQUIRED COMPONENTS controller_interface forward_command_controller pluginlib uwrt_mars_rover_msgs)
+
+catkin_package(
+  CATKIN_DEPENDS
+    uwrt_mars_rover_msgs
+)
 
 # Declare catkin project
 catkin_package(
@@ -13,7 +18,6 @@ catkin_package(
 
 include_directories(include ${Boost_INCLUDE_DIR} ${catkin_INCLUDE_DIRS})
 add_library(${PROJECT_NAME}
-  src/joint_position_controller.cpp
   src/joint_group_position_controller.cpp
 )
 target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES})

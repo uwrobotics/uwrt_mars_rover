@@ -21,6 +21,11 @@ find_package(catkin REQUIRED COMPONENTS
 generate_dynamic_reconfigure_options(cfg/DiffDriveController.cfg)
 
 catkin_package(
+  CATKIN_DEPENDS
+    uwrt_mars_rover_msgs
+)
+
+catkin_package(
   INCLUDE_DIRS include
   LIBRARIES ${PROJECT_NAME}
 )

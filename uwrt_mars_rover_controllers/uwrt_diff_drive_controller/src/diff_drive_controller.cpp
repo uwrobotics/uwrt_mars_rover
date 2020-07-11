@@ -143,7 +143,7 @@ static bool getWheelRadius(const urdf::LinkConstSharedPtr& wheel_link, double& w
 
 namespace diff_drive_controller{
 
-  OpenLoopDiffDriveController::OpenLoopDiffDriveController()
+  UWRTOpenLoopDiffDriveController::UWRTOpenLoopDiffDriveController()
     : open_loop_(false)
     , command_struct_()
     , wheel_separation_(0.0)
@@ -162,7 +162,7 @@ namespace diff_drive_controller{
   {
   }
 
-  bool OpenLoopDiffDriveController::init(hardware_interface::VelocityJointInterface* hw,
+  bool UWRTOpenLoopDiffDriveController::init(hardware_interface::VelocityJointInterface* hw,
             ros::NodeHandle& root_nh,
             ros::NodeHandle &controller_nh)
   {
@@ -352,7 +352,7 @@ namespace diff_drive_controller{
       right_wheel_joints_[i] = hw->getHandle(right_wheel_names[i]);  // throws on failure
     }
 
-    sub_command_ = controller_nh.subscribe("cmd_vel", 1, &OpenLoopDiffDriveController::cmdVelCallback, this);
+    sub_command_ = controller_nh.subscribe("cmd_vel", 1, &UWRTOpenLoopDiffDriveController::cmdVelCallback, this);
 
     // Initialize dynamic parameters
     DynamicParams dynamic_params;
@@ -381,12 +381,12 @@ namespace diff_drive_controller{
     dyn_reconf_server_->updateConfig(config);
     dyn_reconf_server_mutex_.unlock();
 
-    dyn_reconf_server_->setCallback(boost::bind(&OpenLoopDiffDriveController::reconfCallback, this, _1, _2));
+    dyn_reconf_server_->setCallback(boost::bind(&UWRTOpenLoopDiffDriveController::reconfCallback, this, _1, _2));
 
     return true;
   }
 
-  void OpenLoopDiffDriveController::update(const ros::Time& time, const ros::Duration& period)
+  void UWRTOpenLoopDiffDriveController::update(const ros::Time& time, const ros::Duration& period)
   {
     // update parameter from dynamic reconf
     updateDynamicParams();
@@ -501,7 +501,7 @@ namespace diff_drive_controller{
     time_previous_ = time;
   }
 
-  void OpenLoopDiffDriveController::starting(const ros::Time& time)
+  void UWRTOpenLoopDiffDriveController::starting(const ros::Time& time)
   {
     brake();
 
@@ -512,12 +512,12 @@ namespace diff_drive_controller{
     odometry_.init(time);
   }
 
-  void OpenLoopDiffDriveController::stopping(const ros::Time& /*time*/)
+  void UWRTOpenLoopDiffDriveController::stopping(const ros::Time& /*time*/)
   {
     brake();
   }
 
-  void OpenLoopDiffDriveController::brake()
+  void UWRTOpenLoopDiffDriveController::brake()
   {
     const double vel = 0.0;
     for (size_t i = 0; i < wheel_joints_size_; ++i)
@@ -527,7 +527,7 @@ namespace diff_drive_controller{
     }
   }
 
-  void OpenLoopDiffDriveController::cmdVelCallback(const uwrt_mars_rover_msgs::UWRTDiffDriveVelCmd& command)
+  void UWRTOpenLoopDiffDriveController::cmdVelCallback(const uwrt_mars_rover_msgs::UWRTDiffDriveVelCmd& command)
   {
     if (isRunning())
     {
@@ -562,7 +562,7 @@ namespace diff_drive_controller{
     }
   }
 
-  bool OpenLoopDiffDriveController::getWheelNames(ros::NodeHandle& controller_nh,
+  bool UWRTOpenLoopDiffDriveController::getWheelNames(ros::NodeHandle& controller_nh,
                               const std::string& wheel_param,
                               std::vector<std::string>& wheel_names)
   {
@@ -615,7 +615,7 @@ namespace diff_drive_controller{
       return true;
   }
 
-  bool OpenLoopDiffDriveController::setOdomParamsFromUrdf(ros::NodeHandle& root_nh,
+  bool UWRTOpenLoopDiffDriveController::setOdomParamsFromUrdf(ros::NodeHandle& root_nh,
                              const std::string& left_wheel_name,
                              const std::string& right_wheel_name,
                              bool lookup_wheel_separation,
@@ -684,7 +684,7 @@ namespace diff_drive_controller{
     return true;
   }
 
-  void OpenLoopDiffDriveController::setOdomPubFields(ros::NodeHandle& root_nh, ros::NodeHandle& controller_nh)
+  void UWRTOpenLoopDiffDriveController::setOdomPubFields(ros::NodeHandle& root_nh, ros::NodeHandle& controller_nh)
   {
     // Get and check params for covariances
     XmlRpc::XmlRpcValue pose_cov_list;
@@ -731,7 +731,7 @@ namespace diff_drive_controller{
     tf_odom_pub_->msg_.transforms[0].header.frame_id = odom_frame_id_;
   }
 
-  void OpenLoopDiffDriveController::reconfCallback(DiffDriveControllerConfig& config, uint32_t /*level*/)
+  void UWRTOpenLoopDiffDriveController::reconfCallback(DiffDriveControllerConfig& config, uint32_t /*level*/)
   {
     DynamicParams dynamic_params;
     dynamic_params.left_wheel_radius_multiplier  = config.left_wheel_radius_multiplier;
@@ -747,7 +747,7 @@ namespace diff_drive_controller{
     ROS_INFO_STREAM_NAMED(name_, "Dynamic Reconfigure:\n" << dynamic_params);
   }
 
-  void OpenLoopDiffDriveController::updateDynamicParams()
+  void UWRTOpenLoopDiffDriveController::updateDynamicParams()
   {
     // Retreive dynamic params:
     const DynamicParams dynamic_params = *(dynamic_params_.readFromRT());
@@ -760,7 +760,7 @@ namespace diff_drive_controller{
     enable_odom_tf_ = dynamic_params.enable_odom_tf;
   }
 
-  void OpenLoopDiffDriveController::publishWheelData(const ros::Time& time, const ros::Duration& period, Commands& curr_cmd,
+  void UWRTOpenLoopDiffDriveController::publishWheelData(const ros::Time& time, const ros::Duration& period, Commands& curr_cmd,
           double wheel_separation, double left_wheel_radius, double right_wheel_radius)
   {
     if (publish_wheel_joint_controller_state_ && controller_state_pub_->trylock())

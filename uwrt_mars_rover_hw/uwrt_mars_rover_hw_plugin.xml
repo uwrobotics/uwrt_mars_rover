@@ -1,0 +1,8 @@
+<library path="lib/libuwrt_mars_rover_hw">
+    <class name="uwrt_mars_rover_hw/UWRTRoverHWDrivetrainReal" type="uwrt_mars_rover_hw::UWRTRoverHWDrivetrainReal"
+           base_class_type="hardware_interface::RobotHW">
+        <description>
+            ros-control hw interface for drivetrain
+        </description>
+    </class>
+</library>

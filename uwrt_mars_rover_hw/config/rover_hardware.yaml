@@ -1,0 +1,16 @@
+uwrt_mars_rover:
+  can_interface_name: can0
+
+  combined_robot_hw:
+    # robot_hw class plugins that are available to load.
+    drivetrain:
+      type: uwrt_mars_rover_hw/UWRTRoverHWDrivetrainReal
+      roboteq_canopen_id: 0x01
+      joints:
+        - name: left_drive_joint
+          transmission_reduction: 43.8311688312
+          roboteq_index: 2
+
+        - name: right_drive_joint
+          transmission_reduction: 43.8311688312
+          roboteq_index: 1

@@ -19,7 +19,7 @@ uwrt_mars_rover:
     cmd_pos_timeout: 1
 
   drivetrain_velocity_controller:
-    type: diff_drive_controller/UWRTOpenLoopDiffDriveController
+    type: diff_drive_controller/DiffDriveController
     left_wheel: left_drive_joint
     right_wheel: right_drive_joint
     publish_rate: 50.0

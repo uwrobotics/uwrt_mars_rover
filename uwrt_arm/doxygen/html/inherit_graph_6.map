@@ -1,5 +1,0 @@
-<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classuwrt_1_1arm_1_1_arm_control_loop.html" title="uwrt::arm::ArmControlLoop" alt="" coords="5,67,184,94"/>
-<area shape="rect" id="node2" href="$classuwrt_1_1arm_1_1_gazebo_arm_control_plugin.html" title="uwrt::arm::GazeboArmControl\lPlugin" alt="" coords="232,5,428,47"/>
-<area shape="rect" id="node3" href="$classuwrt_1_1arm_1_1_real_arm_control.html" title="uwrt::arm::RealArmControl" alt="" coords="241,71,419,98"/>
-</map>

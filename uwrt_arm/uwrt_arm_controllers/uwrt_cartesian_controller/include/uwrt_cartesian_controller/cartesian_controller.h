@@ -33,7 +33,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 namespace velocity_controllers
 {
-class CartesianController : public controller_interface::Controller<hardware_interface::VelocityJointInterface>
+class UWRTCartesianController : public controller_interface::Controller<hardware_interface::VelocityJointInterface>
 {
 public:
 
@@ -55,7 +55,7 @@ private:
   KDL::Chain kdl_chain_;
 
   KDL::Twist cmd_linear_twist_;
-  KDL::Twist cmd_angular_twist_;
+  // KDL::Twist cmd_angular_twist_;
 
   boost::scoped_ptr<KDL::ChainIkSolverVel> chain_ik_solver_vel_;
   boost::scoped_ptr<KDL::ChainFkSolverPos> chain_fk_solver_;
@@ -69,5 +69,5 @@ private:
 
   void armCommandCallback(const uwrt_arm_msgs::UWRTArmTwistConstPtr& arm_command);
 
-};  // class CartesianController
+};  // class UWRTCartesianController
 }  // namespace velocity_controllers

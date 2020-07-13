@@ -1,8 +1,0 @@
-<map id="uwrt_arm_hw/include/uwrt_arm_hw/arm_control_loop.h" name="uwrt_arm_hw/include/uwrt_arm_hw/arm_control_loop.h">
-<area shape="rect" id="node2" href="$gazebo__arm__control__plugin_8h.html" title="uwrt_arm_hw/include\l/uwrt_arm_hw/gazebo\l_arm_control_plugin.h" alt="" coords="17,109,167,165"/>
-<area shape="rect" id="node4" href="$real__arm__control_8h.html" title="uwrt_arm_hw/include\l/uwrt_arm_hw/real_arm\l_control.h" alt="" coords="193,109,351,165"/>
-<area shape="rect" id="node7" href="$arm__control__loop_8cpp.html" title="uwrt_arm_hw/src/arm\l_control_loop.cpp" alt="" coords="375,117,523,158"/>
-<area shape="rect" id="node3" href="$gazebo__arm__control__plugin_8cpp.html" title="uwrt_arm_hw/src/gazebo\l_arm_control_plugin.cpp" alt="" coords="5,213,173,255"/>
-<area shape="rect" id="node5" href="$arm__hw__real__node_8cpp.html" title="uwrt_arm_hw/src/arm\l_hw_real_node.cpp" alt="" coords="198,213,346,255"/>
-<area shape="rect" id="node6" href="$real__arm__control_8cpp.html" title="uwrt_arm_hw/src/real\l_arm_control.cpp" alt="" coords="371,213,517,255"/>
-</map>

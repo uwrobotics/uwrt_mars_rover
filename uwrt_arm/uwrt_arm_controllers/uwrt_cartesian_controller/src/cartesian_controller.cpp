@@ -18,7 +18,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 namespace velocity_controllers
 {
-bool CartesianController::init(hardware_interface::VelocityJointInterface* hw, ros::NodeHandle& nh)
+bool UWRTCartesianController::init(hardware_interface::VelocityJointInterface* hw, ros::NodeHandle& nh)
   { 
     if(!nh.searchParam("/robot_description", robot_description_)){
         ROS_ERROR("Failed to get robot_description parameter");
@@ -72,7 +72,7 @@ bool CartesianController::init(hardware_interface::VelocityJointInterface* hw, r
       // WE DON'T WANT AN INTERFACE FOR "arm_shoulder_bicep_joint"
       if(it->getJoint().getName().compare("arm_shoulder_bicep_joint")){
         joint_handles_.push_back(hw->getHandle(it->getJoint().getName()));
-        // ROS_INFO_STREAM(it->getJoint().getName());
+      //   ROS_INFO_STREAM(it->getJoint().getName());
       }
     }
 
@@ -83,65 +83,46 @@ bool CartesianController::init(hardware_interface::VelocityJointInterface* hw, r
     // Subscribe to twist msg 
     arm_command_sub_ = nh.subscribe<uwrt_arm_msgs::UWRTArmTwist>("twist_arm_cmds",
                                                                   1,
-                                                                  &CartesianController::armCommandCallback,
+                                                                  &UWRTCartesianController::armCommandCallback,
                                                                   this);
 
     double dead_man_timeout;
-    nh.param<double>("dead_man_timeout", dead_man_timeout, 10);
+    nh.param<double>("dead_man_timeout", dead_man_timeout, 0.2);
     dead_man_timeout_ = ros::Duration(dead_man_timeout);
 
     return true;
   }
 
- void CartesianController::armCommandCallback(const uwrt_arm_msgs::UWRTArmTwistConstPtr& arm_command)
+ void UWRTCartesianController::armCommandCallback(const uwrt_arm_msgs::UWRTArmTwistConstPtr& arm_command)
   {
     cmd_linear_twist_.vel(0) = arm_command->twist.linear.x;
     cmd_linear_twist_.vel(1) = arm_command->twist.linear.y;
     cmd_linear_twist_.vel(2) = arm_command->twist.linear.z;
-    cmd_linear_twist_.rot(0) = 0.0;
-    cmd_linear_twist_.rot(1) = 0.0;
-    cmd_linear_twist_.rot(2) = 0.0;
+    cmd_linear_twist_.rot(0) = arm_command->twist.angular.x;
+    cmd_linear_twist_.rot(1) = arm_command->twist.angular.y;
+    cmd_linear_twist_.rot(2) = arm_command->twist.angular.z;
 
-    cmd_angular_twist_.vel(0) = 0.0;
-    cmd_angular_twist_.vel(1) = 0.0;
-    cmd_angular_twist_.vel(2) = 0.0;
-    cmd_angular_twist_.rot(0) = arm_command->twist.angular.x;
-    cmd_angular_twist_.rot(1) = arm_command->twist.angular.y;
-    cmd_angular_twist_.rot(2) = arm_command->twist.angular.z;
+    // cmd_linear_twist_.vel(0) = arm_command->twist.linear.x;
+    // cmd_linear_twist_.vel(1) = arm_command->twist.linear.y;
+    // cmd_linear_twist_.vel(2) = arm_command->twist.linear.z;
+    // cmd_linear_twist_.rot(0) = 0.0;
+    // cmd_linear_twist_.rot(1) = 0.0;
+    // cmd_linear_twist_.rot(2) = 0.0;
 
-    for (unsigned int i = 0; i < kdl_chain_.getNrOfJoints(); i++)
-    {
-      joint_handles_[i].setCommand(cmd_linear_twist_(i)); // TODO (akeaveny): ONLY TESTING LINEAR COMMANDS
-    }
-  }
-
-  void CartesianController::starting(const ros::Time& time)
-  {
-    // set twists to zero
-    cmd_linear_twist_[0] = 0.0;
-    cmd_linear_twist_[1] = 0.0;
-    cmd_linear_twist_[2] = 0.0;
-    cmd_linear_twist_[3] = 0.0;
-    cmd_linear_twist_[4] = 0.0;
-    cmd_linear_twist_[5] = 0.0;
-
-    cmd_angular_twist_[0] = 0.0;
-    cmd_angular_twist_[1] = 0.0;
-    cmd_angular_twist_[2] = 0.0;
-    cmd_angular_twist_[3] = 0.0;
-    cmd_angular_twist_[4] = 0.0;
-    cmd_angular_twist_[5] = 0.0;
+    // cmd_angular_twist_.vel(0) = 0.0;
+    // cmd_angular_twist_.vel(1) = 0.0;
+    // cmd_angular_twist_.vel(2) = 0.0;
+    // cmd_angular_twist_.rot(0) = arm_command->twist.angular.x;
+    // cmd_angular_twist_.rot(1) = arm_command->twist.angular.y;
+    // cmd_angular_twist_.rot(2) = arm_command->twist.angular.z;
 
     last_msg_ = ros::Time::now();
     got_msg_ = false;
   }
 
-  void CartesianController::stopping(const ros::Time& time)
+  void UWRTCartesianController::update(const ros::Time& time, const ros::Duration& period)
   {
-  }
-
-  void CartesianController::update(const ros::Time& time, const ros::Duration& period)
-  {
+    ROS_INFO_STREAM("Calling Update!");
     if((time - last_msg_) >= dead_man_timeout_) 
     {
       cmd_linear_twist_[0] = 0.0;
@@ -151,12 +132,12 @@ bool CartesianController::init(hardware_interface::VelocityJointInterface* hw, r
       cmd_linear_twist_[4] = 0.0;
       cmd_linear_twist_[5] = 0.0;
 
-      cmd_angular_twist_[0] = 0.0;
-      cmd_angular_twist_[1] = 0.0;
-      cmd_angular_twist_[2] = 0.0;
-      cmd_angular_twist_[3] = 0.0;
-      cmd_angular_twist_[4] = 0.0;
-      cmd_angular_twist_[5] = 0.0;
+      // cmd_angular_twist_[0] = 0.0;
+      // cmd_angular_twist_[1] = 0.0;
+      // cmd_angular_twist_[2] = 0.0;
+      // cmd_angular_twist_[3] = 0.0;
+      // cmd_angular_twist_[4] = 0.0;
+      // cmd_angular_twist_[5] = 0.0;
 
       got_msg_ = false;
 
@@ -190,9 +171,9 @@ bool CartesianController::init(hardware_interface::VelocityJointInterface* hw, r
     KDL::Frame frame_tip_pose_inv = frame_tip_pose.Inverse();
 
     KDL::Twist linear_twist = frame_tip_pose_inv * cmd_linear_twist_;
-    KDL::Twist angular_twist = frame_tip_pose_inv.M * cmd_angular_twist_;
-
-    KDL::Twist twist(linear_twist.vel, angular_twist.rot);
+    // KDL::Twist angular_twist = frame_tip_pose_inv.M * cmd_angular_twist_;
+    
+    KDL::Twist twist(linear_twist.vel, linear_twist.rot);
 
     KDL::JntArray joint_vel(joint_handles_.size());
     if(chain_ik_solver_vel_->CartToJnt(q, twist, joint_vel) < 0)
@@ -212,6 +193,31 @@ bool CartesianController::init(hardware_interface::VelocityJointInterface* hw, r
       joint_handles_[i].setCommand(joint_vel(i));
     }
   }
+
+  void UWRTCartesianController::starting(const ros::Time& time)
+  {
+    // set twists to zero
+    cmd_linear_twist_[0] = 0.0;
+    cmd_linear_twist_[1] = 0.0;
+    cmd_linear_twist_[2] = 0.0;
+    cmd_linear_twist_[3] = 0.0;
+    cmd_linear_twist_[4] = 0.0;
+    cmd_linear_twist_[5] = 0.0;
+
+    // cmd_angular_twist_[0] = 0.0;
+    // cmd_angular_twist_[1] = 0.0;
+    // cmd_angular_twist_[2] = 0.0;
+    // cmd_angular_twist_[3] = 0.0;
+    // cmd_angular_twist_[4] = 0.0;
+    // cmd_angular_twist_[5] = 0.0;
+
+    last_msg_ = ros::Time::now();
+    got_msg_ = false;
+  }
+
+  void UWRTCartesianController::stopping(const ros::Time& time)
+  {
+  }
 }  // namespace velocity_controllers
 
-PLUGINLIB_EXPORT_CLASS(velocity_controllers::CartesianController, controller_interface::ControllerBase)
+PLUGINLIB_EXPORT_CLASS(velocity_controllers::UWRTCartesianController, controller_interface::ControllerBase)

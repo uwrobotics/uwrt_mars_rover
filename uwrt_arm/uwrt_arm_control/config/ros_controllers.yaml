@@ -26,7 +26,7 @@ joint_state_controller:
 controller_list: []  # Not sure why this is required
 
 arm_cartesian_controller:
- type: velocity_controllers/CartesianController
+ type: velocity_controllers/UWRTCartesianController
  root_name: world
  tip_name: arm_claw_link
  joints:

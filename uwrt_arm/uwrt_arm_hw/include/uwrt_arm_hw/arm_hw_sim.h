@@ -22,57 +22,27 @@ namespace uwrt
 {
 namespace arm
 {
-/**
- * Hardware Interface for Gazebo simulation of the Arm
- */
 class ArmHWSim : public ArmHW
 {
 public:
-  /**
-   * \brief Constructor
-   * 
-   * \param model Pointer to the simulated arm object in gazebo
-   * \param urdf_str URDF of the Arm in string format
-   */
   ArmHWSim(gazebo::physics::ModelPtr model,
            const std::string& urdf_str);
-  /**
-   * \brief Constructor
-   * 
-   * \param name Arbitrary name for an instance of this class
-   * \param model Pointer to the simulated arm object in gazebo
-   * \param urdf_str URDF of the Arm in string format
-   */
+
   ArmHWSim(const std::string& name,
            gazebo::physics::ModelPtr model,
            const std::string& urdf_str);
-  /**
-   * \brief Initializes the hardware interface by registering all joints and interfaces
-   * 
-   * \param nh Nodehandle for the root of the arm namespace
-   * \param arm_hw_nh Nodehandle in the namespace of the arm hardware interface
-   */ 
+
   virtual bool init(ros::NodeHandle& nh,
                     ros::NodeHandle& arm_hw_nh);
-  /**
-   * \brief Reads data from the arm
-   * 
-   * \param time The current time
-   * \param period The time passes since last call to read
-   */
+
   virtual void read(const ros::Time& time, const ros::Duration& period);
-  /**
-   * \brief Writes data to the arm
-   * 
-   * \param time The current time
-   * \param period The time passes since last call to write
-   */
+
   virtual void write(const ros::Time& time, const ros::Duration& period);
 
 private:
-  std::string gz_physics_type_;  ///< The physics model used for simulation
+  std::string gz_physics_type_;
   gazebo::physics::ModelPtr gz_model_;
-  std::vector<gazebo::physics::JointPtr> sim_joints_;  ///< Vector of pointers to simulated gazebo Arm joints
+  std::vector<gazebo::physics::JointPtr> sim_joints_;
 };  // class ArmHWSim
 
 typedef boost::shared_ptr<ArmHWSim> ArmHWSimPtr;

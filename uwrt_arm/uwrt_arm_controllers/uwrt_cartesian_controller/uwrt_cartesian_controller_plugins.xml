@@ -1,8 +1,8 @@
 <library path="lib/libcartesian_controller">
 
-  <class name="velocity_controllers/CartesianController" type="velocity_controllers::CartesianController" base_class_type="controller_interface::ControllerBase">
+  <class name="velocity_controllers/UWRTCartesianController" type="velocity_controllers::UWRTCartesianController" base_class_type="controller_interface::ControllerBase">
     <description>
-      CartesianController which accepts TwistStamped Msg.
+      UWRTCartesianController which accepts TwistStamped Msg.
     </description>
   </class>
 

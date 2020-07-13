@@ -35,16 +35,16 @@
   <xacro:property name="claw_width"               value="0.05"/>  <!-- m -->
 
   <!-- Joint Properties -->
-  <xacro:property name="turntable_min_angle"      value="-120.0"/> <!-- deg -->
-  <xacro:property name="turntable_max_angle"      value="120.0"/>  <!-- deg -->
+  <xacro:property name="turntable_min_angle"      value="-360.0"/> <!-- deg -->
+  <xacro:property name="turntable_max_angle"      value="360.0"/>  <!-- deg -->
   <xacro:property name="turntable_max_vel"        value="0.5"/>    <!-- rad/s -->
   <xacro:property name="turntable_max_effort"     value="75"/>
 
   <!-- This values will inform the 'fake' revolute joint, that is modelled 
        to represent an "open" chain version of the closed kinematic chain
        on the real robot -->
-  <xacro:property name="shoulder_min_angle"       value="20.0"/> <!-- deg -->
-  <xacro:property name="shoulder_max_angle"       value="75.0"/> <!-- deg -->
+  <xacro:property name="shoulder_min_angle"       value="-360.0"/> <!-- deg -->
+  <xacro:property name="shoulder_max_angle"       value="360.0"/> <!-- deg -->
   <xacro:property name="shoulder_max_effort"      value="75"/>
   <!-- The max speed specified here should be the worst case scenario
         i.e. over the range of positions the 'fake' revolute joint can assume,
@@ -55,18 +55,24 @@
              this maximum acceleration is the lowest over that range -->
   <xacro:property name="shoulder_max_accel"       value="0.1"/> <!-- rad/s^2 -->
 
-  <xacro:property name="elbow_min_angle"          value="0.0"/>  <!-- deg -->
-  <xacro:property name="elbow_max_angle"          value="80.0"/> <!-- deg -->
+  <xacro:property name="fixed_shoulder_min_angle"       value="-360.0"/> <!-- deg -->
+  <xacro:property name="fixed_shoulder_max_angle"       value="360.0"/> <!-- deg -->
+  <xacro:property name="fixed_shoulder_max_effort"      value="75"/>
+  <xacro:property name="fixed_shoulder_max_vel"         value="1.0"/> <!-- rad/s -->
+  <xacro:property name="fixed_shoulder_max_accel"       value="0.1"/> <!-- rad/s^2 -->
+
+  <xacro:property name="elbow_min_angle"          value="-360.0"/>  <!-- deg -->
+  <xacro:property name="elbow_max_angle"          value="360.0"/> <!-- deg -->
   <xacro:property name="elbow_max_vel"            value="1.0"/>  <!-- rad/s -->
   <xacro:property name="elbow_max_effort"         value="75"/>
 
-  <xacro:property name="wrist_roll_min_angle"     value="-135.0"/> <!-- deg -->
-  <xacro:property name="wrist_roll_max_angle"     value="135.0"/>  <!-- deg -->
+  <xacro:property name="wrist_roll_min_angle"     value="-360.0"/> <!-- deg -->
+  <xacro:property name="wrist_roll_max_angle"     value="360.0"/>  <!-- deg -->
   <xacro:property name="wrist_roll_max_vel"       value="1.0"/>    <!-- rad/s -->
   <xacro:property name="wrist_roll_max_effort"    value="75"/>
 
-  <xacro:property name="wrist_pitch_min_angle"    value="-75.0"/>  <!-- deg -->
-  <xacro:property name="wrist_pitch_max_angle"    value="75.0"/>   <!-- deg -->
+  <xacro:property name="wrist_pitch_min_angle"    value="-360.0"/>  <!-- deg -->
+  <xacro:property name="wrist_pitch_max_angle"    value="360.0"/>   <!-- deg -->
   <xacro:property name="wrist_pitch_max_vel"      value="1.0"/>    <!-- rad/s -->
   <xacro:property name="wrist_pitch_max_effort"   value="100"/>
 
@@ -164,11 +170,15 @@
     </link>
 
     <!-- (JOINT) SHOULDER->BICEP (NOT ACTUATED) -->
-    <joint name="${name}_shoulder_bicep_joint" type="fixed">
+    <joint name="${name}_shoulder_bicep_joint" type="revolute">
       <parent link="${name}_shoulder_revolute_link"/>
       <child  link="${name}_bicep_link"/>
       <origin xyz="0 0 ${shoulder_revolute_link_length}"
               rpy="0 ${(180.0 - 60.3) * M_PI / 180.0} 0"/>
+      <limit lower="${fixed_shoulder_min_angle * M_PI / 180.0}"
+             upper="${fixed_shoulder_max_angle * M_PI / 180.0}"
+             effort="${fixed_shoulder_max_effort}"
+             velocity="${fixed_shoulder_max_vel}"/>
     </joint>
 
     <!-- (LINK) BICEP -->

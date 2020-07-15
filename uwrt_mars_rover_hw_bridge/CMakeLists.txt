@@ -114,14 +114,15 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
-# include
+  include
   ${catkin_INCLUDE_DIRS}
+  library/${PROJECT_NAME}/config
 )
 
 ## Declare a C++ library
-# add_library(${PROJECT_NAME}
-#   src/${PROJECT_NAME}/uwrt_mars_rover_hw_bridge.cpp
-# )
+add_library(${PROJECT_NAME}
+  library/${PROJECT_NAME}/config/hw_bridge.cpp
+)
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries

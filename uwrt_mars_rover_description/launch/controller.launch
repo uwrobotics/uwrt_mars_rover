@@ -1,0 +1,16 @@
+<launch>
+  <include file="$(find uwrt_mars_rover_gazebo)/launch/gazebo.launch"/>
+
+  <rosparam command="load"
+            file="$(find uwrt_mars_rover_description)/config/controller.yaml"/>
+
+  <node name="robot_ex_controller_spawner" pkg="controller_manager" type="spawner" ns="robot_ex"
+    args="joint_state_controller
+          wheel_diff_controller
+          --shutdown-timeout 3"/>
+  
+  <node name="rqt_robot_steering" pkg="rqt_robot_steering" type="rqt_robot_steering">
+    <param name="default_topic" value="/robot_ex/wheel_diff_controller/cmd_vel"/>
+  </node>
+
+</launch>

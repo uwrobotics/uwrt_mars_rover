@@ -1,4 +1,4 @@
-# rover_simulation
+# uwrt_arm_rover_simulation
 
 This package contains the simulation configurations and launch files for the UWRT Mars Rover
 

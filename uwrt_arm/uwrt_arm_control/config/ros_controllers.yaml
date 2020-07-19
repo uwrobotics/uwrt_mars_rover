@@ -1,3 +1,4 @@
+ros_control_namespace: "/"
 # Settings for ros_control control loop
 generic_hw_control_loop:
   loop_hz: 300
@@ -15,8 +16,8 @@ hardware_interface:
 # Publish all joint states
 # Creates the /joint_states topic necessary in ROS
 joint_state_controller:
-  type: joint_state_controller/JointStateController
-  publish_rate: 50
+   type: joint_state_controller/JointStateController
+   publish_rate: 50
 
 controller_list: []  # Not sure why this is required
 
@@ -31,3 +32,117 @@ arm_cartesian_controller:
     - arm_elbow_joint
     - arm_wrist_roll_joint
     - arm_wrist_pitch_joint
+
+arm_trajectory_controller:
+  type: velocity_controllers/JointTrajectoryController
+  joints:
+    - arm_base_turntable_joint
+    - arm_shoulder_joint
+    - arm_elbow_joint
+    - arm_wrist_roll_joint
+    - arm_wrist_pitch_joint
+  gains:
+    arm_base_turntable_joint:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    arm_shoulder_joint:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    arm_elbow_joint:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    arm_wrist_roll_joint:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    arm_wrist_pitch_joint:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+
+arm_voltage_controller:
+  type: voltage_controllers/JointGroupVoltageController
+  joints:
+    - arm_base_turntable_joint
+    - arm_shoulder_joint
+    - arm_elbow_joint
+    - arm_wrist_roll_joint
+    - arm_wrist_pitch_joint
+
+arm_position_controller:
+  type: position_controllers/JointGroupPositionController
+  joints:
+    - arm_base_turntable_joint
+    - arm_shoulder_joint
+    - arm_elbow_joint
+    - arm_wrist_roll_joint
+    - arm_wrist_pitch_joint
+  gains:
+    arm_base_turntable_joint:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    arm_shoulder_joint:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    arm_elbow_joint:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    arm_wrist_roll_joint:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    arm_wrist_pitch_joint:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+
+arm_velocity_controller:
+  type: velocity_controllers/JointGroupVelocityController
+  joints:
+    - arm_base_turntable_joint
+    - arm_shoulder_joint
+    - arm_elbow_joint
+    - arm_wrist_roll_joint
+    - arm_wrist_pitch_joint
+  gains:
+    arm_base_turntable_joint:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    arm_shoulder_joint:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    arm_elbow_joint:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    arm_wrist_roll_joint:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    arm_wrist_pitch_joint:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1

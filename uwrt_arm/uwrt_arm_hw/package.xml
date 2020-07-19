@@ -25,4 +25,8 @@
   <depend>roscpp</depend>
   <depend>transmission_interface</depend>
   <depend>urdf</depend>
+
+  <export>
+    <controller_interface plugin="${prefix}/voltage_controllers_plugins.xml"/>
+  </export>
 </package>

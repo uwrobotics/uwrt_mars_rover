@@ -1,5 +1,5 @@
 /**
-Copyright (c) 2020 Somesh Daga <s2daga@uwaterloo.ca>
+Copyright (c) 2020 Aidan Keaveny <akeaveny@uwaterloo.ca>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
@@ -72,13 +72,12 @@ bool UWRTCartesianController::init(hardware_interface::VelocityJointInterface* h
       // WE DON'T WANT AN INTERFACE FOR "arm_shoulder_bicep_joint"
       if(it->getJoint().getName().compare("arm_shoulder_bicep_joint")){
         joint_handles_.push_back(hw->getHandle(it->getJoint().getName()));
-      //   ROS_INFO_STREAM(it->getJoint().getName());
+        // ROS_INFO_STREAM(it->getJoint().getName());
       }
     }
 
     // KDL solvers
-    chain_ik_solver_vel_.reset(new KDL::ChainIkSolverVel_pinv(kdl_chain_));
-    chain_fk_solver_.reset(new KDL::ChainFkSolverPos_recursive(kdl_chain_));
+    cart_to_joint_solver_vel_.reset(new KDL::ChainIkSolverVel_pinv(kdl_chain_));
 
     // Subscribe to twist msg 
     arm_command_sub_ = nh.subscribe<uwrt_arm_msgs::UWRTArmTwist>("twist_arm_cmds",
@@ -95,29 +94,33 @@ bool UWRTCartesianController::init(hardware_interface::VelocityJointInterface* h
 
  void UWRTCartesianController::armCommandCallback(const uwrt_arm_msgs::UWRTArmTwistConstPtr& arm_command)
   {
-    cmd_linear_twist_.vel(0) = arm_command->twist.linear.x;
-    cmd_linear_twist_.vel(1) = arm_command->twist.linear.y;
-    cmd_linear_twist_.vel(2) = arm_command->twist.linear.z;
-    cmd_linear_twist_.rot(0) = arm_command->twist.angular.x;
-    cmd_linear_twist_.rot(1) = arm_command->twist.angular.y;
-    cmd_linear_twist_.rot(2) = arm_command->twist.angular.z;
-
-    // cmd_linear_twist_.vel(0) = arm_command->twist.linear.x;
-    // cmd_linear_twist_.vel(1) = arm_command->twist.linear.y;
-    // cmd_linear_twist_.vel(2) = arm_command->twist.linear.z;
-    // cmd_linear_twist_.rot(0) = 0.0;
-    // cmd_linear_twist_.rot(1) = 0.0;
-    // cmd_linear_twist_.rot(2) = 0.0;
-
-    // cmd_angular_twist_.vel(0) = 0.0;
-    // cmd_angular_twist_.vel(1) = 0.0;
-    // cmd_angular_twist_.vel(2) = 0.0;
-    // cmd_angular_twist_.rot(0) = arm_command->twist.angular.x;
-    // cmd_angular_twist_.rot(1) = arm_command->twist.angular.y;
-    // cmd_angular_twist_.rot(2) = arm_command->twist.angular.z;
+    qdot_cart_.vel(0) = arm_command->twist.linear.x;
+    qdot_cart_.vel(1) = arm_command->twist.linear.y;
+    qdot_cart_.vel(2) = arm_command->twist.linear.z;
+    qdot_cart_.rot(0) = arm_command->twist.angular.x;
+    qdot_cart_.rot(1) = arm_command->twist.angular.y;
+    qdot_cart_.rot(2) = arm_command->twist.angular.z;
 
     last_msg_ = ros::Time::now();
     got_msg_ = false;
+  }
+
+  void UWRTCartesianController::starting(const ros::Time& time)
+  {
+    // set twists to zero
+    qdot_cart_[0] = 0.0;
+    qdot_cart_[1] = 0.0;
+    qdot_cart_[2] = 0.0;
+    qdot_cart_[3] = 0.0;
+    qdot_cart_[4] = 0.0;
+    qdot_cart_[5] = 0.0;
+
+    last_msg_ = ros::Time::now();
+    got_msg_ = false;
+  }
+
+  void UWRTCartesianController::stopping(const ros::Time& time)
+  {
   }
 
   void UWRTCartesianController::update(const ros::Time& time, const ros::Duration& period)
@@ -125,19 +128,13 @@ bool UWRTCartesianController::init(hardware_interface::VelocityJointInterface* h
     ROS_INFO_STREAM("Calling Update!");
     if((time - last_msg_) >= dead_man_timeout_) 
     {
-      cmd_linear_twist_[0] = 0.0;
-      cmd_linear_twist_[1] = 0.0;
-      cmd_linear_twist_[2] = 0.0;
-      cmd_linear_twist_[3] = 0.0;
-      cmd_linear_twist_[4] = 0.0;
-      cmd_linear_twist_[5] = 0.0;
-
-      // cmd_angular_twist_[0] = 0.0;
-      // cmd_angular_twist_[1] = 0.0;
-      // cmd_angular_twist_[2] = 0.0;
-      // cmd_angular_twist_[3] = 0.0;
-      // cmd_angular_twist_[4] = 0.0;
-      // cmd_angular_twist_[5] = 0.0;
+      // set twists to zero
+      qdot_cart_[0] = 0.0;
+      qdot_cart_[1] = 0.0;
+      qdot_cart_[2] = 0.0;
+      qdot_cart_[3] = 0.0;
+      qdot_cart_[4] = 0.0;
+      qdot_cart_[5] = 0.0;
 
       got_msg_ = false;
 
@@ -150,73 +147,30 @@ bool UWRTCartesianController::init(hardware_interface::VelocityJointInterface* h
     }
 
     // get joint positions
-    KDL::JntArray  q(joint_handles_.size());
+    KDL::JntArray  q_(joint_handles_.size());            
     for(size_t i=0; i<joint_handles_.size(); i++)
     {
-      q(i) = joint_handles_[i].getPosition();
+      q_(i) = joint_handles_[i].getPosition();
     }
 
-    KDL::Frame frame_tip_pose;
-    if(chain_fk_solver_->JntToCart(q, frame_tip_pose) < 0)
-    {
-      ROS_ERROR("Unable to compute forward kinematic.");
-      for (unsigned int i = 0; i < kdl_chain_.getNrOfJoints(); i++)
-      {
-          joint_handles_[i].setCommand(0.0);
-      }
-
-      return;
-    }
-
-    KDL::Frame frame_tip_pose_inv = frame_tip_pose.Inverse();
-
-    KDL::Twist linear_twist = frame_tip_pose_inv * cmd_linear_twist_;
-    // KDL::Twist angular_twist = frame_tip_pose_inv.M * cmd_angular_twist_;
-    
-    KDL::Twist twist(linear_twist.vel, linear_twist.rot);
-
-    KDL::JntArray joint_vel(joint_handles_.size());
-    if(chain_ik_solver_vel_->CartToJnt(q, twist, joint_vel) < 0)
+    // get joint velocities from cartesian velocities and current joint positions 
+    KDL::JntArray qdot_joint_(joint_handles_.size());
+    if(cart_to_joint_solver_vel_->CartToJnt(q_, qdot_cart_, qdot_joint_) < 0)
     {
       ROS_ERROR("Unable to compute cartesian to joint velocity.");
       for (unsigned int i = 0; i < kdl_chain_.getNrOfJoints(); i++)
       {
-          joint_handles_[i].setCommand(0.0);
+        joint_handles_[i].setCommand(0.0);
       }
 
       return;
     }
 
-    // Convert the wrench into joint efforts
+    // set joint velocities
     for (unsigned int i = 0; i < kdl_chain_.getNrOfJoints(); i++)
     {
-      joint_handles_[i].setCommand(joint_vel(i));
+      joint_handles_[i].setCommand(qdot_joint_(i));
     }
-  }
-
-  void UWRTCartesianController::starting(const ros::Time& time)
-  {
-    // set twists to zero
-    cmd_linear_twist_[0] = 0.0;
-    cmd_linear_twist_[1] = 0.0;
-    cmd_linear_twist_[2] = 0.0;
-    cmd_linear_twist_[3] = 0.0;
-    cmd_linear_twist_[4] = 0.0;
-    cmd_linear_twist_[5] = 0.0;
-
-    // cmd_angular_twist_[0] = 0.0;
-    // cmd_angular_twist_[1] = 0.0;
-    // cmd_angular_twist_[2] = 0.0;
-    // cmd_angular_twist_[3] = 0.0;
-    // cmd_angular_twist_[4] = 0.0;
-    // cmd_angular_twist_[5] = 0.0;
-
-    last_msg_ = ros::Time::now();
-    got_msg_ = false;
-  }
-
-  void UWRTCartesianController::stopping(const ros::Time& time)
-  {
   }
 }  // namespace velocity_controllers
 

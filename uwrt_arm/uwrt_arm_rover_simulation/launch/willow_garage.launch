@@ -21,7 +21,7 @@
   </include>
 
   <!-- Load the robot description and joint/state publishers -->
-  <include file="$(find rover_simulation)/launch/include/$(arg robot).launch">
+  <include file="$(find uwrt_arm_rover_simulation)/launch/include/$(arg robot).launch">
     <arg name="spawn_x"   value="$(arg spawn_x)"/>
     <arg name="spawn_y"   value="$(arg spawn_y)"/>
     <arg name="spawn_yaw" value="$(arg spawn_yaw)"/>

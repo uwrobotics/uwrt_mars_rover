@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>rover_simulation</name>
+  <name>uwrt_arm_rover_simulation</name>
   <version>0.0.0</version>
   <description>Simulation tools for UW Mars Rover using RViz and Gazebo</description>
 

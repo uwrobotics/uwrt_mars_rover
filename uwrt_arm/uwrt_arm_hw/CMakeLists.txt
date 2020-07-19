@@ -32,6 +32,7 @@ catkin_package(
   INCLUDE_DIRS
     include
   LIBRARIES
+    ${PROJECT_NAME}_voltage_controllers
     gazebo_${PROJECT_NAME}
   CATKIN_DEPENDS
     angles
@@ -54,6 +55,11 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
+add_library(${PROJECT_NAME}_voltage_controllers
+  src/joint_group_voltage_controller.cpp
+  src/joint_voltage_controller.cpp
+)
+
 # Compile the Gazebo Plugin
 add_library(gazebo_${PROJECT_NAME} SHARED
   src/arm_control_loop.cpp
@@ -64,6 +70,7 @@ add_library(gazebo_${PROJECT_NAME} SHARED
 
 target_link_libraries(gazebo_${PROJECT_NAME}
   ${catkin_LIBRARIES}
+  ${PROJECT_NAME}_voltage_controllers
 )
 
 # Compile the Real Arm HW Interface Node
@@ -77,12 +84,14 @@ add_executable(${PROJECT_NAME}_real
 
 target_link_libraries(${PROJECT_NAME}_real
   ${catkin_LIBRARIES}
+  ${PROJECT_NAME}_voltage_controllers
 )
 
 install(
   TARGETS
     gazebo_${PROJECT_NAME}
     ${PROJECT_NAME}_real
+    ${PROJECT_NAME}_voltage_controllers
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
@@ -93,4 +102,8 @@ install(
   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
   FILES_MATCHING PATTERN "*.h"
   PATTERN ".svn" EXCLUDE
+)
+
+install(FILES voltage_controllers_plugins.xml
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 )

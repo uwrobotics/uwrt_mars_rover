@@ -7,15 +7,10 @@ add_compile_options(-std=c++11)
 find_package(catkin REQUIRED COMPONENTS
   control_msgs
   roscpp
-  roslint
   uwrt_arm_msgs
   uwrt_arm_description
   uwrt_cartesian_controller
 )
-
-# Roslint
-set(ROSLINT_CPP_OPTS "--filter=-build/header_guard,-runtime/references")
-roslint_cpp()
 
 catkin_package(
   CATKIN_DEPENDS
@@ -30,25 +25,9 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-add_executable(delta_joint_publisher_node
-  src/delta_joint_publisher.cpp
-  src/delta_joint_publisher_node.cpp
-)
-
-target_link_libraries(delta_joint_publisher_node
-  ${catkin_LIBRARIES}
-)
-
 install(
   DIRECTORY config launch
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
-)
-
-install(
-  TARGETS delta_joint_publisher_node
-  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
 install(

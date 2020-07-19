@@ -11,19 +11,13 @@
   <buildtool_depend>catkin</buildtool_depend>
 
   <build_depend>roscpp</build_depend>
-  <build_depend>roslint</build_depend>
   <build_depend>uwrt_cartesian_controller</build_depend>
 
   <exec_depend>controller_manager</exec_depend>
   <exec_depend>joint_trajectory_controller</exec_depend>
-  <exec_depend>moveit_commander</exec_depend>
-  <exec_depend>moveit_jog_arm</exec_depend>
-  <exec_depend>moveit_ros_control_interface</exec_depend>
-  <exec_depend>moveit_ros_move_group</exec_depend>
   <exec_depend>position_controllers</exec_depend>
   <exec_depend>velocity_controllers</exec_depend>
   <exec_depend>uwrt_arm_hw</exec_depend>
-  <exec_depend>uwrt_arm_moveit_config</exec_depend>
   <exec_depend>uwrt_cartesian_controller</exec_depend>
 
   <depend>control_msgs</depend>

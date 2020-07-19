@@ -15,8 +15,8 @@ hardware_interface:
 # Publish all joint states
 # Creates the /joint_states topic necessary in ROS
 joint_state_controller:
-   type: joint_state_controller/JointStateController
-   publish_rate: 50
+  type: joint_state_controller/JointStateController
+  publish_rate: 50
 
 controller_list: []  # Not sure why this is required
 

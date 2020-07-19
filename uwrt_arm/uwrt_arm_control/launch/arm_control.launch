@@ -25,6 +25,12 @@
         respawn="true" output="screen"/>
 
   <!-- Spawn other ros_control controllers (disabled at startup) -->
+	<node name="controller_spawner_stopped" pkg="controller_manager" type="spawner"
+        args="--stopped
+		arm_position_controller"
+        respawn="true" output="screen"/>
+
+  <!-- Spawn other ros_control controllers (disabled at startup) -->
    <!--  <node name="controller_spawner_stopped" pkg="controller_manager" type="spawner"
         args="stopped
               arm_trajectory_controller
@@ -45,4 +51,13 @@
 	        output="screen"/>
   </group>
 
+  <!-- Launch MoveIt -->
+  <include file="$(find uwrt_arm_control)/launch/moveit/move_group.launch">
+    <arg name="debug"                  value="$(arg debug)"/> 
+    <arg name="load_robot_description" value="false"/>
+    <arg name="pipeline"               value="$(arg moveit_pipeline)"/>
+  </include>
+
+  <!-- Run Arm Jogging -->
+  <include file="$(find uwrt_arm_control)/launch/moveit/arm_jog.launch"/>
 </launch>

@@ -1,5 +1,5 @@
 /**
-Copyright (c) 2020 Aidan Keaveny <akeaveny@uwaterloo.ca>
+Copyright (c) 2020 Somesh Daga <s2daga@uwaterloo.ca>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
@@ -54,17 +54,20 @@ private:
   KDL::Tree kdl_tree_;
   KDL::Chain kdl_chain_;
 
-  ros::Subscriber arm_command_sub_;
-  
+  KDL::Twist cmd_linear_twist_;
+  // KDL::Twist cmd_angular_twist_;
+
+  boost::scoped_ptr<KDL::ChainIkSolverVel> chain_ik_solver_vel_;
+  boost::scoped_ptr<KDL::ChainFkSolverPos> chain_fk_solver_;
+
   bool got_msg_;
   ros::Time last_msg_;
+
   ros::Duration dead_man_timeout_;
-  
+
+  ros::Subscriber arm_command_sub_;
+
   void armCommandCallback(const uwrt_arm_msgs::UWRTArmTwistConstPtr& arm_command);
-
-  KDL::Twist qdot_cart_;
-
-  boost::scoped_ptr<KDL::ChainIkSolverVel> cart_to_joint_solver_vel_;
 
 };  // class UWRTCartesianController
 }  // namespace velocity_controllers

@@ -16,5 +16,5 @@ if ((current_control_mode_1 != desired_control_mode) Or (current_control_mode_1 
 	current_control_mode_2 = GetConfig(_MMOD, 2) 
 
 end if
-wait(100) ' TODO: TPDO set to 100ms
+wait(GetConfig(_CTPS, 1)) ' TPDO set to 10ms
 goto top

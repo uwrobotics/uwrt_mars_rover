@@ -3,11 +3,11 @@
 #include <linux/can.h>
 #include <linux/can/raw.h>
 #include <net/if.h>
+#include <ros/console.h>
 #include <sys/ioctl.h>
 #include <sys/socket.h>
 #include <sys/time.h>
 #include <unistd.h>
-#include <ros/console.h>
 
 #include <cmath>
 #include <cstdio>
@@ -118,7 +118,6 @@ CanopenInterface::CanopenInterface(canid_t roboteq_can_id, const std::string& if
   if (bind(socket_handle_, reinterpret_cast<struct sockaddr*>(&addr), sizeof(addr)) < 0) {
     throw std::runtime_error("Error binding socket");
   }
-  
 }
 
 template <typename DataType>
@@ -147,22 +146,20 @@ bool CanopenInterface::sendCommand(RuntimeCommand command, uint8_t subindex, Dat
   struct can_frame response_frame = {};
   ssize_t bytes_read = read(roboteq::CanopenInterface::socket_handle_, &response_frame, sizeof(struct can_frame));
 
-  //  std::cout << std::hex << response_frame.can_id << "\t" << static_cast<unsigned>(response_frame.can_dlc) << "\t"
-  //            << static_cast<unsigned>(response_frame.data[0]) << "\t" <<
-  //            static_cast<unsigned>(response_frame.data[1])
-  //            << "\t" << static_cast<unsigned>(response_frame.data[2]) << "\t"
-  //            << static_cast<unsigned>(response_frame.data[3]) << "\t" <<
-  //            static_cast<unsigned>(response_frame.data[4])
-  //            << "\t" << static_cast<unsigned>(response_frame.data[5]) << "\t"
-  //            << static_cast<unsigned>(response_frame.data[6]) << "\t" <<
-  //            static_cast<unsigned>(response_frame.data[7])
-  //            << std::endl;
+  ROS_DEBUG_STREAM(std::hex << response_frame.can_id << "\t" << static_cast<unsigned>(response_frame.can_dlc)
+                     << "\t" << static_cast<unsigned>(response_frame.data[0]) << "\t"
+                     << static_cast<unsigned>(response_frame.data[1]) << "\t"
+                     << static_cast<unsigned>(response_frame.data[2]) << "\t"
+                     << static_cast<unsigned>(response_frame.data[3]) << "\t"
+                     << static_cast<unsigned>(response_frame.data[4]) << "\t"
+                     << static_cast<unsigned>(response_frame.data[5]) << "\t"
+                     << static_cast<unsigned>(response_frame.data[6]) << "\t"
+                     << static_cast<unsigned>(response_frame.data[7]));
 
   if (bytes_read != sizeof(struct can_frame)) {
     throw std::runtime_error("Read packet size does not match can frame size");
   }
 
-  // TODO: throw appropriate errors
   if ((response_frame.data[0] & RESPONSE_TYPE_MASK) != SUCCESSFUL_COMMAND_RESPONSE) {
     throw std::runtime_error("Unsuccessful command response");
   } else if ((command_frame.data[0] & UNUSED_BYTES_MASK) != (response_frame.data[0] & UNUSED_BYTES_MASK)) {
@@ -202,21 +199,20 @@ bool CanopenInterface::sendCommand<empty_data_payload>(RuntimeCommand command, u
   struct can_frame response_frame = {};
   ssize_t bytes_read = read(roboteq::CanopenInterface::socket_handle_, &response_frame, sizeof(struct can_frame));
 
-  //  std::cout << std::hex << response_frame.can_id << "\t" << static_cast<unsigned>(response_frame.can_dlc) << "\t"
-  //            << static_cast<unsigned>(response_frame.data[0]) << "\t" <<
-  //            static_cast<unsigned>(response_frame.data[1])
-  //            << "\t" << static_cast<unsigned>(response_frame.data[2]) << "\t"
-  //            << static_cast<unsigned>(response_frame.data[3]) << "\t" <<
-  //            static_cast<unsigned>(response_frame.data[4])
-  //            << "\t" << static_cast<unsigned>(response_frame.data[5]) << "\t"
-  //            << static_cast<unsigned>(response_frame.data[6]) << "\t" <<
-  //            static_cast<unsigned>(response_frame.data[7])
-  //            << std::endl;
+  ROS_DEBUG_STREAM(std::hex << response_frame.can_id << "\t" << static_cast<unsigned>(response_frame.can_dlc)
+                     << "\t" << static_cast<unsigned>(response_frame.data[0]) << "\t"
+                     << static_cast<unsigned>(response_frame.data[1]) << "\t"
+                     << static_cast<unsigned>(response_frame.data[2]) << "\t"
+                     << static_cast<unsigned>(response_frame.data[3]) << "\t"
+                     << static_cast<unsigned>(response_frame.data[4]) << "\t"
+                     << static_cast<unsigned>(response_frame.data[5]) << "\t"
+                     << static_cast<unsigned>(response_frame.data[6]) << "\t"
+                     << static_cast<unsigned>(response_frame.data[7]));
 
   if (bytes_read != sizeof(struct can_frame)) {
     throw std::runtime_error("Read packet size does not match can frame size");
   }
- if ((response_frame.data[0] & RESPONSE_TYPE_MASK) != SUCCESSFUL_COMMAND_RESPONSE) {
+  if ((response_frame.data[0] & RESPONSE_TYPE_MASK) != SUCCESSFUL_COMMAND_RESPONSE) {
     throw std::runtime_error("Unsuccessful command response");
   } else if ((command_frame.data[0] & UNUSED_BYTES_MASK) != (response_frame.data[0] & UNUSED_BYTES_MASK)) {
     throw std::runtime_error("Mismatched unused bytes value in command response");
@@ -254,17 +250,15 @@ DataType CanopenInterface::sendQuery(RuntimeQuery query, uint8_t subindex) {
   struct can_frame response_frame = {};
   ssize_t bytes_read = read(roboteq::CanopenInterface::socket_handle_, &response_frame, sizeof(struct can_frame));
 
-   std::cout << std::hex << response_frame.can_id << "\t" 
-             << static_cast<unsigned>(response_frame.can_dlc) << "\t"
-             << static_cast<unsigned>(response_frame.data[0]) << "\t" <<
-             static_cast<unsigned>(response_frame.data[1])
-             << "\t" << static_cast<unsigned>(response_frame.data[2]) << "\t"
-             << static_cast<unsigned>(response_frame.data[3]) << "\t" <<
-             static_cast<unsigned>(response_frame.data[4])
-             << "\t" << static_cast<unsigned>(response_frame.data[5]) << "\t"
-             << static_cast<unsigned>(response_frame.data[6]) << "\t" <<
-             static_cast<unsigned>(response_frame.data[7])
-             << std::endl;
+  ROS_DEBUG_STREAM(std::hex << response_frame.can_id << "\t" << static_cast<unsigned>(response_frame.can_dlc)
+                     << "\t" << static_cast<unsigned>(response_frame.data[0]) << "\t"
+                     << static_cast<unsigned>(response_frame.data[1]) << "\t"
+                     << static_cast<unsigned>(response_frame.data[2]) << "\t"
+                     << static_cast<unsigned>(response_frame.data[3]) << "\t"
+                     << static_cast<unsigned>(response_frame.data[4]) << "\t"
+                     << static_cast<unsigned>(response_frame.data[5]) << "\t"
+                     << static_cast<unsigned>(response_frame.data[6]) << "\t"
+                     << static_cast<unsigned>(response_frame.data[7]));
 
   if (bytes_read != sizeof(struct can_frame)) {
     throw std::runtime_error("Read packet size does not match can frame size");
@@ -274,13 +268,12 @@ DataType CanopenInterface::sendQuery(RuntimeQuery query, uint8_t subindex) {
     throw std::runtime_error("Mismatched DLC value");
   }
 
-  // TODO: throw appropriate errors
   if ((response_frame.data[0] & RESPONSE_TYPE_MASK) != SUCCESSFUL_QUERY_RESPONSE) {
     throw std::runtime_error("Unssuccessful query response");
   } else if (query_frame.data[1] != response_frame.data[1] || query_frame.data[2] != response_frame.data[2]) {
     throw std::runtime_error("Mismatched index in query response");
   } else if (query_frame.data[3] != response_frame.data[3]) {
-      throw std::runtime_error("Mismatched sub-index in query response");
+    throw std::runtime_error("Mismatched sub-index in query response");
   } else {
     const size_t data_response_size = SDO_MAX_DATA_SIZE - ((response_frame.data[0] & UNUSED_BYTES_MASK) >> 2);
 

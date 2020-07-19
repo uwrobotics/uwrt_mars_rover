@@ -10,7 +10,6 @@ find_package(catkin REQUIRED
 
 add_message_files(
   FILES
-    UWRTArmCommand.msg
     UWRTArmTwist.msg
     Twist.msg
     Vector3.msg

@@ -249,9 +249,6 @@ void ArmHWReal::write(const ros::Time& time,
       case ControlMethod::EFFORT:
         command = static_cast<float>(joint_effort_command_[i]);
         break;
-      case ControlMethod::VOLTAGE:
-        command = static_cast<float>(joint_voltage_command_[i]);
-        break;
     }
 
     // Create pointer to the data field for the CAN Frame
@@ -311,10 +308,6 @@ void ArmHWReal::doSwitch(const std::list<hardware_interface::ControllerInfo>& st
       else if (claimed.hardware_interface == "hardware_interface::VelocityJointInterface")
       {
         frame.data[0] = 1;
-      }
-      else if (claimed.hardware_interface == "hardware_interface::VoltageJointInterface")
-      {
-        frame.data[0] = 0;
       }
       else if (claimed.hardware_interface == "hardware_interface::JointStateInterface")
       {

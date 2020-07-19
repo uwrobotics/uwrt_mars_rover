@@ -2,7 +2,6 @@
 <launch>
   <arg name="debug"           default="false"/>
   <arg name="sim"             default="false"/>
-  <arg name="moveit_pipeline" default="ompl"/>
   <arg name="arm_hw_ns"       default="$(eval 'arm_hw_sim' if sim
                                                else 'arm_hw_real')"/>
   <!-- The CAN device on which arm feedback/states are written to/from -->
@@ -16,7 +15,7 @@
   <!-- Load Joint Names for the arm -->
   <rosparam command="load" file="$(find uwrt_arm_control)/config/joint_names.yaml"/>
 
-  <!-- Load the ros_controller controller parameters listed in the moveit generated configurations -->
+  <!-- Load the ros_controller controller parameters -->
   <rosparam command="load" file="$(find uwrt_arm_control)/config/ros_controllers.yaml"/>
 
   <!-- Spawn the ros_control controllers (enabled at startup) -->

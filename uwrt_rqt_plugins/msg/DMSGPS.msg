@@ -1,0 +1,6 @@
+float64 latitudeDeg
+float64 latitudeMin
+float64 latitudeSec
+float64 longitudeDeg
+float64 longitudeMin
+float64 longitudeSec

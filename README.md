@@ -36,7 +36,7 @@ rosinstall --catkin . uwrt_mars_rover/arm64_upstream_dependencies.rosinstall
 Commands to update dependencies:
 ```bash
 cd <catkin workspace location>/src
-sudo rosinstall --catkin . uwrt_mars_rover/upstream_dependencies.rosinstall uwrt_mars_rover/metapackage_dependencies.rosinstall
+rosinstall --catkin . uwrt_mars_rover/upstream_dependencies.rosinstall uwrt_mars_rover/metapackage_dependencies.rosinstall
 rosdep install --from-paths . --ignore-src -r -y
 ```
 

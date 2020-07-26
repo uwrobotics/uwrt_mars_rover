@@ -1,4 +1,2 @@
 cmake_minimum_required(VERSION 2.8.3)
-add_library(uwrt_mars_rover_hw_bridge STATIC)
-target_sources(uwrt_mars_rover_hw_bridge PRIVATE library/uwrt_mars_rover_hw_bridge/src/hw_bridge.cpp)
-target_include_directories(uwrt_mars_rover_hw_bridge PUBLIC library/uwrt_mars_rover_hw_bridge/include)
+add_subdirectory(library/uwrt_mars_rover_hw_bridge)

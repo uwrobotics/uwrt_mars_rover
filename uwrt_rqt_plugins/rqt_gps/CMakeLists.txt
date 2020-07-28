@@ -208,10 +208,6 @@ install(TARGETS ${PROJECT_NAME}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
-install(DIRECTORY
-  resource
-  DESTINATION $(CATKIN_PACKAGE_SHARE_DESTINATION)
-)
 
 ## Mark cpp header files for installation
 install(DIRECTORY include/${PROJECT_NAME}/

@@ -19,14 +19,15 @@ class GPSConvPlugin
   Q_OBJECT
 public:
   GPSConvPlugin();
-  virtual void initPlugin(qt_gui_cpp::PluginContext& context);
-  virtual void shutdownPlugin();
-  virtual void saveSettings(qt_gui_cpp::Settings& plugin_settings,
-      qt_gui_cpp::Settings& instance_settings) const;
-  virtual void restoreSettings(const qt_gui_cpp::Settings& plugin_settings,
-      const qt_gui_cpp::Settings& instance_settings);
-  std::vector<double> dmsToDD(std::vector<double> inputLat, std::vector<double> inputLon);
-  std::vector<double> ddToDMS(double inputLat, double inputLon);
+  void initPlugin(qt_gui_cpp::PluginContext& context) override;
+  /* void shutdownPlugin() override;
+  void saveSettings(qt_gui_cpp::Settings& plugin_settings,
+      qt_gui_cpp::Settings& instance_settings) const override;
+  void restoreSettings(const qt_gui_cpp::Settings& plugin_settings,
+      const qt_gui_cpp::Settings& instance_settings) override;
+  */
+  static std::vector<double> dmsToDD(std::vector<double> inputLat, std::vector<double> inputLon);
+  static std::vector<double> ddToDMS(double inputLat, double inputLon);
   // Comment in to signal that the plugin has a way to configure it
   // bool hasConfiguration() const;
   // void triggerConfiguration();
@@ -38,8 +39,8 @@ public slots:
   void handleDMSPublishButton();
 
 private:
-  Ui::GPSConvPluginWidget ui_;
-  QWidget* widget_;
+  Ui::GPSConvPluginWidget ui_ {};
+  QWidget* widget_= new QWidget();
   ros::NodeHandle n;
   ros::Publisher DDGPS_pub;
   ros::Publisher DMSGPS_pub;

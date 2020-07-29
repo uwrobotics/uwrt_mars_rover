@@ -114,6 +114,7 @@ generate_messages(
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
   INCLUDE_DIRS include
+  INCLUDE_DIRS ${${PROJECT_NAME}_INCLUDE_DIRECTORIES}
   LIBRARIES ${PROJECT_NAME}
   CATKIN_DEPENDS message_runtime roscpp rqt_gui_cpp std_msgs
 #  DEPENDS system_lib
@@ -148,9 +149,12 @@ endif()
 ## Your package locations should be listed before other locations
 include_directories(
   include
-  ${CMAKE_CURRENT_BINARY_DIR}/..
+ #${CMAKE_CURRENT_BINARY_DIR}/..
+  ${CMAKE_CURRENT_BINARY_DIR}
   ${catkin_INCLUDE_DIRS}
 )
+
+message("Working path ${CMAKE_PREFIX_PATH} ")
 
 ## Declare a C++ library
 add_library(${PROJECT_NAME}

@@ -60,5 +60,5 @@
         "string": "cpp",
         "string_view": "cpp"
     },
-    "editor.formatOnSave": true
+    "editor.formatOnSave": true,
 }

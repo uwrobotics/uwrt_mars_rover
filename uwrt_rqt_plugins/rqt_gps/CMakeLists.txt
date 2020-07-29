@@ -8,14 +8,14 @@ project(rqt_gps)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
+  genmsg
+  message_generation
   roscpp
   roslint
   rospy
   rqt_gui
   rqt_gui_cpp
   std_msgs
-  genmsg
-  message_generation
 )
 
 ## System dependencies are found with CMake's conventions
@@ -30,7 +30,7 @@ endif()
 ## Uncomment this if the package has a setup.py. This macro ensures
 ## modules and global scripts declared therein get installed
 ## See http://ros.org/doc/api/catkin/html/user_guide/setup_dot_py.html
-#catkin_python_setup()
+catkin_python_setup()
 roslint_cpp()
 ################################################
 ## Declare ROS messages, services and actions ##
@@ -115,29 +115,29 @@ generate_messages(
 catkin_package(
   INCLUDE_DIRS include
   LIBRARIES ${PROJECT_NAME}
-  CATKIN_DEPENDS roscpp rqt_gui_cpp std_msgs message_runtime
+  CATKIN_DEPENDS message_runtime roscpp rqt_gui_cpp std_msgs
 #  DEPENDS system_lib
 )
 
 
-set (rqt_gps_SRCS
-  src/rqt_gps/gpsconv_plugin.cpp
+set (${PROJECT_NAME}_SRCS
+  src/${PROJECT_NAME}/gpsconv_plugin.cpp
 )
 
-set(rqt_gps_HDRS
-  include/rqt_gps/gpsconv_plugin.h
+set(${PROJECT_NAME}_HDRS
+  include/${PROJECT_NAME}/gpsconv_plugin.h
 )
 
-set(rqt_gps_UIS
-  src/rqt_gps/gpsconv_plugin.ui
+set(${PROJECT_NAME}_UIS
+  src/${PROJECT_NAME}/gpsconv_plugin.ui
 )
 
 if("${qt_gui_cpp_USE_QT_MAJOR_VERSION} " STREQUAL "5 ")
-  qt5_wrap_cpp(rqt_gps_MOCS ${rqt_gps_HDRS})
-  qt5_wrap_ui(rqt_gps_UIS_H ${rqt_gps_UIS})
+  qt5_wrap_cpp(${PROJECT_NAME}_MOCS ${${PROJECT_NAME}_HDRS})
+  qt5_wrap_ui(${PROJECT_NAME}_UIS_H ${${PROJECT_NAME}_UIS})
 else()
-  qt4_wrap_cpp(rqt_gps_MOCS ${rqt_gps_HDRS})
-  qt4_wrap_ui(rqt_gps_H ${rqt_gps_UIS})
+  qt4_wrap_cpp(${PROJECT_NAME}_MOCS ${${PROJECT_NAME}_HDRS})
+  qt4_wrap_ui(${PROJECT_NAME}_H ${${PROJECT_NAME}_UIS})
 endif()
 
 ###########
@@ -154,20 +154,20 @@ include_directories(
 
 ## Declare a C++ library
 add_library(${PROJECT_NAME}
-    ${rqt_gps_SRCS}
-    ${rqt_gps_MOCS}
-    ${rqt_gps_UIS_H}
+    ${${PROJECT_NAME}_SRCS}
+    ${${PROJECT_NAME}_MOCS}
+    ${${PROJECT_NAME}_UIS_H}
 )
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
 ## either from message generation or dynamic reconfigure
-add_dependencies(${PROJECT_NAME} rqt_gps_generate_messages_cpp)
+add_dependencies(${PROJECT_NAME} ${PROJECT_NAME}_generate_messages_cpp)
 
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-# add_executable(${PROJECT_NAME}_node src/rqt_gps_node.cpp)
+# add_executable(${PROJECT_NAME}_node src/${PROJECT_NAME}_node.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -228,7 +228,7 @@ install(FILES
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_rqt_gps.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_${PROJECT_NAME}.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()

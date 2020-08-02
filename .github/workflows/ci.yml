@@ -78,7 +78,6 @@ jobs:
       - name: Install Qemu and Start Qemu Docker
         shell: bash
         run: |
-          rosinstall --catkin . ../metapackage_dependencies.rosinstall
           sudo apt update
           sudo apt install qemu-user-static
           docker run --rm --privileged multiarch/qemu-user-static --reset --credential yes --persistent yes

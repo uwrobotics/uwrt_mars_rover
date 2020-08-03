@@ -6,6 +6,7 @@ find_package(catkin REQUIRED COMPONENTS
         message_generation
         roscpp
         uwrt_mars_rover_msgs
+        uwrt_mars_rover_hw_bridge
         )
 
 ###################################

@@ -13,6 +13,8 @@
     <buildtool_depend>catkin</buildtool_depend>
     <depend>uwrt_mars_rover_msgs</depend>
     <exec_depend>message_runtime</exec_depend>
+    <build_depend>uwrt_mars_rover_hw_bridge</build_depend>
+    <exec_depend>uwrt_mars_rover_hw_bridge</exec_depend>
 
     <depend>roscpp</depend>
 

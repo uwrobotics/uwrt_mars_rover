@@ -11,8 +11,8 @@
 #include "std_msgs/String.h"
 
 #include <rqt_gps/DDGPS.h>
-#include <rqt_gps/DMSGPS.h>
 #include <rqt_gps/DDGPSarray.h>
+#include <rqt_gps/DMSGPS.h>
 #include <rqt_gps/DMSGPSarray.h>
 
 #include <vector>
@@ -119,7 +119,7 @@ void GPSConvPlugin::handleDDAddButton() {
   double lon_d = lon_dec->text().toDouble();
 
   // Call conversion function and return a vector of the result
-  std::vector<double> conv_coord = {lat_d,lon_d};
+  std::vector<double> conv_coord = {lat_d, lon_d};
 
   DDList.push_back(conv_coord);
 }
@@ -158,12 +158,12 @@ void GPSConvPlugin::handleDDPublishButton() {
   const int lat_pos = 0;
   const int lon_pos = 1;
 
-  for(auto element : DDList){
+  for (auto element : DDList) {
     coord.latitude = element[lat_pos];
     coord.longitude = element[lon_pos];
     temp.push_back(coord);
   }
-  
+
   msgarr.coord_array = temp;
   DDGPS_pub.publish(msgarr);
 }
@@ -243,9 +243,8 @@ void GPSConvPlugin::handleDMSAddButton() {
   double lon_m = lon_min->text().toDouble();
   double lon_s = lon_sec->text().toDouble();
 
-
   // Call conversion function and return a vector of the result
-  std::vector<double> conv_coord = {lat_d,lat_m,lat_s,lon_d,lon_m,lon_s};
+  std::vector<double> conv_coord = {lat_d, lat_m, lat_s, lon_d, lon_m, lon_s};
 
   DMSList.push_back(conv_coord);
 }
@@ -276,7 +275,7 @@ void GPSConvPlugin::handleDMSPublishButton() {
   double lon_s = lon_sec->text().toDouble();
 
   // Publish the Degree Minute Second custom message
-    // Publish the Decimal Degree custom message
+  // Publish the Decimal Degree custom message
   rqt_gps::DMSGPSarray msgarr;
   rqt_gps::DMSGPS coord;
   std::vector<rqt_gps::DMSGPS> temp = {};
@@ -300,7 +299,7 @@ void GPSConvPlugin::handleDMSPublishButton() {
   const int lonm_pos = 4;
   const int lons_pos = 5;
 
-  for(auto element : DMSList){
+  for (auto element : DMSList) {
     coord.latitudeDeg = element[latd_pos];
     coord.latitudeMin = element[latm_pos];
     coord.latitudeSec = element[lats_pos];

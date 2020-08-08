@@ -148,11 +148,22 @@ void GPSConvPlugin::handleDDPublishButton() {
   // for(int i=0; i<DDList.size(); i++){
   //   msg
   // }
-  for(int i=0; i<DDList.size(); i++){
-    coord.latitude = DDList.at(i)[0];
-    coord.longitude = DDList.at(i)[1];
+  // for(int i=0; i<DDList.size(); i++){
+  //   coord.latitude = DDList.at(i)[0];
+  //   coord.longitude = DDList.at(i)[1];
+  //   temp.push_back(coord);
+  // }
+  // msgarr.coord_array = temp;
+  // DDGPS_pub.publish(msgarr);
+  const int lat_pos = 0;
+  const int lon_pos = 1;
+
+  for(auto element : DDList){
+    coord.latitude = element[lat_pos];
+    coord.longitude = element[lon_pos];
     temp.push_back(coord);
   }
+  
   msgarr.coord_array = temp;
   DDGPS_pub.publish(msgarr);
 }
@@ -272,13 +283,30 @@ void GPSConvPlugin::handleDMSPublishButton() {
   // for(int i=0; i<DDList.size(); i++){
   //   msg
   // }
-  for(int i=0; i<DMSList.size(); i++){
-    coord.latitudeDeg = DMSList.at(i)[0];
-    coord.latitudeMin = DMSList.at(i)[1];
-    coord.latitudeSec = DMSList.at(i)[2];
-    coord.longitudeDeg = DMSList.at(i)[3];
-    coord.longitudeMin = DMSList.at(i)[4];
-    coord.longitudeSec = DMSList.at(i)[5];
+  // for(int i=0; i<DMSList.size(); i++){
+  //   coord.latitudeDeg = DMSList.at(i)[0];
+  //   coord.latitudeMin = DMSList.at(i)[1];
+  //   coord.latitudeSec = DMSList.at(i)[2];
+  //   coord.longitudeDeg = DMSList.at(i)[3];
+  //   coord.longitudeMin = DMSList.at(i)[4];
+  //   coord.longitudeSec = DMSList.at(i)[5];
+  //   temp.push_back(coord);
+  // }
+  const int latd_pos = 0;
+  const int latm_pos = 1;
+  const int lats_pos = 2;
+
+  const int lond_pos = 3;
+  const int lonm_pos = 4;
+  const int lons_pos = 5;
+
+  for(auto element : DMSList){
+    coord.latitudeDeg = element[latd_pos];
+    coord.latitudeMin = element[latm_pos];
+    coord.latitudeSec = element[lats_pos];
+    coord.longitudeDeg = element[lond_pos];
+    coord.longitudeMin = element[lonm_pos];
+    coord.longitudeSec = element[lons_pos];
     temp.push_back(coord);
   }
   msgarr.coord_array = temp;

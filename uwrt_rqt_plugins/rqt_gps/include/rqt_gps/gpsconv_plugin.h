@@ -32,6 +32,10 @@ class GPSConvPlugin : public rqt_gui_cpp::Plugin {
  public slots:
   void handleDDButton();
   void handleDMSButton();
+  void handleDDAddButton();
+  void handleDMSAddButton();
+  void handleDDRemButton();
+  void handleDMSRemButton();
   void handleDDPublishButton();
   void handleDMSPublishButton();
 
@@ -41,8 +45,8 @@ class GPSConvPlugin : public rqt_gui_cpp::Plugin {
   ros::NodeHandle n;
   ros::Publisher DDGPS_pub;
   ros::Publisher DMSGPS_pub;
-  std::vector<std::vector<double>> DDList;
-  std::vector<std::vector<double>> DMSGPSList;
+  std::vector<std::vector<double>> DDList = {};
+  std::vector<std::vector<double>> DMSList = {};
 };
 }  // namespace rqt_gps
 #endif  // RQT_GPS_gpsconv_plugin_H

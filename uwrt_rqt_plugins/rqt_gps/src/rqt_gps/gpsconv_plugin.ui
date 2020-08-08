@@ -218,9 +218,21 @@
           </property>
       </widget></item>
       <item>
+      <widget class="QPushButton" name="ddAddButton">
+          <property name="text">
+            <string>Add DD Coord</string>
+          </property>
+      </widget></item>
+      <item>
+      <widget class="QPushButton" name="ddRemButton">
+          <property name="text">
+            <string>Remove last DD Coord</string>
+          </property>
+      </widget></item>
+      <item>
       <widget class="QPushButton" name="ddPublishButton">
           <property name="text">
-            <string>Publish DD Coordinates</string>
+            <string>Publish DD Coords</string>
           </property>
       </widget></item>
       <item>
@@ -230,9 +242,21 @@
           </property>
       </widget></item>
       <item>
+      <widget class="QPushButton" name="dmsAddButton">
+          <property name="text">
+            <string>Add DMS Coord</string>
+          </property>
+      </widget></item>
+      <item>
+      <widget class="QPushButton" name="dmsRemButton">
+          <property name="text">
+            <string>Remove last DMS Coord</string>
+          </property>
+      </widget></item>
+      <item>
       <widget class="QPushButton" name="dmsPublishButton">
           <property name="text">
-            <string>Publish DMS Coordinates</string>
+            <string>Publish DMS Coords</string>
           </property>
       </widget></item>
     </layout></item>

@@ -61,6 +61,8 @@ add_message_files(
     FILES
     DDGPS.msg
     DMSGPS.msg
+    DDGPSarray.msg
+    DMSGPSarray.msg
 )
 
 ## Generate services in the 'srv' folder

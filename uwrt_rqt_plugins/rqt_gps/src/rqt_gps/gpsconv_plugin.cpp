@@ -12,6 +12,9 @@
 
 #include <rqt_gps/DDGPS.h>
 #include <rqt_gps/DMSGPS.h>
+#include <rqt_gps/DDGPSarray.h>
+#include <rqt_gps/DMSGPSarray.h>
+
 #include <vector>
 
 namespace rqt_gps {
@@ -31,8 +34,8 @@ void GPSConvPlugin::initPlugin(qt_gui_cpp::PluginContext &context) {
   ui_.setupUi(widget_);
 
   // GPS Coordinate Publishers
-  DDGPS_pub = n.advertise<rqt_gps::DDGPS>("DDGPS_coords", message_queue);
-  DMSGPS_pub = n.advertise<rqt_gps::DMSGPS>("DMSGPS_coords", message_queue);
+  DDGPS_pub = n.advertise<rqt_gps::DDGPSarray>("DDGPS_coords", message_queue);
+  DMSGPS_pub = n.advertise<rqt_gps::DMSGPSarray>("DMSGPS_coords", message_queue);
 
   // Parent Layout Reference
   auto *parent_layout = widget_->findChild<QVBoxLayout *>("parent_layout");
@@ -40,12 +43,20 @@ void GPSConvPlugin::initPlugin(qt_gui_cpp::PluginContext &context) {
   // Button References
   auto *dd_button = widget_->findChild<QPushButton *>("ddButton");
   auto *dms_button = widget_->findChild<QPushButton *>("dmsButton");
+  auto *dd_add_button = widget_->findChild<QPushButton *>("ddAddButton");
+  auto *dms_add_button = widget_->findChild<QPushButton *>("dmsAddButton");
+  auto *dd_rem_button = widget_->findChild<QPushButton *>("ddRemButton");
+  auto *dms_rem_button = widget_->findChild<QPushButton *>("dmsRemButton");
   auto *dd_publish_button = widget_->findChild<QPushButton *>("ddPublishButton");
   auto *dms_publish_button = widget_->findChild<QPushButton *>("dmsPublishButton");
 
   // Add events for button activations
   connect(dd_button, SIGNAL(released()), this, SLOT(handleDDButton()));
   connect(dms_button, SIGNAL(released()), this, SLOT(handleDMSButton()));
+  connect(dd_add_button, SIGNAL(released()), this, SLOT(handleDDAddButton()));
+  connect(dms_add_button, SIGNAL(released()), this, SLOT(handleDMSAddButton()));
+  connect(dd_rem_button, SIGNAL(released()), this, SLOT(handleDDRemButton()));
+  connect(dms_rem_button, SIGNAL(released()), this, SLOT(handleDMSRemButton()));
   connect(dd_publish_button, SIGNAL(released()), this, SLOT(handleDDPublishButton()));
   connect(dms_publish_button, SIGNAL(released()), this, SLOT(handleDMSPublishButton()));
 
@@ -95,6 +106,28 @@ void GPSConvPlugin::handleDDButton() {
   lon_dec->setText(QString("%1").arg(conv_coord.at(lon_pos)));
 }
 
+void GPSConvPlugin::handleDDAddButton() {
+  /*
+   * Handles the decimal degree conversion event (converting from DMS to DD)
+   * */
+  // Get references to line edits to output results
+  auto *lat_dec = widget_->findChild<QLineEdit *>("latDec");
+  auto *lon_dec = widget_->findChild<QLineEdit *>("lonDec");
+
+  // Converts entered coordinates to doubless
+  double lat_d = lat_dec->text().toDouble();
+  double lon_d = lon_dec->text().toDouble();
+
+  // Call conversion function and return a vector of the result
+  std::vector<double> conv_coord = {lat_d,lon_d};
+
+  DDList.push_back(conv_coord);
+}
+
+void GPSConvPlugin::handleDDRemButton() {
+  DDList.pop_back();
+}
+
 void GPSConvPlugin::handleDDPublishButton() {
   /*
    * Handles the decimal degree publishing event
@@ -109,10 +142,19 @@ void GPSConvPlugin::handleDDPublishButton() {
   double lon_d = lon_dec->text().toDouble();
 
   // Publish the Decimal Degree custom message
-  rqt_gps::DDGPS msg;
-  msg.latitude = lat_d;
-  msg.longitude = lon_d;
-  DDGPS_pub.publish(msg);
+  rqt_gps::DDGPSarray msgarr;
+  rqt_gps::DDGPS coord;
+  std::vector<rqt_gps::DDGPS> temp = {};
+  // for(int i=0; i<DDList.size(); i++){
+  //   msg
+  // }
+  for(int i=0; i<DDList.size(); i++){
+    coord.latitude = DDList.at(i)[0];
+    coord.longitude = DDList.at(i)[1];
+    temp.push_back(coord);
+  }
+  msgarr.coord_array = temp;
+  DDGPS_pub.publish(msgarr);
 }
 
 std::vector<double> GPSConvPlugin::dmsToDD(std::vector<double> inputLat, std::vector<double> inputLon) {
@@ -170,6 +212,37 @@ void GPSConvPlugin::handleDMSButton() {
   lon_sec->setText(QString("%1").arg(conv_coord.at(lons_pos)));
 }
 
+void GPSConvPlugin::handleDMSAddButton() {
+  /*
+   * Handles the decimal degree conversion event (converting from DMS to DD)
+   * */
+  // Get references to degree, minute, second entered coordinates
+  auto *lat_deg = widget_->findChild<QLineEdit *>("latDeg");
+  auto *lat_min = widget_->findChild<QLineEdit *>("latMin");
+  auto *lat_sec = widget_->findChild<QLineEdit *>("latSec");
+  auto *lon_deg = widget_->findChild<QLineEdit *>("lonDeg");
+  auto *lon_min = widget_->findChild<QLineEdit *>("lonMin");
+  auto *lon_sec = widget_->findChild<QLineEdit *>("lonSec");
+
+  // Convert the values to doubles
+  double lat_d = lat_deg->text().toDouble();
+  double lat_m = lat_min->text().toDouble();
+  double lat_s = lat_sec->text().toDouble();
+  double lon_d = lon_deg->text().toDouble();
+  double lon_m = lon_min->text().toDouble();
+  double lon_s = lon_sec->text().toDouble();
+
+
+  // Call conversion function and return a vector of the result
+  std::vector<double> conv_coord = {lat_d,lat_m,lat_s,lon_d,lon_m,lon_s};
+
+  DMSList.push_back(conv_coord);
+}
+
+void GPSConvPlugin::handleDMSRemButton() {
+  DMSList.pop_back();
+}
+
 void GPSConvPlugin::handleDMSPublishButton() {
   /*
    * Handles the degree, minute, second publishing event
@@ -192,14 +265,24 @@ void GPSConvPlugin::handleDMSPublishButton() {
   double lon_s = lon_sec->text().toDouble();
 
   // Publish the Degree Minute Second custom message
-  rqt_gps::DMSGPS msg;
-  msg.latitudeDeg = lat_d;
-  msg.latitudeMin = lat_m;
-  msg.latitudeSec = lat_s;
-  msg.longitudeDeg = lon_d;
-  msg.longitudeMin = lon_m;
-  msg.longitudeSec = lon_s;
-  DMSGPS_pub.publish(msg);
+    // Publish the Decimal Degree custom message
+  rqt_gps::DMSGPSarray msgarr;
+  rqt_gps::DMSGPS coord;
+  std::vector<rqt_gps::DMSGPS> temp = {};
+  // for(int i=0; i<DDList.size(); i++){
+  //   msg
+  // }
+  for(int i=0; i<DMSList.size(); i++){
+    coord.latitudeDeg = DMSList.at(i)[0];
+    coord.latitudeMin = DMSList.at(i)[1];
+    coord.latitudeSec = DMSList.at(i)[2];
+    coord.longitudeDeg = DMSList.at(i)[3];
+    coord.longitudeMin = DMSList.at(i)[4];
+    coord.longitudeSec = DMSList.at(i)[5];
+    temp.push_back(coord);
+  }
+  msgarr.coord_array = temp;
+  DMSGPS_pub.publish(msgarr);
 }
 
 std::vector<double> GPSConvPlugin::ddToDMS(double inputLat, double inputLon) {

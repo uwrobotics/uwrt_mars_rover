@@ -60,8 +60,8 @@ roslint_cpp()
 add_message_files(
     FILES
     DDGPS.msg
-    DMSGPS.msg
     DDGPSarray.msg
+    DMSGPS.msg
     DMSGPSarray.msg
 )
 

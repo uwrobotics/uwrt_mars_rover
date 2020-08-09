@@ -7,3 +7,11 @@ catkin_package(
 )
 
 add_subdirectory(lib/${PROJECT_NAME})
+
+## Mark libraries for installation
+install(TARGETS
+        uwrt-mars-rover-hw-bridge
+        ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+        LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+        RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
+        )

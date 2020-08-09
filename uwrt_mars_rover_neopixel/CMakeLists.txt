@@ -62,6 +62,8 @@ target_link_libraries(${PROJECT_NAME}_node
         ${catkin_LIBRARIES}
         )
 
+message(FATAL ${catkin_LIBRARIES}\n ${catkin_INCLUDE_DIRS})
+
 #############
 ## Install ##
 #############

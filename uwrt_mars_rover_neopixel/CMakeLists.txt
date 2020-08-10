@@ -5,8 +5,8 @@ project(uwrt_mars_rover_neopixel)
 find_package(catkin REQUIRED COMPONENTS
         message_generation
         roscpp
-        uwrt_mars_rover_msgs
         uwrt_mars_rover_hw_bridge
+        uwrt_mars_rover_msgs
         )
 
 ###################################
@@ -25,8 +25,8 @@ catkin_package(
         ${PROJECT_NAME}
         CATKIN_DEPENDS
         roscpp
-        uwrt_mars_rover_msgs
         uwrt_mars_rover_hw_bridge
+        uwrt_mars_rover_msgs
 )
 
 ###########
@@ -61,8 +61,6 @@ target_link_libraries(${PROJECT_NAME}_node
         ${PROJECT_NAME}
         ${catkin_LIBRARIES}
         )
-
-message(FATAL ${catkin_LIBRARIES}\n ${catkin_INCLUDE_DIRS})
 
 #############
 ## Install ##

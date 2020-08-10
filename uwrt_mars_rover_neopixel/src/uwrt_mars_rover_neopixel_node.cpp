@@ -1,6 +1,6 @@
 #include <cstdlib>
-#include "hw_bridge.h"
 
+#include "uwrt_mars_rover_hw_bridge/hw_bridge.h"
 #include "uwrt_mars_rover_neopixel/uwrt_mars_rover_neopixel_can.h"
 #include "uwrt_mars_rover_neopixel/uwrt_mars_rover_neopixel_control.h"
 

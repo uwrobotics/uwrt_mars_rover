@@ -8,7 +8,7 @@ project(uwrt_state_machine)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-  behaviortree_cpp_v3
+  behaviortree_cpp
   roscpp
 )
 

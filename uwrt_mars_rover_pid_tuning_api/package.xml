@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="2">
-    <name>uwrt_mars_rover_pid_api</name>
+    <name>uwrt_mars_rover_pid_tuning_api</name>
     <version>0.0.0</version>
-    <description>pidApi</description>
+    <description>API for tuning PID parameters over CAN</description>
 
     <maintainer email="younesreda1@outlook.com">younesreda1</maintainer>
 
@@ -11,6 +11,8 @@
     <build_depend>message_generation</build_depend>
     <buildtool_depend>catkin</buildtool_depend>
     <depend>uwrt_mars_rover_msgs</depend>
+    <depend>uwrt_mars_rover_hw_bridge</depend>
+    <depend>uwrt_utils</depend>
     <exec_depend>message_runtime</exec_depend>
 
     <depend>roscpp</depend>

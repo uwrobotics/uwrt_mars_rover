@@ -27,9 +27,27 @@ bool pidTuningApi::updatePIDParam(uwrt_mars_rover_msgs::pid_tuning_api::Request 
     return false;
   }
   HWBRDIGE::ARM::PID::tuningApiPayload payload{.value = req.pid_tuning_api_data.value,
-                                               .isVelocityPID = req.pid_tuning_api_data.isVelocityPID,
+                                               .velocity = req.pid_tuning_api_data.isVelocityPID,
                                                .actuatorID = req.pid_tuning_api_data.actuatorID};
-  return CANMsg.writeToID<HWBRIDGE::ARM::PID::tuningApiPayload>(payload, req.pid_tuning_api_data.parameter);
+  int32_t can_id;
+  switch (tolower(req.pid_tuning_api_data.parameter)) {
+    case "deadzone":
+      can_id = 1873;
+      break;
+    case "p":
+      can_id = 1874;
+      break;
+    case "i":
+      can_id = 1875;
+      break;
+    case "d":
+      can_id = 1876;
+      break;
+    case "bias":
+      can_id = 1877;
+      break;
+  }
+  return CANMsg.writeToID<HWBRIDGE::ARM::PID::tuningApiPayload>(payload, can_id);
 }
 
 bool pidTuningApi::isValidPayload(uwrt_mars_rover_msgs::pid_tuning_api_msg & payload_data) {

@@ -1,4 +1,4 @@
 float32 value
 bool isVelocityPID
-uint8 parameter
+string parameter
 uint8 actuatorID

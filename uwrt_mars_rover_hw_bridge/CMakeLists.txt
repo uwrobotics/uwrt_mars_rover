@@ -6,4 +6,4 @@ catkin_package(
         LIBRARIES uwrt-mars-rover-hw-bridge
 )
 
-add_subdirectory(lib/${PROJECT_NAME})
+# add_subdirectory(lib/${PROJECT_NAME})

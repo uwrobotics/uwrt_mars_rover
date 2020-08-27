@@ -1,13 +1,20 @@
 #include "uwrt_mars_rover_pid_tuning_api.h"
 #include "uwrt_mars_rover_hw_bridge/hw_bridge.h"
+#include <algorithm> // for std::find
+#include <iterator> 
+#include <string>
+#include <vector>
 
 pidTuningApi::pidTuningApi(const ros::NodeHandle &nh, const uint8_t loop_rate, const std::string &log_filter,
                            const std::string &can_interface)
     : _nh(nh),
       _loop_rate(loop_rate),
+Side PanelExpand side panel
+Breadcrumb:
+Table of Contents Electrical Awareness Electrical Awareness
       _log_filter(log_filter),
       CANMsg(uwrt_utils::UWRTCANWrapper("pid_tuning_api_can", can_interface, true)) {
-  CANMsg.init(std::vector<uint16_t>{HWBRIDGE::CANID::SET_JOINT_PID_P, HWBRIDGE::CANID::SET_JOINT_PID_I,
+    CANMsg.init(std::vector<uint32_t>{HWBRIDGE::CANID::SET_JOINT_PID_P, HWBRIDGE::CANID::SET_JOINT_PID_I,
                                     HWBRIDGE::CANID::SET_JOINT_PID_D, HWBRIDGE::CANID::SET_JOINT_PID_DEADZONE,
                                     HWBRIDGE::CANID::SET_JOINT_PID_BIAS});
 }
@@ -25,11 +32,14 @@ bool pidTuningApi::updatePIDParam(uwrt_mars_rover_msgs::pid_tuning_api::Request 
   return CANMsg.writeToID<HWBRIDGE::ARM::PID::tuningApiPayload>(payload, req.pid_tuning_api_data.parameter);
 }
 
+bool pidTuningApi::isValidPayload(uwrt_mars_rover_msgs::pid_tuning_api_msg & payload_data) {
+  std::string parameters[5] {"p", "i", "d", "bias", "deadzone"};
+  bool exists = std::find(std::begin(a), std::end(a), tolower(payload_data.parameter)) != std::end(parameters);
+  return exists && payload_data.actuatorID >= 0 && payload_data.actuatorID <= 5;
+}
+
 void pidTuningApi::run() {
-  ros::ServiceServer _ss = _nh.advertiseService("pid_tuning_api", &pidApi::updatePIDParam, this);
+  ros::ServiceServer _ss = _nh.advertiseService("pid_tuning_api", &pidTuningApi::updatePIDParam, this);
   ROS_INFO_NAMED(_log_filter, "Ready to update PID gain paramaters.");
-  while (ros::ok()) {
-    ros::spinOnce();
-    _loop_rate.sleep();
-  }
+  ros::spin()
 }

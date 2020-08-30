@@ -11,7 +11,12 @@
 
     <buildtool_depend>catkin</buildtool_depend>
 
+    <exec_depend>uwrt_autonomy</exec_depend>
+    <exec_depend>uwrt_mars_rover_hw</exec_depend>
+    <exec_depend>uwrt_mars_rover_hw_bridge</exec_depend>
     <exec_depend>uwrt_mars_rover_msgs</exec_depend>
+    <exec_depend>uwrt_mars_rover_neopixel</exec_depend>
+    <exec_depend>uwrt_utils</exec_depend>
 
     <export>
         <metapackage/>

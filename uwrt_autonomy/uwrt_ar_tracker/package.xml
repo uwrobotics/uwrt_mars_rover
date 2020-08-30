@@ -1,19 +1,22 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>uwrt_ar_tracker</name>
-  <version>0.0.0</version>
-  <description>This enables tracking of an arbitrary number of AR tags given a pre-calibrated camera</description>
+    <name>uwrt_ar_tracker</name>
+    <version>0.0.0</version>
+    <description>This enables tracking of an arbitrary number of AR tags given a pre-calibrated camera</description>
 
-  <maintainer email="hmahdi@uwaterloo.ca">hmahdi</maintainer>
+    <maintainer email="hmahdi@uwaterloo.ca">hmahdi</maintainer>
 
-  <license>TODO</license>
+    <license>TODO</license>
 
-  <buildtool_depend>catkin</buildtool_depend>
-  <exec_depend>ar_track_alvar</exec_depend>
+    <buildtool_depend>catkin</buildtool_depend>
+    <exec_depend>ar_track_alvar</exec_depend>
+    <exec_depend>image_view</exec_depend>
+    <exec_depend>tf2_ros</exec_depend>
+    <exec_depend>usb_cam</exec_depend>
 
-  <!-- The export tag contains other, unspecified, tags -->
-  <export>
-    <!-- Other tools can request additional information be placed here -->
+    <!-- The export tag contains other, unspecified, tags -->
+    <export>
+        <!-- Other tools can request additional information be placed here -->
 
-  </export>
+    </export>
 </package>

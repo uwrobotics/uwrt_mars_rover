@@ -111,6 +111,8 @@ You can install clang-format and run it on the files themselves, but the recomme
 ### Catkin Lint
 Catkin Lint ensures that the catkin-specific files are configured correctly. This includes the `package.xml`, `CMakeLists.txt` and more. To install `catkin_lint`:
 ```
+sudo add-apt-repository ppa:roehling/ros
+sudo apt update
 sudo apt install python-catkin-lint
 ```
 

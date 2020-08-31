@@ -7,4 +7,4 @@
 - git:
     uri: https://github.com/uwrobotics/uwrt_mars_rover_hw_bridge.git
     local-name: uwrt_mars_rover/uwrt_mars_rover_hw_bridge/lib/uwrt_mars_rover_hw_bridge/
-    version: fix-ros-build
+    version: 68876ad7e2a574dd663a9fadcd261abd8ef2068c

@@ -9,9 +9,6 @@ pidTuningApi::pidTuningApi(const ros::NodeHandle &nh, const uint8_t loop_rate, c
                            const std::string &can_interface)
     : _nh(nh),
       _loop_rate(loop_rate),
-Side PanelExpand side panel
-Breadcrumb:
-Table of Contents Electrical Awareness Electrical Awareness
       _log_filter(log_filter),
       CANMsg(uwrt_utils::UWRTCANWrapper("pid_tuning_api_can", can_interface, true)) {
     CANMsg.init(std::vector<uint32_t>{HWBRIDGE::CANID::SET_JOINT_PID_P, HWBRIDGE::CANID::SET_JOINT_PID_I,

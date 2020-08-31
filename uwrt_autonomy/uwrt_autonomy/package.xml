@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package format="2">
+
+    <name>uwrt_autonomy</name>
+    <version>0.0.0</version>
+    <description>Metapackage containing all of UWRT's packages related to autonomy</description>
+
+    <maintainer email="melvin.mc.wang@gmail.com">Melvin Wang</maintainer>
+
+    <license>MIT</license>
+
+    <buildtool_depend>catkin</buildtool_depend>
+
+    <exec_depend>uwrt_ar_tracker</exec_depend>
+
+    <export>
+        <metapackage/>
+    </export>
+
+</package>

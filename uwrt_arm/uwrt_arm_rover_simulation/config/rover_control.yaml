@@ -1,0 +1,24 @@
+rover:
+  joint_state_controller:
+    type: joint_state_controller/JointStateController
+    publish_rate: 50
+
+  arm_turntable_bicep_joint_controller:
+    type: position_controllers/JointPositionController
+    joint: arm_turntable_bicep_joint
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+
+  arm_bicep_forearm_joint_controller:
+    type: position_controllers/JointPositionController
+    joint: arm_bicep_forearm_joint
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+
+  arm_forearm_wrist_joint_controller:
+    type: position_controllers/JointPositionController
+    joint: arm_forearm_wrist_joint
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+
+  arm_wrist_claw_joint_controller:
+    type: position_controllers/JointPositionController
+    joint: arm_wrist_claw_joint
+    pid: {p: 100.0, i: 0.01, d: 10.0}

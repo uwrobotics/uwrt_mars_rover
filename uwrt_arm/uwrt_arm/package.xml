@@ -13,7 +13,6 @@
   <exec_depend>uwrt_arm_control</exec_depend>
   <exec_depend>uwrt_arm_description</exec_depend>
   <exec_depend>uwrt_arm_hw</exec_depend>
-  <exec_depend>uwrt_arm_moveit_config</exec_depend>
   <exec_depend>uwrt_arm_msgs</exec_depend>
   <exec_depend>uwrt_arm_controllers</exec_depend>
 

@@ -15,5 +15,5 @@
 		<param name="right_stick_vertical_scale" value="1" type="int"/>
 		<param name="right_stick_angular_scale" value="1" type="int"/>
 		
-		<node pkg="joystick" type="xbox_controller" name="xbox_teleop"/>
+		<node pkg="joystick" type="xbox_controller" name="xbox_teleop" output='screen'/>
 </launch>

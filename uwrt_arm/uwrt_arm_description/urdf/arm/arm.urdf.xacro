@@ -43,7 +43,7 @@
   <!-- This values will inform the 'fake' revolute joint, that is modelled 
        to represent an "open" chain version of the closed kinematic chain
        on the real robot -->
-  <xacro:property name="shoulder_min_angle"       value="20.0"/> <!-- deg -->
+  <xacro:property name="shoulder_min_angle"       value="-20.0"/> <!-- deg -->
   <xacro:property name="shoulder_max_angle"       value="75.0"/> <!-- deg -->
   <xacro:property name="shoulder_max_effort"      value="75"/>
   <!-- The max speed specified here should be the worst case scenario
@@ -256,7 +256,7 @@
       <child  link="${name}_wrist_link"/>
       <origin xyz="0 0 ${forearm_length + 0.01}"
               rpy="0 0 0"/>
-      <axis xyz="0 0 1"/>
+      <axis xyz="0 1 0"/>
       <limit lower="${wrist_roll_min_angle * M_PI / 180.0}"
              upper="${wrist_roll_max_angle * M_PI / 180.0}"
              effort="${wrist_roll_max_effort}"
@@ -303,7 +303,7 @@
       <child  link="${name}_claw_link"/>
       <origin xyz="0 0 0.01"
               rpy="0 0 0"/>
-      <axis xyz="0 1 0"/>
+      <axis xyz="1 0 0"/>
       <limit lower="${wrist_pitch_min_angle * M_PI / 180.0}"
              upper="${wrist_pitch_max_angle * M_PI / 180.0}"
              effort="${wrist_pitch_max_effort}"

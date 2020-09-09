@@ -58,6 +58,8 @@
   <exec_depend>joy</exec_depend>
   <exec_depend>roscpp</exec_depend>
   <exec_depend>turtlesim</exec_depend>
+  
+  <depend>uwrt_arm_msgs</depend>
 
 
   <!-- The export tag contains other, unspecified, tags -->

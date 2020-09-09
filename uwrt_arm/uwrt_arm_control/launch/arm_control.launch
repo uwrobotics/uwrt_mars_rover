@@ -24,14 +24,6 @@
 	      arm_cartesian_controller"
         respawn="true" output="screen"/>
 
-  <!-- Spawn other ros_control controllers (disabled at startup) -->
-   <!--  <node name="controller_spawner_stopped" pkg="controller_manager" type="spawner"
-        args="stopped
-              arm_trajectory_controller
-              arm_position_controller
-	      arm_cartesian_controller"
-        respawn="true" output="screen"/>  -->
-
   <!-- Run Real Interface -->
   <group unless="$(arg sim)">
     <!-- Load private parameters for the hardware interface in its namespace -->

@@ -11,6 +11,7 @@ find_package(catkin REQUIRED COMPONENTS
   joy
   roscpp
   turtlesim
+  uwrt_arm_msgs
 )
 
 ## System dependencies are found with CMake's conventions
@@ -103,9 +104,9 @@ find_package(catkin REQUIRED COMPONENTS
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-#  INCLUDE_DIRS include
-#  LIBRARIES joystick
-   CATKIN_DEPENDS joy roscpp turtlesim
+   INCLUDE_DIRS include
+   LIBRARIES joystick
+   CATKIN_DEPENDS joy roscpp turtlesim uwrt_arm_msgs
 #  DEPENDS system_lib
 )
 
@@ -116,14 +117,14 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
-# include
+include
   ${catkin_INCLUDE_DIRS}
 )
 
-## Declare a C++ library
-# add_library(${PROJECT_NAME}
-#   src/${PROJECT_NAME}/joystick.cpp
-# )
+add_library(Controller
+  include/joystick/Controller.h
+   src/Controller.cpp
+)
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries

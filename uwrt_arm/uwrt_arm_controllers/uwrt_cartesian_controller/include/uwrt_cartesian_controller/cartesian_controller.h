@@ -47,6 +47,7 @@ public:
 private:
 
   std::string robot_description_, root_name_, tip_name_;
+  std::vector<std::string> joint_names_;
    
   hardware_interface::JointHandle joint_;
   std::vector<hardware_interface::JointHandle> joint_handles_;

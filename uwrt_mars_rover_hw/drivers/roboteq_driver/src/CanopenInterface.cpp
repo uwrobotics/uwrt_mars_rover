@@ -170,10 +170,6 @@ bool CanopenInterface::sendCommand(RuntimeCommand command, uint8_t subindex, Dat
   if (command_frame.data[3] != response_frame.data[3]) {
     throw std::runtime_error("Mismatched sub-index in command response");
   }
-  // NOLINTNEXTLINE(readability-else-after-return)
-  else {
-    return true;
-  }
   std::cout << "COMMAND RESPONSE ID" << response_frame.can_id << std::endl;
   return false;
 }
@@ -285,7 +281,6 @@ DataType CanopenInterface::sendQuery(RuntimeQuery query, uint8_t subindex) {
     return response_data;
   }
 
-  // std::cout << "QUERY RESPONSE ID" << response_frame.can_id << std::endl;
   ROS_DEBUG_STREAM("QUERY RESPONSE ID" << response_frame.can_id);
   return false;
 }

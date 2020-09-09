@@ -1,0 +1,13 @@
+<launch>
+
+    <!-- Markers -->
+    <arg name="markers" default="$(find uwrt_arm_workspace)/meshes/mean_workspace_markers.xyz" />
+    <!-- <arg name="markers" default="$(find uwrt_arm_workspace)/meshes/max_workspace_markers.xyz" />
+    <arg name="markers" default="$(find uwrt_arm_workspace)/meshes/min_workspace_markers.xyz" /> -->
+    
+    <node type="rviz" name="rviz" pkg="rviz" args="-d $(find uwrt_arm_workspace)/rviz/workspace_markers.rviz" />
+ 
+    <!-- Starting filter node -->
+    <node pkg="uwrt_arm_workspace" name="publish_workspace_markers" type="publish_workspace_markers" output="screen" cwd="node"></node>
+        <param name="markers" value="$(arg markers)" />
+</launch>

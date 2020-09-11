@@ -55,8 +55,8 @@ add_message_files(
 ## Generate services in the 'srv' folder
 add_service_files(
   FILES
-  set_state.srv
   pid_tuning_api_srv.srv
+  set_state.srv
 )
 
 ## Generate actions in the 'action' folder

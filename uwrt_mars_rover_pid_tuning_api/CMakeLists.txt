@@ -5,9 +5,9 @@ project(uwrt_mars_rover_pid_tuning_api)
 find_package(catkin REQUIRED COMPONENTS
         message_generation
         roscpp
-        uwrt_utils
-        uwrt_mars_rover_msgs
         uwrt_mars_rover_hw_bridge
+        uwrt_mars_rover_msgs
+        uwrt_utils
         )
 
 catkin_package(
@@ -17,9 +17,9 @@ catkin_package(
         ${PROJECT_NAME}
         CATKIN_DEPENDS
         roscpp
-        uwrt_utils
-        uwrt_mars_rover_msgs
         uwrt_mars_rover_hw_bridge
+        uwrt_mars_rover_msgs
+        uwrt_utils
 )
 
 include_directories(

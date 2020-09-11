@@ -11,10 +11,12 @@ class PidTuningApi {
   const std::string _log_filter;
   uwrt_utils::UWRTCANWrapper CANMsg;
   // public:
-  bool updatePIDParam(uwrt_mars_rover_msgs::pid_tuning_api_srv::Request& req, uwrt_mars_rover_msgs::pid_tuning_api_srv::Response& res);
-  static bool isValidPayload(uwrt_mars_rover_msgs::pid_tuning_api_msg & payload_data);
+  bool updatePIDParam(uwrt_mars_rover_msgs::pid_tuning_api_srv::Request& req,
+                      uwrt_mars_rover_msgs::pid_tuning_api_srv::Response& res);
+  static bool isValidPayload(uwrt_mars_rover_msgs::pid_tuning_api_msg& payload_data);
+
  public:
   PidTuningApi(ros::NodeHandle& nh, uint8_t loop_rate, std::string log_filter = "pidApiServiceServer",
-         std::string can_interface = "can0");
+               std::string can_interface = "can0");
   void run();
 };

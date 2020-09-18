@@ -62,7 +62,7 @@ install(TARGETS
 
 ## Mark cpp header files for installation
 install(DIRECTORY
-        include/${PROJECT_NAME}/
+        include/
         DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
         FILES_MATCHING
         PATTERN "*.h"

@@ -5,16 +5,19 @@
   <description>Metapackage for arm of UWRT Rover</description>
 
   <maintainer email="s2daga@uwaterloo.ca">Somesh Daga</maintainer>
+  <maintainer email="akeaveny@uwaterloo.ca">Aidan Keaveny</maintainer>
   <license>MIT</license>
   <author email="s2daga@uwaterloo.ca">Somesh Daga</author>
 
   <buildtool_depend>catkin</buildtool_depend>
 
+  <exec_depend>uwrt_arm_bringup</exec_depend>
   <exec_depend>uwrt_arm_control</exec_depend>
+  <exec_depend>uwrt_arm_controllers</exec_depend>
   <exec_depend>uwrt_arm_description</exec_depend>
   <exec_depend>uwrt_arm_hw</exec_depend>
   <exec_depend>uwrt_arm_msgs</exec_depend>
-  <exec_depend>uwrt_arm_controllers</exec_depend>
+  <exec_depend>uwrt_arm_rover_simulation</exec_depend>
 
   <export>
     <metapackage/>

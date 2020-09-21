@@ -19,6 +19,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #include <hardware_interface/joint_command_interface.h>
 
 #include <boost/scoped_ptr.hpp>
+#include <boost/move/unique_ptr.hpp>
 #include <kdl/chain.hpp>
 #include <kdl/tree.hpp>
 #include <kdl/chainjnttojacsolver.hpp>
@@ -33,20 +34,22 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 namespace velocity_controllers
 {
+// NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)  
 class UWRTCartesianController : public controller_interface::Controller<hardware_interface::VelocityJointInterface>
 {
 public:
-
+  // NOLINTNEXTLINE(modernize-use-override, cppcoreguidelines-explicit-virtual-functions) 
   bool init(hardware_interface::VelocityJointInterface* hw, ros::NodeHandle& nh);
-  
+  // NOLINTNEXTLINE(modernize-use-override, cppcoreguidelines-explicit-virtual-functions) 
   void starting(const ros::Time& time);
+  // NOLINTNEXTLINE(modernize-use-override, cppcoreguidelines-explicit-virtual-functions) 
   void stopping(const ros::Time& time);
-
+  // NOLINTNEXTLINE(modernize-use-override, cppcoreguidelines-explicit-virtual-functions) 
   void update(const ros::Time& time, const ros::Duration& period);
 
 private:
 
-  std::string robot_description_, root_name_, tip_name_;
+  std::string _robot_description, root_name_, tip_name_;
   std::vector<std::string> joint_names_;
    
   hardware_interface::JointHandle joint_;
@@ -57,15 +60,14 @@ private:
 
   ros::Subscriber arm_command_sub_;
   
-  bool got_msg_;
-  ros::Time last_msg_;
+  ros::Time last_msg_time_;
   ros::Duration dead_man_timeout_;
   
   void armCommandCallback(const uwrt_arm_msgs::UWRTArmTwistConstPtr& arm_command);
 
   KDL::Twist qdot_cart_;
 
-  boost::scoped_ptr<KDL::ChainIkSolverVel> cart_to_joint_solver_vel_;
+  std::unique_ptr<KDL::ChainIkSolverVel> cart_to_joint_solver_vel_;
 
 };  // class UWRTCartesianController
 }  // namespace velocity_controllers

@@ -29,12 +29,13 @@ public:
 
   ArmHWReal(const std::string& name, const std::string& urdf_str);
 
+  // NOLINTNEXTLINE(modernize-use-override, cppcoreguidelines-explicit-virtual-functions)  
   virtual bool init(ros::NodeHandle& nh,
                     ros::NodeHandle& arm_hw_nh);
 
-  // NOLINTNEXTLINE(readability-inconsistent-declaration-parameter-name)
+  // NOLINTNEXTLINE(modernize-use-override, readability-inconsistent-declaration-parameter-name, cppcoreguidelines-explicit-virtual-functions)
   virtual void read(const ros::Time& time, const ros::Duration& period);
-  // NOLINTNEXTLINE(readability-inconsistent-declaration-parameter-name)
+  // NOLINTNEXTLINE(modernize-use-override, readability-inconsistent-declaration-parameter-name, cppcoreguidelines-explicit-virtual-functions)
   virtual void write(const ros::Time& time, const ros::Duration& period);
   void doSwitch(const std::list<hardware_interface::ControllerInfo>& start_list,
                 const std::list<hardware_interface::ControllerInfo>& stop_list) override;

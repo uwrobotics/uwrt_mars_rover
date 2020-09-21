@@ -17,16 +17,11 @@ find_package(catkin REQUIRED
     joint_limits_interface
     pluginlib
     roscpp
-    roslint
     transmission_interface
     urdf
 )
 
 find_package(GAZEBO REQUIRED)
-
-# Roslint
-set(ROSLINT_CPP_OPTS "--filter=-build/header_guard,-runtime/references")
-roslint_cpp()
 
 catkin_package(
   INCLUDE_DIRS

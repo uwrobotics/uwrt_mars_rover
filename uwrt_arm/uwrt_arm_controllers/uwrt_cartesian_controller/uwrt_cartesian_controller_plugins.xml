@@ -2,7 +2,7 @@
 
   <class name="velocity_controllers/UWRTCartesianController" type="velocity_controllers::UWRTCartesianController" base_class_type="controller_interface::ControllerBase">
     <description>
-      UWRTCartesianController which accepts TwistStamped Msg.
+      UWRTCartesianController accepts an End Effector Twist Msg converts it into individual Joint Velocity Cmds.
     </description>
   </class>
 

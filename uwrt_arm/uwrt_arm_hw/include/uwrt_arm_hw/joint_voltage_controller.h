@@ -28,6 +28,7 @@ namespace voltage_controllers
  * Subscribes to:
  * - \b command (std_msgs::Float64) : The joint voltage/pwm to apply in range [-1, 1]
  */
+// NOLINTNEXTLINE(modernize-use-using)
 typedef forward_command_controller::ForwardCommandController<hardware_interface::VoltageJointInterface>
         JointVoltageController;
 

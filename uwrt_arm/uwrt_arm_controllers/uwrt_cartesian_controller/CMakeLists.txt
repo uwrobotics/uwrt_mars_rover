@@ -13,16 +13,11 @@ find_package(catkin REQUIRED COMPONENTS
   kdl_parser
   realtime_tools
   roscpp
-  roslint
   uwrt_arm_description
   uwrt_arm_msgs
 )
 
 find_package(Eigen3 REQUIRED)
-
-# Roslint
-set(ROSLINT_CPP_OPTS "--filter=-build/header_guard,-runtime/references")
-roslint_cpp()
 
 catkin_package(
   CATKIN_DEPENDS

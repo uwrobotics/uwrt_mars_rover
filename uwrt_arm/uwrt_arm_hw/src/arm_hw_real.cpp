@@ -76,35 +76,35 @@ bool ArmHWReal::init(ros::NodeHandle& nh,
   // Filter based on the CAN IDs associated with PC Arm Feedback
   //    - Match Condition: <received_can_id> & mask == can_id & mask
   // NOLINTNEXTLINE(readability-magic-numbers, cppcoreguidelines-avoid-magic-numbers)
-  filter[0].can_id = can_id::Get::ARM_ERROR;
+  filter[0].can_id = can_id::Get::ARM_ERROR_;
   // NOLINTNEXTLINE(readability-magic-numbers, cppcoreguidelines-avoid-magic-numbers)
   filter[0].can_mask = (CAN_EFF_FLAG | CAN_RTR_FLAG | CAN_SFF_MASK);
   // NOLINTNEXTLINE(readability-magic-numbers, cppcoreguidelines-avoid-magic-numbers)
-  filter[1].can_id = can_id::Get::TURNTABLE_FEEDBACK;
+  filter[1].can_id = can_id::Get::TURNTABLE_FEEDBACK_;
   // NOLINTNEXTLINE(readability-magic-numbers, cppcoreguidelines-avoid-magic-numbers)
   filter[1].can_mask = (CAN_EFF_FLAG | CAN_RTR_FLAG | CAN_SFF_MASK);
   // NOLINTNEXTLINE(readability-magic-numbers, cppcoreguidelines-avoid-magic-numbers)
-  filter[2].can_id = can_id::Get::SHOULDER_FEEDBACK;
+  filter[2].can_id = can_id::Get::SHOULDER_FEEDBACK_;
   // NOLINTNEXTLINE(readability-magic-numbers, cppcoreguidelines-avoid-magic-numbers)
   filter[2].can_mask = (CAN_EFF_FLAG | CAN_RTR_FLAG | CAN_SFF_MASK);
   // NOLINTNEXTLINE(readability-magic-numbers, cppcoreguidelines-avoid-magic-numbers)
-  filter[3].can_id = can_id::Get::ELBOW_FEEDBACK;
+  filter[3].can_id = can_id::Get::ELBOW_FEEDBACK_;
   // NOLINTNEXTLINE(readability-magic-numbers, cppcoreguidelines-avoid-magic-numbers)
   filter[3].can_mask = (CAN_EFF_FLAG | CAN_RTR_FLAG | CAN_SFF_MASK);
   // NOLINTNEXTLINE(readability-magic-numbers, cppcoreguidelines-avoid-magic-numbers)
-  filter[4].can_id = can_id::Get::WRIST_PITCH_FEEDBACK;
+  filter[4].can_id = can_id::Get::WRIST_PITCH_FEEDBACK_;
   // NOLINTNEXTLINE(readability-magic-numbers, cppcoreguidelines-avoid-magic-numbers)
   filter[4].can_mask = (CAN_EFF_FLAG | CAN_RTR_FLAG | CAN_SFF_MASK);
   // NOLINTNEXTLINE(readability-magic-numbers, cppcoreguidelines-avoid-magic-numbers)
-  filter[5].can_id = can_id::Get::WRIST_ROLL_FEEDBACK;
+  filter[5].can_id = can_id::Get::WRIST_ROLL_FEEDBACK_;
   // NOLINTNEXTLINE(readability-magic-numbers, cppcoreguidelines-avoid-magic-numbers)
   filter[5].can_mask = (CAN_EFF_FLAG | CAN_RTR_FLAG | CAN_SFF_MASK);
   // NOLINTNEXTLINE(readability-magic-numbers, cppcoreguidelines-avoid-magic-numbers)
-  filter[6].can_id = can_id::Get::CLAW_FEEDBACK;
+  filter[6].can_id = can_id::Get::CLAW_FEEDBACK_;
   // NOLINTNEXTLINE(readability-magic-numbers, cppcoreguidelines-avoid-magic-numbers)
   filter[6].can_mask = (CAN_EFF_FLAG | CAN_RTR_FLAG | CAN_SFF_MASK);
   // NOLINTNEXTLINE(readability-magic-numbers, cppcoreguidelines-avoid-magic-numbers)
-  filter[7].can_id = can_id::Get::FORCE_SENSOR_VALUE;
+  filter[7].can_id = can_id::Get::FORCE_SENSOR_VALUE_;
   // NOLINTNEXTLINE(readability-magic-numbers, cppcoreguidelines-avoid-magic-numbers)
   filter[7].can_mask = (CAN_EFF_FLAG | CAN_RTR_FLAG | CAN_SFF_MASK);
   
@@ -175,31 +175,31 @@ void ArmHWReal::read(const ros::Time& time, const ros::Duration& duration)
     {
       switch (frame[0].can_id)
       {
-        case can_id::Get::ARM_ERROR:
+        case can_id::Get::ARM_ERROR_:
           // Do something with this
           fb = FeedbackType::GENERAL;
           break;
-        case can_id::Get::TURNTABLE_FEEDBACK:
+        case can_id::Get::TURNTABLE_FEEDBACK_:
           fb = FeedbackType::POSVEL;
           joint_idx = joint_index_map_["arm_base_turntable_joint"];
           break;
-        case can_id::Get::SHOULDER_FEEDBACK:
+        case can_id::Get::SHOULDER_FEEDBACK_:
           fb = FeedbackType::POSVEL;
           joint_idx = joint_index_map_["arm_shoulder_joint"];
           break;
-        case can_id::Get::ELBOW_FEEDBACK:
+        case can_id::Get::ELBOW_FEEDBACK_:
           fb = FeedbackType::POSVEL;
           joint_idx = joint_index_map_["arm_elbow_joint"];
           break;
-        case can_id::Get::WRIST_PITCH_FEEDBACK:
+        case can_id::Get::WRIST_PITCH_FEEDBACK_:
           fb = FeedbackType::POSVEL;
           joint_idx = joint_index_map_["arm_wrist_pitch_joint"];
           break;
-        case can_id::Get::WRIST_ROLL_FEEDBACK:
+        case can_id::Get::WRIST_ROLL_FEEDBACK_:
           fb = FeedbackType::POSVEL;
           joint_idx = joint_index_map_["arm_wrist_roll_joint"];
           break;
-        case can_id::Get::CLAW_FEEDBACK:
+        case can_id::Get::CLAW_FEEDBACK_:
           fb = FeedbackType::POSVEL;
           // TODO(someshdaga): Figure out what to do with the claw
           break;
@@ -252,19 +252,19 @@ void ArmHWReal::write(const ros::Time& time, const ros::Duration& duration)
     // TODO(someshdaga): Streamline mapping of can ids
     //                   to joint indexes/joint names
     if (joint_names_[i] == "arm_base_turntable_joint"){
-      frame.can_id = can_id::Set::TURNTABLE_COMMAND;
+      frame.can_id = can_id::Set::TURNTABLE_COMMAND_;
       }
     else if (joint_names_[i] == "arm_shoulder_joint"){
-      frame.can_id = can_id::Set::SHOULDER_COMMAND;
+      frame.can_id = can_id::Set::SHOULDER_COMMAND_;
       }
     else if (joint_names_[i] == "arm_elbow_joint"){
-      frame.can_id = can_id::Set::ELBOW_COMMAND;
+      frame.can_id = can_id::Set::ELBOW_COMMAND_;
       }
     else if (joint_names_[i] == "arm_wrist_pitch_joint"){
-      frame.can_id = can_id::Set::WRIST_PITCH_COMMAND;
+      frame.can_id = can_id::Set::WRIST_PITCH_COMMAND_;
       }
     else if (joint_names_[i] == "arm_wrist_roll_joint"){
-      frame.can_id = can_id::Set::WRIST_ROLL_COMMAND;
+      frame.can_id = can_id::Set::WRIST_ROLL_COMMAND_;
       }
     else {
       ROS_ERROR_STREAM("[ArmHWReal][write] Invalid joint: " << joint_names_[i]);
@@ -372,15 +372,15 @@ void ArmHWReal::doSwitch(const std::list<hardware_interface::ControllerInfo>& st
                         claimed.hardware_interface.c_str());
       }
 
-      frame.can_id = can_id::Set::TURNTABLE_CONTROL_MODE;
+      frame.can_id = can_id::Set::TURNTABLE_CONTROL_MODE_;
       writeCanFrame(frame);
-      frame.can_id = can_id::Set::SHOULDER_CONTROL_MODE;
+      frame.can_id = can_id::Set::SHOULDER_CONTROL_MODE_;
       writeCanFrame(frame);
-      frame.can_id = can_id::Set::ELBOW_CONTROL_MODE;
+      frame.can_id = can_id::Set::ELBOW_CONTROL_MODE_;
       writeCanFrame(frame);
-      frame.can_id = can_id::Set::WRIST_CONTROL_MODE;
+      frame.can_id = can_id::Set::WRIST_CONTROL_MODE_;
       writeCanFrame(frame);
-      frame.can_id = can_id::Set::CLAW_CONTROL_MODE;
+      frame.can_id = can_id::Set::CLAW_CONTROL_MODE_;
       writeCanFrame(frame);
     }
   }

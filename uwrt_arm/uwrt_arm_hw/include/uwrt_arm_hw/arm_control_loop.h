@@ -20,6 +20,7 @@ namespace uwrt
 {
 namespace arm
 {
+// NOLINTNEXTLINE(cppcoreguidelines-special-member-functions)
 class ArmControlLoop
 {
 public:

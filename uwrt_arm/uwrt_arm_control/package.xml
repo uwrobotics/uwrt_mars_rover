@@ -26,8 +26,6 @@
 
   <build_export_depend>uwrt_cartesian_controller</build_export_depend>
 
-  <test_depend>roslaunch</test_depend>
-
   <export>
   </export>
 </package>

@@ -15,10 +15,12 @@ namespace uwrt
 {
 namespace arm
 {
+// NOLINTNEXTLINE(cppcoreguidelines-special-member-functions)
 class RealArmControl : public ArmControlLoop
 {
 public:
   RealArmControl();
+  // NOLINTNEXTLINE(modernize-use-override)
   ~RealArmControl();
 
   void spinOnce();

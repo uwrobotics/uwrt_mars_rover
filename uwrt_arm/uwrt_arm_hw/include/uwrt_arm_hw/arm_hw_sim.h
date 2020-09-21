@@ -31,12 +31,12 @@ public:
   ArmHWSim(const std::string& name,
            gazebo::physics::ModelPtr model,
            const std::string& urdf_str);
-
+  // NOLINTNEXTLINE(modernize-use-override, cppcoreguidelines-explicit-virtual-functions)   
   virtual bool init(ros::NodeHandle& nh,
                     ros::NodeHandle& arm_hw_nh);
-
+  // NOLINTNEXTLINE(modernize-use-override, cppcoreguidelines-explicit-virtual-functions)   
   virtual void read(const ros::Time& time, const ros::Duration& period);
-
+  // NOLINTNEXTLINE(modernize-use-override, cppcoreguidelines-explicit-virtual-functions)   
   virtual void write(const ros::Time& time, const ros::Duration& period);
 
 private:
@@ -45,6 +45,7 @@ private:
   std::vector<gazebo::physics::JointPtr> sim_joints_;
 };  // class ArmHWSim
 
+// NOLINTNEXTLINE(modernize-use-using)   
 typedef boost::shared_ptr<ArmHWSim> ArmHWSimPtr;
 
 }  // namespace arm

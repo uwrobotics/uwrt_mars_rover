@@ -30,6 +30,7 @@ namespace voltage_controllers
  * Subscribes to:
  * - \b command (std_msgs::Float64MultiArray) : The joint voltages/pwms to apply
  */
+// NOLINTNEXTLINE(modernize-use-using)
 typedef forward_command_controller::ForwardJointGroupCommandController<hardware_interface::VoltageJointInterface>
         JointGroupVoltageController;
 

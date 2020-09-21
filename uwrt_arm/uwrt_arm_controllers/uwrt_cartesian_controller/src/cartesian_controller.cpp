@@ -20,14 +20,13 @@ namespace velocity_controllers
 {
 bool UWRTCartesianController::init(hardware_interface::VelocityJointInterface* hw, ros::NodeHandle& nh)
 {
-  // ROS_INFO_STREAM("Calling Init!");
 
-  if(!nh.searchParam("/robot_description", robot_description_)){
+  if(!nh.searchParam("/robot_description", _robot_description)){
       ROS_ERROR("Failed to get robot_description parameter");
       return false;
     }
   
-  if (!kdl_parser::treeFromParam(robot_description_, kdl_tree_)){
+  if (!kdl_parser::treeFromParam(_robot_description, kdl_tree_)){
     ROS_ERROR("Failed to construct kdl tree from robot description parameter");
     return false;
   }
@@ -46,44 +45,44 @@ bool UWRTCartesianController::init(hardware_interface::VelocityJointInterface* h
   if(!kdl_tree_.getChain(root_name_, tip_name_, kdl_chain_)){
 
     ROS_ERROR_STREAM("Failed to get KDL chain from tree: ");
-    ROS_ERROR_STREAM("  "<<root_name_<<" --> "<<tip_name_);
+    ROS_ERROR_STREAM("\t"<<root_name_<<" --> "<<tip_name_);
     
-    ROS_ERROR_STREAM("  Tree has "<<kdl_tree_.getNrOfJoints()<<" joints");
-    ROS_ERROR_STREAM("  The joint names are:");
+    ROS_ERROR_STREAM("\tTree has "<<kdl_tree_.getNrOfJoints()<<" joints");
+    ROS_ERROR_STREAM("\tThe joint names are:");
     for(std::vector<KDL::Segment>::const_iterator it = kdl_chain_.segments.begin(); it != kdl_chain_.segments.end(); ++it) {
-      ROS_ERROR_STREAM("    "<<it->getJoint().getName());
+      ROS_ERROR_STREAM("\t\t"<<it->getJoint().getName());
     }
 
-    ROS_ERROR_STREAM("  Tree has "<<kdl_tree_.getNrOfSegments()<<" segments");
-    ROS_ERROR_STREAM("  The segments are:");
+    ROS_ERROR_STREAM("\tTree has "<<kdl_tree_.getNrOfSegments()<<" segments");
+    ROS_ERROR_STREAM("\tThe segments are:");
 
     KDL::SegmentMap segment_map = kdl_tree_.getSegments();
     KDL::SegmentMap::iterator it;
 
     for( it=segment_map.begin(); it != segment_map.end(); it++ ){
-      ROS_ERROR_STREAM( "    "<<(*it).first);
+      ROS_ERROR_STREAM("\t\t"<<(*it).first);
     }
 
     return false;
   }
 
   ROS_INFO_STREAM("*** Listing KDL chain from tree: ***");
-  ROS_INFO_STREAM("  "<<root_name_<<" --> "<<tip_name_);
+  ROS_INFO_STREAM("\t"<<root_name_<<" --> "<<tip_name_);
   
-  ROS_INFO_STREAM("  Tree has "<<kdl_tree_.getNrOfJoints()<<" joints");
-  ROS_INFO_STREAM("  The joint names are:");
+  ROS_INFO_STREAM("\tTree has "<<kdl_tree_.getNrOfJoints()<<" joints");
+  ROS_INFO_STREAM("\tThe joint names are:");
   for(std::vector<KDL::Segment>::const_iterator it = kdl_chain_.segments.begin(); it != kdl_chain_.segments.end(); ++it) {
-    ROS_INFO_STREAM("    "<<it->getJoint().getName());
+    ROS_INFO_STREAM("\t\t"<<it->getJoint().getName());
   }
 
-  ROS_INFO_STREAM("  Tree has "<<kdl_tree_.getNrOfSegments()<<" segments");
-  ROS_INFO_STREAM("  The segments are:");
+  ROS_INFO_STREAM("\tTree has "<<kdl_tree_.getNrOfSegments()<<" segments");
+  ROS_INFO_STREAM("\tThe segments are:");
 
   KDL::SegmentMap segment_map = kdl_tree_.getSegments();
   KDL::SegmentMap::iterator it;
 
   for( it=segment_map.begin(); it != segment_map.end(); it++ ){
-    ROS_INFO_STREAM( "    "<<(*it).first);
+    ROS_INFO_STREAM("\t\t"<<(*it).first);
   }
 
   ROS_INFO_STREAM("***Listing HW Interfaces: ***");    
@@ -91,11 +90,10 @@ bool UWRTCartesianController::init(hardware_interface::VelocityJointInterface* h
   for(std::vector<KDL::Segment>::const_iterator it = kdl_chain_.segments.begin(); it != kdl_chain_.segments.end(); ++it)
   {
     // WE DON'T WANT AN INTERFACE FOR THE FIXED JOINT
-    // if(it->getJoint().getName().compare("arm_shoulder_bicep_joint")) {
     if(it->getJoint().getName() != "arm_shoulder_bicep_joint") {
       joint_handles_.push_back(hw->getHandle(it->getJoint().getName()));
       joint_names_.push_back(it->getJoint().getName());
-      ROS_INFO_STREAM("    "<<it->getJoint().getName());
+      ROS_INFO_STREAM("\t\t"<<it->getJoint().getName());
     }
   }
   ROS_INFO_STREAM("***KDL Chain has "<< kdl_chain_.getNrOfJoints() <<" joints ***");    
@@ -110,10 +108,8 @@ bool UWRTCartesianController::init(hardware_interface::VelocityJointInterface* h
                                                                 &UWRTCartesianController::armCommandCallback,
                                                                 this);
 
-  double dead_man_timeout;
-  // NOLINTNEXTLINE(readability-magic-numbers, cppcoreguidelines-avoid-magic-numbers)
-  nh.param<double>("dead_man_timeout", dead_man_timeout, 0.2);
-  dead_man_timeout_ = ros::Duration(dead_man_timeout);
+  constexpr double DEFAULT_DEAD_MAN_TIMEOUT{0.2}; // TODO: Default value to be configurable in a cfg file.  
+  dead_man_timeout_ = ros::Duration(DEFAULT_DEAD_MAN_TIMEOUT);
 
   return true;
 }
@@ -128,56 +124,25 @@ bool UWRTCartesianController::init(hardware_interface::VelocityJointInterface* h
     qdot_cart_.rot(1) = arm_command->twist.angular.y;
     qdot_cart_.rot(2) = arm_command->twist.angular.z;
 
-    last_msg_ = ros::Time::now();
-    got_msg_ = false;
+    last_msg_time_ = ros::Time::now();
   }
 
-  // NOLINTNEXTLINE(misc-unused-parameters)
-  void UWRTCartesianController::starting(const ros::Time& time)
+  void UWRTCartesianController::starting(const ros::Time& /*time*/)
   {
-    // set twists to zero
-    // NOLINTNEXTLINE(readability-magic-numbers, cppcoreguidelines-avoid-magic-numbers)
-    qdot_cart_[0] = 0.0;
-    // NOLINTNEXTLINE(readability-magic-numbers, cppcoreguidelines-avoid-magic-numbers)
-    qdot_cart_[1] = 0.0;
-    // NOLINTNEXTLINE(readability-magic-numbers, cppcoreguidelines-avoid-magic-numbers)
-    qdot_cart_[2] = 0.0;
-    // NOLINTNEXTLINE(readability-magic-numbers, cppcoreguidelines-avoid-magic-numbers)
-    qdot_cart_[3] = 0.0;
-    // NOLINTNEXTLINE(readability-magic-numbers, cppcoreguidelines-avoid-magic-numbers)
-    qdot_cart_[4] = 0.0;
-    // NOLINTNEXTLINE(readability-magic-numbers, cppcoreguidelines-avoid-magic-numbers)
-    qdot_cart_[5] = 0.0;
+    KDL::SetToZero(qdot_cart_);
 
-    last_msg_ = ros::Time::now();
-    got_msg_ = false;
+    last_msg_time_ = ros::Time::now();
   }
   
-  // NOLINTNEXTLINE(misc-unused-parameters)
-  void UWRTCartesianController::stopping(const ros::Time& time)
+  void UWRTCartesianController::stopping(const ros::Time& /*time*/)
   {
   }
 
-  // NOLINTNEXTLINE(misc-unused-parameters)
-  void UWRTCartesianController::update(const ros::Time& time, const ros::Duration& period)
+  void UWRTCartesianController::update(const ros::Time& time, const ros::Duration& /*period*/)
   {
-    if((time - last_msg_) >= dead_man_timeout_) 
+    if((time - last_msg_time_) >= dead_man_timeout_) 
     {
-      // set twists to zero
-      // NOLINTNEXTLINE(readability-magic-numbers, cppcoreguidelines-avoid-magic-numbers)
-      qdot_cart_[0] = 0.0;
-      // NOLINTNEXTLINE(readability-magic-numbers, cppcoreguidelines-avoid-magic-numbers)
-      qdot_cart_[1] = 0.0;
-      // NOLINTNEXTLINE(readability-magic-numbers, cppcoreguidelines-avoid-magic-numbers)
-      qdot_cart_[2] = 0.0;
-      // NOLINTNEXTLINE(readability-magic-numbers, cppcoreguidelines-avoid-magic-numbers)
-      qdot_cart_[3] = 0.0;
-      // NOLINTNEXTLINE(readability-magic-numbers, cppcoreguidelines-avoid-magic-numbers)
-      qdot_cart_[4] = 0.0;
-      // NOLINTNEXTLINE(readability-magic-numbers, cppcoreguidelines-avoid-magic-numbers)
-      qdot_cart_[5] = 0.0;
-
-      got_msg_ = false;
+      KDL::SetToZero(qdot_cart_);
 
       for (unsigned int i = 0; i < kdl_chain_.getNrOfJoints(); i++)
       {
@@ -187,7 +152,7 @@ bool UWRTCartesianController::init(hardware_interface::VelocityJointInterface* h
       return;
     }
 
-    // ROS_INFO_STREAM("Calling Update!");
+    // DEBUG_STREAM_NAMED("Calling Update!");
 
     // get joint positions
     KDL::JntArray  q(joint_handles_.size());            

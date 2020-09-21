@@ -1,6 +1,6 @@
 Header header
-float64 turntable_command
-float64 shoulder_command
-float64 elbow_command
-float64 wrist_roll_command
-float64 wrist_pitch_command
+float64 TURNTABLE_COMMAND_
+float64 SHOULDER_COMMAND_
+float64 ELBOW_COMMAND_
+float64 WRIST_ROLL_COMMAND_
+float64 WRIST_PITCH_COMMAND_

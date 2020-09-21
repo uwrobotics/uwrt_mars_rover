@@ -35,12 +35,14 @@ public:
   explicit ArmHW(const std::string& urdf_str);
 
   ArmHW(const std::string& name, const std::string& urdf_str);
-
+  // NOLINTNEXTLINE(modernize-use-override, cppcoreguidelines-explicit-virtual-functions)                
   bool init(ros::NodeHandle& nh,
             ros::NodeHandle& arm_hw_nh) override;
   void doSwitch(const std::list<hardware_interface::ControllerInfo>& start_list,
                 const std::list<hardware_interface::ControllerInfo>& stop_list) override;
+  // NOLINTNEXTLINE(modernize-use-override, cppcoreguidelines-explicit-virtual-functions)                
   virtual void read(const ros::Time& time, const ros::Duration& period) = 0;
+  // NOLINTNEXTLINE(modernize-use-override, cppcoreguidelines-explicit-virtual-functions)         
   virtual void write(const ros::Time& time, const ros::Duration& period) = 0;
 
   void enforceLimits(ros::Duration period);
@@ -96,8 +98,11 @@ private:
                            const hardware_interface::JointHandle& joint_handle_position,
                            const hardware_interface::JointHandle& joint_handle_velocity,
                            const hardware_interface::JointHandle& joint_handle_effort,
+                           // NOLINTNEXTLINE(readability-avoid-const-params-in-decls)
                            double* const joint_lower_limit,
+                           // NOLINTNEXTLINE(readability-avoid-const-params-in-decls)
                            double* const joint_upper_limit,
+                           // NOLINTNEXTLINE(readability-avoid-const-params-in-decls)
                            double* const joint_effort_limit);
   void registerInterfaces(const urdf::Model& urdf_model);
   // void parseTransmissionsFromURDF();

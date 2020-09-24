@@ -1,0 +1,4 @@
+float32 value
+bool is_velocity_pid
+string parameter
+uint8 actuator_id

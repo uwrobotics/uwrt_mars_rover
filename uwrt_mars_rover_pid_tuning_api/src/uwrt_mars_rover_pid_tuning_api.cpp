@@ -55,16 +55,15 @@ bool PidTuningApi::isValidPayload(uwrt_mars_rover_msgs::PidTuningApi& payload_da
   std::array<std::string, num_parameters> parameters{"p", "i", "d", "bias", "deadzone"};
   bool exists = std::find(std::begin(parameters), std::end(parameters), boost::to_lower_copy(payload_data.parameter)) !=
                 std::end(parameters);
-  
+
   if (!exists) {
     ROS_WARN_NAMED(_log_filter, "Invalid PID payload parameter value.");
-    return false;
   } else if (!(payload_data.actuator_id >= 0 && payload_data.actuator_id <= highest_actuator_id)) {
     ROS_WARN_NAMED(_log_filter, "Invalid PID payload actuator value.");
-    return false;
   } else {
     return true;
   }
+  return false;
 }
 
 void PidTuningApi::run() {

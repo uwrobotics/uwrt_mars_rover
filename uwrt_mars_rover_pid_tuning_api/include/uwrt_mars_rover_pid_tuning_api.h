@@ -13,7 +13,7 @@ class PidTuningApi {
   // public:
   bool updatePIDParam(uwrt_mars_rover_msgs::pid_tuning_api::Request& req,
                       uwrt_mars_rover_msgs::pid_tuning_api::Response& res);
-  static bool isValidPayload(uwrt_mars_rover_msgs::PidTuningApi& payload_data);
+  bool isValidPayload(uwrt_mars_rover_msgs::PidTuningApi& payload_data);
 
  public:
   PidTuningApi(ros::NodeHandle& nh, uint8_t loop_rate, std::string log_filter = "pidApiServiceServer",

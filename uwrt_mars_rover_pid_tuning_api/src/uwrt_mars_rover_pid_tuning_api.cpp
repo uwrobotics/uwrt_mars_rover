@@ -24,7 +24,7 @@ bool PidTuningApi::updatePIDParam(uwrt_mars_rover_msgs::pid_tuning_api::Request&
                                   uwrt_mars_rover_msgs::pid_tuning_api::Response& res) {
   ROS_INFO_NAMED(_log_filter, "Updating PID gains");
   if (!isValidPayload(req.pid_tuning_api_data)) {
-    ROS_WARN_NAMED(_log_filter, "Invalid PID payload. Service call failed. Message not sent");
+    ROS_WARN_NAMED(_log_filter, "Service call failed. Message not sent");
     return false;
   }
   HWBRIDGE::ARM::PID::tuningApiPayload payload{.value = static_cast<float>(req.pid_tuning_api_data.value),
@@ -55,7 +55,16 @@ bool PidTuningApi::isValidPayload(uwrt_mars_rover_msgs::PidTuningApi& payload_da
   std::array<std::string, num_parameters> parameters{"p", "i", "d", "bias", "deadzone"};
   bool exists = std::find(std::begin(parameters), std::end(parameters), boost::to_lower_copy(payload_data.parameter)) !=
                 std::end(parameters);
-  return exists && payload_data.actuator_id >= 0 && payload_data.actuator_id <= highest_actuator_id;
+  
+  if (!exists) {
+    ROS_WARN_NAMED(_log_filter, "Invalid PID payload parameter value.");
+    return false;
+  } else if (!(payload_data.actuator_id >= 0 && payload_data.actuator_id <= highest_actuator_id)) {
+    ROS_WARN_NAMED(_log_filter, "Invalid PID payload actuator value.");
+    return false;
+  } else {
+    return true;
+  }
 }
 
 void PidTuningApi::run() {

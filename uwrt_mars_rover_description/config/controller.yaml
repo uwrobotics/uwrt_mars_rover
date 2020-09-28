@@ -9,8 +9,8 @@ robot_ex:
     type: "diff_drive_controller/DiffDriveController"
     publish_rate: 50
 
-    left_wheel: ['Rev4', 'Rev2']
-    right_wheel: ['Rev3', 'Rev1']
+    left_wheel: ['wheel_back_left_to_rocker', 'wheel_front_left_to_rocker']
+    right_wheel: ['wheel_back_right_to_rocker', 'wheel_front_right_to_rocker']
 
     wheel_separation: 0.5
     wheel_radius: 0.125

@@ -1,0 +1,162 @@
+<?xml version="1.0" ?>
+<robot name="uwrt_mars_rover" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+<xacro:include filename="$(find uwrt_mars_rover_description)/urdf/robot.gazebo" />
+
+<xacro:property name="body_color" value="Gazebo/Cyan"/>
+<xacro:property name="wheel_color" value="Gazebo/Silver"/>
+<xacro:property name="rocker_color" value="Gazebo/Red"/>
+
+<link name="base_link">
+  <inertial>
+    <origin rpy="0 0 0" xyz="0.15385713698693046 -0.08778896425180195 -0.2698750000003254"/>
+    <mass value="582.8423997062505"/>
+    <inertia ixx="110.709125" ixy="-0.137662" ixz="-0.012299" iyy="155.023526" iyz="0.0" izz="97.815843"/>
+  </inertial>
+  <visual>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <geometry>
+      <mesh filename="package://uwrt_mars_rover_description/meshes/chassis.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="Cyan">
+      <color rgba="0 1.0 1.0 1.0"/>
+    </material>
+  </visual>
+  <collision>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <geometry>
+      <mesh filename="package://uwrt_mars_rover_description/meshes/chassis.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<gazebo reference="base_link">
+  <material>${body_color}</material>
+  <gravity>true</gravity>
+  <selfCollide>false</selfCollide>
+</gazebo>
+
+<xacro:macro name="chassis_to_rocker" params="_suffix _side rotate">
+  
+  <link name="rocker_${_suffix}">
+    <inertial>
+      <origin rpy="0 0 0" xyz="-0.0007397688458582806 -1.0783832098202512e-05 -0.0000060755009578"/>
+      <mass value="373.58767139092913"/>
+      <inertia ixx="15.179593" ixy="-0.000146" ixz="-7.2e-05" iyy="9.170619" iyz="0.000335" izz="9.170464"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0.0254 0"/>
+      <geometry>
+        <mesh filename="package://uwrt_mars_rover_description/meshes/rocker.stl" scale="0.0254 0.0254 0.0254"/>
+      </geometry>
+      <material name="Red">
+        <color rgba="1 0 0 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0.0254 0"/>
+      <geometry>
+        <mesh filename="package://uwrt_mars_rover_description/meshes/rocker.stl" scale="0.0254 0.0254 0.0254"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <gazebo reference="rocker_${_suffix}">
+    <material>${rocker_color}</material>
+    <gravity>true</gravity>
+    <selfCollide>false</selfCollide>
+  </gazebo>
+
+  <joint name="rocker_${_suffix}_to_chassis" type="revolute">
+    <origin xyz="0 ${_side*0.24289} 0" rpy="0.0 0.0 ${pi*rotate}"/>
+    <parent link="base_link"/>
+    <child link="rocker_${_suffix}"/>
+    <axis xyz="0.0 1.0 0.0"/>
+    <limit lower="${-pi/4}" upper="${pi/4}" effort="1000000" velocity="5"/>
+  </joint>
+
+  <transmission name="rocker_${_suffix}_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="rocker_${_suffix}_to_chassis">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="rocker_${_suffix}_to_chassis_actuator">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <xacro:macro name="rocker_to_wheel" params="suffix side reflect n_side">
+
+    <link name="wheel_${suffix}_${side}">
+      <inertial>
+        <origin rpy="0 0 0" xyz="-0.0007397688458582806 -1.0783832098202512e-05 -0.0000060755009578"/>
+        <mass value="373.58767139092913"/>
+        <inertia ixx="15.179593" ixy="-0.000146" ixz="-7.2e-05" iyy="9.170619" iyz="0.000335" izz="9.170464"/>
+      </inertial>
+      <visual>
+        <origin rpy="0 0 0" xyz="0 0.09398 0"/>
+        <geometry>
+          <mesh filename="package://uwrt_mars_rover_description/meshes/wheel.stl" scale="0.0254 0.0254 0.0254"/>
+        </geometry>
+        <material name="body_color"/>
+      </visual>
+      <collision>
+        <origin rpy="0 0 0" xyz="0 0.09398 0"/>
+        <geometry>
+          <mesh filename="package://uwrt_mars_rover_description/meshes/wheel.stl" scale="0.0254 0.0254 0.0254"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <joint name="wheel_${suffix}_${side}_to_rocker" type="continuous">
+      <origin xyz="${n_side*0.381} 0.07414 -0.15636" rpy="0.0 0.0 0.0"/>
+      <parent link="rocker_${suffix}"/>
+      <child link="wheel_${suffix}_${side}"/>
+      <axis xyz="0.0 1.0 0.0"/>
+    </joint>
+
+    <transmission name="wheel_${suffix}_${side}_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="wheel_${suffix}_${side}_to_rocker">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="wheel_${suffix}_${side}_actuator">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission>
+
+    <gazebo reference="wheel_${suffix}_${side}">
+      <material>${wheel_color}</material>
+      <mu1>1</mu1>
+      <mu2>1</mu2>
+      <fdir1>1 0 0</fdir1>
+      <minDepth>0.001</minDepth>
+      <maxVel>3.0</maxVel>
+      <gravity>true</gravity>
+      <kp  value="10000000.0" />
+      <kd  value="1.0" />
+      <selfCollide>false</selfCollide>
+    </gazebo>
+
+  </xacro:macro>
+  
+  <xacro:if value="${_suffix == 'right'}">
+    <xacro:rocker_to_wheel suffix="${_suffix}" side="front" reflect="-1" n_side="-1"/>
+    <xacro:rocker_to_wheel suffix="${_suffix}" side="back" reflect="-1" n_side="1"/>
+  </xacro:if>
+  <xacro:if value="${_suffix == 'left'}">
+    <xacro:rocker_to_wheel suffix="${_suffix}" side="front" reflect="1" n_side="1"/>
+    <xacro:rocker_to_wheel suffix="${_suffix}" side="back" reflect="1" n_side="-1"/>
+  </xacro:if>
+
+    
+</xacro:macro>
+
+<xacro:chassis_to_rocker _suffix="left" _side="1" rotate="0"/>
+<xacro:chassis_to_rocker _suffix="right" _side="-1" rotate="1"/>
+
+</robot>
+
+

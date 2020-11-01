@@ -1,6 +1,10 @@
 name: CI
 
-on: [push, pull_request]
+on:
+  push:
+  pull_request:
+  schedule: # Trigger a job on master at midnight UTC every day
+    - cron: '0 0 * * *'
 
 jobs:
   amd64_build:

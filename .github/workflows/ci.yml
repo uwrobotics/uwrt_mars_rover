@@ -20,7 +20,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Run ROS Industrial CI
-        uses: wmmc88/industrial_ci@update-catkin-lint
+        uses: ros-industrial/industrial_ci@master
         env: ${{matrix.env}}
 
   clang-format:
@@ -35,7 +35,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Run ROS Industrial CI
-        uses: wmmc88/industrial_ci@update-catkin-lint
+        uses: ros-industrial/industrial_ci@master
         env: ${{matrix.env}}
 
   clang-tidy:
@@ -50,7 +50,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Run ROS Industrial CI
-        uses: wmmc88/industrial_ci@update-catkin-lint
+        uses: ros-industrial/industrial_ci@master
         env: ${{matrix.env}}
 
   catkin_lint:
@@ -65,7 +65,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Run ROS Industrial CI
-        uses: wmmc88/industrial_ci@update-catkin-lint
+        uses: ros-industrial/industrial_ci@master
         env: ${{matrix.env}}
 
   arm64_build:
@@ -87,5 +87,5 @@ jobs:
           docker run --rm --privileged multiarch/qemu-user-static --reset --credential yes --persistent yes
 
       - name: Run ROS Industrial CI
-        uses: wmmc88/industrial_ci@update-catkin-lint
+        uses: ros-industrial/industrial_ci@master
         env: ${{matrix.env}}

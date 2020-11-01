@@ -12,6 +12,7 @@ updates:
       - "wmmc88"
     reviewers:
       - "wmmc88"
+      - "azumnanji"
 
   - package-ecosystem: "gitsubmodule"
     directory: "/"
@@ -23,3 +24,4 @@ updates:
       - "wmmc88"
     reviewers:
       - "wmmc88"
+      - "azumnanji"

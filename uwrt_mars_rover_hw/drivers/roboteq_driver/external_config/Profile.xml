@@ -112,16 +112,16 @@
           </Node>
           <Node Text="CANOpen TPDO Send Rate">
             <Nodes>
-              <Node Text="TPDO 1 Send Rate (ms)" Value="100">
+              <Node Text="TPDO 1 Send Rate (ms)" Value="10">
                 <Nodes />
               </Node>
-              <Node Text="TPDO 2 Send Rate (ms)" Value="100">
+              <Node Text="TPDO 2 Send Rate (ms)" Value="10">
                 <Nodes />
               </Node>
-              <Node Text="TPDO 3 Send Rate (ms)" Value="100">
+              <Node Text="TPDO 3 Send Rate (ms)" Value="10">
                 <Nodes />
               </Node>
-              <Node Text="TPDO 4 Send Rate (ms)" Value="100">
+              <Node Text="TPDO 4 Send Rate (ms)" Value="10">
                 <Nodes />
               </Node>
             </Nodes>

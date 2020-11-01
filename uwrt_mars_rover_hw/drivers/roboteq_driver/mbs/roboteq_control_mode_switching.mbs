@@ -1,0 +1,20 @@
+Print("Starting roboteq drivetrain control mode switching ... \r")
+current_control_mode_1 = GetValue(_MMOD, 1)
+current_control_mode_2 = GetValue(_MMOD, 2)
+
+top: 
+desired_control_mode = GetValue(_VAR, 9) ' Read desired control mode from ROS
+
+if ((current_control_mode_1 != desired_control_mode) Or (current_control_mode_1 != current_control_mode_2))
+	SetConfig(_MMOD, 1, desired_control_mode) ' switch control modes
+	SetConfig(_MMOD, 2, desired_control_mode) 
+	
+	SetValue(_VAR, 1, current_control_mode_1) ' set TPDO to current control mode
+	SetValue(_VAR, 2, current_control_mode_2) 
+
+	current_control_mode_1 = GetConfig(_MMOD, 1) ' for next iteration
+	current_control_mode_2 = GetConfig(_MMOD, 2) 
+
+end if
+wait(GetConfig(_CTPS, 1)) ' TPDO set to 10ms
+goto top

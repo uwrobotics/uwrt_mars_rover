@@ -108,28 +108,6 @@ void XboxController::joyCallback(const sensor_msgs::Joy::ConstPtr& joy) {
   drivetrain_twist_publisher_.publish(drivetrain_twist);
 }
 
-// claw twist
-std_msgs::Float64MultiArray claw_MultiArray;
-
-// open close claw
-double claw_open_close = 0.0;
-if (joy->buttons[A_]) {
-  claw_open_close = 1.0;
-} else if (joy->buttons[Y_]) {
-  claw_open_close = -1.0;
-}
-std::vector<double> claw_vec = {claw_open_close};
-claw_MultiArray.data.insert(claw_MultiArray.data.end(), claw_vec.begin(), claw_vec.end());
-claw_publisher.publish(claw_MultiArray);
-
-// camera movement custom message
-geometry_msgs::Twist camera_twist;
-drivetrain_twist.angular.z = joy->axes[right_stick_left_right_];
-drivetrain_twist.angular.y = joy->axes[right_stick_up_down_];
-
-camera_publisher.publish(camera_twist);
-}
-
 int main(int argc, char** argv) {
   ros::init(argc, argv, "xbox_controller");
   XboxController xbox_controller;

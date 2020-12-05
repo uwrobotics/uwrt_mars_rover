@@ -120,11 +120,11 @@ int32_t RoboteqController::readEncoderMotorSpeed(uint8_t channel) {
 }
 
 int32_t RoboteqController::readAbsoluteEncoderCount(uint8_t channel) {
-  canopen_interface_->sendQuery<int32_t>(roboteq::RuntimeQuery::READ_ABSOLUTE_ENCODER_COUNT, channel);
+  return canopen_interface_->sendQuery<int32_t>(roboteq::RuntimeQuery::READ_ABSOLUTE_ENCODER_COUNT, channel);
 }
 
 int32_t RoboteqController::readAbsoluteBrushlessCounter(uint8_t channel) {
-  canopen_interface_->sendQuery<int32_t>(roboteq::RuntimeQuery::READ_ABSOLUTE_BRUSHLESS_COUNTER, channel);
+  return canopen_interface_->sendQuery<int32_t>(roboteq::RuntimeQuery::READ_ABSOLUTE_BRUSHLESS_COUNTER, channel);
 }
 
 int32_t RoboteqController::readUserIntegerVariable(int32_t nbvar) {
@@ -132,24 +132,24 @@ int32_t RoboteqController::readUserIntegerVariable(int32_t nbvar) {
 }
 
 int16_t RoboteqController::readEncoderMotorSpeedRelativeToMaxSpeed(uint8_t channel) {
-  canopen_interface_->sendQuery<int16_t>(roboteq::RuntimeQuery::READ_ENCODER_MOTOR_SPEED_RELATIVE_TO_MAX_SPEED,
+  return canopen_interface_->sendQuery<int16_t>(roboteq::RuntimeQuery::READ_ENCODER_MOTOR_SPEED_RELATIVE_TO_MAX_SPEED,
                                          channel);
 }
 
 int32_t RoboteqController::readEncoderCountRelative(uint8_t channel) {
-  canopen_interface_->sendQuery<int32_t>(roboteq::RuntimeQuery::READ_ENCODER_COUNT_RELATIVE, channel);
+  return canopen_interface_->sendQuery<int32_t>(roboteq::RuntimeQuery::READ_ENCODER_COUNT_RELATIVE, channel);
 }
 
 int32_t RoboteqController::readBrushlessCountRelative(uint8_t channel) {
-  canopen_interface_->sendQuery<int32_t>(roboteq::RuntimeQuery::READ_BRUSHLESS_COUNT_RELATIVE, channel);
+  return canopen_interface_->sendQuery<int32_t>(roboteq::RuntimeQuery::READ_BRUSHLESS_COUNT_RELATIVE, channel);
 }
 
 int16_t RoboteqController::readBrushlessMotorSpeed(uint8_t channel) {
-  canopen_interface_->sendQuery<int16_t>(roboteq::RuntimeQuery::READ_BRUSHLESS_MOTOR_SPEED, channel);
+  return canopen_interface_->sendQuery<int16_t>(roboteq::RuntimeQuery::READ_BRUSHLESS_MOTOR_SPEED, channel);
 }
 
 int16_t RoboteqController::readBrushlessMotorSpeedRelativeToMaxSpeed(uint8_t channel) {
-  canopen_interface_->sendQuery<int16_t>(roboteq::RuntimeQuery::READ_BRUSHLESS_MOTOR_SPEED_RELATIVE_TO_MAX_SPEED,
+  return canopen_interface_->sendQuery<int16_t>(roboteq::RuntimeQuery::READ_BRUSHLESS_MOTOR_SPEED_RELATIVE_TO_MAX_SPEED,
                                          channel);
 }
 
@@ -194,15 +194,15 @@ bool RoboteqController::readUserBooleanVariable(uint32_t nbvar) {
 }
 
 int32_t RoboteqController::readInternalSerialCommand(uint8_t channel) {
-  canopen_interface_->sendQuery<int32_t>(roboteq::RuntimeQuery::READ_INTERNAL_SERIAL_COMMAND, channel);
+  return canopen_interface_->sendQuery<int32_t>(roboteq::RuntimeQuery::READ_INTERNAL_SERIAL_COMMAND, channel);
 }
 
 int32_t RoboteqController::readInternalAnalogCommand(uint8_t channel) {
-  canopen_interface_->sendQuery<int32_t>(roboteq::RuntimeQuery::READ_INTERNAL_ANALOG_COMMAND, channel);
+  return canopen_interface_->sendQuery<int32_t>(roboteq::RuntimeQuery::READ_INTERNAL_ANALOG_COMMAND, channel);
 }
 
 int32_t RoboteqController::readInternalInternalPulseCommand(uint8_t channel) {
-  canopen_interface_->sendQuery<int32_t>(roboteq::RuntimeQuery::READ_INTERNAL_PULSE_COMMAND, channel);
+  return canopen_interface_->sendQuery<int32_t>(roboteq::RuntimeQuery::READ_INTERNAL_PULSE_COMMAND, channel);
 }
 
 uint32_t RoboteqController::readTime(uint8_t param) {
@@ -226,7 +226,7 @@ uint8_t RoboteqController::readMagsensorTrackDetect() {
 }
 
 int16_t RoboteqController::readMagsensorTrackPosition(uint8_t nb_pulse) {
-  canopen_interface_->sendQuery<int16_t>(roboteq::RuntimeQuery::READ_MAGSENSOR_TRACK_POSITION, nb_pulse);
+  return canopen_interface_->sendQuery<int16_t>(roboteq::RuntimeQuery::READ_MAGSENSOR_TRACK_POSITION, nb_pulse);
 }
 
 uint8_t RoboteqController::readMagsensorMarkers(uint8_t nb_pulse) {

@@ -133,7 +133,7 @@ int32_t RoboteqController::readUserIntegerVariable(int32_t nbvar) {
 
 int16_t RoboteqController::readEncoderMotorSpeedRelativeToMaxSpeed(uint8_t channel) {
   return canopen_interface_->sendQuery<int16_t>(roboteq::RuntimeQuery::READ_ENCODER_MOTOR_SPEED_RELATIVE_TO_MAX_SPEED,
-                                         channel);
+                                                channel);
 }
 
 int32_t RoboteqController::readEncoderCountRelative(uint8_t channel) {
@@ -150,7 +150,7 @@ int16_t RoboteqController::readBrushlessMotorSpeed(uint8_t channel) {
 
 int16_t RoboteqController::readBrushlessMotorSpeedRelativeToMaxSpeed(uint8_t channel) {
   return canopen_interface_->sendQuery<int16_t>(roboteq::RuntimeQuery::READ_BRUSHLESS_MOTOR_SPEED_RELATIVE_TO_MAX_SPEED,
-                                         channel);
+                                                channel);
 }
 
 int16_t RoboteqController::readBatteryAmps(uint8_t channel) {

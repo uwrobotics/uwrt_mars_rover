@@ -2,9 +2,10 @@
 <package format="2">
   <name>uwrt_utils</name>
   <version>0.0.0</version>
-  <description>Utility package for uwrt_mars_rover ROS</description>
+  <description>Package including common utilities for uwrt_mars_rover(ex. CAN Library, HW Bridge)</description>
 
   <maintainer email="wrraftus@uwaterloo.ca">Walter Raftus</maintainer>
+  <maintainer email="younesreda1@outlook.com">Younes Reda</maintainer>
 
   <license>MIT</license>
 

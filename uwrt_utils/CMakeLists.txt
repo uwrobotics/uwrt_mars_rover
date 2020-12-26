@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.3)
+cmake_minimum_required(VERSION 3.10.2)
 project(uwrt_utils)
 
 # Load catkin and package dependencies
@@ -9,12 +9,19 @@ find_package(catkin REQUIRED COMPONENTS
 
 # Declare a catkin package
 catkin_package(
-  INCLUDE_DIRS include
-  LIBRARIES ${PROJECT_NAME}
+  INCLUDE_DIRS
+        include
+        lib/uwrt_mars_rover_hw_bridge/include
+  LIBRARIES
+        ${PROJECT_NAME}
+        uwrt-mars-rover-hw-bridge
   CATKIN_DEPENDS
-  roscpp
-  std_msgs
+        roscpp
+        std_msgs
 )
+
+# Adds CMakeLists from hw-bridge
+add_subdirectory(lib/uwrt_mars_rover_hw_bridge)
 
 # Specify additional locations of header files
 include_directories(

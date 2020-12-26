@@ -50,5 +50,5 @@ qtcreator-*
 CATKIN_IGNORE
 
 # uwrt_mars_rover_hw_bridge shouldnt be added as a git submodule
-uwrt_mars_rover_hw_bridge/lib/uwrt_mars_rover_hw_bridge/
+uwrt_utils/lib/uwrt_mars_rover_hw_bridge/
 

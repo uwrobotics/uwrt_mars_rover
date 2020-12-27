@@ -10,6 +10,8 @@
 
     <buildtool_depend>catkin</buildtool_depend>
 
+    <exec_depend>uwrt_mars_rover_science_controllers</exec_depend>
+
     <export>
         <metapackage/>
     </export>

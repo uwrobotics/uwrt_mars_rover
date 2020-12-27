@@ -4,7 +4,6 @@ project(uwrt_mars_rover_utils)
 # Load catkin and package dependencies
 find_package(catkin REQUIRED COMPONENTS
   roscpp
-  std_msgs
 )
 
 # Declare a catkin package
@@ -17,7 +16,6 @@ catkin_package(
         uwrt-mars-rover-hw-bridge
   CATKIN_DEPENDS
         roscpp
-        std_msgs
 )
 
 # Adds CMakeLists from hw-bridge

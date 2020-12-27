@@ -16,6 +16,6 @@
 
     <depend>roscpp</depend>
     <depend>uwrt_mars_rover_msgs</depend>
-    <depend>uwrt_utils</depend>
+    <depend>uwrt_mars_rover_utils</depend>
 
 </package>

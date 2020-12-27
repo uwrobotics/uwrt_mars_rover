@@ -1,0 +1,14 @@
+uwrt_mars_rover:
+
+  combined_robot_hw:
+    drivetrain:
+      type: uwrt_mars_rover_drivetrain_hw/UWRTMarsRoverDrivetrainHWReal
+      roboteq_canopen_id: 0x01
+      joints:
+        - name: left_drive_joint
+          transmission_reduction: 43.8311688312
+          roboteq_index: 2
+
+        - name: right_drive_joint
+          transmission_reduction: 43.8311688312
+          roboteq_index: 1

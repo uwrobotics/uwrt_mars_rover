@@ -1,0 +1,7 @@
+<launch>
+  <arg name="can_device" default="can0"/>
+  <group ns="/uwrt_mars_rover_utils/">
+    <param name="can_interface" value="$(arg can_device)"/>
+    <node name="uwrt_utils_can_test_node" pkg="uwrt_mars_rover_utils" type="node" respawn="false" output="screen"/>
+  </group>
+</launch>

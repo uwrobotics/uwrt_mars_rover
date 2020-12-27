@@ -11,7 +11,7 @@ NeopixelCan::NeopixelCan(uint16_t can_id_outgoing, uint8_t dlc, const std::strin
   _ifname = name;
   if ((_s = socket(PF_CAN, SOCK_RAW, CAN_RAW)) < 0) {
     ROS_ERROR("Error while opening socket\n");
-    throw - 1;
+    throw std::runtime_error("Error while opening socket in " __FILE__);
   }
   strcpy(_ifr.ifr_name, _ifname.c_str());
   ioctl(_s, SIOCGIFINDEX, &_ifr);
@@ -21,7 +21,7 @@ NeopixelCan::NeopixelCan(uint16_t can_id_outgoing, uint8_t dlc, const std::strin
   // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast): reinterpret cast required by syscall
   if (bind(_s, reinterpret_cast<struct sockaddr *>(&_addr), sizeof(_addr)) < 0) {
     ROS_ERROR("Error in socket bind");
-    throw - 2;
+    throw std::runtime_error("Error in socket bind in " __FILE__);
   }
 }
 void NeopixelCan::sendCAN(const uint8_t data) {

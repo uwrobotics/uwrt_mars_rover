@@ -1,0 +1,35 @@
+<launch>
+    <arg name="control_mode"
+         doc="Control mode that the rover should start in. Valid options are arm_mission, science_mission, arm_only, science_only, drivetrain_only"/>
+
+    <rosparam file="$(find uwrt_mars_rover_control)/cfg/control_loop.yaml" command="load"/>
+    <rosparam file="$(find uwrt_mars_rover_control)/cfg/rover_controllers.yaml" command="load"/>
+    <rosparam file="$(find uwrt_mars_rover_control)/cfg/rover_hardware.yaml" command="load"/>
+
+    <rosparam file="$(find uwrt_mars_rover_drivetrain_hw)/cfg/drivetrain_controllers.yaml" command="load"/>
+    <rosparam file="$(find uwrt_mars_rover_drivetrain_hw)/cfg/drivetrain_hardware.yaml" command="load"/>
+
+    <group ns="/uwrt_mars_rover/">
+        <param name="control_mode" value="$(arg control_mode)"/>
+
+        <!-- list of all available controllers to load. this must be manually updated when new controllers are added -->
+        <arg name="controller_list" value="rover_joint_state_controller
+                                           drivetrain_velocity_controller"/>
+
+       <!-- load all the available controllers -->
+       <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
+             output="screen" args="$(arg controller_list)"/>
+
+       <!-- load robot hw plugins list based on control mode -->
+       <arg name="hardware_list" value="[drivetrain, arm]" if="$(eval control_mode == 'arm_mission')"/>
+       <arg name="hardware_list" value="[drivetrain, science]" if="$(eval control_mode == 'science_mission')"/>
+       <arg name="hardware_list" value="[arm]" if="$(eval control_mode == 'arm_only')"/>
+       <arg name="hardware_list" value="[science]" if="$(eval control_mode == 'science_only')"/>
+       <arg name="hardware_list" value="[drivetrain]" if="$(eval control_mode == 'drivetrain_only')"/>
+
+       <rosparam param="combined_robot_hw/robot_hardware" subst_value="True">$(arg hardware_list)</rosparam>
+
+       <node name="uwrt_mars_rover_control_node" pkg="uwrt_mars_rover_control" type="node" output="screen"/>
+    </group>
+
+</launch>

@@ -6,13 +6,13 @@ find_package(catkin REQUIRED COMPONENTS
         message_generation
         roscpp
         uwrt_mars_rover_msgs
-        uwrt_utils
+        uwrt_mars_rover_utils
         )
 
 ###################################
 ## catkin specific configuration ##
 ###################################
-## The catkin_package macro generates cmake config files for your package
+## The catkin_package macro generates cmake cfg files for your package
 ## Declare things to be passed to dependent projects
 ## INCLUDE_DIRS: uncomment this if your package contains header files
 ## LIBRARIES: libraries you create in this project that dependent projects also need
@@ -26,7 +26,7 @@ catkin_package(
         CATKIN_DEPENDS
         roscpp
         uwrt_mars_rover_msgs
-        uwrt_utils
+        uwrt_mars_rover_utils
 )
 
 ###########

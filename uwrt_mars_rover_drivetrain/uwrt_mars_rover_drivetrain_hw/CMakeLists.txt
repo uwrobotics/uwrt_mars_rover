@@ -46,8 +46,8 @@ install(TARGETS roboteq_driver
         )
 
 install(DIRECTORY
-        drivers/roboteq_driver/include
-        include/${PROJECT_NAME}
+        drivers/roboteq_driver/include/
+        include/${PROJECT_NAME}/
         DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
         FILES_MATCHING
         PATTERN "*.h"

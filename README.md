@@ -39,7 +39,9 @@ cd <catkin workspace location>/src
 rosinstall --catkin . uwrt_mars_rover/upstream_dependencies.rosinstall uwrt_mars_rover/metapackage_dependencies.rosinstall
 rosdep install --from-paths . --ignore-src -r -y
 ```
-
+**Note:** If there have been certain changes to the workspace (ex. if a refactor moved one of the metapackage deps to a
+different folder), you may need to delete the existing `.rosinstall` that's found in `<catkin workspace location>/src`
+before you run the above commands.
 
 ## Adding Dependencies
 For ease of setup on the Jetson, we should always try to use prebuilt binaries of dependent ROS packages, instead of 

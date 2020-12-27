@@ -39,7 +39,9 @@ add_library(${PROJECT_NAME}
         )
 target_link_libraries(${PROJECT_NAME} roboteq_driver ${catkin_LIBRARIES})
 
-install(TARGETS roboteq_driver
+install(TARGETS
+        roboteq_driver
+        ${PROJECT_NAME}
         ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
         LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
         RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}

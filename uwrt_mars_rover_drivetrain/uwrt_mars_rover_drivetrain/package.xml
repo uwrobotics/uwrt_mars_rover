@@ -12,6 +12,8 @@
 
     <buildtool_depend>catkin</buildtool_depend>
 
+    <exec_depend>uwrt_mars_rover_drivetrain_hw</exec_depend>
+
     <export>
         <metapackage/>
     </export>

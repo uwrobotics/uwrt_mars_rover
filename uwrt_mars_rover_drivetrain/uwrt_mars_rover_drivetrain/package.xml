@@ -5,6 +5,7 @@
     <version>0.0.0</version>
     <description>Metapackage containing all of UWRT's packages related to the drivetrain subsystem</description>
 
+    <maintainer email="azumnanji@gmail.com">Azum Nanji</maintainer>
     <maintainer email="melvin.mc.wang@gmail.com">Melvin Wang</maintainer>
 
     <license>MIT</license>

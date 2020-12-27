@@ -10,9 +10,6 @@
 
   <buildtool_depend>catkin</buildtool_depend>
 
-  <!--TODO: FILL IN  -->
-  <!-- uwrt_mars_rover metapkgs -->
-
-  <!-- uwrt_mars_rover top-level pkgs -->
+  <exec_depend>uwrt_mars_rover_control</exec_depend>
 
 </package>

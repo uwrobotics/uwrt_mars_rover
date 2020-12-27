@@ -11,7 +11,7 @@
 
     <buildtool_depend>catkin</buildtool_depend>
 
-    <exec_depend>uwrt_ar_tracker</exec_depend>
+    <exec_depend>uwrt_mars_rover_ar_tracker</exec_depend>
 
     <export>
         <metapackage/>

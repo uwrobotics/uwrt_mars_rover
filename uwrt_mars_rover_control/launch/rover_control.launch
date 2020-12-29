@@ -1,6 +1,11 @@
 <launch>
     <arg name="control_mode"
-         doc="Control mode that the rover should start in. Valid options are arm_mission, science_mission, arm_only, science_only, drivetrain_only"/>
+         doc="Control mode that the rover should start in.
+              Valid options are: [arm_mission, science_mission, arm_only, science_only, drivetrain_only]"/>
+    <arg name="use_realtime_kernel"
+         default="true"
+         doc="A bool that controls whether or not to set realtime thread priority and lock memory pages. This can only
+              be enabled if you are using a realtime linux kernel. Valid options are: [true, false]"/>
 
     <rosparam file="$(find uwrt_mars_rover_control)/cfg/control_loop.yaml" command="load"/>
     <rosparam file="$(find uwrt_mars_rover_control)/cfg/rover_controllers.yaml" command="load"/>
@@ -11,6 +16,7 @@
 
     <group ns="/uwrt_mars_rover/">
         <param name="control_mode" value="$(arg control_mode)"/>
+        <param name="use_realtime_kernel" value="$(arg use_realtime_kernel)"/>
 
         <!-- list of all available controllers to load. this must be manually updated when new controllers are added -->
         <arg name="controller_list" value="rover_joint_state_controller

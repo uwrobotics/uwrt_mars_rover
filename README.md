@@ -40,15 +40,17 @@ cd <catkin workspace location>/src
 rosinstall --catkin . uwrt_mars_rover/upstream_dependencies.rosinstall uwrt_mars_rover/metapackage_dependencies.rosinstall
 rosdep install --from-paths . --ignore-src -r -y
 ```
+
 **Note:** If there have been certain changes to the workspace (ex. if a refactor moved one of the metapackage deps to a
 different folder), you may need to delete the existing `.rosinstall` that's found in `<catkin workspace location>/src`
 before you run the above commands.
 
 ## Adding Dependencies
-For ease of setup on the Jetson, we should always try to use prebuilt binaries of dependent ROS packages, instead of 
-including their sources. This means that if a package you write is dependent on a 3rd party package, you should just 
-declare that dependency in the `CMakelists.txt` and `package.xml`. `rosdep` will take care of resolving the 
-dependencies. 
+
+For ease of setup on the Jetson, we should always try to use prebuilt binaries of dependent ROS packages, instead of
+including their sources. This means that if a package you write is dependent on a 3rd party package, you should just
+declare that dependency in the `CMakelists.txt` and `package.xml`. `rosdep` will take care of resolving the
+dependencies.
 
 In the event that you cannot use the binaries (ex. we rely on a feature that has not been released), the package source
 code should be cloned outside of our metapackage, so that our CI doesn't run linting/formatting checks on it. To do
@@ -57,17 +59,59 @@ party master branch), please pin the rosinstall entry to a commit hash, rather t
 care of cloning the source dependencies declared in `upstream_dependencies.rosinstall`.
 
 If you need to declare dependencies that are not ROS packages, typically you can declare them as system dependencies in
-a `package.xml`. If it is an unreleased source dependency, (ex. the roboteq c++ driver we wrote), declare it in the 
-`metapackage_dependencies.rosinstall`. Source code modules are still subject to the clangformat and clangtidy checks 
-because they should only consist of code the team has written. 
+a `package.xml`. If it is an unreleased source dependency, (ex. the roboteq c++ driver we wrote), declare it in the
+`metapackage_dependencies.rosinstall`. Source code modules are still subject to the clangformat and clangtidy checks
+because they should only consist of code the team has written.
+
+## Launching the Rover!
+
+The main entry point of the rover is `rover.launch` in the `uwrt_mars_rover_bringup` package.
+
+To list the required and optional arguements of `rover.launch`:
+
+```
+roslaunch uwrt_mars_rover_bringup rover.launch --ros-args
+```
+
+Ex. To launch the rover ros stack in drivetrain only mode:
+
+```
+roslaunch uwrt_mars_rover_bringup rover.launch control_mode:=drivetrain_only 
+```
+
+### Hard Realtime Loop
+
+`rover.launch` makes the assumption that you are running a linux kernel will realtime capabilities (like our NVIDIA
+Jetsons where we have enabled the PREEMPT_RT kernel patch). If this assumption is not true(ex. you are running nodes on
+your own development machines), you must run `rover.launch` with `use_realtime_kernel:=false`
+
+On machines with a realtime kernel, make sure you have permissions to lock unlimited memory for processes.
+
+To check:
+
+```
+ulimit -l
+```
+
+If it does not return `unlimited`, you must adjust your memory locking permissions:
+
+1. Open `/etc/security/limits.conf` as sudo in a text editor (ex. gedit, nano, vim)
+2. Add the following line:
+   ```
+   <your username>    -   memlock   -1
+   ```
+3. Reboot your computer
+4. Check that `ulimit -l` returns `unlimited`
 
 ## Git Workflow
+
 ### Issues
 
 Before writing code, assign yourself the issue that pertains to the code you are going to write. If there is no GitHub
 issue created yet, create one for yourself! Try to keep all discussions related to the task within the issue.
 
 ### Branch Naming
+
 To be able to quickly see work done by members, you should name you're branches with the following scheme:
 `user/<username>/#<issue number>/<issue name>`
 

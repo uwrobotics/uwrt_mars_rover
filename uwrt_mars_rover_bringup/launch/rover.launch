@@ -1,6 +1,11 @@
 <launch>
     <arg name="control_mode"
-         doc="Control mode that the rover should start in. Valid options are arm_mission, science_mission, arm_only, science_only, drivetrain_only"/>
+         doc="Control mode that the rover should start in.
+              Valid options are: [arm_mission, science_mission, arm_only, science_only, drivetrain_only]"/>
+    <arg name="use_realtime_kernel"
+         default="true"
+         doc="A bool that controls whether or not to set realtime thread priority and lock memory pages. This can only
+              be enabled if you are using a realtime linux kernel. Valid options are: [true, false]"/>
 
     <include file="$(find uwrt_mars_rover_control)/launch/rover_control.launch" pass_all_args="true"/>
 

@@ -22,7 +22,7 @@ class MarsRoverHWControlLoop {
 
   virtual bool init();
 
-  void update(const ros::Time& time_now);
+  void update();
 
  protected:
   const std::string name_;
@@ -33,6 +33,7 @@ class MarsRoverHWControlLoop {
 
   std::unique_ptr<controller_manager::ControllerManager> controller_manager_;
 
+  ros::Time current_control_loop_time_;
   ros::Time last_control_loop_time_;
   double controller_watchdog_timeout_{0};
   double control_freq_{0};

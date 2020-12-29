@@ -6,6 +6,7 @@ find_package(catkin REQUIRED COMPONENTS
         combined_robot_hw
         controller_manager
         hardware_interface
+        indexer_controller
         joint_limits_interface
         roscpp
         transmission_interface
@@ -31,6 +32,7 @@ catkin_package(
         combined_robot_hw
         controller_manager
         hardware_interface
+        indexer_controller
         joint_limits_interface
         roscpp
         transmission_interface
@@ -54,7 +56,9 @@ add_library(${PROJECT_NAME}
         src/${PROJECT_NAME}_control_loop_real.cpp
         src/${PROJECT_NAME}_drivetrain.cpp
         src/${PROJECT_NAME}_drivetrain_real.cpp
-        )
+        src/${PROJECT_NAME}_science.cpp
+        src/${PROJECT_NAME}_science_real.cpp
+)
 
 add_library(roboteq_driver
         drivers/roboteq_driver/src/CanopenInterface.cpp

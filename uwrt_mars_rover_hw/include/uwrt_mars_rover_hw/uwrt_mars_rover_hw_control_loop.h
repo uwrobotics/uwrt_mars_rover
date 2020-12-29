@@ -7,8 +7,6 @@
 #include <memory>
 #include <string>
 
-#include "uwrt_mars_rover_hw_drivetrain.h"
-
 namespace uwrt_mars_rover_hw {
 
 class MarsRoverHWControlLoop {

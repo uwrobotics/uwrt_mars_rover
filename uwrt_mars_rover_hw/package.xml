@@ -22,4 +22,6 @@
         <hardware_interface plugin="${prefix}/uwrt_mars_rover_hw_plugin.xml"/>
     </export>
 
+    <depend>indexer_controller</depend>
+
 </package>

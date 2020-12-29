@@ -4,7 +4,8 @@
 
 ## Repository Setup
 
-To get started with development, clone this repo into the `src` directory of your `catkin` workspace. Use `rosinstall` and `rosdep` to fetch any source or binary dependencies.
+To get started with development, clone this repo into the `src` directory of your `catkin` workspace. Use `rosinstall`
+and `rosdep` to fetch any source or binary dependencies.
 
 ```bash
 # Ensure rosinstall and rosdep are installed and up to date
@@ -49,11 +50,11 @@ including their sources. This means that if a package you write is dependent on 
 declare that dependency in the `CMakelists.txt` and `package.xml`. `rosdep` will take care of resolving the 
 dependencies. 
 
-In the event that you cannot use the binaries (ex. we rely on a feature that has not been released), the package source 
-code should be cloned outside of our metapackage, so that our CI doesn't run linting/formatting checks on it. To do 
-this, declare the source dependency in `upstream_dependencies.rosinstall`. If using unreleased features(ie. cloning 3rd party master branch), 
-please pin the rosinstall entry to a commit hash, rather than the branch. `rosinstall` will take care of cloning the 
-source dependencies declared in `upstream_dependencies.rosinstall`. 
+In the event that you cannot use the binaries (ex. we rely on a feature that has not been released), the package source
+code should be cloned outside of our metapackage, so that our CI doesn't run linting/formatting checks on it. To do
+this, declare the source dependency in `upstream_dependencies.rosinstall`. If using unreleased features(ie. cloning 3rd
+party master branch), please pin the rosinstall entry to a commit hash, rather than the branch. `rosinstall` will take
+care of cloning the source dependencies declared in `upstream_dependencies.rosinstall`.
 
 If you need to declare dependencies that are not ROS packages, typically you can declare them as system dependencies in
 a `package.xml`. If it is an unreleased source dependency, (ex. the roboteq c++ driver we wrote), declare it in the 
@@ -62,7 +63,9 @@ because they should only consist of code the team has written.
 
 ## Git Workflow
 ### Issues
-Before writing code, assign yourself the issue that pertains to the code you are going to write. If there is no GitHub issue created yet, create one for yourself! Try to keep all discussions related to the task within the issue.
+
+Before writing code, assign yourself the issue that pertains to the code you are going to write. If there is no GitHub
+issue created yet, create one for yourself! Try to keep all discussions related to the task within the issue.
 
 ### Branch Naming
 To be able to quickly see work done by members, you should name you're branches with the following scheme:
@@ -72,14 +75,22 @@ For example:
 `user/wmmc88/#2/update-readme-with-git-workflow`
 
 ### Pull Requests
-To merge code into master, you must open a pull request. Branches must be up to date with the latest master to be able to merge. Choose people you think are familiar with your task to do code reviews of your code. 
-After your PR is merged, make sure you close the associated issue and delete the branch. Github will usually delete the branch automatically and you can automatically close the issue by mentioning `closes #<issue number>` in the PR or in one of the commits on the branch.
 
-If you have code that's not ready to merge, but you'd still like people thoughts on it, open a [draft pull request](https://github.blog/2019-02-14-introducing-draft-pull-requests/).
+To merge code into master, you must open a pull request. Branches must be up to date with the latest master to be able
+to merge. Choose people you think are familiar with your task to do code reviews of your code. After your PR is merged,
+make sure you close the associated issue and delete the branch. Github will usually delete the branch automatically and
+you can automatically close the issue by mentioning `closes #<issue number>` in the PR or in one of the commits on the
+branch.
+
+If you have code that's not ready to merge, but you'd still like people thoughts on it, open a
+[draft pull request](https://github.blog/2019-02-14-introducing-draft-pull-requests/).
 
 ## Running CI Stages Locally
 ### Strict Build
-CI builds with extra cmake flags that can help catch common errors in code. Follow the instructions [here](https://github.com/uwrobotics/dev_tools) to install our `catkin_tools` profiles. It is highly encouraged for you to use this as your default `catkin_tools` profile when developing code. To build using our stricter build flags:
+
+CI builds with extra cmake flags that can help catch common errors in code. Follow the instructions
+[here](https://github.com/uwrobotics/dev_tools) to install our `catkin_tools` profiles. It is highly encouraged for you
+to use this as your default `catkin_tools` profile when developing code. To build using our stricter build flags:
 ```
 catkin clean -y
 catkin profile set strict
@@ -87,7 +98,9 @@ catkin build
 ```
 
 ### Clang Tidy
-Follow the instructions [here](https://github.com/uwrobotics/dev_tools) to install our `catkin_tools` profiles. You will also need to install `clang-tidy-9`
+
+Follow the instructions [here](https://github.com/uwrobotics/dev_tools) to install our `catkin_tools` profiles. You will
+also need to install `clang-tidy-9`
 ```
 sudo apt install clang-tidy-9
 ```
@@ -99,8 +112,10 @@ catkin build
 ```
 
 ### Release Build
-The release build profile is a combination of stricter build flags, clang-tidy and `-O3` optimizations. This profile also installs the packages in an isolated install space. This is the profile you should use to build code for execution on the rover.
-Assuming you've installed our `catkin_tools` profiles and `clang-tidy-9`, to build in release mode:
+
+The release build profile is a combination of stricter build flags, clang-tidy and `-O3` optimizations. This profile
+also installs the packages in an isolated install space. This is the profile you should use to build code for execution
+on the rover. Assuming you've installed our `catkin_tools` profiles and `clang-tidy-9`, to build in release mode:
 ```
 catkin clean -y
 catkin profile set release
@@ -108,10 +123,14 @@ catkin build
 ```
 
 ### Clang Format
-You can install clang-format and run it on the files themselves, but the recommended way is to install a clang-format plugin for whatever IDE you're using. They typically automatically find and use the `.clang-format` file in our repo. 
+
+You can install clang-format and run it on the files themselves, but the recommended way is to install a clang-format
+plugin for whatever IDE you're using. They typically automatically find and use the `.clang-format` file in our repo.
 
 ### Catkin Lint
-Catkin Lint ensures that the catkin-specific files are configured correctly. This includes the `package.xml`, `CMakeLists.txt` and more. To install `catkin_lint`:
+
+Catkin Lint ensures that the catkin-specific files are configured correctly. This includes the `package.xml`,
+`CMakeLists.txt` and more. To install the latest `catkin_lint`:
 ```
 sudo add-apt-repository ppa:roehling/ros
 sudo apt update

@@ -12,14 +12,17 @@ bool MarsRoverHWControlLoop::init() {
   ros::NodeHandle loop_nh(nh_, name_);
   // TODO: utils package with rosparam errors on not finding param_name
   bool param_retrieved = loop_nh.param<double>("control_frequency", control_freq_, DEFAULT_CONTROL_FREQUENCY);
-  ROS_ERROR_STREAM_COND_NAMED(!param_retrieved, name_,
-                              loop_nh.getNamespace()
-                                  << "/control_frequency could not be found and loaded from parameter server.");
-  param_retrieved = loop_nh.param<double>("controllers_watchdog_timeout", controller_watchdog_timeout_,
-                                          DEFAULT_CONTROLLER_WATCHDOG_TIMEOUT);
   ROS_ERROR_STREAM_COND_NAMED(
       !param_retrieved, name_,
-      loop_nh.getNamespace() << "/controllers_watchdog_timeout could not be found and loaded from parameter server.");
+      loop_nh.getNamespace()
+          << "/control_frequency could not be found and loaded from parameter server. Using default value of "
+          << DEFAULT_CONTROL_FREQUENCY);
+  param_retrieved = loop_nh.param<double>("controllers_watchdog_timeout", controller_watchdog_timeout_,
+                                          DEFAULT_CONTROLLER_WATCHDOG_TIMEOUT);
+  ROS_ERROR_STREAM_COND_NAMED(!param_retrieved, name_,
+                              loop_nh.getNamespace() << "/controllers_watchdog_timeout could not be found and loaded "
+                                                        "from parameter server. Using default value of "
+                                                     << DEFAULT_CONTROLLER_WATCHDOG_TIMEOUT);
 
   ros::NodeHandle rover_hw_nh(nh_, "combined_robot_hw");
   rover_hw_ = std::make_unique<combined_robot_hw::CombinedRobotHW>();

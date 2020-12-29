@@ -54,3 +54,7 @@ install(DIRECTORY include/${PROJECT_NAME}
         PATTERN "*.hpp"
         PATTERN ".svn" EXCLUDE
         )
+
+install(DIRECTORY cfg launch
+        DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
+        )

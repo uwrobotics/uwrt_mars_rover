@@ -57,6 +57,10 @@ install(DIRECTORY
         PATTERN ".svn" EXCLUDE
         )
 
+install(DIRECTORY cfg
+        DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
+        )
+
 install(FILES ${PROJECT_NAME}_plugin.xml
         DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
         )

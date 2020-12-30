@@ -13,15 +13,3 @@ updates:
     reviewers:
       - "wmmc88"
       - "azumnanji"
-
-  - package-ecosystem: "gitsubmodule"
-    directory: "/"
-    schedule:
-      interval: "daily"
-    pull-request-branch-name:
-      separator: "/"
-    assignees:
-      - "wmmc88"
-    reviewers:
-      - "wmmc88"
-      - "azumnanji"

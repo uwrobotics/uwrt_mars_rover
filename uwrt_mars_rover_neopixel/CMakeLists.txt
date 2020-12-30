@@ -5,8 +5,8 @@ project(uwrt_mars_rover_neopixel)
 find_package(catkin REQUIRED COMPONENTS
         message_generation
         roscpp
-        uwrt_mars_rover_hw_bridge
         uwrt_mars_rover_msgs
+        uwrt_mars_rover_utils
         )
 
 ###################################
@@ -25,8 +25,8 @@ catkin_package(
         ${PROJECT_NAME}
         CATKIN_DEPENDS
         roscpp
-        uwrt_mars_rover_hw_bridge
         uwrt_mars_rover_msgs
+        uwrt_mars_rover_utils
 )
 
 ###########

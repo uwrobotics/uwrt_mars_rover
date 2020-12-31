@@ -103,4 +103,3 @@ int main(int argc, char* argv[]) {  // NOLINT(bugprone-exception-escape)
 
   return EXIT_SUCCESS;
 }
-// namespace uwrt_mars_rover_utils

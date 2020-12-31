@@ -32,12 +32,21 @@ bool MarsRoverHWControlLoop::init() {
   }
 
   controller_manager_ = std::make_unique<controller_manager::ControllerManager>(rover_hw_.get(), nh_);
+
+  // Set last_control_loop_time_ for first update call
+  ros::ros_steadytime(last_control_loop_time_.sec, last_control_loop_time_.nsec);
+
   return true;
 }
 
-void MarsRoverHWControlLoop::update(const ros::Time& time_now) {
-  ros::Duration control_loop_period = time_now - last_control_loop_time_;
-  last_control_loop_time_ = time_now;
+void MarsRoverHWControlLoop::update() {
+  // Update current time using UNIX time
+  ros::Time time_now = ros::Time::now();
+
+  // Calculate control loop period using Monotonic Time
+  ros::ros_steadytime(current_control_loop_time_.sec, current_control_loop_time_.nsec);
+  ros::Duration control_loop_period = current_control_loop_time_ - last_control_loop_time_;
+  last_control_loop_time_ = current_control_loop_time_;
 
   rover_hw_->read(time_now, control_loop_period);
 
@@ -45,7 +54,7 @@ void MarsRoverHWControlLoop::update(const ros::Time& time_now) {
   ROS_WARN_STREAM_COND_NAMED(reset_controllers, name_,
                              "Control loop period exceeded watchdog timeout by "
                                  << (control_loop_period.toSec() - controller_watchdog_timeout_)
-                                 << " seconds. Restarting controllers.");
+                                 << " seconds. Resetting controllers.");
   controller_manager_->update(time_now, control_loop_period, reset_controllers);
 
   rover_hw_->write(time_now, control_loop_period);

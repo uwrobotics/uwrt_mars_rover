@@ -67,8 +67,8 @@
             <Nodes>
               <Node Text="USB/RS232 Safety">
                 <Nodes>
-                  <Node Text="Watchdog (ms)" Value="0">
-                    <Nodes />
+                  <Node Text="Watchdog (ms)" Value="100">
+                    <Nodes/>
                   </Node>
                 </Nodes>
               </Node>

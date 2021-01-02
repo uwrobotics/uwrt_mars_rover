@@ -1,8 +1,7 @@
-#include "uwrt_mars_rover_utils/uwrt_can.h"
-
 #include <ros/ros.h>
 #include <sys/ioctl.h>
 #include <sys/socket.h>
+#include <uwrt_mars_rover_utils/uwrt_can.h>
 
 #include <cerrno>
 #include <cstring>

@@ -1,8 +1,6 @@
-#include "RoboteqController.hpp"
-
+#include <CommunicationInterface.hpp>
+#include <RoboteqController.hpp>
 #include <memory>
-
-#include "CommunicationInterface.hpp"
 
 namespace roboteq {
 

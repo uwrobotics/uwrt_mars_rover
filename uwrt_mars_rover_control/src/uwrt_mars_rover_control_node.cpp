@@ -1,9 +1,9 @@
 #include <ros/console.h>
 #include <sys/mman.h>
+#include <uwrt_mars_rover_control/uwrt_mars_rover_hw_control_loop_real.h>
+#include <uwrt_mars_rover_utils/uwrt_params.h>
 
 #include <cstdlib>
-
-#include "uwrt_mars_rover_control/uwrt_mars_rover_hw_control_loop_real.h"
 
 /** hasRealtimeKernel - Determine whether or not kernel has realtime patch by checking /sys/kernel/realtime
  *
@@ -80,7 +80,7 @@ void preventMemoryPageFaults(const std::string& node_name) {
 }
 
 int main(int argc, char** argv) {
-  std::string node_name = "uwrt_mars_rover_control";
+  const std::string node_name = "uwrt_mars_rover_control";
   ros::init(argc, argv, node_name);
   ros::NodeHandle nh;
 
@@ -88,15 +88,9 @@ int main(int argc, char** argv) {
   ros::AsyncSpinner async_spinner(0);
   async_spinner.start();
 
-  //  TODO: I know this param block looks ugly and overly verbose. This is just here until #48 is implemented(soon).
-  bool use_realtime_kernel = false;
-  bool default_realtime_mode = true;
-  bool param_retrieved = nh.param<bool>("use_realtime_kernel", use_realtime_kernel, default_realtime_mode);
-  ROS_WARN_STREAM_COND_NAMED(
-      !param_retrieved, node_name,
-      nh.getNamespace()
-          << "/use_realtime_kernel could not be found and loaded from parameter server. Using default value of "
-          << default_realtime_mode);
+  const bool default_realtime_mode = true;
+  const bool use_realtime_kernel{
+      uwrt_mars_rover_utils::getParam(nh, "use_realtime_kernel", default_realtime_mode, node_name)};
 
   if (use_realtime_kernel) {
     constexpr auto REALTIME_SCHEDULING_POLICY = SCHED_FIFO;

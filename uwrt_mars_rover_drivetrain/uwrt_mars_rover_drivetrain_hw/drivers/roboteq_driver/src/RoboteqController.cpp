@@ -1,6 +1,5 @@
 #include <CommunicationInterface.hpp>
 #include <RoboteqController.hpp>
-#include <memory>
 
 namespace roboteq {
 

@@ -3,9 +3,6 @@
 #include <sys/socket.h>
 #include <uwrt_mars_rover_utils/uwrt_can.h>
 
-#include <cerrno>
-#include <cstring>
-
 namespace uwrt_mars_rover_utils {
 
 // static constexpr need to be declared again in cpp file (fixed in c++17)

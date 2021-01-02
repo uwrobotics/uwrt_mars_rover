@@ -1,8 +1,5 @@
 #include <uwrt_mars_rover_neopixel/uwrt_mars_rover_neopixel_control.h>
-#include <uwrt_mars_rover_utils/hw_bridge.h>
 #include <uwrt_mars_rover_utils/uwrt_params.h>
-
-#include <cstdlib>
 
 constexpr uint8_t DEFAULT_LOOP_RATE{1};
 constexpr uint16_t DEFAULT_NEOPIXEL_CAN_ID_OUTGOING{0x784};

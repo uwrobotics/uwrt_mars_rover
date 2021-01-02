@@ -1,8 +1,6 @@
 #include <uwrt_mars_rover_drivetrain_hw/uwrt_mars_rover_drivetrain_hw_real.h>
 #include <uwrt_mars_rover_utils/uwrt_params.h>
 
-#include <CanopenInterface.hpp>
-#include <cmath>
 #include <pluginlib/class_list_macros.hpp>
 
 namespace uwrt_mars_rover_drivetrain_hw {

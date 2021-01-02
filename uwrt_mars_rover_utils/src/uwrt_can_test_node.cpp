@@ -3,9 +3,6 @@
 #include <std_msgs/UInt32.h>
 #include <uwrt_mars_rover_utils/uwrt_can.h>
 
-#include <string>
-#include <vector>
-
 // ids
 static constexpr uint32_t FLOAT_READ_ID1 = 0x001;
 static constexpr uint32_t FLOAT_READ_ID2 = 0x002;

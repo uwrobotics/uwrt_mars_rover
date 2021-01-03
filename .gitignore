@@ -2,7 +2,6 @@ devel/
 logs/
 build/
 bin/
-lib/
 msg_gen/
 srv_gen/
 msg/*Action.msg
@@ -52,4 +51,7 @@ qtcreator-*
 
 # Catkin custom files
 CATKIN_IGNORE
+
+# uwrt_mars_rover_hw_bridge shouldnt be added as a git submodule
+uwrt_mars_rover_utils/lib/uwrt_mars_rover_hw_bridge/
 

@@ -16,6 +16,7 @@
   <depend>controller_manager</depend>
   <depend>hardware_interface</depend>
   <depend>uwrt_mars_rover_drivetrain_hw</depend>
+  <depend>uwrt_mars_rover_utils</depend>
 
   <exec_depend>rqt_controller_manager</exec_depend>
 

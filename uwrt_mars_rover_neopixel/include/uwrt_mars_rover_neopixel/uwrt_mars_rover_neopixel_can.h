@@ -7,27 +7,22 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <unistd.h>
+
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
 // CAN lib includes done
 #include <string>
+
 #include "ros/ros.h"
 // This is a library the Neopixel Node uses to send messages over CAN.
 // If a general CAN library is added to the repo, delete this and use the general CAN library.
 class NeopixelCan {
  private:
-  int _s;
-  // Build the CAN Socket
-  sockaddr_can _addr;
-  // Build the outgoing CAN packet
-  can_frame _outgoing_packet{};
-  // log filter
-  std::string _log_filter;
-  // Build the incoming CAN packet
-  can_frame _incoming_packet{};
-  ifreq _ifr;
-  std::string _ifname;
+  int socket_handle_;
+  can_frame outgoing_can_frame_{};
+  std::string log_filter_;
+  can_frame incoming_can_frame_{};
 
  public:
   // Constructor for my CAN class

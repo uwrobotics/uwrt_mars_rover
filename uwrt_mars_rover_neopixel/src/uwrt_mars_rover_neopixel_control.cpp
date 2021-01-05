@@ -1,4 +1,4 @@
-#include "uwrt_mars_rover_neopixel/uwrt_mars_rover_neopixel_control.h"
+#include <uwrt_mars_rover_neopixel/uwrt_mars_rover_neopixel_control.h>
 
 constexpr uint8_t FRAME_PAYLOAD_LENGTH = 1;
 

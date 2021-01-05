@@ -1,17 +1,10 @@
-#include "CanopenInterface.hpp"
-
 #include <linux/can.h>
 #include <linux/can/raw.h>
 #include <net/if.h>
 #include <ros/console.h>
 #include <sys/ioctl.h>
-#include <sys/socket.h>
-#include <sys/time.h>
-#include <unistd.h>
 
-#include <cmath>
-#include <cstdio>
-#include <cstring>
+#include <CanopenInterface.hpp>
 
 namespace roboteq {
 

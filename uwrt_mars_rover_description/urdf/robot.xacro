@@ -71,7 +71,7 @@
     <origin xyz="0 ${_side*0.24289} 0" rpy="0.0 0.0 ${pi*rotate}"/>
     <parent link="base_link"/>
     <child link="rocker_${_suffix}"/>
-    <axis xyz="0.0 1.0 0.0"/>
+    <axis xyz="0.0 ${_side*1.0} 0.0"/>
     <limit lower="${-pi/4}" upper="${pi/4}" effort="1000000" velocity="5"/>
   </joint>
 

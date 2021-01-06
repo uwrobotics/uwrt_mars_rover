@@ -6,6 +6,7 @@ find_package(catkin REQUIRED COMPONENTS
         message_generation
         roscpp
         uwrt_mars_rover_msgs
+        uwrt_mars_rover_utils
         )
 
 ###################################
@@ -25,6 +26,7 @@ catkin_package(
         CATKIN_DEPENDS
         roscpp
         uwrt_mars_rover_msgs
+        uwrt_mars_rover_utils
 )
 
 ###########

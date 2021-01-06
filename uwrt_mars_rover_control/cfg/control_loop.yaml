@@ -1,0 +1,5 @@
+uwrt_mars_rover:
+
+  rover_control_loop_real:
+    control_frequency: 50.0 # hz
+    controllers_watchdog_timeout: 0.04 # seconds

@@ -27,24 +27,30 @@ include_directories(
         ${catkin_INCLUDE_DIRS}
 )
 
-# Declare and link the C++
+# Declare and link the C++ Library
 add_library(${PROJECT_NAME}
         src/uwrt_can.cpp
         src/uwrt_can_test_node.cpp
         )
 
-# add executable and set dependencies
+# uwrt_can_test_node
 add_executable(uwrt_can_test_node src/uwrt_can_test_node.cpp)
 add_dependencies(uwrt_can_test_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-
-# link dependencies for executable
 target_link_libraries(uwrt_can_test_node
         ${PROJECT_NAME}
         ${catkin_LIBRARIES}
         )
 
-# Install executable
-install(TARGETS uwrt_can_test_node
+# uwrt_params_test_node
+add_executable(uwrt_params_test_node src/uwrt_params_test_node.cpp)
+add_dependencies(uwrt_params_test_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(uwrt_params_test_node
+        ${PROJECT_NAME}
+        ${catkin_LIBRARIES}
+        )
+
+# Install executables
+install(TARGETS uwrt_can_test_node uwrt_params_test_node
         RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
         )
 

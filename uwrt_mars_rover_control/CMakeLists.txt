@@ -7,6 +7,7 @@ find_package(catkin REQUIRED COMPONENTS
         hardware_interface
         roscpp
         uwrt_mars_rover_drivetrain_hw
+        uwrt_mars_rover_utils
         )
 
 catkin_package(
@@ -20,6 +21,7 @@ catkin_package(
         hardware_interface
         roscpp
         uwrt_mars_rover_drivetrain_hw
+        uwrt_mars_rover_utils
 )
 
 include_directories(

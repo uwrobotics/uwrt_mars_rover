@@ -1,45 +1,49 @@
-#include "uwrt_mars_rover_neopixel/uwrt_mars_rover_neopixel_can.h"
+#include <uwrt_mars_rover_neopixel/uwrt_mars_rover_neopixel_can.h>
 
 constexpr uint16_t NEOPIXEL_CAN_ID_INCOMING = 0x785;
 
 NeopixelCan::NeopixelCan(uint16_t can_id_outgoing, uint8_t dlc, const std::string &name, std::string log_filter)
-    : _addr{}, _ifr{}, _log_filter(std::move(log_filter)) {
+    : log_filter_(std::move(log_filter)) {
   // Prepare the outgoing can packet
-  _outgoing_packet.can_id = can_id_outgoing;
-  _outgoing_packet.can_dlc = dlc;
+  outgoing_can_frame_.can_id = can_id_outgoing;
+  outgoing_can_frame_.can_dlc = dlc;
   // General work for socket binding
-  _ifname = name;
-  if ((_s = socket(PF_CAN, SOCK_RAW, CAN_RAW)) < 0) {
+  if ((socket_handle_ = socket(PF_CAN, SOCK_RAW, CAN_RAW)) < 0) {
     ROS_ERROR("Error while opening socket\n");
     throw std::runtime_error("Error while opening socket in " __FILE__);
   }
-  strcpy(_ifr.ifr_name, _ifname.c_str());
-  ioctl(_s, SIOCGIFINDEX, &_ifr);
-  _addr.can_family = AF_CAN;
-  _addr.can_ifindex = _ifr.ifr_ifindex;
+  const std::string &can_interface_name{name};
+  ifreq interface_request{};
+  strcpy(interface_request.ifr_name, can_interface_name.c_str());
+  ioctl(socket_handle_, SIOCGIFINDEX, &interface_request);
+
+  sockaddr_can socket_addr{};
+  socket_addr.can_family = AF_CAN;
+  socket_addr.can_ifindex = interface_request.ifr_ifindex;
+
   // Bind socket CAN to an interface
   // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast): reinterpret cast required by syscall
-  if (bind(_s, reinterpret_cast<struct sockaddr *>(&_addr), sizeof(_addr)) < 0) {
+  if (bind(socket_handle_, reinterpret_cast<struct sockaddr *>(&socket_addr), sizeof(socket_addr)) < 0) {
     ROS_ERROR("Error in socket bind");
     throw std::runtime_error("Error in socket bind in " __FILE__);
   }
 }
 void NeopixelCan::sendCAN(const uint8_t data) {
   // Store data into the data potion of the CAN packet
-  _outgoing_packet.data[0] = data;
+  outgoing_can_frame_.data[0] = data;
   // Send out the CAN packet
-  write(_s, &_outgoing_packet, sizeof(_outgoing_packet));
+  write(socket_handle_, &outgoing_can_frame_, sizeof(outgoing_can_frame_));
 }
 bool NeopixelCan::waitforAck() {
-  ROS_INFO_NAMED(_log_filter, "Now waiting for acknowledgement message.");
+  ROS_INFO_NAMED(log_filter_, "Now waiting for acknowledgement message.");
   do {
-    recv(_s, &_incoming_packet, sizeof(_incoming_packet), 0);
-    ROS_INFO_NAMED(_log_filter, "CAN message received. Checking validity...");
-    ROS_INFO_COND_NAMED(_incoming_packet.can_id != NEOPIXEL_CAN_ID_INCOMING || _incoming_packet.data[0] != 1,
-                        _log_filter,
+    recv(socket_handle_, &incoming_can_frame_, sizeof(incoming_can_frame_), 0);
+    ROS_INFO_NAMED(log_filter_, "CAN message received. Checking validity...");
+    ROS_INFO_COND_NAMED(incoming_can_frame_.can_id != NEOPIXEL_CAN_ID_INCOMING || incoming_can_frame_.data[0] != 1,
+                        log_filter_,
                         "The received CAN message did not match the expected acknowledgment message. Waiting again.");
-  } while (_incoming_packet.can_id != NEOPIXEL_CAN_ID_INCOMING || _incoming_packet.data[0] != 1);
-  ROS_INFO_NAMED(_log_filter, "The expected acknowledgement message was received.");
+  } while (incoming_can_frame_.can_id != NEOPIXEL_CAN_ID_INCOMING || incoming_can_frame_.data[0] != 1);
+  ROS_INFO_NAMED(log_filter_, "The expected acknowledgement message was received.");
   return true;
   // for now, this function cannot time out and return false
   // this will be implemented in a wrapper lib for can later

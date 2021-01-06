@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<launch>
+	<arg name="frame_id" default="imu_link"/>
+
+	<node pkg="vectornav" type="vnpub" name="vectornav" output="screen" >
+	  <param name="frame_id" value="$(arg frame_id)"/>
+      <rosparam command="load" file="$(find uwrt_mars_rover_localization)/config/vn300.yaml" />
+	</node>	
+	
+</launch>

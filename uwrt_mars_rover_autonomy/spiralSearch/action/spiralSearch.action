@@ -1,0 +1,10 @@
+# Action goal : client sends goal of a end position
+int64 goal_x
+int64 goal_y
+---
+# Action result : (Elapsed time since the action was started)
+int64 time
+---
+# Action Feedback
+int64 vel_x
+int64 vel_y

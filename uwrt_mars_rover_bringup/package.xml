@@ -11,5 +11,6 @@
   <buildtool_depend>catkin</buildtool_depend>
 
   <exec_depend>uwrt_mars_rover_control</exec_depend>
+  <exec_depend>uwrt_mars_rover_localization</exec_depend>
 
 </package>

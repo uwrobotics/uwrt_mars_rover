@@ -1,10 +1,15 @@
 <?xml version="1.0"?>
 <launch>
+	<!--
+		In order to run this node you need to be part of the dialout group in ubuntu.
+		Run the following command in the terminal to add yourself to the group then restart your computer.
+		sudo adduser $USER dialout
+	-->
 	<arg name="frame_id" default="imu_link"/>
 
 	<node pkg="vectornav" type="vnpub" name="vectornav" output="screen" >
 	  <param name="frame_id" value="$(arg frame_id)"/>
-      <rosparam command="load" file="$(find uwrt_mars_rover_localization)/config/vn300.yaml" />
+      <rosparam command="load" file="$(find uwrt_mars_rover_localization)/cfg/vn300.yaml" />
 	</node>	
 	
 </launch>

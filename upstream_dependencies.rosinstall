@@ -1,8 +1,5 @@
 # These are upstream source dependencies used by all builds.
 
-# When this file starts getting used, add it to the options(UPSTREAM_WORKSPACE: "upstream_dependencies.rosinstall") of the following CI stages:
-# - arm64_build , amd64_build, clang-tidy, catkin_lint
-
 - git:
     uri: https://github.com/dawonn/vectornav
     local-name: vectornav

@@ -1,0 +1,8 @@
+<?xml version="1.0" ?>
+<robot name="uwrt_mars_rover" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+<xacro:macro name="arm_to_base" params="base_object">
+
+</xacro:macro>
+
+</robot>

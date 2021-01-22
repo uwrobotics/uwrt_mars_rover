@@ -134,7 +134,15 @@ class UWRTCANWrapper {
     return bytes_sent == sizeof(struct can_frame);
   }
 
+<<<<<<< HEAD
   template <class T>
+=======
+<<<<<<< HEAD
+  template <class T>
+=======
+ template <class T>
+>>>>>>> 8d4a7ede21124571389fa946542f3d3cc58a1c43
+>>>>>>> 31d570e42ac36d5657ff90cf34e5893a4ccab4ac
   bool writeToIDwithAck(T data, uint32_t id) {
     // check socket has been initialized
     if (!initialized_) {

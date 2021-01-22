@@ -11,7 +11,6 @@
 #include <stdexcept>
 #include <thread>
 #include <vector>
-
 namespace uwrt_mars_rover_utils {
 
 class UWRTCANWrapper {
@@ -51,6 +50,9 @@ class UWRTCANWrapper {
   std::timed_mutex recv_map_mtx_;
   std::chrono::milliseconds thread_sleep_millis_{};
   static constexpr std::chrono::milliseconds MUTEX_LOCK_TIMEOUT{1};
+
+  // variables needed for can send & acknowledge function
+  static constexpr int MAX_TRIES = 5;
 
   // read function to be run in the thread
   void readSocketTask();
@@ -130,6 +132,59 @@ class UWRTCANWrapper {
     int bytes_sent = send(socket_handle_, &frame, sizeof(struct can_frame), 0);
 
     return bytes_sent == sizeof(struct can_frame);
+  }
+
+ template <class T>
+  bool writeToIDwithAck(T data, uint32_t id) {
+    // check socket has been initialized
+    if (!initialized_) {
+      throw std::runtime_error("Please initialize CAN wrapper before using it");
+    }
+
+    // makes sure data is not too big
+    if (sizeof(T) > CAN_MAX_DLEN) {
+      throw std::runtime_error("Size of this data structure is too big");
+    }
+
+    // construct data frame
+    struct can_frame frame {};
+    frame.can_id = (canid_t)id;
+    frame.can_dlc = sizeof(T);
+    data = correctEndianness<T>(data);
+    std::memcpy(frame.data, &data, sizeof(T));
+
+    // send data over can bus
+    int bytes_sent = send(socket_handle_, &frame, sizeof(struct can_frame), MSG_DONTWAIT);
+
+    // error checking
+    if (bytes_sent != sizeof(struct can_frame)) {
+      ROS_ERROR_STREAM("CAN MESSAGE FAILED TO SEND");
+      return false;
+    }
+
+    // wait for one second then receive can frame
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+
+    int attempts{0};                 // number of tries executed for reading from socket
+    ros::Rate loop_rate{10};         // loop rate
+    int bytes_recv{};                // holds the number of bytes received from can bus
+    struct can_frame recv_frame {};  // empty can frame to be filled
+
+    do {
+      // recv can frame from can bus - non-blocking
+      bytes_recv = recv(socket_handle_, &recv_frame, sizeof(struct can_frame), MSG_DONTWAIT);
+      attempts++;
+      loop_rate.sleep();
+    } while (ros::ok() && attempts < MAX_TRIES && bytes_recv != sizeof(struct can_frame));
+
+    // check if message was successfully received by firmware
+    if (bytes_recv == sizeof(struct can_frame)) {
+      ROS_INFO_STREAM("MESSAGE SENT TO FW SUCCESSFULLY");
+      return true;
+    } else {
+      ROS_ERROR_STREAM("FW MESSAGE FAILED TO LOAD");
+      return false;
+    }
   }
 };
 

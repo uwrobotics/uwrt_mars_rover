@@ -1,6 +1,7 @@
 #include <ros/console.h>
 #include <sys/mman.h>
 #include <uwrt_mars_rover_control/uwrt_mars_rover_hw_control_loop_real.h>
+#include <uwrt_mars_rover_utils/uwrt_params.h>
 
 /** hasRealtimeKernel - Determine whether or not kernel has realtime patch by checking /sys/kernel/realtime
  *
@@ -87,7 +88,7 @@ int main(int argc, char** argv) {
 
   const bool default_realtime_mode = true;
   const bool use_realtime_kernel{
-      uwrt_mars_rover_utils::getParam(nh, "use_realtime_kernel", default_realtime_mode, node_name)};
+      uwrt_mars_rover_utils::getParam(nh, node_name, "use_realtime_kernel", default_realtime_mode)};
 
   if (use_realtime_kernel) {
     constexpr auto REALTIME_SCHEDULING_POLICY = SCHED_FIFO;

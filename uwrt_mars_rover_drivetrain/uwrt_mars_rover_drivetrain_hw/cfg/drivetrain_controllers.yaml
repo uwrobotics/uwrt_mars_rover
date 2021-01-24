@@ -1,37 +1,65 @@
 uwrt_mars_rover:
 
-  drivetrain_position_controller:
-    type: position_controllers/UWRTOpenLoopPositionController
-    left_wheel: left_drive_joint
-    right_wheel: right_drive_joint
+  drivetrain_controller_shared:
+    left_wheel: &shared_left_wheel_name left_drive_joint
+    right_wheel: &shared_right_wheel_name right_drive_joint
 
-    # Wheel separation and diameter. These are both optional.
-    # UWRTOpenLoopPositionController will attempt to read either one or both from the
-    # URDF if not specified as a parameter
-    wheel_separation: 0.762
-    wheel_radius: 0.1524
+    wheel_separation: &shared_wheel_separation_distance 0.762
+    wheel_radius: &shared_wheel_radius 0.1524
 
-    # Velocity commands timeout [s], default 0.5
-    cmd_pos_timeout: 0.5
+    publish_clamped_cmd: &shared_publish_clamped_cmd True
+    publish_wheel_joint_controller_state: &shared_publish_wheel_controller_state True
+
+    allow_multiple_cmd_publishers: &shared_allow_multiple_cmd_publishers False
+    cmd_timeout: &shared_cmd_timeout 0.5
+
+  drivetrain_voltage_controller:
+    type: diff_drive_voltage_controller/DiffDriveVoltageController
+    left_wheel: *shared_left_wheel_name
+    right_wheel: *shared_right_wheel_name
+
+    publish_controller_output_cmd: *shared_publish_clamped_cmd
+    publish_wheel_joint_controller_state: *shared_publish_wheel_controller_state
+
+    allow_multiple_cmd_publishers: *shared_allow_multiple_cmd_publishers
+    cmd_timeout: *shared_cmd_timeout
+
+    # Limits:
+    linear:
+      x:
+        has_limits: true
+        max_cmd: 1.0
+        min_cmd: -1.0
+    angular:
+      z:
+        has_limits: true
+        max_cmd: 1.0
+        min_cmd: -1.0
+
 
   drivetrain_velocity_controller:
     type: diff_drive_controller/DiffDriveController
-    left_wheel: left_drive_joint
-    right_wheel: right_drive_joint
-    publish_rate: 50.0
-    publish_cmd: True
-    allow_multiple_cmd_vel_publishers: False
-    pose_covariance_diagonal: [0.001, 0.001, 1000000.0, 1000000.0, 1000000.0, 1000.0]
-    twist_covariance_diagonal: [0.001, 0.001, 1000000.0, 1000000.0, 1000000.0, 1000.0]
+    left_wheel: *shared_left_wheel_name
+    right_wheel: *shared_right_wheel_name
 
-    # Wheel separation and diameter. These are both optional.
-    # diff_drive_controller will attempt to read either one or both from the
-    # URDF if not specified as a parameter
-    wheel_separation: 0.762
-    wheel_radius: 0.1524
+    wheel_separation: *shared_wheel_separation_distance
+    wheel_radius: *shared_wheel_radius
 
-    # Velocity commands timeout [s], default 0.5
-    cmd_vel_timeout: 0.5
+    publish_cmd: *shared_publish_clamped_cmd
+    publish_wheel_joint_controller_state: *shared_publish_wheel_controller_state
+
+    allow_multiple_cmd_vel_publishers: *shared_allow_multiple_cmd_publishers
+    cmd_vel_timeout: *shared_cmd_timeout
+
+
+
+
+
+
+    pose_covariance_diagonal: [ 0.001, 0.001, 1000000.0, 1000000.0, 1000000.0, 1000.0 ]
+    twist_covariance_diagonal: [ 0.001, 0.001, 1000000.0, 1000000.0, 1000000.0, 1000.0 ]
+
+
 
     # TODO
     #  # Velocity and acceleration limits

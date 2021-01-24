@@ -17,7 +17,6 @@
     <depend>transmission_interface</depend>
 
     <depend>uwrt_mars_rover_utils</depend>
-    <depend>uwrt_open_loop_position_controller</depend>
 
     <export>
         <hardware_interface plugin="${prefix}/uwrt_mars_rover_drivetrain_hw_plugin.xml"/>

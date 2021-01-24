@@ -1,9 +1,0 @@
-<library path="lib/libposition_controllers">
-
-  <class name="position_controllers/UWRTOpenLoopPositionController" type="position_controllers::UWRTOpenLoopPositionController" base_class_type="controller_interface::ControllerBase">
-    <description>
-      The UWRTOpenLoopPositionController tracks position commands for a set of joints. It expects a PositionJointInterface type of hardware interface.
-    </description>
-  </class>
-
-</library>

@@ -45,10 +45,10 @@ void UWRTRoverHWDrivetrain::doSwitch(const std::list<hardware_interface::Control
   for (const auto &controller : start_list) {
     for (const auto &claimed : controller.claimed_resources) {
       for (const auto &joint_name : claimed.resources) {
-        if (claimed.hardware_interface == "hardware_interface::PositionJointInterface") {
+        if (claimed.hardware_interface == "uwrt_hardware_interface::PositionJointInterface") {
           actuator_joint_commands_[joint_name].type = DrivetrainActuatorJointCommand::Type::POSITION;
           actuator_joint_commands_[joint_name].actuator_data = actuator_joint_states_[joint_name].actuator_position;
-        } else if (claimed.hardware_interface == "hardware_interface::VelocityJointInterface") {
+        } else if (claimed.hardware_interface == "uwrt_hardware_interface::VelocityJointInterface") {
           actuator_joint_commands_[joint_name].type = DrivetrainActuatorJointCommand::Type::VELOCITY;
           actuator_joint_commands_[joint_name].actuator_data = 0.0;
         }  // TODO(wmmc88): add an open loop interface (voltage?)

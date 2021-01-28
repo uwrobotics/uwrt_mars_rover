@@ -9,7 +9,7 @@
 
     <include file="$(find uwrt_mars_rover_control)/launch/rover_control.launch" pass_all_args="true"/>
 
-    <group if="$(eval control_mode == 'arm_mission' or control_mode == 'science_mission' or control_mode == 'autonomy_mission')">
+    <group if="$(eval control_mode in ['arm_mission' , 'science_mission', 'autonomy_mission'])">
         <include file="$(find uwrt_mars_rover_localization)/launch/vectornav300.launch">
             <!--Additional params can be found in uwrt_mars_rover_autonomy/uwrt_mars_rover_localization/cfg/vn300.yaml-->
             <!--Need to be part of the dialout group to run this node, see launch file for instructions-->

@@ -8,9 +8,9 @@
 
   <link name="rocker_${_suffix}">
     <inertial>
-      <origin rpy="0 0 0" xyz="-0.0007397688458582806 -1.0783832098202512e-05 -0.0000060755009578"/>
-      <mass value="373.58767139092913"/>
-      <inertia ixx="15.179593" ixy="-0.000146" ixz="-7.2e-05" iyy="9.170619" iyz="0.000335" izz="9.170464"/>
+      <origin rpy="0 0 0" xyz="0.0003 0.02583 0.07381"/>
+      <mass value="4.84"/>
+      <inertia ixx="0.073122" ixy="-0.0001" ixz="0.00015" iyy="0.187572" iyz="0.02183" izz="0.15447"/>
     </inertial>
     <visual>
       <origin rpy="0 0 ${pi*rotate}" xyz="0 ${_side*0.0254} 0"/>
@@ -58,9 +58,9 @@
 
     <link name="wheel_${suffix}_${side}">
       <inertial>
-        <origin rpy="0 0 0" xyz="-0.0007397688458582806 -1.0783832098202512e-05 -0.0000060755009578"/>
-        <mass value="373.58767139092913"/>
-        <inertia ixx="15.179593" ixy="-0.000146" ixz="-7.2e-05" iyy="9.170619" iyz="0.000335" izz="9.170464"/>
+        <origin rpy="0 0 0" xyz="0 0 0"/>
+        <mass value="1.32"/>
+        <inertia ixx="0.0137" ixy="0" ixz="0" iyy="0.0191595" iyz="0" izz="0.0137"/>
       </inertial>
       <visual>
         <origin rpy="0 0 0" xyz="0 ${reflect*0.09398} 0"/>

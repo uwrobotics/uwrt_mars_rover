@@ -2,6 +2,7 @@
 <robot name="uwrt_mars_rover" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
 <xacro:macro name="arm_to_base" params="base_object">
+<!-- TODO: Correct the inertia and reference frame for the inertia for each link. -->
     <link name="turntable">
         <inertial>
             <origin rpy="0 0 0" xyz="-0.0007397688458582806 -1.0783832098202512e-05 -0.0000060755009578"/>
@@ -109,6 +110,10 @@
         <axis xyz="0.0 1.0 0.0"/>
         <limit lower="${-pi/4}" upper="${pi/4}" effort="10000" velocity="0.5"/>
     </joint>
+
+    <xacro:macro name="claw_to_arm" params="forearm_link">
+        <!---->
+    </xacro:macro>
 </xacro:macro>
 
 </robot>

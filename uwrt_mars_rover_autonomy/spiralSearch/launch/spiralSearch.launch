@@ -1,0 +1,9 @@
+  
+<launch>
+       
+    <node pkg="spiralSearch" type="spiralSearch_server" name="spiralSearch_server" >
+        <param name="spiral_constant" value="0.1" type="double" />
+        <param name="angular_velocity" value="1.0" type="double" />
+    </node> 
+
+</launch>

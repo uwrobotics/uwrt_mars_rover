@@ -17,19 +17,18 @@ namespace uwrt_mars_rover_utils {
 class UWRTCANWrapper {
  public:
   explicit UWRTCANWrapper() = default;
-  explicit UWRTCANWrapper(std::string name, std::string interface_name, bool rcv_big_endian,
-                          int thread_sleep_millis = 10);  // NOLINT(cppcoreguidelines-avoid-magic-numbers,
-                                                          // readability-magic-numbers)
+  explicit UWRTCANWrapper(
+      std::string name, std::string interface_name, bool rcv_big_endian,
+      int thread_sleep_millis = 10);  // NOLINT(cppcoreguidelines-avoid-magic-numbers,readability-magic-numbers)
+
   explicit UWRTCANWrapper(const UWRTCANWrapper &to_copy) = delete;
-  // NOLINTNEXTLINE(performance-noexcept-move-constructor,
-  // bugprone-exception-escape)
+  // NOLINTNEXTLINE(performance-noexcept-move-constructor, bugprone-exception-escape)
   explicit UWRTCANWrapper(UWRTCANWrapper &&to_move);
 
   ~UWRTCANWrapper();
 
   UWRTCANWrapper &operator=(const UWRTCANWrapper &to_copy) = delete;
-  // NOLINTNEXTLINE(performance-noexcept-move-constructor,
-  // bugprone-exception-escape)
+  // NOLINTNEXTLINE(performance-noexcept-move-constructor,bugprone-exception-escape)
   UWRTCANWrapper &operator=(UWRTCANWrapper &&to_move);
 
   void init(const std::vector<uint32_t> &ids);
@@ -56,6 +55,7 @@ class UWRTCANWrapper {
 
   // variables needed for can send & acknowledge function
   static constexpr int MAX_TRIES = 5;
+  static constexpr int RATE = 10;
 
   // read function to be run in the thread
   void readSocketTask();
@@ -171,7 +171,7 @@ class UWRTCANWrapper {
     std::this_thread::sleep_for(std::chrono::seconds(1));
 
     int attempts{0};                 // number of tries executed for reading from socket
-    ros::Rate loop_rate{10};         // loop rate
+    ros::Rate loop_rate{RATE};       // loop rate
     int bytes_recv{};                // holds the number of bytes received from can bus
     struct can_frame recv_frame {};  // empty can frame to be filled
 
@@ -186,10 +186,10 @@ class UWRTCANWrapper {
     if (bytes_recv == sizeof(struct can_frame)) {
       ROS_INFO_STREAM("MESSAGE SENT TO FW SUCCESSFULLY");
       return true;
-    } else {
-      ROS_ERROR_STREAM("FW MESSAGE FAILED TO LOAD");
-      return false;
     }
+
+    ROS_ERROR_STREAM("FW MESSAGE FAILED TO LOAD");
+    return false;
   }
 };
 

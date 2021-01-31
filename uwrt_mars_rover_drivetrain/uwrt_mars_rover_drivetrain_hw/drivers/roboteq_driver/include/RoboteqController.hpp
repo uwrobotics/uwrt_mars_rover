@@ -1,10 +1,9 @@
 #pragma once
 
+#include <CanopenInterface.hpp>
 #include <iostream>
 #include <memory>
 
-//#include "CommunicationInterface.hpp"
-#include "CanopenInterface.hpp"
 namespace roboteq {
 
 class RoboteqController {

@@ -1,4 +1,3 @@
-#include <CommunicationInterface.hpp>
 #include <RoboteqController.hpp>
 
 namespace roboteq {

@@ -36,8 +36,8 @@ bool DiffDriveVoltageController::init(uwrt_hardware_interface::VoltageJointInter
       uwrt_mars_rover_utils::getParam(controller_nh, name_, "angular/z/min_cmd", DEFAULT_MIN_ANGULAR_CMD);
 
   cmd_timeout_ = uwrt_mars_rover_utils::getParam(controller_nh, name_, "cmd_timeout", DEFAULT_CMD_TIMEOUT);
-  allow_multiple_cmd_publishers_ =
-      uwrt_mars_rover_utils::getParam(controller_nh, name_, "cmd_timeout", DEFAULT_ALLOW_MULTIPLE_CMD_PUBLISHERS);
+  allow_multiple_cmd_publishers_ = uwrt_mars_rover_utils::getParam(
+      controller_nh, name_, "allow_multiple_cmd_publishers", DEFAULT_ALLOW_MULTIPLE_CMD_PUBLISHERS);
   publish_controller_cmd_output_ = uwrt_mars_rover_utils::getParam(
       controller_nh, name_, "publish_controller_output_cmd", DEFAULT_PUBLISH_CONTROLLER_CMD_OUTPUT);
 

@@ -108,7 +108,7 @@ void UWRTRoverHWDrivetrain::registerStateInterfacesAndTransmissions(const std::s
       joint_state_data_[joint_name]);
   actuator_to_joint_state_interface_.registerHandle(actuator_to_joint_state_handle);
 
-  // TODO #222: register new state interface for motor voltage, current, etc.
+  // TODO #121: register new state interface for motor voltage, current, etc.
 }
 
 void UWRTRoverHWDrivetrain::registerCommandInterfacesAndTransmissions(const std::string &joint_name) {

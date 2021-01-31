@@ -37,14 +37,14 @@ void UWRTMarsRoverDrivetrainHWReal::read(const ros::Time & /*time*/, const ros::
         motor_controller_->readEncoderMotorSpeed(roboteq_actuator_index_[joint_name]) *
         RPM_TO_RADIANS_PER_SECOND_FACTOR;
 
-    // TODO #222: populate actuator current and voltage to new state interface
+    // TODO #121: populate actuator current and voltage to new state interface
     // motor_controller_->readMotorAmps(roboteq_actuator_index_[joint_name]) * MOTOR_READING_TO_AMPS_CONVERSION_FACTOR;
 
     motor_controller_->readMotorStatusFlags(roboteq_actuator_index_[joint_name]);
   }
   actuator_to_joint_state_interface_.propagate();
 
-  //  TODO: #222 maybe? add interface for motor fault flags
+  //  TODO: #121 maybe? add interface for motor fault flags
   //  motor_controller_->readFaultFlags();
 }
 

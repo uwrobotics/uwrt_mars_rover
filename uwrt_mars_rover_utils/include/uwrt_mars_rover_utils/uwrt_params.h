@@ -36,7 +36,7 @@ T getParam(const ros::NodeHandle& nh, const std::string& logger_name, const std:
   return retrieved_param;
 }
 
-/** getLoggerName - Determines a rosconsole logger name from a nodehandle. Uses the last part of a nodehandles
+/** getLoggerName - Determines a rosconsole logger name from a nodehandle. Uses the last part of a nodehandle's
  * namespace.
  *
  * @example
@@ -50,5 +50,12 @@ T getParam(const ros::NodeHandle& nh, const std::string& logger_name, const std:
  * @return derived logger name
  */
 std::string getLoggerName(ros::NodeHandle& nh);
+
+/** getLoggerName - Determines a rosconsole logger name by using the executing node's name. This is the name passed to
+ * ros::init
+ *
+ * @return derived logger name
+ */
+std::string getLoggerName();
 
 }  // namespace uwrt_mars_rover_utils

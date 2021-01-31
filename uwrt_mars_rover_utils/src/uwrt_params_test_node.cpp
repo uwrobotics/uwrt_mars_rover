@@ -51,6 +51,10 @@ void getLoggerNameTest() {
 
   logger_name = uwrt_mars_rover_utils::getLoggerName(nh);
   assert("UNNAMED_LOGGER_2" == logger_name);
+
+  // Should use node executable name when called without a nodehandle
+  logger_name = uwrt_mars_rover_utils::getLoggerName();
+  assert(NODE_NAME == logger_name);
 }
 
 int main(int argc, char* argv[]) {

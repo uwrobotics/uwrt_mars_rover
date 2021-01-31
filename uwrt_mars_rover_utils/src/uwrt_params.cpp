@@ -1,6 +1,8 @@
+#include <ros/console.h>
 #include <uwrt_mars_rover_utils/uwrt_params.h>
 
 namespace uwrt_mars_rover_utils {
+
 std::string getLoggerName(ros::NodeHandle& nh) {
   const std::string& nh_namespace{nh.getNamespace()};
   std::size_t start_of_name_index = nh_namespace.rfind('/') + 1;
@@ -19,4 +21,13 @@ std::string getLoggerName(ros::NodeHandle& nh) {
 
   return logger_name;
 }
+
+std::string getLoggerName() {
+  std::string logger_name = ros::this_node::getName();
+  std::size_t start_of_name_index = logger_name.rfind('/') + 1;
+  logger_name = logger_name.substr(start_of_name_index);
+
+  return logger_name;
+}
+
 }  // namespace uwrt_mars_rover_utils

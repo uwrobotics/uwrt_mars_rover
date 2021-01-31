@@ -23,13 +23,13 @@ void getParamTest() {
 
   // Test successful param retrieval
   std::string retrieved_param =
-      uwrt_mars_rover_utils::getParam<std::string>(nh, PARAM_KEY, DEFAULT_PARAM_VALUE, NODE_NAME);
+      uwrt_mars_rover_utils::getParam<std::string>(nh, NODE_NAME, PARAM_KEY, DEFAULT_PARAM_VALUE);
   assert(PARAM_VALUE == retrieved_param);
 
   // Test unsuccessful param retrieval w/ custom logger name
   // This should return default because PARAM_KEY was not set in nh2's namespace
   retrieved_param =
-      uwrt_mars_rover_utils::getParam<std::string>(nh2, PARAM_KEY, DEFAULT_PARAM_VALUE, CUSTOM_LOGGER_NAME);
+      uwrt_mars_rover_utils::getParam<std::string>(nh2, CUSTOM_LOGGER_NAME, PARAM_KEY, DEFAULT_PARAM_VALUE);
   assert(DEFAULT_PARAM_VALUE == retrieved_param);
 }
 
@@ -55,15 +55,6 @@ void getLoggerNameTest() {
 
 int main(int argc, char* argv[]) {
   ros::init(argc, argv, NODE_NAME);
-
-  // Set loggers to print debug statements
-  bool success = ros::console::set_logger_level(std::string(ROSCONSOLE_DEFAULT_NAME) + '.' + NODE_NAME,
-                                                ros::console::levels::Debug);
-  assert(success);
-  success = ros::console::set_logger_level(std::string(ROSCONSOLE_DEFAULT_NAME) + '.' + CUSTOM_LOGGER_NAME,
-                                           ros::console::levels::Debug);
-  assert(success);
-  ros::console::notifyLoggerLevelsChanged();
 
   getParamTest();
   getLoggerNameTest();

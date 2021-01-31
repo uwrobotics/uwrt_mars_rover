@@ -11,7 +11,11 @@ constexpr bool DiffDriveVoltageController::DEFAULT_ALLOW_MULTIPLE_CMD_PUBLISHERS
 constexpr bool DiffDriveVoltageController::DEFAULT_PUBLISH_CONTROLLER_CMD_OUTPUT;
 constexpr bool DiffDriveVoltageController::DEFAULT_PUBLISH_WHEEL_JOINT_CONTROLLER_STATE;
 
-bool DiffDriveVoltageController::init(hardware_interface::VelocityJointInterface* hw, ros::NodeHandle& controller_nh) {
+// todo
+//    : dyn reconfigure
+
+bool DiffDriveVoltageController::init(uwrt_hardware_interface::VoltageJointInterface* hw,
+                                      ros::NodeHandle& controller_nh) {
   name_ = uwrt_mars_rover_utils::getLoggerName(controller_nh);
 
   std::vector<std::string> left_wheel_names, right_wheel_names;
@@ -43,42 +47,13 @@ bool DiffDriveVoltageController::init(hardware_interface::VelocityJointInterface
             controller_nh, "cmd_open_loop_out", 100));
   }
 
-
-  //  publish_wheel_joint_controller_state_ = uwrt_mars_rover_utils::getParam(
-  //      controller_nh, "publish_wheel_joint_controller_state", DEFAULT_PUBLISH_WHEEL_JOINT_CONTROLLER_STATE, name_);
-  //  if (publish_wheel_joint_controller_state_) {
-  //    controller_state_pub_.reset(new
-  //    realtime_tools::RealtimePublisher<control_msgs::JointTrajectoryControllerState>(controller_nh,
-  //    "wheel_joint_controller_state", 100));
-  //
-  //          const size_t num_wheels = wheel_joint_pairs_.size() * 2;
-  //
-  //      controller_state_pub_->msg_.joint_names.resize(num_wheels);
-  //
-  //      controller_state_pub_->msg_.desired.positions.resize(num_wheels);
-  //      controller_state_pub_->msg_.desired.velocities.resize(num_wheels);
-  //      controller_state_pub_->msg_.desired.accelerations.resize(num_wheels);
-  //      controller_state_pub_->msg_.desired.effort.resize(num_wheels);
-  //
-  //      controller_state_pub_->msg_.actual.positions.resize(num_wheels);
-  //      controller_state_pub_->msg_.actual.velocities.resize(num_wheels);
-  //      controller_state_pub_->msg_.actual.accelerations.resize(num_wheels);
-  //      controller_state_pub_->msg_.actual.effort.resize(num_wheels);
-  //
-  //      controller_state_pub_->msg_.error.positions.resize(num_wheels);
-  //      controller_state_pub_->msg_.error.velocities.resize(num_wheels);
-  //      controller_state_pub_->msg_.error.accelerations.resize(num_wheels);
-  //      controller_state_pub_->msg_.error.effort.resize(num_wheels);
-  //
-  //      // Convention is the list all left joints in order before all right joints in order
-  //      for (size_t i = 0; i < wheel_joint_pairs_.size(); ++i) {
-  //        controller_state_pub_->msg_.joint_names[i] = left_wheel_names[i];
-  //        controller_state_pub_->msg_.joint_names[i + wheel_joint_pairs_.size()] = right_wheel_names[i];
-  //      }
-  //
-  //      vel_left_previous_.resize(wheel_joint_pairs_.size(), 0.0);
-  //      vel_right_previous_.resize(wheel_joint_pairs_.size(), 0.0);
-  //  }
+  publish_wheel_joint_controller_state_ = uwrt_mars_rover_utils::getParam(
+      controller_nh, name_, "publish_wheel_joint_controller_state", DEFAULT_PUBLISH_WHEEL_JOINT_CONTROLLER_STATE);
+  if (publish_wheel_joint_controller_state_) {
+    // TODO: Add controller_state_publisher_.reset here in #121 (controller_state_publisher_.reset(new
+    // realtime_tools::RealtimePublisher<uwrt_mars_rover_msgs::JointTrajectoryControllerState>(controller_nh,
+    // "wheel_joint_controller_state", 100)))
+  }
 
   // Get the joint object to use in the realtime loop
   for (size_t i = 0; i < wheel_joint_pairs_.size(); i++) {
@@ -141,6 +116,10 @@ void DiffDriveVoltageController::update(const ros::Time& time, const ros::Durati
     joint_pair.left_wheel_joint.setCommand(vel_left);
     joint_pair.right_wheel_joint.setCommand(vel_right);
   }
+
+  // Publish Controller State
+  // TODO in #121:
+  // if publish_wheel_joint_controller_state_ && controller_state_publisher_->trylock(), publish controller state
 }
 
 bool DiffDriveVoltageController::loadWheelParameters(ros::NodeHandle& controller_nh,
@@ -182,7 +161,7 @@ bool DiffDriveVoltageController::getWheelNames(ros::NodeHandle& controller_nh, c
       return false;
     }
 
-    for (int i = 0; i < wheel_list.size(); ++i) {
+    for (int i = 0; i < wheel_list.size(); i++) {
       if (wheel_list[i].getType() != XmlRpc::XmlRpcValue::TypeString) {
         ROS_ERROR_STREAM_NAMED(name_, "Wheel param '" << wheel_param << "' #" << i << " isn't a string.");
         return false;
@@ -190,7 +169,7 @@ bool DiffDriveVoltageController::getWheelNames(ros::NodeHandle& controller_nh, c
     }
 
     wheel_names.resize(wheel_list.size());
-    for (int i = 0; i < wheel_list.size(); ++i) {
+    for (int i = 0; i < wheel_list.size(); i++) {
       wheel_names[i] = static_cast<std::string>(wheel_list[i]);
     }
   } else if (wheel_list.getType() == XmlRpc::XmlRpcValue::TypeString) {
@@ -216,7 +195,7 @@ void DiffDriveVoltageController::commandSubscriberCallback(
     }
 
     if (!std::isfinite(command.angular.z) || !std::isfinite(command.linear.x)) {
-      ROS_WARN_THROTTLE_NAMED(1.0, name_, "Received NaN in velocity command. Ignoring.");
+      ROS_WARN_THROTTLE_NAMED(1.0, name_, "Received NaN in open loop command. Ignoring.");
       return;
     }
 

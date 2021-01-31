@@ -6,6 +6,7 @@ find_package(catkin REQUIRED COMPONENTS
         joint_limits_interface
         roscpp
         transmission_interface
+        uwrt_mars_rover_hw
         uwrt_mars_rover_utils
         )
 
@@ -21,6 +22,7 @@ catkin_package(
         joint_limits_interface
         roscpp
         transmission_interface
+        uwrt_mars_rover_hw
         uwrt_mars_rover_utils
 )
 

@@ -8,6 +8,8 @@
 #include <realtime_tools/realtime_publisher.h>
 #include <ros/node_handle.h>
 #include <uwrt_mars_rover_drivetrain_msgs/OpenLoopTwist.h>
+#include <uwrt_mars_rover_hw/voltage_joint_interface.h>
+#include <uwrt_mars_rover_msgs/JointControllerState.h>
 
 #include <string>
 #include <vector>
@@ -25,14 +27,15 @@ namespace diff_drive_voltage_controller {
  * decompose the commands from linear & angular to left & right, and optionally publish the controller state (commands
  * sent to RobotHW)
  */
-class DiffDriveVoltageController : public controller_interface::Controller<hardware_interface::VelocityJointInterface> {
+class DiffDriveVoltageController
+    : public controller_interface::Controller<uwrt_hardware_interface::VoltageJointInterface> {
  public:
   DiffDriveVoltageController() = default;
 
-  bool init(hardware_interface::VelocityJointInterface* hw, ros::NodeHandle& controller_nh) override;
+  bool init(uwrt_hardware_interface::VoltageJointInterface* hw, ros::NodeHandle& controller_nh) override;
   void starting(const ros::Time& time) override;
   void stopping(const ros::Time& time) override;
-  void update(const ros::Time& time, const ros::Duration& duration) override;
+  void update(const ros::Time& /*time*/, const ros::Duration& duration) override;
 
  private:
   bool loadWheelParameters(ros::NodeHandle& controller_nh, std::vector<std::string>& left_wheel_names,

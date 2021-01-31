@@ -11,6 +11,8 @@ find_package(
         forward_command_controller
         pluginlib
         uwrt_mars_rover_drivetrain_msgs
+        uwrt_mars_rover_hw
+        uwrt_mars_rover_msgs
         uwrt_mars_rover_utils
 )
 
@@ -22,6 +24,8 @@ catkin_package(
         controller_interface
         forward_command_controller
         uwrt_mars_rover_drivetrain_msgs
+        uwrt_mars_rover_hw
+        uwrt_mars_rover_msgs
         uwrt_mars_rover_utils
 )
 

@@ -11,25 +11,28 @@
 #include <stdexcept>
 #include <thread>
 #include <vector>
+
 namespace uwrt_mars_rover_utils {
 
 class UWRTCANWrapper {
  public:
   explicit UWRTCANWrapper() = default;
-  explicit UWRTCANWrapper(
-      std::string name, std::string interface_name, bool rcv_big_endian,
-      int thread_sleep_millis = 10);  // NOLINT(cppcoreguidelines-avoid-magic-numbers, readability-magic-numbers)
-  explicit UWRTCANWrapper(const UWRTCANWrapper& to_copy) = delete;
-  // NOLINTNEXTLINE(performance-noexcept-move-constructor, bugprone-exception-escape)
-  explicit UWRTCANWrapper(UWRTCANWrapper&& to_move);
+  explicit UWRTCANWrapper(std::string name, std::string interface_name, bool rcv_big_endian,
+                          int thread_sleep_millis = 10);  // NOLINT(cppcoreguidelines-avoid-magic-numbers,
+                                                          // readability-magic-numbers)
+  explicit UWRTCANWrapper(const UWRTCANWrapper &to_copy) = delete;
+  // NOLINTNEXTLINE(performance-noexcept-move-constructor,
+  // bugprone-exception-escape)
+  explicit UWRTCANWrapper(UWRTCANWrapper &&to_move);
 
   ~UWRTCANWrapper();
 
-  UWRTCANWrapper& operator=(const UWRTCANWrapper& to_copy) = delete;
-  // NOLINTNEXTLINE(performance-noexcept-move-constructor, bugprone-exception-escape)
-  UWRTCANWrapper& operator=(UWRTCANWrapper&& to_move);
+  UWRTCANWrapper &operator=(const UWRTCANWrapper &to_copy) = delete;
+  // NOLINTNEXTLINE(performance-noexcept-move-constructor,
+  // bugprone-exception-escape)
+  UWRTCANWrapper &operator=(UWRTCANWrapper &&to_move);
 
-  void init(const std::vector<uint32_t>& ids);
+  void init(const std::vector<uint32_t> &ids);
 
  private:
   // description name for this wrapper
@@ -59,7 +62,7 @@ class UWRTCANWrapper {
 
   // function to get swap endianness
   template <class T>
-  T correctEndianness(const T& data) {
+  T correctEndianness(const T &data) {
     // if endianness is the same, just return the data back
     if (rcv_endianness_ == __BYTE_ORDER__) {
       return data;
@@ -68,8 +71,9 @@ class UWRTCANWrapper {
     // if not, we need to swap endianess
     T swapped_data;
     auto swapped_ptr =
-        reinterpret_cast<uint8_t*>(&swapped_data);                // NOLINT(cppcoreguidelines-pro-type-reinterpret-cast)
-    auto original_ptr = reinterpret_cast<const uint8_t*>(&data);  // NOLINT(cppcoreguidelines-pro-type-reinterpret-cast)
+        reinterpret_cast<uint8_t *>(&swapped_data);  // NOLINT(cppcoreguidelines-pro-type-reinterpret-cast)
+    auto original_ptr =
+        reinterpret_cast<const uint8_t *>(&data);  // NOLINT(cppcoreguidelines-pro-type-reinterpret-cast)
     for (int i = 0; i < sizeof(T); i++) {
       // NOLINTNEXTLINE(cppcoreguidelines-pro-bounds-pointer-arithmetic)
       std::memcpy(&swapped_ptr[i], &original_ptr[sizeof(T) - 1 - i], 1);
@@ -78,9 +82,10 @@ class UWRTCANWrapper {
   }
 
  public:
-  // these two function definitions need to be in header because they use templates (good one c++ 11)
+  // these two function definitions need to be in header because they use
+  // templates (good one c++ 11)
   template <class T>
-  bool getLatestFromID(T& data, uint32_t id) {
+  bool getLatestFromID(T &data, uint32_t id) {
     // make sure we have been initialized
     if (!initialized_) {
       throw std::runtime_error("Please initialize CAN wrapper before using it");
@@ -138,12 +143,12 @@ class UWRTCANWrapper {
   bool writeToIDwithAck(T data, uint32_t id) {
     // check socket has been initialized
     if (!initialized_) {
-      throw std::runtime_error("Please initialize CAN wrapper before using it");
+      ROS_ERROR_STREAM("Please intialize CAN wrapper before using it");
     }
 
     // makes sure data is not too big
     if (sizeof(T) > CAN_MAX_DLEN) {
-      throw std::runtime_error("Size of this data structure is too big");
+      ROS_ERROR_STREAM("Size of this data structure is too big");
     }
 
     // construct data frame

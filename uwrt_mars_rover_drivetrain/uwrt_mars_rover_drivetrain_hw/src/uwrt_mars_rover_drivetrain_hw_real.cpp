@@ -16,7 +16,7 @@ bool UWRTMarsRoverDrivetrainHWReal::init(ros::NodeHandle &root_nh, ros::NodeHand
 
   // TODO: controller to switch the roboteq communication mode
   std::unique_ptr<roboteq::CanopenInterface> comm = std::make_unique<roboteq::CanopenInterface>(
-      roboteq_canopen_id_, uwrt_mars_rover_utils::getParam<std::string>(root_nh, "can_interface_name", "can0", name_));
+      roboteq_canopen_id_, uwrt_mars_rover_utils::getParam<std::string>(root_nh, name_, "can_interface_name", "can0"));
   motor_controller_ = std::make_unique<roboteq::RoboteqController>(std::move(comm));
   return true;
 }
@@ -84,7 +84,7 @@ void UWRTMarsRoverDrivetrainHWReal::write(const ros::Time & /*time*/, const ros:
 }
 
 bool UWRTMarsRoverDrivetrainHWReal::loadRoboteqConfigFromParamServer(ros::NodeHandle &robot_hw_nh) {
-  roboteq_canopen_id_ = uwrt_mars_rover_utils::getParam<int>(robot_hw_nh, "roboteq_canopen_id", 0x01, name_);
+  roboteq_canopen_id_ = uwrt_mars_rover_utils::getParam<int>(robot_hw_nh, name_, "roboteq_canopen_id", 0x01);
 
   // Get joint list info
   XmlRpc::XmlRpcValue joints_list;

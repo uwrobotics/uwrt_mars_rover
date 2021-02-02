@@ -30,7 +30,7 @@ include_directories(
 # Declare and link the C++ Library
 add_library(${PROJECT_NAME}
         src/uwrt_can.cpp
-        src/uwrt_can_test_node.cpp
+        src/uwrt_params.cpp
         )
 
 # uwrt_can_test_node

@@ -13,13 +13,13 @@ int main(int argc, char** argv) {
   ros::NodeHandle nh;
 
   // Use Service Parameters
-  const int loop_rate{uwrt_mars_rover_utils::getParam<int>(nh, "neopixel/loop_rate", DEFAULT_LOOP_RATE, NODE_NAME)};
+  const int loop_rate{uwrt_mars_rover_utils::getParam<int>(nh, NODE_NAME, "neopixel/loop_rate", DEFAULT_LOOP_RATE)};
   const std::string can_interface{
-      uwrt_mars_rover_utils::getParam(nh, "neopixel/can_interface", DEFAULT_CAN_INTERFACE, NODE_NAME)};
+      uwrt_mars_rover_utils::getParam(nh, NODE_NAME, "neopixel/can_interface", DEFAULT_CAN_INTERFACE)};
   const std::string log_filter{
-      uwrt_mars_rover_utils::getParam(nh, "neopixel/log_filter", DEFAULT_LOG_FILTER, NODE_NAME)};
-  const int neopixel_can_id_outgoing{uwrt_mars_rover_utils::getParam<int>(nh, "neopixel/can_id_outgoing",
-                                                                          DEFAULT_NEOPIXEL_CAN_ID_OUTGOING, NODE_NAME)};
+      uwrt_mars_rover_utils::getParam(nh, NODE_NAME, "neopixel/log_filter", DEFAULT_LOG_FILTER)};
+  const int neopixel_can_id_outgoing{uwrt_mars_rover_utils::getParam<int>(nh, NODE_NAME, "neopixel/can_id_outgoing",
+                                                                          DEFAULT_NEOPIXEL_CAN_ID_OUTGOING)};
 
   // Run the node
   Neopixel neopixel_node(nh, static_cast<uint8_t>(loop_rate), can_interface, log_filter,

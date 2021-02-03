@@ -1,13 +1,14 @@
 <?xml version="1.0" ?>
 <robot name="uwrt_mars_rover" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
+<xacro:include filename="$(find uwrt_mars_rover_description)/urdf/robot_claw.xacro"/>
+
 <xacro:macro name="arm_to_base" params="base_object">
-<!-- TODO: Correct the inertia and reference frame for the inertia for each link. -->
     <link name="turntable">
         <inertial>
-            <origin rpy="0 0 0" xyz="-0.0007397688458582806 -1.0783832098202512e-05 -0.0000060755009578"/>
-            <mass value="373.58767139092913"/>
-            <inertia ixx="15.179593" ixy="-0.000146" ixz="-7.2e-05" iyy="9.170619" iyz="0.000335" izz="9.170464"/>
+            <origin rpy="0 0 0" xyz="-0.00358 0.03422 0.05666"/>
+            <mass value="1.26885"/>
+            <inertia ixx="0.00397" ixy="-0.00035" ixz="0.00084" iyy="0.01033" iyz="-0.00008" izz="0.01305"/>
         </inertial>
         <visual>
             <origin rpy="0 0 0" xyz="0 0 0"/>
@@ -41,9 +42,9 @@
 
     <link name="bicep">
         <inertial>
-            <origin rpy="0 0 0" xyz="-0.0007397688458582806 -1.0783832098202512e-05 -0.0000060755009578"/>
-            <mass value="373.58767139092913"/>
-            <inertia ixx="15.179593" ixy="-0.000146" ixz="-7.2e-05" iyy="9.170619" iyz="0.000335" izz="9.170464"/>
+            <origin rpy="0 0 0" xyz="0.21949 0.01582 0.16754"/>
+            <mass value="6.480"/>
+            <inertia ixx="0.049355726" ixy="-0.009202176" ixz="-0.033305137" iyy="0.185953394" iyz="-0.000337776" izz="0.156889351"/>
         </inertial>
         <visual>
             <origin rpy="0 0 0" xyz="0 0 -0.0381"/>
@@ -77,9 +78,9 @@
 
     <link name="forearm">
         <inertial>
-            <origin rpy="0 0 0" xyz="-0.0007397688458582806 -1.0783832098202512e-05 -0.0000060755009578"/>
-            <mass value="373.58767139092913"/>
-            <inertia ixx="15.179593" ixy="-0.000146" ixz="-7.2e-05" iyy="9.170619" iyz="0.000335" izz="9.170464"/>
+            <origin rpy="0 0 0" xyz="-0.045 0.15159 0.05923"/>
+            <mass value="1.00758"/>
+            <inertia ixx="0.002383071" ixy="0.0000089677" ixz="-0.000286743" iyy="0.010400499" iyz="-0.000000279" izz="0.012282219"/>
         </inertial>
         <visual>
             <origin rpy="0 0 0" xyz="0.318874 -0.151281 -0.062292"/>
@@ -111,9 +112,8 @@
         <limit lower="${-pi/4}" upper="${pi/4}" effort="10000" velocity="0.5"/>
     </joint>
 
-    <xacro:macro name="claw_to_arm" params="forearm_link">
-        <!---->
-    </xacro:macro>
+    <xacro:claw_to_arm forearm_link="forearm"/>
+
 </xacro:macro>
 
 </robot>

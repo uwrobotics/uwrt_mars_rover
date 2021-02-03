@@ -1,0 +1,223 @@
+<?xml version="1.0" ?>
+<robot name="uwrt_mars_rover" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+<xacro:macro name="claw_to_arm" params="forearm_link">
+    <link name="claw_up_down">
+        <inertial>
+            <origin rpy="0 0 0" xyz="-0.0133 0 0"/>
+            <mass value="0.21436"/>
+            <inertia ixx="0.000111209" ixy="0" ixz="-0.000032753" iyy="0.0001526999" iyz="0" izz="0.000138406"/>
+        </inertial>
+        <visual>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <geometry>
+                <mesh filename="package://uwrt_mars_rover_description/meshes/claw_up_down.stl" scale="0.0254 0.0254 0.0254"/>
+            </geometry>
+            <material name="Blue">
+                <color rgba="0 0 1 1"/>
+            </material>
+        </visual>
+        <collision>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <geometry>
+                <mesh filename="package://uwrt_mars_rover_description/meshes/claw_up_down.stl" scale="0.0254 0.0254 0.0254"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <gazebo reference="claw_up_down">
+        <gravity>true</gravity>
+        <selfCollide>false</selfCollide>
+    </gazebo>
+
+    <joint name="wrist_up_down" type="revolute">
+        <origin xyz="0.355638 0.000418 0" rpy="0.0 0.0 0.0"/>
+        <parent link="${forearm_link}"/>
+        <child link="claw_up_down"/>
+        <axis xyz="0.0 1.0 0.0"/>
+        <limit lower="${-pi/4}" upper="${pi/4}" effort="10000" velocity="0.5"/>
+    </joint>
+
+    <link name="claw_rotate">
+        <inertial>
+            <origin rpy="0 0 0" xyz="0.0186 0 0"/>
+            <mass value="0.08276"/>
+            <inertia ixx="0.0000195" ixy="0.000000055" ixz="-0.000023176" iyy="0.000056806" iyz="-0.00000152" izz="0.000043396"/>
+        </inertial>
+        <visual>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <geometry>
+                <mesh filename="package://uwrt_mars_rover_description/meshes/claw_rotate.stl" scale="0.0254 0.0254 0.0254"/>
+            </geometry>
+            <material name="Blue">
+                <color rgba="0 0 1 1"/>
+            </material>
+        </visual>
+        <collision>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <geometry>
+                <mesh filename="package://uwrt_mars_rover_description/meshes/claw_rotate.stl" scale="0.0254 0.0254 0.0254"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <gazebo reference="claw_rotate">
+        <gravity>true</gravity>
+        <selfCollide>false</selfCollide>
+    </gazebo>
+
+    <joint name="wrist_rotate" type="continuous">
+        <origin xyz="0 0 0" rpy="0.0 0.0 0.0"/>
+        <parent link="claw_up_down"/>
+        <child link="claw_rotate"/>
+        <axis xyz="1.0 0.0 0.0"/>
+    </joint>
+
+    <link name="claw_static">
+        <inertial>
+            <origin rpy="0 0 0" xyz="-0.02271 -0.00121 0.02018"/>
+            <mass value="0.57339"/>
+            <inertia ixx="0.0004705087" ixy="-0.0000169291" ixz="-0.0000989304" iyy="0.000579985" iyz="-0.000000533" izz="0.000651862"/>
+        </inertial>
+        <visual>
+            <origin rpy="0 0 0" xyz="0.058 0 0"/>
+            <geometry>
+                <mesh filename="package://uwrt_mars_rover_description/meshes/claw_static.stl" scale="0.0254 0.0254 0.0254"/>
+            </geometry>
+            <material name="Blue">
+                <color rgba="0 0 1 1"/>
+            </material>
+        </visual>
+        <collision>
+            <origin rpy="0 0 0" xyz="0.058 0 0"/>
+            <geometry>
+                <mesh filename="package://uwrt_mars_rover_description/meshes/claw_static.stl" scale="0.0254 0.0254 0.0254"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <gazebo reference="claw_static">
+        <gravity>true</gravity>
+        <selfCollide>false</selfCollide>
+    </gazebo>
+
+    <joint name="wrist_static" type="fixed">
+        <origin xyz="0.0652 0 0" rpy="0.0 0.0 0.0"/>
+        <parent link="claw_rotate"/>
+        <child link="claw_static"/>
+    </joint>
+
+    <link name="servo">
+        <inertial>
+            <origin rpy="0 0 0" xyz="0.0844 -0.00027 0.00657"/>
+            <mass value="0.0535"/>
+            <inertia ixx="0.000009626" ixy="0.00000095" ixz="-0.0000095" iyy="0.0000714" iyz="-0.0000003" izz="0.00007375"/>
+        </inertial>
+        <visual>
+            <origin rpy="0 0 0" xyz="-0.021 0 -0.029"/>
+            <geometry>
+                <mesh filename="package://uwrt_mars_rover_description/meshes/servo.stl" scale="0.0254 0.0254 0.0254"/>
+            </geometry>
+            <material name="Blue">
+                <color rgba="0 0 1 1"/>
+            </material>
+        </visual>
+        <collision>
+            <origin rpy="0 0 0" xyz="-0.021 0 -0.029"/>
+            <geometry>
+                <mesh filename="package://uwrt_mars_rover_description/meshes/servo.stl" scale="0.0254 0.0254 0.0254"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <gazebo reference="servo">
+        <gravity>true</gravity>
+        <selfCollide>false</selfCollide>
+    </gazebo>
+
+    <joint name="servo_joint" type="revolute">
+        <origin xyz="0.079 0 0.029" rpy="0.0 0.0 0.0"/>
+        <parent link="claw_static"/>
+        <child link="servo"/>
+        <axis xyz="0.0 1.0 0.0"/>
+        <limit lower="${-pi/2}" upper="${pi/2}" effort="10000" velocity="0.5"/>
+    </joint>
+
+    <link name="hex_key">
+        <inertial>
+            <origin rpy="0 0 0" xyz="0.105 0 0.004"/>
+            <mass value="0.0224"/>
+            <inertia ixx="0.0000002" ixy="0" ixz="0.0000005" iyy="0.0000117" iyz="0" izz="0.0000117"/>
+        </inertial>
+        <visual>
+            <origin rpy="0 0 0" xyz="-0.138 0 -0.005"/>
+            <geometry>
+                <mesh filename="package://uwrt_mars_rover_description/meshes/hex_key.stl" scale="0.0254 0.0254 0.0254"/>
+            </geometry>
+            <material name="Blue">
+                <color rgba="0 0 1 1"/>
+            </material>
+        </visual>
+        <collision>
+            <origin rpy="0 0 0" xyz="-0.138 0 -0.005"/>
+            <geometry>
+                <mesh filename="package://uwrt_mars_rover_description/meshes/hex_key.stl" scale="0.0254 0.0254 0.0254"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <gazebo reference="hex_key">
+        <gravity>true</gravity>
+        <selfCollide>false</selfCollide>
+    </gazebo>
+
+    <joint name="hex_joint" type="fixed">
+        <origin xyz="0.118 0 -0.024" rpy="0.0 0.0 0.0"/>
+        <parent link="servo"/>
+        <child link="hex_key"/>
+    </joint>
+
+    <xacro:macro name="gripper_to_claw" params="claw_static_link side mirror">
+        <link name="gripper_finger_${side}">
+            <inertial>
+                <origin rpy="0 0 0" xyz="-0.02271 -0.00121 0.02018"/>
+                <mass value="0.0479"/>
+                <inertia ixx="0.0000153325" ixy="-0.000015029" ixz="0" iyy="0.000060103" iyz="-0.000000144" izz="0.000071409"/>
+            </inertial>
+            <visual>
+                <origin rpy="0 0 0" xyz="0 ${-mirror*0.072} 0"/>
+                <geometry>
+                    <mesh filename="package://uwrt_mars_rover_description/meshes/gripper_finger_${side}.stl" scale="0.0254 0.0254 0.0254"/>
+                </geometry>
+                <material name="Blue">
+                    <color rgba="0 0 1 1"/>
+                </material>
+            </visual>
+            <collision>
+                <origin rpy="0 0 0" xyz="0 ${-mirror*0.072} 0"/>
+                <geometry>
+                    <mesh filename="package://uwrt_mars_rover_description/meshes/gripper_finger_${side}.stl" scale="0.0254 0.0254 0.0254"/>
+                </geometry>
+            </collision>
+        </link>
+
+        <gazebo reference="gripper_finger_${side}">
+            <gravity>true</gravity>
+            <selfCollide>false</selfCollide>
+        </gazebo>
+
+        <joint name="gripper_joint_${side}" type="revolute">
+            <origin xyz="0.058 ${mirror*0.072} 0" rpy="0.0 0.0 0.0"/>
+            <parent link="${claw_static_link}"/>
+            <child link="gripper_finger_${side}"/>
+            <axis xyz="0.0 0.0 1.0"/>
+            <limit lower="${-pi/4}" upper="${pi/4}" effort="10000" velocity="0.5"/>
+        </joint>
+    </xacro:macro>
+
+    <xacro:gripper_to_claw claw_static_link="claw_static" side="right" mirror="-1"/>
+    <xacro:gripper_to_claw claw_static_link="claw_static" side="left" mirror="1"/>
+    
+</xacro:macro>
+
+</robot>

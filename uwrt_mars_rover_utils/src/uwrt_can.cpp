@@ -11,6 +11,7 @@ constexpr std::chrono::milliseconds UWRTCANWrapper::MUTEX_LOCK_TIMEOUT;
 UWRTCANWrapper::UWRTCANWrapper(std::string name, std::string interface_name, bool rcv_big_endian,
                                int thread_sleep_millis)
     : name_(std::move(name)),
+      _logger_name(uwrt_mars_rover_utils::getLoggerName()),
       interface_name_(std::move(interface_name)),
       rcv_endianness_(rcv_big_endian ? __ORDER_BIG_ENDIAN__ : __ORDER_LITTLE_ENDIAN__),
       thread_sleep_millis_(std::chrono::milliseconds(thread_sleep_millis)){};
@@ -18,6 +19,7 @@ UWRTCANWrapper::UWRTCANWrapper(std::string name, std::string interface_name, boo
 // NOLINTNEXTLINE(performance-noexcept-move-constructor, bugprone-exception-escape)
 UWRTCANWrapper::UWRTCANWrapper(UWRTCANWrapper&& to_move)
     : name_(std::move(to_move.name_)),
+      _logger_name(std::move(to_move._logger_name)),
       interface_name_(std::move(to_move.interface_name_)),
       initialized_(to_move.initialized_),
       rcv_endianness_(to_move.rcv_endianness_),
@@ -45,6 +47,7 @@ UWRTCANWrapper& UWRTCANWrapper::operator=(UWRTCANWrapper&& to_move) {
     interface_name_ = std::move(to_move.interface_name_);
     rcv_endianness_ = to_move.rcv_endianness_;
     thread_sleep_millis_ = to_move.thread_sleep_millis_;
+    _logger_name = std::move(to_move._logger_name);
 
     // stop our thread
     read_thread_running_ = false;

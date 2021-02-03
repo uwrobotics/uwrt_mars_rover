@@ -12,6 +12,8 @@
 #include <thread>
 #include <vector>
 
+#include "uwrt_params.h"
+
 namespace uwrt_mars_rover_utils {
 
 class UWRTCANWrapper {
@@ -36,6 +38,9 @@ class UWRTCANWrapper {
  private:
   // description name for this wrapper
   std::string name_;
+
+  // ROS logger name variable for ROS erros
+  std::string _logger_name;
 
   // variables needed for can socket
   std::string interface_name_;
@@ -88,12 +93,12 @@ class UWRTCANWrapper {
   bool getLatestFromID(T &data, uint32_t id) {
     // make sure we have been initialized
     if (!initialized_) {
-      throw std::runtime_error("Please initialize CAN wrapper before using it");
+      ROS_ERROR_STREAM_NAMED(_logger_name, "Please initialize CAN wrapper before using it");
     }
 
     // check that we have new data to read at specified id
     if (!recv_map_mtx_.try_lock_for(MUTEX_LOCK_TIMEOUT)) {
-      throw std::runtime_error("Timed out while trying to lock read mutex");
+      ROS_ERROR_STREAM_NAMED(_logger_name, "Timed out while trying to lock read mutex");
     }
     auto it = recv_map_.find((canid_t)id);
     if (it == recv_map_.end()) {
@@ -108,7 +113,7 @@ class UWRTCANWrapper {
 
     // extract data from frame
     if (frame.can_dlc != sizeof(T)) {
-      throw std::runtime_error("Mismatch of size between recieved and requested data");
+      ROS_ERROR_STREAM_NAMED(_logger_name, "Mismatch of size between recieved and requested data");
     }
     std::memcpy(&data, frame.data, sizeof(T));
     data = correctEndianness<T>(data);
@@ -119,12 +124,12 @@ class UWRTCANWrapper {
   bool writeToID(T data, uint32_t id) {
     // make sure we have been initialized
     if (!initialized_) {
-      throw std::runtime_error("Please initialize CAN wrapper before using it");
+      ROS_ERROR_STREAM_NAMED(_logger_name, "Please initialize CAN wrapper before using it");
     }
 
     // make sure data isn't too big
     if (sizeof(T) > CAN_MAX_DLEN) {
-      throw std::runtime_error("Size of this data structure is too big");
+      ROS_ERROR_STREAM_NAMED(_logger_name, "Size of this data structure is too big");
     }
 
     // construct data frame
@@ -143,12 +148,12 @@ class UWRTCANWrapper {
   bool writeToIDwithAck(T data, uint32_t id) {
     // check socket has been initialized
     if (!initialized_) {
-      ROS_ERROR_STREAM("Please intialize CAN wrapper before using it");
+      ROS_ERROR_STREAM_NAMED(_logger_name, "Please intialize CAN wrapper before using it");
     }
 
     // makes sure data is not too big
     if (sizeof(T) > CAN_MAX_DLEN) {
-      ROS_ERROR_STREAM("Size of this data structure is too big");
+      ROS_ERROR_STREAM_NAMED(_logger_name, "Size of this data structure is too big");
     }
 
     // construct data frame
@@ -163,7 +168,7 @@ class UWRTCANWrapper {
 
     // error checking
     if (bytes_sent != sizeof(struct can_frame)) {
-      ROS_ERROR_STREAM("CAN MESSAGE FAILED TO SEND");
+      ROS_ERROR_STREAM_NAMED(_logger_name, "CAN MESSAGE FAILED TO SEND");
       return false;
     }
 
@@ -184,11 +189,11 @@ class UWRTCANWrapper {
 
     // check if message was successfully received by firmware
     if (bytes_recv == sizeof(struct can_frame)) {
-      ROS_INFO_STREAM("MESSAGE SENT TO FW SUCCESSFULLY");
+      ROS_INFO_STREAM_NAMED(_logger_name, "MESSAGE SENT TO FW SUCCESSFULLY");
       return true;
     }
 
-    ROS_ERROR_STREAM("FW MESSAGE FAILED TO LOAD");
+    ROS_ERROR_STREAM_NAMED(_logger_name, "FW MESSAGE FAILED TO LOAD");
     return false;
   }
 };

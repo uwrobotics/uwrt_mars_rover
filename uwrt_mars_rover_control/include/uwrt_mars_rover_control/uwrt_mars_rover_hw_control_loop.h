@@ -4,6 +4,7 @@
 #include <controller_manager/controller_manager.h>
 #include <ros/ros.h>
 #include <uwrt_mars_rover_drivetrain_hw/uwrt_mars_rover_drivetrain_hw.h>
+#include <uwrt_mars_rover_utils/uwrt_params.h>
 
 #include <memory>
 #include <string>

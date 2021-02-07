@@ -4,7 +4,7 @@
 #include <ros/console.h>
 #include <sys/ioctl.h>
 
-#include <CanopenInterface.hpp>
+#include <roboteq_driver/CanopenInterface.hpp>
 
 namespace roboteq {
 

@@ -1,8 +1,8 @@
 #pragma once
 
-#include <CanopenInterface.hpp>
 #include <iostream>
 #include <memory>
+#include <roboteq_driver/CanopenInterface.hpp>
 
 namespace roboteq {
 

@@ -10,8 +10,8 @@ find_package(
 
 add_message_files(
         FILES
-        PositionTwist.msg
         OpenLoopTwist.msg
+        PositionTwist.msg
 )
 
 generate_messages(

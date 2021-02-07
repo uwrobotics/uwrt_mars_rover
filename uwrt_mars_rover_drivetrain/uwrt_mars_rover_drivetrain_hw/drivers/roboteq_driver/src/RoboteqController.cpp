@@ -1,4 +1,4 @@
-#include <RoboteqController.hpp>
+#include <roboteq_driver/RoboteqController.hpp>
 
 namespace roboteq {
 

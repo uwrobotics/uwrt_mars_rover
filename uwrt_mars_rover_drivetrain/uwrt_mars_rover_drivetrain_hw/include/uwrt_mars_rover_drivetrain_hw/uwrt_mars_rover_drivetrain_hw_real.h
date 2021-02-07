@@ -2,7 +2,7 @@
 
 #include <uwrt_mars_rover_drivetrain_hw/uwrt_mars_rover_drivetrain_hw.h>
 
-#include "RoboteqController.hpp"
+#include "roboteq_driver/RoboteqController.hpp"
 
 namespace uwrt_mars_rover_drivetrain_hw {
 

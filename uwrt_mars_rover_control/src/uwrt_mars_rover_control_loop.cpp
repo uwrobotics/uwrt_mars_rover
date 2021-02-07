@@ -1,6 +1,7 @@
 #include <uwrt_mars_rover_control/uwrt_mars_rover_hw_control_loop.h>
 
-namespace uwrt_mars_rover_control {
+namespace uwrt_mars_rover_control 
+{
 // static constexpr class members must have definitions outside of their class to compile. This can be removed in C++17
 constexpr double MarsRoverHWControlLoop::DEFAULT_CONTROL_FREQUENCY;
 constexpr double MarsRoverHWControlLoop::DEFAULT_CONTROLLER_WATCHDOG_TIMEOUT;
@@ -8,11 +9,13 @@ constexpr double MarsRoverHWControlLoop::DEFAULT_CONTROLLER_WATCHDOG_TIMEOUT;
 MarsRoverHWControlLoop::MarsRoverHWControlLoop(std::string name, const ros::NodeHandle& nh)
     : name_(std::move(name)), nh_(nh) {}
 
-bool MarsRoverHWControlLoop::init() {
+bool MarsRoverHWControlLoop::init() 
+{
   ros::NodeHandle loop_nh(nh_, name_);
   ros::NodeHandle rover_hw_nh(nh_, "combined_robot_hw");
   rover_hw_ = std::make_unique<combined_robot_hw::CombinedRobotHW>();
-  if (!rover_hw_->init(nh_, rover_hw_nh)) {
+  if (!rover_hw_->init(nh_, rover_hw_nh)) 
+  {
     ROS_FATAL_STREAM_NAMED(name_, "Failed to initialize combined_robot_hw");
     return false;
   }
@@ -25,7 +28,8 @@ bool MarsRoverHWControlLoop::init() {
   return true;
 }
 
-void MarsRoverHWControlLoop::update() {
+void MarsRoverHWControlLoop::update() 
+{
   // Update current time using UNIX time
   ros::Time time_now = ros::Time::now();
 

@@ -14,7 +14,8 @@ static const std::string DEFAULT_PARAM_VALUE{"This is the DEFAULT string param v
 void getParamTest();
 void getLoggerNameTest();
 
-void getParamTest() {
+void getParamTest() 
+{
   ros::NodeHandle nh;
   ros::NodeHandle nh2(nh, CUSTOM_NAMESPACE);
 
@@ -33,7 +34,8 @@ void getParamTest() {
   assert(DEFAULT_PARAM_VALUE == retrieved_param);
 }
 
-void getLoggerNameTest() {
+void getLoggerNameTest() 
+{
   ros::NodeHandle nh;
   ros::NodeHandle nh2(nh, CUSTOM_NAMESPACE);
 
@@ -57,7 +59,8 @@ void getLoggerNameTest() {
   assert(NODE_NAME == logger_name);
 }
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[]) 
+{
   ros::init(argc, argv, NODE_NAME);
 
   getParamTest();

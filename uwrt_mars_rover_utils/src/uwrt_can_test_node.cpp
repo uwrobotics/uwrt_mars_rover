@@ -20,33 +20,43 @@ uwrt_mars_rover_utils::UWRTCANWrapper can_wrapper_int;    // NOLINT(readability-
 uwrt_mars_rover_utils::UWRTCANWrapper can_wrapper_float;  // NOLINT(readability-identifier-naming)
 
 // callback to get new float from topic, and send it over can
-void sendCanFloatCallback(const std_msgs::Float32::ConstPtr& data) {
+void sendCanFloatCallback(const std_msgs::Float32::ConstPtr& data) 
+{
   auto msg = (float)data->data;
-  if (can_wrapper_float.writeToID<float>(msg, FLOAT_WRITE_ID)) {
+  if (can_wrapper_float.writeToID<float>(msg, FLOAT_WRITE_ID)) 
+  {
     ROS_INFO_STREAM("Successfully sent float msg " << msg << " to id 0x05");
-  } else {
+  } 
+  else 
+  {
     ROS_INFO_STREAM("Failed to send float msg " << msg << " to id 0x05");
   }
 }
 
 // callback to get new int from topic, and send it over can
-void sendCanUIntCallback(const std_msgs::UInt32::ConstPtr& data) {
+void sendCanUIntCallback(const std_msgs::UInt32::ConstPtr& data) 
+{
   auto msg = (uint32_t)data->data;
-  if (can_wrapper_int.writeToID<uint32_t>(msg, UINT_WRITE_ID)) {
+  if (can_wrapper_int.writeToID<uint32_t>(msg, UINT_WRITE_ID)) 
+  {
     ROS_INFO_STREAM("Successfully sent uint32_t msg " << msg << " to id 0x05");
-  } else {
+  } 
+  else 
+  {
     ROS_INFO_STREAM("Failed to send uint32_t msg " << msg << " to id 0x05");
   }
 }
 
-int main(int argc, char* argv[]) {  // NOLINT(bugprone-exception-escape)
-  // init ROS
+int main(int argc, char* argv[]) 
+{  // NOLINT(bugprone-exception-escape)
+   // init ROS
   ros::init(argc, argv, "uwrt_utils_tester");
   ros::NodeHandle nh;
 
   // get params for CAN wrapper, and init it
   std::string can_interface;
-  if (!nh.getParam("can_interface", can_interface)) {
+  if (!nh.getParam("can_interface", can_interface)) 
+  {
     ROS_ERROR_STREAM("Could not find name for CAN interface");
     return EXIT_FAILURE;
   }
@@ -76,19 +86,24 @@ int main(int argc, char* argv[]) {  // NOLINT(bugprone-exception-escape)
 
   // main node loop
   ros::Rate loop_rate(LOOP_RATE);
-  while (ros::ok()) {
+  while (ros::ok()) 
+  {
     // try and read float ids
-    for (const auto& id : float_ids) {
+    for (const auto& id : float_ids) 
+    {
       float data;
-      if (can_wrapper_float.getLatestFromID<float>(data, id)) {
+      if (can_wrapper_float.getLatestFromID<float>(data, id)) 
+      {
         ROS_INFO_STREAM("Got float " << data << " from id " << id);
       }
     }
 
     // try and read float ids
-    for (const auto& id : uint_ids) {
+    for (const auto& id : uint_ids) 
+    {
       uint32_t data;
-      if (can_wrapper_int.getLatestFromID<uint32_t>(data, id)) {
+      if (can_wrapper_int.getLatestFromID<uint32_t>(data, id)) 
+      {
         ROS_INFO_STREAM("Got uint32_t " << data << " from id " << id);
       }
     }

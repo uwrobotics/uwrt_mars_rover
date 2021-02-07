@@ -1,13 +1,17 @@
 #include <uwrt_mars_rover_drivetrain_hw/uwrt_mars_rover_drivetrain_hw.h>
 
-namespace uwrt_mars_rover_drivetrain_hw {
+namespace uwrt_mars_rover_drivetrain_hw 
+{
 
-bool UWRTRoverHWDrivetrain::init(ros::NodeHandle & /*root_nh*/, ros::NodeHandle &robot_hw_nh) {
-  if (!loadJointInfoFromParameterServer(robot_hw_nh)) {
+bool UWRTRoverHWDrivetrain::init(ros::NodeHandle & /*root_nh*/, ros::NodeHandle &robot_hw_nh) 
+{
+  if (!loadJointInfoFromParameterServer(robot_hw_nh)) 
+  {
     return false;
   }
 
-  for (const auto &joint_name : joint_names_) {
+  for (const auto &joint_name : joint_names_) 
+  {
     registerStateInterfacesAndTransmissions(joint_name);
     registerCommandInterfacesAndTransmissions(joint_name);
   }
@@ -19,18 +23,21 @@ bool UWRTRoverHWDrivetrain::init(ros::NodeHandle & /*root_nh*/, ros::NodeHandle 
   return true;
 }
 
-void UWRTRoverHWDrivetrain::read(const ros::Time & /*time*/, const ros::Duration & /*period*/) {
+void UWRTRoverHWDrivetrain::read(const ros::Time & /*time*/, const ros::Duration & /*period*/) 
+{
   ROS_ERROR_STREAM_NAMED(name_, "read function called from "
                                     << name_ << " class. read calls should only happen to the overloaded function.");
 }
 
-void UWRTRoverHWDrivetrain::write(const ros::Time & /*time*/, const ros::Duration & /*period*/) {
+void UWRTRoverHWDrivetrain::write(const ros::Time & /*time*/, const ros::Duration & /*period*/)
+{
   ROS_ERROR_STREAM_NAMED(name_, "write function called from "
                                     << name_ << " class. write calls should only happen to the overloaded function.");
 }
 
 void UWRTRoverHWDrivetrain::doSwitch(const std::list<hardware_interface::ControllerInfo> &start_list,
-                                     const std::list<hardware_interface::ControllerInfo> &stop_list) {
+                                     const std::list<hardware_interface::ControllerInfo> &stop_list) 
+{
   // Reset commands for joints claimed by stopping controllers
   for (const auto &controller : stop_list) {
     for (const auto &hardware_interface_resource_list : controller.claimed_resources) {
@@ -42,13 +49,18 @@ void UWRTRoverHWDrivetrain::doSwitch(const std::list<hardware_interface::Control
   }
 
   // Set command type for joints claimed by starting controllers
-  for (const auto &controller : start_list) {
-    for (const auto &claimed : controller.claimed_resources) {
-      for (const auto &joint_name : claimed.resources) {
-        if (claimed.hardware_interface == "hardware_interface::PositionJointInterface") {
+  for (const auto &controller : start_list) 
+  {
+    for (const auto &claimed : controller.claimed_resources) 
+    {
+      for (const auto &joint_name : claimed.resources) 
+      {
+        if (claimed.hardware_interface == "hardware_interface::PositionJointInterface") 
+        {
           actuator_joint_commands_[joint_name].type = DrivetrainActuatorJointCommand::Type::POSITION;
           actuator_joint_commands_[joint_name].actuator_data = actuator_joint_states_[joint_name].actuator_position;
-        } else if (claimed.hardware_interface == "hardware_interface::VelocityJointInterface") {
+        } else if (claimed.hardware_interface == "hardware_interface::VelocityJointInterface") 
+        {
           actuator_joint_commands_[joint_name].type = DrivetrainActuatorJointCommand::Type::VELOCITY;
           actuator_joint_commands_[joint_name].actuator_data = 0.0;
         }  // TODO(wmmc88): add an open loop interface (voltage?)
@@ -57,10 +69,12 @@ void UWRTRoverHWDrivetrain::doSwitch(const std::list<hardware_interface::Control
   }
 }
 
-bool UWRTRoverHWDrivetrain::loadJointInfoFromParameterServer(ros::NodeHandle &robot_hw_nh) {
+bool UWRTRoverHWDrivetrain::loadJointInfoFromParameterServer(ros::NodeHandle &robot_hw_nh) 
+{
   XmlRpc::XmlRpcValue joints_list;
   bool param_fetched = robot_hw_nh.getParam("joints", joints_list);
-  if (!param_fetched) {
+  if (!param_fetched) 
+  {
     ROS_WARN_STREAM_NAMED(name_, robot_hw_nh.getNamespace() << "/joints could not be loaded from parameter server.");
     return false;
   }
@@ -68,7 +82,8 @@ bool UWRTRoverHWDrivetrain::loadJointInfoFromParameterServer(ros::NodeHandle &ro
   ROS_ASSERT(joints_list.getType() == XmlRpc::XmlRpcValue::TypeArray);
 
   // NOLINTNEXTLINE(modernize-loop-convert): iterator only valid for XmlRpcValue::TypeStruct
-  for (size_t joint_index = 0; joint_index < joints_list.size(); joint_index++) {
+  for (size_t joint_index = 0; joint_index < joints_list.size(); joint_index++) 
+  {
     ROS_ASSERT(joints_list[joint_index].getType() == XmlRpc::XmlRpcValue::TypeStruct);
     ROS_ASSERT(joints_list[joint_index].hasMember("name"));
     ROS_ASSERT(joints_list[joint_index]["name"].getType() == XmlRpc::XmlRpcValue::TypeString);
@@ -81,7 +96,8 @@ bool UWRTRoverHWDrivetrain::loadJointInfoFromParameterServer(ros::NodeHandle &ro
   return true;
 }
 
-void UWRTRoverHWDrivetrain::registerStateInterfacesAndTransmissions(const std::string &joint_name) {
+void UWRTRoverHWDrivetrain::registerStateInterfacesAndTransmissions(const std::string &joint_name) 
+{
   // Register JointStateHandle to the JointStateInterface
   hardware_interface::JointStateHandle joint_state_handle(
       joint_name, &actuator_joint_states_[joint_name].joint_position,
@@ -105,7 +121,8 @@ void UWRTRoverHWDrivetrain::registerStateInterfacesAndTransmissions(const std::s
   actuator_to_joint_state_interface_.registerHandle(actuator_to_joint_state_handle);
 }
 
-void UWRTRoverHWDrivetrain::registerCommandInterfacesAndTransmissions(const std::string &joint_name) {
+void UWRTRoverHWDrivetrain::registerCommandInterfacesAndTransmissions(const std::string &joint_name) 
+{
   // Register JointHandle associated with a JointStateHandle to command interfaces
   hardware_interface::JointHandle joint_command_handle(joint_state_interface_.getHandle(joint_name),
                                                        &actuator_joint_commands_[joint_name].joint_data);

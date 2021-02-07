@@ -3,7 +3,8 @@
 #include <sys/socket.h>
 #include <uwrt_mars_rover_utils/uwrt_can.h>
 
-namespace uwrt_mars_rover_utils {
+namespace uwrt_mars_rover_utils 
+{
 
 // static constexpr need to be declared again in cpp file (fixed in c++17)
 constexpr std::chrono::milliseconds UWRTCANWrapper::MUTEX_LOCK_TIMEOUT;
@@ -23,16 +24,19 @@ UWRTCANWrapper::UWRTCANWrapper(UWRTCANWrapper&& to_move)
       interface_name_(std::move(to_move.interface_name_)),
       initialized_(to_move.initialized_),
       rcv_endianness_(to_move.rcv_endianness_),
-      thread_sleep_millis_(std::chrono::milliseconds(to_move.thread_sleep_millis_)) {
+thread_sleep_millis_(std::chrono::milliseconds(to_move.thread_sleep_millis_)) 
+{
   // if to_move has been initialized, move over other variables
-  if (initialized_) {
+  if (initialized_) 
+  {
     socket_handle_ = to_move.socket_handle_;
     sock_addr_ = to_move.sock_addr_;
     ifr_ = to_move.ifr_;
 
     read_thread_ = std::thread(std::move(to_move.read_thread_));
     read_thread_running_ = to_move.read_thread_running_;
-    if (!std::unique_lock<std::timed_mutex>(to_move.recv_map_mtx_, MUTEX_LOCK_TIMEOUT)) {
+    if (!std::unique_lock<std::timed_mutex>(to_move.recv_map_mtx_, MUTEX_LOCK_TIMEOUT)) 
+    {
       throw std::runtime_error("Timed out while trying to lock vector mutex in " __FILE__);
     }
     recv_map_ = std::move(to_move.recv_map_);
@@ -40,8 +44,10 @@ UWRTCANWrapper::UWRTCANWrapper(UWRTCANWrapper&& to_move)
 };
 
 // NOLINTNEXTLINE(performance-noexcept-move-constructor, bugprone-exception-escape)
-UWRTCANWrapper& UWRTCANWrapper::operator=(UWRTCANWrapper&& to_move) {
-  if (this != &to_move) {
+UWRTCANWrapper& UWRTCANWrapper::operator=(UWRTCANWrapper&& to_move) 
+{
+  if (this != &to_move) 
+  {
     // move constructor variables
     name_ = std::move(to_move.name_);
     interface_name_ = std::move(to_move.interface_name_);
@@ -51,7 +57,8 @@ UWRTCANWrapper& UWRTCANWrapper::operator=(UWRTCANWrapper&& to_move) {
 
     // stop our thread
     read_thread_running_ = false;
-    if (read_thread_.joinable()) {
+    if (read_thread_.joinable()) 
+    {
       read_thread_.join();
     }
 
@@ -64,7 +71,8 @@ UWRTCANWrapper& UWRTCANWrapper::operator=(UWRTCANWrapper&& to_move) {
 
       read_thread_ = std::thread(std::move(to_move.read_thread_));
       read_thread_running_ = to_move.read_thread_running_;
-      if (!std::unique_lock<std::timed_mutex>(to_move.recv_map_mtx_, MUTEX_LOCK_TIMEOUT)) {
+      if (!std::unique_lock<std::timed_mutex>(to_move.recv_map_mtx_, MUTEX_LOCK_TIMEOUT)) 
+      {
         throw std::runtime_error("Timed out while trying to lock vector mutex in " __FILE__);
       }
       recv_map_ = std::move(to_move.recv_map_);
@@ -74,18 +82,22 @@ UWRTCANWrapper& UWRTCANWrapper::operator=(UWRTCANWrapper&& to_move) {
   return *this;
 }
 
-UWRTCANWrapper::~UWRTCANWrapper() {
+UWRTCANWrapper::~UWRTCANWrapper() 
+{
   read_thread_running_ = false;
   if (read_thread_.joinable()) {
     read_thread_.join();
   }
 }
 
-void UWRTCANWrapper::init(const std::vector<uint32_t>& ids) {
+void UWRTCANWrapper::init(const std::vector<uint32_t>& ids) 
+{
   // if already initialized, stop the thread and clear rcv map
-  if (initialized_) {
+  if (initialized_) 
+  {
     initialized_ = false;
-    if (read_thread_.joinable()) {
+    if (read_thread_.joinable()) 
+    {
       read_thread_.join();
     }
     recv_map_.clear();
@@ -93,7 +105,8 @@ void UWRTCANWrapper::init(const std::vector<uint32_t>& ids) {
 
   // set up can socket
   socket_handle_ = socket(PF_CAN, SOCK_RAW, CAN_RAW);
-  if (socket_handle_ < 0) {
+  if (socket_handle_ < 0) 
+  {
     throw std::runtime_error("Failed to set up a socket for CAN in " __FILE__);
   }
   strcpy(ifr_.ifr_name, interface_name_.c_str());
@@ -104,7 +117,8 @@ void UWRTCANWrapper::init(const std::vector<uint32_t>& ids) {
   // set software filters on can_id
   std::vector<struct can_filter> filters;
   filters.resize(ids.size());
-  for (int i = 0; i < ids.size(); i++) {
+  for (int i = 0; i < ids.size(); i++) 
+  {
     filters[i].can_id = (canid_t)ids[i];
     filters[i].can_mask = (CAN_EFF_FLAG | CAN_RTR_FLAG | CAN_SFF_MASK);
   }
@@ -117,7 +131,8 @@ void UWRTCANWrapper::init(const std::vector<uint32_t>& ids) {
 
   // finally bind can socket to can addr
   // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
-  if (bind(socket_handle_, reinterpret_cast<struct sockaddr*>(&sock_addr_), sizeof(sock_addr_)) < 0) {
+  if (bind(socket_handle_, reinterpret_cast<struct sockaddr*>(&sock_addr_), sizeof(sock_addr_)) < 0) 
+  {
     throw std::runtime_error("Failed to bind can device to socket in " __FILE__);
   }
 
@@ -127,16 +142,21 @@ void UWRTCANWrapper::init(const std::vector<uint32_t>& ids) {
   initialized_ = true;
 }
 
-void UWRTCANWrapper::readSocketTask() {
+void UWRTCANWrapper::readSocketTask() 
+{
   struct can_frame frame {};
   int bytes_read;
 
-  while (read_thread_running_) {
+  while (read_thread_running_) 
+  {
     // keep performing read until buffer is emptied
-    do {
+    do 
+    {
       bytes_read = recv(socket_handle_, &frame, sizeof(struct can_frame), 0);
-      if (bytes_read == sizeof(struct can_frame)) {
-        if (!recv_map_mtx_.try_lock_for(MUTEX_LOCK_TIMEOUT)) {
+      if (bytes_read == sizeof(struct can_frame)) 
+      {
+        if (!recv_map_mtx_.try_lock_for(MUTEX_LOCK_TIMEOUT)) 
+        {
           ROS_WARN_NAMED(name_, "CAN wrapper failed to lock mutex, resulting in a lost CAN frame!");
           break;
         }

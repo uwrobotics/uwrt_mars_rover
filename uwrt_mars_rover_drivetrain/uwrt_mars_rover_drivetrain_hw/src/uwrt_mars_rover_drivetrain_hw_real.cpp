@@ -3,14 +3,18 @@
 
 #include <pluginlib/class_list_macros.hpp>
 
-namespace uwrt_mars_rover_drivetrain_hw {
+namespace uwrt_mars_rover_drivetrain_hw 
+{
 
-bool UWRTMarsRoverDrivetrainHWReal::init(ros::NodeHandle &root_nh, ros::NodeHandle &robot_hw_nh) {
-  if (!UWRTRoverHWDrivetrain::init(root_nh, robot_hw_nh)) {
+bool UWRTMarsRoverDrivetrainHWReal::init(ros::NodeHandle &root_nh, ros::NodeHandle &robot_hw_nh) 
+{
+  if (!UWRTRoverHWDrivetrain::init(root_nh, robot_hw_nh)) 
+  {
     return false;
   }
 
-  if (!loadRoboteqConfigFromParamServer(robot_hw_nh)) {
+  if (!loadRoboteqConfigFromParamServer(robot_hw_nh)) 
+  {
     return false;
   }
 
@@ -21,11 +25,13 @@ bool UWRTMarsRoverDrivetrainHWReal::init(ros::NodeHandle &root_nh, ros::NodeHand
   return true;
 }
 
-void UWRTMarsRoverDrivetrainHWReal::read(const ros::Time & /*time*/, const ros::Duration & /*period*/) {
+void UWRTMarsRoverDrivetrainHWReal::read(const ros::Time & /*time*/, const ros::Duration & /*period*/) 
+{
   static constexpr double MOTOR_READING_TO_AMPS_CONVERSION_FACTOR{10.0};
   static constexpr double RPM_TO_RADIANS_PER_SECOND_FACTOR{2 * M_PI / 60};
 
-  for (const auto &joint_name : joint_names_) {
+  for (const auto &joint_name : joint_names_) 
+  {
     // TODO: change to use tpdos
     actuator_joint_states_[joint_name].actuator_position = motor_controller_->readAbsoluteEncoderCount(
         roboteq_actuator_index_[joint_name]);  // TODO: This is Encoder Counts? Convert to Rad?
@@ -42,12 +48,15 @@ void UWRTMarsRoverDrivetrainHWReal::read(const ros::Time & /*time*/, const ros::
   motor_controller_->readFaultFlags();
 }
 
-void UWRTMarsRoverDrivetrainHWReal::write(const ros::Time & /*time*/, const ros::Duration & /*period*/) {
+void UWRTMarsRoverDrivetrainHWReal::write(const ros::Time & /*time*/, const ros::Duration & /*period*/) 
+{
   static constexpr double RADIANS_PER_SECOND_TO_RPM_FACTOR{60 / M_PI / 2};
 
-  for (const auto &joint_name : joint_names_) {
+  for (const auto &joint_name : joint_names_) 
+  {
     bool successful_joint_write = false;
-    switch (actuator_joint_commands_[joint_name].type) {
+    switch (actuator_joint_commands_[joint_name].type) 
+    {
       case UWRTRoverHWDrivetrain::DrivetrainActuatorJointCommand::Type::POSITION:
         joint_to_actuator_position_interface_.propagate();
         successful_joint_write = motor_controller_->setPosition(
@@ -75,21 +84,23 @@ void UWRTMarsRoverDrivetrainHWReal::write(const ros::Time & /*time*/, const ros:
                               << ",which is an unknown command type. Sending Stop Command to Roboteq Controller!");
         successful_joint_write = motor_controller_->stopInAllModes(roboteq_actuator_index_[joint_name]);
     }
-    if (!successful_joint_write && actuator_joint_commands_[joint_name].type !=
-                                       UWRTRoverHWDrivetrain::DrivetrainActuatorJointCommand::Type::NONE) {
+    if (!successful_joint_write && actuator_joint_commands_[joint_name].type != UWRTRoverHWDrivetrain::DrivetrainActuatorJointCommand::Type::NONE) 
+    {
       ROS_ERROR_STREAM_NAMED(name_, "Failed to write " << actuator_joint_commands_[joint_name].type << " command to "
                                                        << joint_name << ".");
     }
   }
 }
 
-bool UWRTMarsRoverDrivetrainHWReal::loadRoboteqConfigFromParamServer(ros::NodeHandle &robot_hw_nh) {
+bool UWRTMarsRoverDrivetrainHWReal::loadRoboteqConfigFromParamServer(ros::NodeHandle &robot_hw_nh) 
+{
   roboteq_canopen_id_ = uwrt_mars_rover_utils::getParam<int>(robot_hw_nh, name_, "roboteq_canopen_id", 0x01);
 
   // Get joint list info
   XmlRpc::XmlRpcValue joints_list;
   bool param_fetched = robot_hw_nh.getParam("joints", joints_list);
-  if (!param_fetched) {
+  if (!param_fetched) 
+  {
     ROS_WARN_STREAM_NAMED(name_, robot_hw_nh.getNamespace() << "/joints could not be loaded from parameter server.");
     return false;
   }

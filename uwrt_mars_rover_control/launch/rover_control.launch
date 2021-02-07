@@ -27,7 +27,8 @@
              output="screen" args="$(arg initial_start_controller_list)"/>
 
        <!-- list of all other controllers that should be loaded, but not started -->
-       <arg name="load_only_controller_list" value="drivetrain_voltage_controller"/>
+       <arg name="load_only_controller_list" value="drivetrain_voltage_controller
+                                                    drivetrain_position_controller"/>
 
        <!-- load all other controllers-->
        <node name="load_controller_spawner" pkg="controller_manager" type="spawner" respawn="false"

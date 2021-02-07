@@ -32,9 +32,9 @@ class DiffDrivePositionController
   DiffDrivePositionController() = default;
 
   bool init(hardware_interface::PositionJointInterface* hw, ros::NodeHandle& controller_nh) override;
-  void starting(const ros::Time& time) override;
-  void stopping(const ros::Time& time) override;
-  void update(const ros::Time& /*time*/, const ros::Duration& duration) override;
+  void starting(const ros::Time& /*time*/) override;
+  void stopping(const ros::Time& /*time*/) override;
+  void update(const ros::Time& time, const ros::Duration& /*period*/) override;
 
  private:
   bool loadWheelParameters(ros::NodeHandle& controller_nh, std::vector<std::string>& left_wheel_names,
@@ -42,10 +42,11 @@ class DiffDrivePositionController
   bool getWheelNames(ros::NodeHandle& controller_nh, const std::string& wheel_param,
                      std::vector<std::string>& wheel_names);
   void commandSubscriberCallback(const uwrt_mars_rover_drivetrain_msgs::PositionTwist& command);
-  bool resetPositionSetpointCallback(std_srvs::Trigger::Request& request, std_srvs::Trigger::Response& response);
+  bool resetPositionSetpointCallback(std_srvs::Trigger::Request& /*request*/, std_srvs::Trigger::Response& response);
   void resetPositionSetpoints();
   void stopMotors();
-  bool is_close(double value_1, double value_2, double threshold);
+
+  static bool isClose(double value_1, double value_2, double threshold);
 
  private:
   // limit defaults
@@ -61,25 +62,25 @@ class DiffDrivePositionController
   static constexpr bool DEFAULT_ALLOW_MULTIPLE_CMD_PUBLISHERS{true};
   static constexpr bool DEFAULT_PUBLISH_CONTROLLER_CMD_OUTPUT{false};
   static constexpr bool DEFAULT_PUBLISH_WHEEL_JOINT_CONTROLLER_STATE{false};
+  static constexpr unsigned DEFAULT_PUBLISH_QUEUE_SIZE{100};
 
   struct Command {
-    double linear;
-    double angular;
-    ros::Time timestamp;
-    Command() : linear(0.0), angular(0.0), timestamp(0.0) {}
+    double linear{0.0};
+    double angular{0.0};
+    ros::Time timestamp{0.0};
   };
 
   std::string name_;
-  double wheel_separation_;
-  double wheel_radius_;
+  double wheel_separation_{0.0};
+  double wheel_radius_{0.0};
 
   struct JointHandlePair {
-    hardware_interface::JointHandle left_wheel_joint;
-    hardware_interface::JointHandle right_wheel_joint;
+    hardware_interface::JointHandle left_wheel_joint{};
+    hardware_interface::JointHandle right_wheel_joint{};
   };
   struct JointSetpointPair {
-    double left_wheel_setpoint;
-    double right_wheel_setpoint;
+    double left_wheel_setpoint{};
+    double right_wheel_setpoint{};
   };
   struct JointPair {
     JointHandlePair joint_handles;
@@ -97,21 +98,21 @@ class DiffDrivePositionController
   ros::ServiceServer reset_setpoint_service_server_;
 
   // loop state variables
-  std::atomic<bool> waiting_for_setpoint_reset_;
-  bool accepting_offset_commands_;
+  std::atomic<bool> waiting_for_setpoint_reset_{false};
+  bool accepting_offset_commands_{false};
 
   // limits
-  bool has_linear_cmd_limits_;
-  double max_linear_cmd_;
-  double min_linear_cmd_;
-  bool has_angular_cmd_limits_;
-  double max_angular_cmd_;
-  double min_angular_cmd_;
+  bool has_linear_cmd_limits_{false};
+  double max_linear_cmd_{0.0};
+  double min_linear_cmd_{0.0};
+  bool has_angular_cmd_limits_{false};
+  double max_angular_cmd_{0.0};
+  double min_angular_cmd_{0.0};
 
   // publisher & subscriber options
-  double cmd_timeout_;
-  bool allow_multiple_cmd_publishers_;
-  bool publish_controller_cmd_output_;
-  bool publish_wheel_joint_controller_state_;
+  double cmd_timeout_{0.0};
+  bool allow_multiple_cmd_publishers_{false};
+  bool publish_controller_cmd_output_{false};
+  bool publish_wheel_joint_controller_state_{false};
 };
 }  // namespace diff_drive_position_controller

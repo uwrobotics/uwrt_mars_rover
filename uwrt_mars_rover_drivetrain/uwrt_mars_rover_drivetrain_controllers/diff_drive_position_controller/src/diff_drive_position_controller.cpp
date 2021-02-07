@@ -5,16 +5,11 @@
 #include <pluginlib/class_list_macros.hpp>
 
 namespace diff_drive_position_controller {
-// static constexpr class members must have definitions outside of their class to compile. This can be removed in C++17
-constexpr double DiffDrivePositionController::DEFAULT_CMD_TIMEOUT;
-constexpr bool DiffDrivePositionController::DEFAULT_ALLOW_MULTIPLE_CMD_PUBLISHERS;
-constexpr bool DiffDrivePositionController::DEFAULT_PUBLISH_CONTROLLER_CMD_OUTPUT;
-constexpr bool DiffDrivePositionController::DEFAULT_PUBLISH_WHEEL_JOINT_CONTROLLER_STATE;
-
 bool DiffDrivePositionController::init(hardware_interface::PositionJointInterface* hw, ros::NodeHandle& controller_nh) {
   name_ = uwrt_mars_rover_utils::getLoggerName(controller_nh);
 
-  std::vector<std::string> left_wheel_names, right_wheel_names;
+  std::vector<std::string> left_wheel_names;
+  std::vector<std::string> right_wheel_names;
   if (!loadWheelParameters(controller_nh, left_wheel_names, right_wheel_names)) {
     return false;
   }
@@ -39,7 +34,7 @@ bool DiffDrivePositionController::init(hardware_interface::PositionJointInterfac
   if (publish_controller_cmd_output_) {
     output_command_publisher_.reset(
         new realtime_tools::RealtimePublisher<uwrt_mars_rover_drivetrain_msgs::PositionTwist>(
-            controller_nh, "cmd_open_loop_out", 100));
+            controller_nh, "cmd_open_loop_out", DEFAULT_PUBLISH_QUEUE_SIZE));
   }
 
   publish_wheel_joint_controller_state_ = uwrt_mars_rover_utils::getParam(
@@ -47,7 +42,7 @@ bool DiffDrivePositionController::init(hardware_interface::PositionJointInterfac
   if (publish_wheel_joint_controller_state_) {
     // TODO: Add controller_state_publisher_.reset here in #121 (controller_state_publisher_.reset(new
     // realtime_tools::RealtimePublisher<uwrt_mars_rover_msgs::JointTrajectoryControllerState>(controller_nh,
-    // "wheel_joint_controller_state", 100)))
+    // "wheel_joint_controller_state", DEFAULT_PUBLISH_QUEUE_SIZE)))
   }
 
   // Get the joint object to use in the realtime loop
@@ -71,15 +66,15 @@ bool DiffDrivePositionController::init(hardware_interface::PositionJointInterfac
   return true;
 }
 
-void DiffDrivePositionController::starting(const ros::Time& time) {
+void DiffDrivePositionController::starting(const ros::Time& /*time*/) {
   stopMotors();
 }
 
-void DiffDrivePositionController::stopping(const ros::Time& time) {
+void DiffDrivePositionController::stopping(const ros::Time& /*time*/) {
   stopMotors();
 }
 
-void DiffDrivePositionController::update(const ros::Time& time, const ros::Duration& period) {
+void DiffDrivePositionController::update(const ros::Time& time, const ros::Duration& /*period*/) {
   // Re-zero the position setpoint if request was received by service server. Signals success to use in service reply.
   bool needs_setpoint_reset = waiting_for_setpoint_reset_.exchange(false);
   if (needs_setpoint_reset) {
@@ -92,8 +87,8 @@ void DiffDrivePositionController::update(const ros::Time& time, const ros::Durat
   if (!accepting_offset_commands_) {
     static constexpr double LINEAR_CLOSE_THRESHOLD{0.001};   // 1 mm
     static constexpr double ANGULAR_CLOSE_THRESHOLD{0.002};  // ~0.11 degrees
-    if (is_close(current_cmd.linear, 0, LINEAR_CLOSE_THRESHOLD) &&
-        is_close(current_cmd.angular, 0, ANGULAR_CLOSE_THRESHOLD)) {
+    if (isClose(current_cmd.linear, 0, LINEAR_CLOSE_THRESHOLD) &&
+        isClose(current_cmd.angular, 0, ANGULAR_CLOSE_THRESHOLD)) {
       accepting_offset_commands_ = true;
     }
   }
@@ -235,7 +230,7 @@ void DiffDrivePositionController::commandSubscriberCallback(
   }
 }
 
-bool DiffDrivePositionController::resetPositionSetpointCallback(std_srvs::Trigger::Request& request,
+bool DiffDrivePositionController::resetPositionSetpointCallback(std_srvs::Trigger::Request& /*request*/,
                                                                 std_srvs::Trigger::Response& response) {
   static const ros::Duration RESET_SETPOINT_TIMEOUT{0.2};
 
@@ -246,11 +241,11 @@ bool DiffDrivePositionController::resetPositionSetpointCallback(std_srvs::Trigge
 
   ros::Time timeout_time = current_time + RESET_SETPOINT_TIMEOUT;
 
-  response.success = false;
+  response.success = static_cast<uint8_t>(false);
   while (current_time < timeout_time) {
     if (!waiting_for_setpoint_reset_) {
       // Wait for controller manager thread to reset setpoint
-      response.success = true;
+      response.success = static_cast<uint8_t>(true);
       break;
     }
 
@@ -258,7 +253,7 @@ bool DiffDrivePositionController::resetPositionSetpointCallback(std_srvs::Trigge
     ros::ros_steadytime(current_time.sec, current_time.nsec);
   }
 
-  if (!response.success) {
+  if (response.success == static_cast<uint8_t>(false)) {
     std::stringstream ss;
     ss << "Request Timed Out! Waited for " << RESET_SETPOINT_TIMEOUT.toSec() << " seconds before terminating.";
     response.message = ss.str();
@@ -282,7 +277,7 @@ void DiffDrivePositionController::stopMotors() {
   }
 }
 
-bool DiffDrivePositionController::is_close(double value_1, double value_2, double threshold) {
+bool DiffDrivePositionController::isClose(double value_1, double value_2, double threshold) {
   return std::abs(value_1 - value_2) < threshold;
 }
 }  // namespace diff_drive_position_controller

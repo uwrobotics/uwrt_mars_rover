@@ -32,9 +32,9 @@ class DiffDriveVoltageController
   DiffDriveVoltageController() = default;
 
   bool init(uwrt_hardware_interface::VoltageJointInterface* hw, ros::NodeHandle& controller_nh) override;
-  void starting(const ros::Time& time) override;
-  void stopping(const ros::Time& time) override;
-  void update(const ros::Time& /*time*/, const ros::Duration& duration) override;
+  void starting(const ros::Time& /*time*/) override;
+  void stopping(const ros::Time& /*time*/) override;
+  void update(const ros::Time& time, const ros::Duration& /*period*/) override;
 
  private:
   bool loadWheelParameters(ros::NodeHandle& controller_nh, std::vector<std::string>& left_wheel_names,
@@ -58,12 +58,12 @@ class DiffDriveVoltageController
   static constexpr bool DEFAULT_ALLOW_MULTIPLE_CMD_PUBLISHERS{true};
   static constexpr bool DEFAULT_PUBLISH_CONTROLLER_CMD_OUTPUT{false};
   static constexpr bool DEFAULT_PUBLISH_WHEEL_JOINT_CONTROLLER_STATE{false};
+  static constexpr unsigned DEFAULT_PUBLISH_QUEUE_SIZE{100};
 
   struct Command {
-    double linear;
-    double angular;
-    ros::Time timestamp;
-    Command() : linear(0.0), angular(0.0), timestamp(0.0) {}
+    double linear{0.0};
+    double angular{0.0};
+    ros::Time timestamp{0.0};
   };
 
   std::string name_;
@@ -83,17 +83,17 @@ class DiffDriveVoltageController
       output_command_publisher_;
 
   // limits
-  bool has_linear_cmd_limits_;
-  double max_linear_cmd_;
-  double min_linear_cmd_;
-  bool has_angular_cmd_limits_;
-  double max_angular_cmd_;
-  double min_angular_cmd_;
+  bool has_linear_cmd_limits_{false};
+  double max_linear_cmd_{0.0};
+  double min_linear_cmd_{0.0};
+  bool has_angular_cmd_limits_{false};
+  double max_angular_cmd_{0.0};
+  double min_angular_cmd_{0.0};
 
   // publisher & subscriber options
-  double cmd_timeout_;
-  bool allow_multiple_cmd_publishers_;
-  bool publish_controller_cmd_output_;
-  bool publish_wheel_joint_controller_state_;
+  double cmd_timeout_{0.0};
+  bool allow_multiple_cmd_publishers_{false};
+  bool publish_controller_cmd_output_{false};
+  bool publish_wheel_joint_controller_state_{false};
 };
 }  // namespace diff_drive_voltage_controller

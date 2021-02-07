@@ -5,17 +5,12 @@
 #include <pluginlib/class_list_macros.hpp>
 
 namespace diff_drive_voltage_controller {
-// static constexpr class members must have definitions outside of their class to compile. This can be removed in C++17
-constexpr double DiffDriveVoltageController::DEFAULT_CMD_TIMEOUT;
-constexpr bool DiffDriveVoltageController::DEFAULT_ALLOW_MULTIPLE_CMD_PUBLISHERS;
-constexpr bool DiffDriveVoltageController::DEFAULT_PUBLISH_CONTROLLER_CMD_OUTPUT;
-constexpr bool DiffDriveVoltageController::DEFAULT_PUBLISH_WHEEL_JOINT_CONTROLLER_STATE;
-
 bool DiffDriveVoltageController::init(uwrt_hardware_interface::VoltageJointInterface* hw,
                                       ros::NodeHandle& controller_nh) {
   name_ = uwrt_mars_rover_utils::getLoggerName(controller_nh);
 
-  std::vector<std::string> left_wheel_names, right_wheel_names;
+  std::vector<std::string> right_wheel_names;
+  std::vector<std::string> left_wheel_names;
   if (!loadWheelParameters(controller_nh, left_wheel_names, right_wheel_names)) {
     return false;
   }
@@ -40,7 +35,7 @@ bool DiffDriveVoltageController::init(uwrt_hardware_interface::VoltageJointInter
   if (publish_controller_cmd_output_) {
     output_command_publisher_.reset(
         new realtime_tools::RealtimePublisher<uwrt_mars_rover_drivetrain_msgs::OpenLoopTwist>(
-            controller_nh, "cmd_open_loop_out", 100));
+            controller_nh, "cmd_open_loop_out", DEFAULT_PUBLISH_QUEUE_SIZE));
   }
 
   publish_wheel_joint_controller_state_ = uwrt_mars_rover_utils::getParam(
@@ -48,7 +43,7 @@ bool DiffDriveVoltageController::init(uwrt_hardware_interface::VoltageJointInter
   if (publish_wheel_joint_controller_state_) {
     // TODO: Add controller_state_publisher_.reset here in #121 (controller_state_publisher_.reset(new
     // realtime_tools::RealtimePublisher<uwrt_mars_rover_msgs::JointTrajectoryControllerState>(controller_nh,
-    // "wheel_joint_controller_state", 100)))
+    // "wheel_joint_controller_state", DEFAULT_PUBLISH_QUEUE_SIZE)))
   }
 
   // Get the joint object to use in the realtime loop
@@ -66,15 +61,15 @@ bool DiffDriveVoltageController::init(uwrt_hardware_interface::VoltageJointInter
   return true;
 }
 
-void DiffDriveVoltageController::starting(const ros::Time& time) {
+void DiffDriveVoltageController::starting(const ros::Time& /*time*/) {
   stopMotors();
 }
 
-void DiffDriveVoltageController::stopping(const ros::Time& time) {
+void DiffDriveVoltageController::stopping(const ros::Time& /*time*/) {
   stopMotors();
 }
 
-void DiffDriveVoltageController::update(const ros::Time& time, const ros::Duration& period) {
+void DiffDriveVoltageController::update(const ros::Time& time, const ros::Duration& /*period*/) {
   Command current_cmd = *(command_realtime_buffer_.readFromRT());
   const double cmd_dt{(time - current_cmd.timestamp).toSec()};
 

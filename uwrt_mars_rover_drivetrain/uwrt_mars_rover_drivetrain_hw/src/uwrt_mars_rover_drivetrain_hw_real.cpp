@@ -29,8 +29,9 @@ void UWRTMarsRoverDrivetrainHWReal::read(const ros::Time & /*time*/, const ros::
   for (const auto &joint_name : joint_names_) {
     // position measured in Radians from starting position
     actuator_joint_states_[joint_name].actuator_position =
+        REVOLUTIONS_TO_RADIANS_FACTOR *
         motor_controller_->readAbsoluteEncoderCount(roboteq_actuator_index_[joint_name]) /
-        ticks_per_revolution_[joint_name] * REVOLUTIONS_TO_RADIANS_FACTOR;
+        ticks_per_revolution_[joint_name];
 
     // velocity in Radians/sec
     actuator_joint_states_[joint_name].actuator_velocity =

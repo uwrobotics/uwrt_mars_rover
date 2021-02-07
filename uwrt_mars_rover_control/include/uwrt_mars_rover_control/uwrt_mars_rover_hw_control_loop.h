@@ -41,7 +41,7 @@ class MarsRoverHWControlLoop {
   ros::Time current_control_loop_time_;
   ros::Time last_control_loop_time_;
 
-  double control_freq_;
-  double controller_watchdog_timeout_;
+  double control_freq_{0.0};
+  double controller_watchdog_timeout_{0.0};
 };
 }  // namespace uwrt_mars_rover_control

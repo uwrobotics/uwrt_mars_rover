@@ -13,6 +13,68 @@ uwrt_mars_rover:
     allow_multiple_cmd_publishers: &shared_allow_multiple_cmd_publishers False
     cmd_timeout: &shared_cmd_timeout 0.5
 
+  drivetrain_velocity_controller:
+    type: diff_drive_controller/DiffDriveController
+    left_wheel: *shared_left_wheel_name
+    right_wheel: *shared_right_wheel_name
+
+    wheel_separation: *shared_wheel_separation_distance
+    wheel_radius: *shared_wheel_radius
+
+    publish_cmd: *shared_publish_clamped_cmd
+    publish_wheel_joint_controller_state: *shared_publish_wheel_controller_state
+
+    allow_multiple_cmd_vel_publishers: *shared_allow_multiple_cmd_publishers
+    cmd_vel_timeout: *shared_cmd_timeout
+
+    pose_covariance_diagonal: [ 0.001, 0.001, 1000000.0, 1000000.0, 1000000.0, 1000.0 ]
+    twist_covariance_diagonal: [ 0.001, 0.001, 1000000.0, 1000000.0, 1000000.0, 1000.0 ]
+
+    linear:
+      x:
+        has_velocity_limits: false
+        max_velocity: 1.0  # m/s
+        min_velocity: -0.5 # m/s
+        has_acceleration_limits: false
+        max_acceleration: 0.8  # m/s^2
+        min_acceleration: -0.4 # m/s^2
+        has_jerk_limits: true
+        max_jerk: 5.0  # m/s^3
+    angular:
+      z:
+        has_velocity_limits: false
+        max_velocity: 1.7  # rad/s
+        has_acceleration_limits: false
+        max_acceleration: 1.5  # rad/s^2
+        has_jerk_limits: false
+        max_jerk: 2.5  # rad/s^3
+
+  drivetrain_position_controller:
+    type: diff_drive_position_controller/DiffDrivePositionController
+    left_wheel: *shared_left_wheel_name
+    right_wheel: *shared_right_wheel_name
+
+    wheel_separation: *shared_wheel_separation_distance
+    wheel_radius: *shared_wheel_radius
+
+    publish_controller_output_cmd: *shared_publish_clamped_cmd
+    publish_wheel_joint_controller_state: *shared_publish_wheel_controller_state
+
+    allow_multiple_cmd_publishers: *shared_allow_multiple_cmd_publishers
+    cmd_timeout: *shared_cmd_timeout
+
+    # Limits:
+    linear:
+      x: # Linear offset (metres)
+        has_limits: true
+        max_cmd: 1.5
+        min_cmd: -1.5
+    angular:
+      z: # Angular offset (radians)
+        has_limits: true
+        max_cmd: 3.14
+        min_cmd: -3.14
+
   drivetrain_voltage_controller:
     type: diff_drive_voltage_controller/DiffDriveVoltageController
     left_wheel: *shared_left_wheel_name
@@ -35,50 +97,3 @@ uwrt_mars_rover:
         has_limits: true
         max_cmd: 1.0
         min_cmd: -1.0
-
-
-  drivetrain_velocity_controller:
-    type: diff_drive_controller/DiffDriveController
-    left_wheel: *shared_left_wheel_name
-    right_wheel: *shared_right_wheel_name
-
-    wheel_separation: *shared_wheel_separation_distance
-    wheel_radius: *shared_wheel_radius
-
-    publish_cmd: *shared_publish_clamped_cmd
-    publish_wheel_joint_controller_state: *shared_publish_wheel_controller_state
-
-    allow_multiple_cmd_vel_publishers: *shared_allow_multiple_cmd_publishers
-    cmd_vel_timeout: *shared_cmd_timeout
-
-
-
-
-
-
-    pose_covariance_diagonal: [ 0.001, 0.001, 1000000.0, 1000000.0, 1000000.0, 1000.0 ]
-    twist_covariance_diagonal: [ 0.001, 0.001, 1000000.0, 1000000.0, 1000000.0, 1000.0 ]
-
-
-
-    # TODO
-    #  # Velocity and acceleration limits
-    #  # Whenever a min_* is unspecified, default to -max_*
-    #  linear:
-    #    x:
-    #      has_velocity_limits: true
-    #      max_velocity: 1.0  # m/s
-    #      min_velocity: -0.5 # m/s
-    #      has_acceleration_limits: true
-    #      max_acceleration: 0.8  # m/s^2
-    #      min_acceleration: -0.4 # m/s^2
-    #      has_jerk_limits: true
-    #      max_jerk: 5.0  # m/s^3
-    #  angular:
-    #    z:
-    #      has_velocity_limits: true
-    #      max_velocity: 1.7  # rad/s
-    #      has_acceleration_limits: true
-    #      max_acceleration: 1.5  # rad/s^2
-    #      has_jerk_limits: true
-    #      max_jerk: 2.5  # rad/s^3

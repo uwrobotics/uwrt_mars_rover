@@ -4,7 +4,7 @@
            type="diff_drive_voltage_controller::DiffDriveVoltageController"
            base_class_type="controller_interface::ControllerBase">
         <description>
-            The DiffDriveVoltageController tracks uwrt_mars_rover_drivetrain_msgs::VoltageTwist commands for a set of
+            The DiffDriveVoltageController tracks uwrt_mars_rover_drivetrain_msgs::OpenLoopTwist commands for a set of
             joints.
             It expects 2 of the VoltageJointInterface type of hardware interfaces.
         </description>

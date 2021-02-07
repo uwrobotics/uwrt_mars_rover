@@ -60,7 +60,7 @@ void UWRTRoverHWDrivetrain::doSwitch(const std::list<hardware_interface::Control
     }
   }
 
-  // TODO: doswitch to change control modes on roboteq
+  // TODO: doswitch to change control modes on roboteq (to go to and from open loop mode)
 }
 
 bool UWRTRoverHWDrivetrain::loadJointInfoFromParameterServer(ros::NodeHandle &robot_hw_nh) {

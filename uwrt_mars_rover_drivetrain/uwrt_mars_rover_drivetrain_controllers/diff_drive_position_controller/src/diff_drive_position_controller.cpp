@@ -1,18 +1,17 @@
-#include <diff_drive_voltage_controller/diff_drive_voltage_controller.h>
+#include <diff_drive_position_controller/diff_drive_position_controller.h>
 #include <uwrt_mars_rover_utils/uwrt_params.h>
 
 #include <algorithm>
 #include <pluginlib/class_list_macros.hpp>
 
-namespace diff_drive_voltage_controller {
+namespace diff_drive_position_controller {
 // static constexpr class members must have definitions outside of their class to compile. This can be removed in C++17
-constexpr double DiffDriveVoltageController::DEFAULT_CMD_TIMEOUT;
-constexpr bool DiffDriveVoltageController::DEFAULT_ALLOW_MULTIPLE_CMD_PUBLISHERS;
-constexpr bool DiffDriveVoltageController::DEFAULT_PUBLISH_CONTROLLER_CMD_OUTPUT;
-constexpr bool DiffDriveVoltageController::DEFAULT_PUBLISH_WHEEL_JOINT_CONTROLLER_STATE;
+constexpr double DiffDrivePositionController::DEFAULT_CMD_TIMEOUT;
+constexpr bool DiffDrivePositionController::DEFAULT_ALLOW_MULTIPLE_CMD_PUBLISHERS;
+constexpr bool DiffDrivePositionController::DEFAULT_PUBLISH_CONTROLLER_CMD_OUTPUT;
+constexpr bool DiffDrivePositionController::DEFAULT_PUBLISH_WHEEL_JOINT_CONTROLLER_STATE;
 
-bool DiffDriveVoltageController::init(uwrt_hardware_interface::VoltageJointInterface* hw,
-                                      ros::NodeHandle& controller_nh) {
+bool DiffDrivePositionController::init(hardware_interface::PositionJointInterface* hw, ros::NodeHandle& controller_nh) {
   name_ = uwrt_mars_rover_utils::getLoggerName(controller_nh);
 
   std::vector<std::string> left_wheel_names, right_wheel_names;
@@ -39,7 +38,7 @@ bool DiffDriveVoltageController::init(uwrt_hardware_interface::VoltageJointInter
 
   if (publish_controller_cmd_output_) {
     output_command_publisher_.reset(
-        new realtime_tools::RealtimePublisher<uwrt_mars_rover_drivetrain_msgs::OpenLoopTwist>(
+        new realtime_tools::RealtimePublisher<uwrt_mars_rover_drivetrain_msgs::PositionTwist>(
             controller_nh, "cmd_open_loop_out", 100));
   }
 
@@ -56,30 +55,52 @@ bool DiffDriveVoltageController::init(uwrt_hardware_interface::VoltageJointInter
     ROS_INFO_STREAM_NAMED(
         name_, "Adding left wheel with joint name: " << left_wheel_names[i]
                                                      << " and right wheel with joint name: " << right_wheel_names[i]);
-    wheel_joint_pairs_[i].left_wheel_joint = hw->getHandle(left_wheel_names[i]);    // throws on failure
-    wheel_joint_pairs_[i].right_wheel_joint = hw->getHandle(right_wheel_names[i]);  // throws on failure
+    wheel_joint_pairs_[i].joint_handles.left_wheel_joint = hw->getHandle(left_wheel_names[i]);    // throws on failure
+    wheel_joint_pairs_[i].joint_handles.right_wheel_joint = hw->getHandle(right_wheel_names[i]);  // throws on failure
   }
 
+  waiting_for_setpoint_reset_ = false;
+  accepting_offset_commands_ = false;
+
   command_subscriber_ =
-      controller_nh.subscribe("cmd_open_loop", 1, &DiffDriveVoltageController::commandSubscriberCallback, this);
+      controller_nh.subscribe("cmd_open_loop", 1, &DiffDrivePositionController::commandSubscriberCallback, this);
+
+  reset_setpoint_service_server_ = controller_nh.advertiseService(
+      "reset_position_setpoint", &DiffDrivePositionController::resetPositionSetpointCallback, this);
 
   return true;
 }
 
-void DiffDriveVoltageController::starting(const ros::Time& time) {
+void DiffDrivePositionController::starting(const ros::Time& time) {
   stopMotors();
 }
 
-void DiffDriveVoltageController::stopping(const ros::Time& time) {
+void DiffDrivePositionController::stopping(const ros::Time& time) {
   stopMotors();
 }
 
-void DiffDriveVoltageController::update(const ros::Time& time, const ros::Duration& period) {
-  Command current_cmd = *(command_realtime_buffer_.readFromRT());
+void DiffDrivePositionController::update(const ros::Time& time, const ros::Duration& period) {
+  // Re-zero the position setpoint if request was received by service server. Signals success to use in service reply.
+  bool needs_setpoint_reset = waiting_for_setpoint_reset_.exchange(false);
+  if (needs_setpoint_reset) {
+    resetPositionSetpoints();
+    accepting_offset_commands_ = false;
+  }
+
+  // Start accepting offset commands again if the offset commands have reset to 0
+  Command current_cmd = *(command_offset_realtime_buffer_.readFromRT());
+  if (!accepting_offset_commands_) {
+    static constexpr double LINEAR_CLOSE_THRESHOLD{0.001};   // 1 mm
+    static constexpr double ANGULAR_CLOSE_THRESHOLD{0.002};  // ~0.11 degrees
+    if (is_close(current_cmd.linear, 0, LINEAR_CLOSE_THRESHOLD) &&
+        is_close(current_cmd.angular, 0, ANGULAR_CLOSE_THRESHOLD)) {
+      accepting_offset_commands_ = true;
+    }
+  }
+
+  // Set command to 0 if subscribed command has timed out or if waiting for offset command to reset to 0
   const double cmd_dt{(time - current_cmd.timestamp).toSec()};
-
-  // Set command to 0 if subscribed command has timed out
-  if (cmd_dt > cmd_timeout_) {
+  if (cmd_dt > cmd_timeout_ || !accepting_offset_commands_) {
     current_cmd.linear = 0.0;
     current_cmd.angular = 0.0;
   }
@@ -99,18 +120,17 @@ void DiffDriveVoltageController::update(const ros::Time& time, const ros::Durati
     output_command_publisher_->unlockAndPublish();
   }
 
-  // Compute wheel commands:
-  double cmd_left = current_cmd.linear - current_cmd.angular;
-  double cmd_right = current_cmd.linear + current_cmd.angular;
+  // Compute wheel position offsets:
+  const double pos_offset_left = (current_cmd.linear - current_cmd.angular * wheel_separation_ / 2.0) / wheel_radius_;
+  const double pos_offset_right = (current_cmd.linear + current_cmd.angular * wheel_separation_ / 2.0) / wheel_radius_;
 
-  // Clamp outputs commands to be within [-1.0, 1.0]
-  current_cmd.linear = std::clamp(current_cmd.linear, -1.0, 1.0);
-  current_cmd.angular = std::clamp(current_cmd.angular, -1.0, 1.0);
-
-  // Set wheels commands:
+  // Set wheel positions:
   for (auto& joint_pair : wheel_joint_pairs_) {
-    joint_pair.left_wheel_joint.setCommand(cmd_left);
-    joint_pair.right_wheel_joint.setCommand(cmd_right);
+    double left_command = joint_pair.joint_setpoints.left_wheel_setpoint + pos_offset_left;
+    double right_command = joint_pair.joint_setpoints.right_wheel_setpoint + pos_offset_right;
+
+    joint_pair.joint_handles.left_wheel_joint.setCommand(left_command);
+    joint_pair.joint_handles.right_wheel_joint.setCommand(right_command);
   }
 
   // Publish Controller State
@@ -118,9 +138,9 @@ void DiffDriveVoltageController::update(const ros::Time& time, const ros::Durati
   // if publish_wheel_joint_controller_state_ && controller_state_publisher_->trylock(), publish controller state
 }
 
-bool DiffDriveVoltageController::loadWheelParameters(ros::NodeHandle& controller_nh,
-                                                     std::vector<std::string>& left_wheel_names,
-                                                     std::vector<std::string>& right_wheel_names) {
+bool DiffDrivePositionController::loadWheelParameters(ros::NodeHandle& controller_nh,
+                                                      std::vector<std::string>& left_wheel_names,
+                                                      std::vector<std::string>& right_wheel_names) {
   // Get wheel joint names from the parameter server
   if (!getWheelNames(controller_nh, "left_wheel", left_wheel_names) ||
       !getWheelNames(controller_nh, "right_wheel", right_wheel_names)) {
@@ -135,15 +155,23 @@ bool DiffDriveVoltageController::loadWheelParameters(ros::NodeHandle& controller
   }
   wheel_joint_pairs_.resize(left_wheel_names.size());
 
-  // TODO(azumnanji? or wmmc88): Add function here to grab params from urdf. Should probably
+  if (!controller_nh.getParam("wheel_separation", wheel_separation_)) {
+    return false;
+  }
+
+  if (!controller_nh.getParam("wheel_radius", wheel_radius_)) {
+    return false;
+  }
+
+  // TODO(azumnanji? or wmmc88): Add function here to grab wheel params from urdf. Should probably
   // issue a warning if both sources of info exist(urdf should take precedence). If only one exists, there should be a
   // console log that says where things got loaded from.
 
   return true;
 }
 
-bool DiffDriveVoltageController::getWheelNames(ros::NodeHandle& controller_nh, const std::string& wheel_param,
-                                               std::vector<std::string>& wheel_names) {
+bool DiffDrivePositionController::getWheelNames(ros::NodeHandle& controller_nh, const std::string& wheel_param,
+                                                std::vector<std::string>& wheel_names) {
   XmlRpc::XmlRpcValue wheel_list;
   if (!controller_nh.getParam(wheel_param, wheel_list)) {
     ROS_ERROR_STREAM_NAMED(name_, "Couldn't retrieve wheel param '" << wheel_param << "'.");
@@ -177,8 +205,8 @@ bool DiffDriveVoltageController::getWheelNames(ros::NodeHandle& controller_nh, c
   return true;
 }
 
-void DiffDriveVoltageController::commandSubscriberCallback(
-    const uwrt_mars_rover_drivetrain_msgs::OpenLoopTwist& command) {
+void DiffDrivePositionController::commandSubscriberCallback(
+    const uwrt_mars_rover_drivetrain_msgs::PositionTwist& command) {
   if (isRunning()) {
     if (!allow_multiple_cmd_publishers_ && command_subscriber_.getNumPublishers() > 1) {
       ROS_ERROR_STREAM_THROTTLE_NAMED(1.0, name_,
@@ -197,7 +225,7 @@ void DiffDriveVoltageController::commandSubscriberCallback(
     command_struct_.angular = command.angular.z;
     command_struct_.linear = command.linear.x;
     command_struct_.timestamp = ros::Time::now();
-    command_realtime_buffer_.writeFromNonRT(command_struct_);
+    command_offset_realtime_buffer_.writeFromNonRT(command_struct_);
     ROS_DEBUG_STREAM_NAMED(name_, "Added values to command. "
                                       << "Ang: " << command_struct_.angular << ", "
                                       << "Lin: " << command_struct_.linear << ", "
@@ -207,12 +235,56 @@ void DiffDriveVoltageController::commandSubscriberCallback(
   }
 }
 
-void DiffDriveVoltageController::stopMotors() {
-  constexpr double STOP_COMMAND_VALUE{0.0};
+bool DiffDrivePositionController::resetPositionSetpointCallback(std_srvs::Trigger::Request& request,
+                                                                std_srvs::Trigger::Response& response) {
+  static const ros::Duration RESET_SETPOINT_TIMEOUT{0.2};
+
+  waiting_for_setpoint_reset_ = true;
+
+  ros::Time current_time;
+  ros::ros_steadytime(current_time.sec, current_time.nsec);
+
+  ros::Time timeout_time = current_time + RESET_SETPOINT_TIMEOUT;
+
+  response.success = false;
+  while (current_time < timeout_time) {
+    if (!waiting_for_setpoint_reset_) {
+      // Wait for controller manager thread to reset setpoint
+      response.success = true;
+      break;
+    }
+
+    // update current time
+    ros::ros_steadytime(current_time.sec, current_time.nsec);
+  }
+
+  if (!response.success) {
+    std::stringstream ss;
+    ss << "Request Timed Out! Waited for " << RESET_SETPOINT_TIMEOUT.toSec() << " seconds before terminating.";
+    response.message = ss.str();
+  }
+
+  return true;
+}
+
+void DiffDrivePositionController::resetPositionSetpoints() {
   for (auto& joint_pair : wheel_joint_pairs_) {
-    joint_pair.left_wheel_joint.setCommand(STOP_COMMAND_VALUE);
-    joint_pair.right_wheel_joint.setCommand(STOP_COMMAND_VALUE);
+    joint_pair.joint_setpoints.left_wheel_setpoint = joint_pair.joint_handles.left_wheel_joint.getPosition();
+    joint_pair.joint_setpoints.right_wheel_setpoint = joint_pair.joint_handles.right_wheel_joint.getPosition();
   }
 }
-}  // namespace diff_drive_voltage_controller
-PLUGINLIB_EXPORT_CLASS(diff_drive_voltage_controller::DiffDriveVoltageController, controller_interface::ControllerBase)
+
+void DiffDrivePositionController::stopMotors() {
+  resetPositionSetpoints();
+  for (auto& joint_pair : wheel_joint_pairs_) {
+    joint_pair.joint_handles.left_wheel_joint.setCommand(joint_pair.joint_setpoints.left_wheel_setpoint);
+    joint_pair.joint_handles.right_wheel_joint.setCommand(joint_pair.joint_setpoints.right_wheel_setpoint);
+  }
+}
+
+bool DiffDrivePositionController::is_close(double value_1, double value_2, double threshold) {
+  return std::abs(value_1 - value_2) < threshold;
+}
+}  // namespace diff_drive_position_controller
+PLUGINLIB_EXPORT_CLASS(diff_drive_position_controller::DiffDrivePositionController,
+                       controller_interface::ControllerBase)

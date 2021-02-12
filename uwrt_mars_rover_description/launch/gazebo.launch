@@ -7,7 +7,7 @@
 
   <param command="$(find xacro)/xacro $(arg model) mode:=$(arg control_mode)" name="robot_description"/>
 
-  <node args="-x 0.0 -y 0.0 -z 0.3 -param robot_description -urdf -model robot" name="spawn_urdf" pkg="gazebo_ros" type="spawn_model"/>
+  <node args="-x 0.0 -y 0.0 -z 0.35 -param robot_description -urdf -model robot" name="spawn_urdf" pkg="gazebo_ros" type="spawn_model"/>
 
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
     <arg name="paused" value="true"/>

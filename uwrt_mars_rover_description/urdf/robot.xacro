@@ -1,17 +1,19 @@
 <?xml version="1.0" ?>
-<robot name="uwrt_mars_rover" xmlns:xacro="http://www.ros.org/wiki/xacro">
+<robot name="uwrt_mars_rover_sim" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-<gazebo>
-  <plugin filename="libgazebo_ros_control.so" name="gazebo_ros_control"/>
-</gazebo>
-
-<xacro:include filename="$(find uwrt_mars_rover_description)/urdf/robot_arm.xacro"/>
-<xacro:include filename="$(find uwrt_mars_rover_description)/urdf/robot_chassis.xacro"/>
+<xacro:include filename="$(find uwrt_mars_rover_description)/urdf/common.gazebo"/>
+<xacro:include filename="$(find uwrt_mars_rover_description)/urdf/robot.gazebo"/>
+<xacro:include filename="$(find uwrt_mars_rover_description)/urdf/arm/robot_arm.xacro"/>
+<xacro:include filename="$(find uwrt_mars_rover_description)/urdf/chassis/robot_chassis.xacro"/>
 
 <xacro:property name="body_color" value="Gazebo/Cyan"/>
 
 <!-- Get the control_mode from the passed argument. -->
 <xacro:property name="_mode" value="$(arg mode)"/>
+
+<!-- TODO: add transmissions (maybe separate file) to actively controlled joints-->
+<!-- TODO: reconfigure the collisions into simple shapes for reduced CPU load -->
+<!-- TODO: add the counter weight for the chassis / rocker bogey (may need to recalculate inertia / split into two components)-->
 
 <link name="base_link">
   <inertial>
@@ -36,11 +38,7 @@
   </collision>
 </link>
 
-<gazebo reference="base_link">
-  <material>${body_color}</material>
-  <gravity>true</gravity>
-  <selfCollide>false</selfCollide>
-</gazebo>
+<xacro:basic_gazebo_ref link_name="base_link" color="${body_color}"/>
 
 <!-- Only the arm or science module will be added to the chassis of the robot for any launch configuration. -->
 <!--  Add the arm to the chassis of the robot. -->

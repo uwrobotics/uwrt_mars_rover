@@ -1,0 +1,13 @@
+<?xml version="1.0" ?>
+<robot name="uwrt_mars_rover_sim" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+<xacro:macro name="basic_gazebo_ref" params="link_name color">
+    <gazebo reference="${link_name}">
+        <material>${color}</material>
+        <gravity>true</gravity>
+        <selfCollide>false</selfCollide>
+    </gazebo>
+</xacro:macro>
+
+
+</robot>

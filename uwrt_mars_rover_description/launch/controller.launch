@@ -1,16 +1,22 @@
 <launch>
-  <include file="$(find uwrt_mars_rover_gazebo)/launch/gazebo.launch"/>
+  <arg name="control_mode" default="drivetrain_only"
+         doc="Control mode that the rover should start in.
+              Valid options are: [arm_mission, science_mission, arm_only, science_only, drivetrain_only]"/>
+
+  <include file="$(find uwrt_mars_rover_description)/launch/gazebo.launch">
+    <arg name="control_mode" value="$(arg control_mode)"/>
+  </include>
 
   <rosparam command="load"
-            file="$(find uwrt_mars_rover_description)/config/controller.yaml"/>
+            file="$(find uwrt_mars_rover_description)/cfg/controller.yaml"/>
 
-  <node name="robot_ex_controller_spawner" pkg="controller_manager" type="spawner" ns="robot_ex"
+  <node name="robot_controller_spawner" pkg="controller_manager" type="spawner" ns="/uwrt_mars_rover_sim"
     args="joint_state_controller
           wheel_diff_controller
           --shutdown-timeout 3"/>
   
   <node name="rqt_robot_steering" pkg="rqt_robot_steering" type="rqt_robot_steering">
-    <param name="default_topic" value="/robot_ex/wheel_diff_controller/cmd_vel"/>
+    <param name="default_topic" value="/uwrt_mars_rover_sim/wheel_diff_controller/cmd_vel"/>
   </node>
 
 </launch>

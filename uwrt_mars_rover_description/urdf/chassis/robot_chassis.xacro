@@ -1,11 +1,15 @@
 <?xml version="1.0" ?>
-<robot name="uwrt_mars_rover" xmlns:xacro="http://www.ros.org/wiki/xacro">
+<robot name="uwrt_mars_rover_sim" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+<xacro:include filename="$(find uwrt_mars_rover_description)/urdf/common.gazebo"/>
+<xacro:include filename="$(find uwrt_mars_rover_description)/urdf/chassis/robot_chassis.gazebo"/>
+<xacro:include filename="$(find uwrt_mars_rover_description)/urdf/chassis/robot_chassis.trans"/>
 
 <xacro:property name="wheel_color" value="Gazebo/Silver"/>
 <xacro:property name="rocker_color" value="Gazebo/Red"/>
 
 <xacro:macro name="chassis_to_rocker" params="_suffix _side rotate base_object">
-
+<!-- TODO: update COM of the rocker components -->
   <link name="rocker_${_suffix}">
     <inertial>
       <origin rpy="0 0 0" xyz="0.0003 0.02583 0.07381"/>
@@ -29,36 +33,22 @@
     </collision>
   </link>
 
-  <gazebo reference="rocker_${_suffix}">
-    <material>${rocker_color}</material>
-    <gravity>true</gravity>
-    <selfCollide>false</selfCollide>
-  </gazebo>
+  <xacro:basic_gazebo_ref link_name="rocker_${_suffix}" color="${rocker_color}"/>
 
-  <joint name="rocker_${_suffix}_to_chassis" type="revolute">
+  <!-- TODO: Make this a revolute rocker joint and write the differential bar transmission -->
+  <joint name="rocker_${_suffix}_to_chassis" type="fixed">
     <origin xyz="0 ${_side*0.24289} 0" rpy="0.0 0.0 0.0"/>
     <parent link="${base_object}"/>
     <child link="rocker_${_suffix}"/>
-    <axis xyz="0.0 1.0 0.0"/>
-    <limit lower="${-pi/4}" upper="${pi/4}" effort="100000" velocity="5"/>
+    <!--<axis xyz="0.0 1.0 0.0"/>
+    <limit lower="${-pi/4}" upper="${pi/4}" effort="100000" velocity="5"/>-->
   </joint>
-
-  <transmission name="rocker_${_suffix}_trans">
-    <type>transmission_interface/SimpleTransmission</type>
-    <joint name="rocker_${_suffix}_to_chassis">
-      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-    </joint>
-    <actuator name="rocker_${_suffix}_to_chassis_actuator">
-      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-      <mechanicalReduction>1</mechanicalReduction>
-    </actuator>
-  </transmission>
 
   <xacro:macro name="rocker_to_wheel" params="suffix side reflect n_side">
 
     <link name="wheel_${suffix}_${side}">
       <inertial>
-        <origin rpy="0 0 0" xyz="0 0 0"/>
+        <origin rpy="0 0 0" xyz="0 ${reflect*0.09398} 0"/>
         <mass value="1.32"/>
         <inertia ixx="0.0137" ixy="0" ixz="0" iyy="0.0191595" iyz="0" izz="0.0137"/>
       </inertial>
@@ -84,29 +74,9 @@
       <axis xyz="0.0 1.0 0.0"/>
     </joint>
 
-    <transmission name="wheel_${suffix}_${side}_trans">
-      <type>transmission_interface/SimpleTransmission</type>
-      <joint name="wheel_${suffix}_${side}_to_rocker">
-        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-      </joint>
-      <actuator name="wheel_${suffix}_${side}_actuator">
-        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-        <mechanicalReduction>1</mechanicalReduction>
-      </actuator>
-    </transmission>
+    <xacro:wheel_gazebo wheel_link="wheel_${suffix}_${side}" color="${wheel_color}"/>
 
-    <gazebo reference="wheel_${suffix}_${side}">
-      <material>${wheel_color}</material>
-      <mu1>1</mu1>
-      <mu2>1</mu2>
-      <fdir1>1 0 0</fdir1>
-      <minDepth>0.001</minDepth>
-      <maxVel>3.0</maxVel>
-      <gravity>true</gravity>
-      <kp  value="10000000.0" />
-      <kd  value="1.0" />
-      <selfCollide>false</selfCollide>
-    </gazebo>
+    <xacro:wheel_transmission link_name="wheel_${suffix}_${side}" joint_name="wheel_${suffix}_${side}_to_rocker" mech_reduction="43.8311688312"/>
 
   </xacro:macro>
   

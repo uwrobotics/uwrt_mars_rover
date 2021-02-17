@@ -14,7 +14,6 @@ bool UWRTMarsRoverDrivetrainHWReal::init(ros::NodeHandle &root_nh, ros::NodeHand
     return false;
   }
 
-  // TODO: controller to switch the roboteq communication mode
   std::unique_ptr<roboteq::CanopenInterface> comm = std::make_unique<roboteq::CanopenInterface>(
       roboteq_canopen_id_, uwrt_mars_rover_utils::getParam<std::string>(root_nh, name_, "can_interface_name", "can0"));
   motor_controller_ = std::make_unique<roboteq::RoboteqController>(std::move(comm));
@@ -24,35 +23,50 @@ bool UWRTMarsRoverDrivetrainHWReal::init(ros::NodeHandle &root_nh, ros::NodeHand
 void UWRTMarsRoverDrivetrainHWReal::read(const ros::Time & /*time*/, const ros::Duration & /*period*/) {
   static constexpr double MOTOR_READING_TO_AMPS_CONVERSION_FACTOR{10.0};
   static constexpr double RPM_TO_RADIANS_PER_SECOND_FACTOR{2 * M_PI / 60};
+  static constexpr double REVOLUTIONS_TO_RADIANS_FACTOR{2 * M_PI};
 
+  // TODO: change to use tpdos instead of queries
   for (const auto &joint_name : joint_names_) {
-    // TODO: change to use tpdos
-    actuator_joint_states_[joint_name].actuator_position = motor_controller_->readAbsoluteEncoderCount(
-        roboteq_actuator_index_[joint_name]);  // TODO: This is Encoder Counts? Convert to Rad?
+    // position measured in Radians from starting position
+    actuator_joint_states_[joint_name].actuator_position =
+        REVOLUTIONS_TO_RADIANS_FACTOR *
+        motor_controller_->readAbsoluteEncoderCount(roboteq_actuator_index_[joint_name]) /
+        ticks_per_revolution_[joint_name];
+
+    // velocity in Radians/sec
     actuator_joint_states_[joint_name].actuator_velocity =
         motor_controller_->readEncoderMotorSpeed(roboteq_actuator_index_[joint_name]) *
         RPM_TO_RADIANS_PER_SECOND_FACTOR;
-    actuator_joint_states_[joint_name].actuator_effort =
-        motor_controller_->readMotorAmps(roboteq_actuator_index_[joint_name]) * MOTOR_READING_TO_AMPS_CONVERSION_FACTOR;
+
+    // TODO #121: populate actuator current and voltage to new state interface
+    // motor_controller_->readMotorAmps(roboteq_actuator_index_[joint_name]) * MOTOR_READING_TO_AMPS_CONVERSION_FACTOR;
 
     motor_controller_->readMotorStatusFlags(roboteq_actuator_index_[joint_name]);
   }
   actuator_to_joint_state_interface_.propagate();
 
-  motor_controller_->readFaultFlags();
+  //  TODO: #121 maybe? add interface for motor fault flags
+  //  motor_controller_->readFaultFlags();
 }
 
 void UWRTMarsRoverDrivetrainHWReal::write(const ros::Time & /*time*/, const ros::Duration & /*period*/) {
   static constexpr double RADIANS_PER_SECOND_TO_RPM_FACTOR{60 / M_PI / 2};
+  static constexpr double REVOLUTIONS_PER_RADIAN{1 / (2 * M_PI)};
 
   for (const auto &joint_name : joint_names_) {
     bool successful_joint_write = false;
     switch (actuator_joint_commands_[joint_name].type) {
       case UWRTRoverHWDrivetrain::DrivetrainActuatorJointCommand::Type::POSITION:
         joint_to_actuator_position_interface_.propagate();
+
+        // FIxME: This will cause catastrophic behaviour when the counter rolls over. At the rollover point, our
+        // diff_drive_position_controller will cause the rover to suddenly drive full speed in the opposite direction it
+        // was already driving for very very long time... (almost 23km). The good news is that this only happens after
+        // the rover drives continuously in one direction for ~23km in the current configuration. 🧐💩💩
         successful_joint_write = motor_controller_->setPosition(
-            static_cast<int32_t>(actuator_joint_commands_[joint_name].actuator_data),
-            roboteq_actuator_index_[joint_name]);  // TODO(wmmc88): Does this need unit conversion
+            static_cast<int32_t>(actuator_joint_commands_[joint_name].actuator_data * REVOLUTIONS_PER_RADIAN *
+                                 ticks_per_revolution_[joint_name]),
+            roboteq_actuator_index_[joint_name]);
         break;
 
       case UWRTRoverHWDrivetrain::DrivetrainActuatorJointCommand::Type::VELOCITY:
@@ -60,6 +74,15 @@ void UWRTMarsRoverDrivetrainHWReal::write(const ros::Time & /*time*/, const ros:
         successful_joint_write = motor_controller_->setVelocity(
             static_cast<int32_t>(actuator_joint_commands_[joint_name].actuator_data * RADIANS_PER_SECOND_TO_RPM_FACTOR),
             roboteq_actuator_index_[joint_name]);
+        break;
+
+      case UWRTRoverHWDrivetrain::DrivetrainActuatorJointCommand::Type::VOLTAGE:
+        // No need for joint_to_actuator propagation for voltage commands. Data is already in actuator space.
+        actuator_joint_commands_[joint_name].actuator_data = actuator_joint_commands_[joint_name].joint_data;
+
+        successful_joint_write =
+            motor_controller_->setMotorCommand(static_cast<int32_t>(actuator_joint_commands_[joint_name].actuator_data),
+                                               roboteq_actuator_index_[joint_name]);
         break;
 
       case UWRTRoverHWDrivetrain::DrivetrainActuatorJointCommand::Type::NONE:
@@ -105,6 +128,10 @@ bool UWRTMarsRoverDrivetrainHWReal::loadRoboteqConfigFromParamServer(ros::NodeHa
     ROS_ASSERT(joints_list[joint_index].hasMember("roboteq_index"));
     ROS_ASSERT(joints_list[joint_index]["roboteq_index"].getType() == XmlRpc::XmlRpcValue::TypeInt);
     roboteq_actuator_index_[joint_name] = static_cast<int>(joints_list[joint_index]["roboteq_index"]);
+
+    ROS_ASSERT(joints_list[joint_index].hasMember("encoder_ticks_per_revolution"));
+    ROS_ASSERT(joints_list[joint_index]["encoder_ticks_per_revolution"].getType() == XmlRpc::XmlRpcValue::TypeInt);
+    ticks_per_revolution_[joint_name] = static_cast<int>(joints_list[joint_index]["encoder_ticks_per_revolution"]);
   }
   return true;
 }

@@ -6,6 +6,7 @@
 #include <hardware_interface/robot_hw.h>
 #include <transmission_interface/simple_transmission.h>
 #include <transmission_interface/transmission_interface.h>
+#include <uwrt_mars_rover_hw/voltage_joint_interface.h>
 
 namespace uwrt_mars_rover_drivetrain_hw {
 
@@ -16,15 +17,14 @@ class UWRTRoverHWDrivetrain : public hardware_interface::RobotHW {
   struct DrivetrainActuatorJointState {
     double joint_position;
     double joint_velocity;
-    double joint_effort;
+    double joint_effort;  // Not Populated and not used. Required for hardware_interface::JointStateHandle.
 
     double actuator_position;
     double actuator_velocity;
-    double actuator_effort;
   };
 
   struct DrivetrainActuatorJointCommand {
-    enum class Type { NONE, POSITION, VELOCITY };
+    enum class Type { NONE, POSITION, VELOCITY, VOLTAGE };
     Type type;
     double actuator_data;
     double joint_data;
@@ -67,12 +67,11 @@ class UWRTRoverHWDrivetrain : public hardware_interface::RobotHW {
   // Joint Command Interfaces
   hardware_interface::PositionJointInterface joint_position_interface_;
   hardware_interface::VelocityJointInterface joint_velocity_interface_;
-  hardware_interface::EffortJointInterface joint_effort_interface_;
+  uwrt_hardware_interface::VoltageJointInterface joint_voltage_interface_;
 
   // Joint Command Transmission Interfaces
   transmission_interface::JointToActuatorPositionInterface joint_to_actuator_position_interface_;
   transmission_interface::JointToActuatorVelocityInterface joint_to_actuator_velocity_interface_;
-  transmission_interface::JointToActuatorEffortInterface joint_to_actuator_effort_interface_;
 
  private:
   bool loadJointInfoFromParameterServer(ros::NodeHandle &robot_hw_nh);
@@ -93,6 +92,10 @@ inline std::ostream &operator<<(std::ostream &os,
 
     case UWRTRoverHWDrivetrain::DrivetrainActuatorJointCommand::Type::VELOCITY:
       os << "Velocity";
+      break;
+
+    case UWRTRoverHWDrivetrain::DrivetrainActuatorJointCommand::Type::VOLTAGE:
+      os << "Voltage";
       break;
 
     default:

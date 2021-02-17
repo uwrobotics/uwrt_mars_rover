@@ -1,0 +1,13 @@
+<library path="lib/libdiff_drive_position_controller">
+
+    <class name="diff_drive_position_controller/DiffDrivePositionController"
+           type="diff_drive_position_controller::DiffDrivePositionController"
+           base_class_type="controller_interface::ControllerBase">
+        <description>
+            The DiffDrivePositionController tracks uwrt_mars_rover_drivetrain_msgs::PositionTwist commands for a set of
+            joints.
+            It expects 2 of the PositionJointInterface type of hardware interfaces.
+        </description>
+    </class>
+
+</library>

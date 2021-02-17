@@ -18,13 +18,21 @@
         <param name="control_mode" value="$(arg control_mode)"/>
         <param name="use_realtime_kernel" value="$(arg use_realtime_kernel)"/>
 
-        <!-- list of all available controllers to load. this must be manually updated when new controllers are added -->
-        <arg name="controller_list" value="rover_joint_state_controller
-                                           drivetrain_velocity_controller"/>
+        <!-- list of all the controllers to start initially. This determines what control mode each joint is at startup (ie. vel, pos, etc.).  -->
+        <arg name="initial_start_controller_list" value="rover_joint_state_controller
+                                                         drivetrain_velocity_controller"/>
 
-       <!-- load all the available controllers -->
-       <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
-             output="screen" args="$(arg controller_list)"/>
+       <!-- load the intially started controllers used in any configuration-->
+       <node name="start_controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
+             output="screen" args="$(arg initial_start_controller_list)"/>
+
+       <!-- list of all other controllers that should be loaded, but not started -->
+       <arg name="load_only_controller_list" value="drivetrain_voltage_controller
+                                                    drivetrain_position_controller"/>
+
+       <!-- load all other controllers-->
+       <node name="load_controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
+            output="screen" args="--stopped $(arg load_only_controller_list)"/>
 
        <!-- load robot hw plugins list based on control mode -->
        <arg name="hardware_list" value="[drivetrain, arm]" if="$(eval control_mode == 'arm_mission')"/>

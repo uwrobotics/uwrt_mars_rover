@@ -2,7 +2,8 @@
 <package format="2">
   <name>uwrt_mars_rover_control</name>
   <version>0.0.0</version>
-  <description>Metapackage containing the rover's top-level control loops, launch files and the combined hw node </description>
+  <description>Package containing the rover's top-level control loops, launch files and the combined hw node
+  </description>
 
   <maintainer email="melvin.mc.wang@gmail.com">wmmc88</maintainer>
 

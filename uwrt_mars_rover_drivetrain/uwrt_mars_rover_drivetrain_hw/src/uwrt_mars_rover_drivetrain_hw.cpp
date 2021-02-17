@@ -15,6 +15,7 @@ bool UWRTRoverHWDrivetrain::init(ros::NodeHandle & /*root_nh*/, ros::NodeHandle 
   this->registerInterface(&joint_state_interface_);
   this->registerInterface(&joint_position_interface_);
   this->registerInterface(&joint_velocity_interface_);
+  this->registerInterface(&joint_voltage_interface_);
 
   return true;
 }
@@ -47,14 +48,19 @@ void UWRTRoverHWDrivetrain::doSwitch(const std::list<hardware_interface::Control
       for (const auto &joint_name : claimed.resources) {
         if (claimed.hardware_interface == "hardware_interface::PositionJointInterface") {
           actuator_joint_commands_[joint_name].type = DrivetrainActuatorJointCommand::Type::POSITION;
-          actuator_joint_commands_[joint_name].actuator_data = actuator_joint_states_[joint_name].actuator_position;
+          actuator_joint_commands_[joint_name].joint_data = actuator_joint_states_[joint_name].joint_position;
         } else if (claimed.hardware_interface == "hardware_interface::VelocityJointInterface") {
           actuator_joint_commands_[joint_name].type = DrivetrainActuatorJointCommand::Type::VELOCITY;
-          actuator_joint_commands_[joint_name].actuator_data = 0.0;
-        }  // TODO(wmmc88): add an open loop interface (voltage?)
+          actuator_joint_commands_[joint_name].joint_data = 0.0;
+        } else if (claimed.hardware_interface == "uwrt_hardware_interface::VoltageJointInterface") {
+          actuator_joint_commands_[joint_name].type = DrivetrainActuatorJointCommand::Type::VOLTAGE;
+          actuator_joint_commands_[joint_name].joint_data = 0.0;
+        }
       }
     }
   }
+
+  // TODO: doswitch to change control modes on roboteq (to go to and from open loop mode)
 }
 
 bool UWRTRoverHWDrivetrain::loadJointInfoFromParameterServer(ros::NodeHandle &robot_hw_nh) {
@@ -91,18 +97,18 @@ void UWRTRoverHWDrivetrain::registerStateInterfacesAndTransmissions(const std::s
   // Wrap Actuators States
   actuator_state_data_[joint_name].position.push_back(&actuator_joint_states_[joint_name].actuator_position);
   actuator_state_data_[joint_name].velocity.push_back(&actuator_joint_states_[joint_name].actuator_velocity);
-  actuator_state_data_[joint_name].effort.push_back(&actuator_joint_states_[joint_name].actuator_effort);
 
   // Wrap Joint States
   joint_state_data_[joint_name].position.push_back(&actuator_joint_states_[joint_name].joint_position);
   joint_state_data_[joint_name].velocity.push_back(&actuator_joint_states_[joint_name].joint_velocity);
-  joint_state_data_[joint_name].effort.push_back(&actuator_joint_states_[joint_name].joint_effort);
 
   // Register ActuatorToJointStateHandle with wrapped state data to a ActuatorToJointStateInterface
   transmission_interface::ActuatorToJointStateHandle actuator_to_joint_state_handle(
       joint_name, &joint_transmissions_.find(joint_name)->second, actuator_state_data_[joint_name],
       joint_state_data_[joint_name]);
   actuator_to_joint_state_interface_.registerHandle(actuator_to_joint_state_handle);
+
+  // TODO #121: register new state interface for motor voltage, current, etc.
 }
 
 void UWRTRoverHWDrivetrain::registerCommandInterfacesAndTransmissions(const std::string &joint_name) {
@@ -111,6 +117,7 @@ void UWRTRoverHWDrivetrain::registerCommandInterfacesAndTransmissions(const std:
                                                        &actuator_joint_commands_[joint_name].joint_data);
   joint_position_interface_.registerHandle(joint_command_handle);
   joint_velocity_interface_.registerHandle(joint_command_handle);
+  joint_voltage_interface_.registerHandle(joint_command_handle);
 
   // Wrap Actuator Commands
   actuator_command_data_[joint_name].position.push_back(&actuator_joint_commands_[joint_name].actuator_data);

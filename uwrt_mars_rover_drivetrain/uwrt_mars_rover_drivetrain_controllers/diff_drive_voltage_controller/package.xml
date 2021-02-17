@@ -1,0 +1,26 @@
+<package format="3">
+    <name>diff_drive_voltage_controller</name>
+    <version>0.17.0</version>
+    <description>Controller for voltage-based control of a diffrential drive robot</description>
+
+    <maintainer email="melvin.mc.wang@gmail.com">Melvin Wang</maintainer>
+
+    <author email="akeaveny@uwaterloo.ca">Aidan Keaveny</author>
+
+    <license>MIT</license>
+
+    <buildtool_depend>catkin</buildtool_depend>
+
+    <depend>controller_interface</depend>
+    <depend>control_msgs</depend>
+    <depend>forward_command_controller</depend>
+    <depend>pluginlib</depend>
+    <depend>uwrt_mars_rover_drivetrain_msgs</depend>
+    <depend>uwrt_mars_rover_hw</depend>
+    <depend>uwrt_mars_rover_msgs</depend>
+    <depend>uwrt_mars_rover_utils</depend>
+
+    <export>
+        <controller_interface plugin="${prefix}/diff_drive_voltage_controller_plugin.xml"/>
+    </export>
+</package>

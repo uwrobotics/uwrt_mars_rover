@@ -12,6 +12,7 @@ Checks:  '-*,
           -cppcoreguidelines-pro-type-vararg,
           -cppcoreguidelines-pro-type-union-access,
           -cppcoreguidelines-non-private-member-variables-in-classes,
+          -cppcoreguidelines-owning-memory,
           -misc-non-private-member-variables-in-classes,
           -modernize-use-trailing-return-type,'
 

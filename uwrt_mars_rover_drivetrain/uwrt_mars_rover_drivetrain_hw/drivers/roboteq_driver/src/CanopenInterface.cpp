@@ -97,8 +97,11 @@ bool CanopenInterface::sendCommand(RuntimeCommand command, uint8_t subindex, Dat
   package[2] = CanopenInterface::COMMAND_CANOPEN_ID_MAP_.at(command) >> bytesToBits(1);
   package[3] = subindex;
   package[4] = data;
+  // NOLINTNEXTLINE(readability-magic-numbers, cppcoreguidelines-avoid-magic-numbers)
   package[5] = data >> bytesToBits(1);
+  // NOLINTNEXTLINE(readability-magic-numbers, cppcoreguidelines-avoid-magic-numbers)
   package[6] = data >> bytesToBits(2);
+  // NOLINTNEXTLINE(readability-magic-numbers, cppcoreguidelines-avoid-magic-numbers)
   package[7] = data >> bytesToBits(3);
 
   bool check = wrapper_.writeToIDwithAck(package, roboteq_can_id_);
@@ -114,7 +117,7 @@ bool CanopenInterface::sendCommand(RuntimeCommand command, uint8_t subindex, Dat
                << "\t" << static_cast<unsigned>(response_frame.data[5]) << "\t"
                << static_cast<unsigned>(response_frame.data[6]) << "\t"
                << static_cast<unsigned>(response_frame.data[7]));
-               
+
   if(check)
     return false;
   return true;
@@ -129,9 +132,9 @@ bool CanopenInterface::sendCommand<empty_data_payload>(RuntimeCommand command, u
   package[2] = CanopenInterface::COMMAND_CANOPEN_ID_MAP_.at(command) >> bytesToBits(1);
   package[3] = subindex;
   package[4] = 0;
-  package[5] = 0;
-  package[6] = 0;
-  package[7] = 0;
+  package[5] = 0; // NOLINT(readability-magic-numbers, cppcoreguidelines-avoid-magic-numbers)
+  package[6] = 0; // NOLINT(readability-magic-numbers, cppcoreguidelines-avoid-magic-numbers)
+  package[7] = 0; // NOLINT(readability-magic-numbers, cppcoreguidelines-avoid-magic-numbers)
 
   return wrapper_.writeToIDwithAck(package, roboteq_can_id_);
 }
@@ -145,9 +148,9 @@ DataType CanopenInterface::sendQuery(RuntimeQuery query, uint8_t subindex) {
   package[2] = CanopenInterface::QUERY_CANOPEN_ID_MAP_.at(query) >> bytesToBits(1);
   package[3] = subindex;
   package[4] = 0;
-  package[5] = 0;
-  package[6] = 0;
-  package[7] = 0;
+  package[5] = 0; // NOLINT(readability-magic-numbers, cppcoreguidelines-avoid-magic-numbers)
+  package[6] = 0; // NOLINT(readability-magic-numbers, cppcoreguidelines-avoid-magic-numbers)
+  package[7] = 0; // NOLINT(readability-magic-numbers, cppcoreguidelines-avoid-magic-numbers)
 
   wrapper_.writeToIDwithAck(package, roboteq_can_id_);
 

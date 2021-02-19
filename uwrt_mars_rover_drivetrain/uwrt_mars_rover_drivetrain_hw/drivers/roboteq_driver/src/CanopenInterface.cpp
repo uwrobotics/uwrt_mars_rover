@@ -7,8 +7,6 @@
 #include <roboteq_driver/CanopenInterface.hpp>
 #include <uwrt_mars_rover_utils/uwrt_can.h>
 
-using namespace uwrt_mars_rover_utils;
-
 namespace roboteq {
 
 const std::unordered_map<RuntimeCommand, uint16_t> CanopenInterface::COMMAND_CANOPEN_ID_MAP_ = {

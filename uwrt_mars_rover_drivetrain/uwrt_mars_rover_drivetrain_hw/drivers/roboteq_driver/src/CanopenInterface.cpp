@@ -84,7 +84,7 @@ CanopenInterface::CanopenInterface(canid_t roboteq_can_id, const std::string& if
   ids.push_back(SDO_COB_ID_OFFSET + CanopenInterface::roboteq_can_id_);
   ids.push_back(SDO_RESPONSE_COB_ID_OFFSET + CanopenInterface::roboteq_can_id_);
 
-  UWRTCANWrapper wrapper_("roboteq", ifname, false);
+  uwrt_mars_rover_utils::UWRTCANWrapper wrapper_("roboteq", ifname, false);
   wrapper_.init(ids);
 }
 

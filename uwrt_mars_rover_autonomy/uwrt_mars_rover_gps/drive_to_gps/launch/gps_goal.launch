@@ -1,8 +1,7 @@
 <launch>
 
-  <node pkg="turtlesim" name="turtlesim_node" type="turtlesim_node"/>
+  <node pkg="nmea_navsat_driver" name="nmea_serial_driver" type="nmea_serial_driver" output="screen"/>
   <node pkg="drive_to_gps" name="current_heading" type="current_heading" output="screen"/>
-  <node pkg="drive_to_gps" name="turtle_client" type="turtle_client" output="screen"/>
   <node pkg="drive_to_gps" name="calculate_twist" type="calculate_twist_server" output="screen"/>
 
 </launch>

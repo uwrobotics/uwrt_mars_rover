@@ -1,12 +1,6 @@
-#ifndef CALCULATE_DEGREES_H
-#define CALCULATE_DEGREES_H
-#define RADIUS_E 6371e3
+#include "utils/utils.h"
 
-#include "math.h"
-#include "ros/ros.h"
-#include "sensor_msgs/NavSatFix.h"
-
-double deg_to_rad(double deg) { return M_PI / 180.0 * deg; }
+static inline double deg_to_rad(double deg) { return M_PI / 180.0 * deg; }
 
 int calculate_degrees(const sensor_msgs::NavSatFixConstPtr &curr_gps,
                       const sensor_msgs::NavSatFixConstPtr &prev) {
@@ -17,7 +11,7 @@ int calculate_degrees(const sensor_msgs::NavSatFixConstPtr &curr_gps,
   double dy = cos(lat1) * sin(lat2) - sin(lat1) * cos(lat2) * cos(dlong);
   double angle = 180.0 / M_PI * atan2(dx, dy); // convert radians to degrees
   ROS_INFO("Angle is %lf", angle);
-  int heading = (int(std::round(angle)) + 360) % 360;
+  int heading = (int(round(angle)) + 360) % 360;
   ROS_INFO("Heading is %d degrees", heading);
   return heading;
 }
@@ -34,5 +28,3 @@ double calculate_distance(const sensor_msgs::NavSatFixConstPtr &goal,
 
   return RADIUS_E * c;
 }
-
-#endif

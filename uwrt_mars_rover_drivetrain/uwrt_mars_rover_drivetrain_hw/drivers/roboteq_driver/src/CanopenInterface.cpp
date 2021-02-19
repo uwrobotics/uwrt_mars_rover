@@ -118,9 +118,7 @@ bool CanopenInterface::sendCommand(RuntimeCommand command, uint8_t subindex, Dat
                << static_cast<unsigned>(response_frame.data[6]) << "\t"
                << static_cast<unsigned>(response_frame.data[7]));
 
-  if(check)
-    return false;
-  return true;
+  return check ? false : true;
 }
 
 template <>
@@ -136,7 +134,21 @@ bool CanopenInterface::sendCommand<empty_data_payload>(RuntimeCommand command, u
   package[6] = 0; // NOLINT(readability-magic-numbers, cppcoreguidelines-avoid-magic-numbers)
   package[7] = 0; // NOLINT(readability-magic-numbers, cppcoreguidelines-avoid-magic-numbers)
 
-  return wrapper_.writeToIDwithAck(package, roboteq_can_id_);
+  bool check = wrapper_.writeToIDwithAck(package, roboteq_can_id_);
+
+  struct can_frame response_frame = {};
+  ssize_t bytes_read = read(roboteq::CanopenInterface::socket_handle_, &response_frame, sizeof(struct can_frame));
+
+  ROS_DEBUG_STREAM(
+      std::hex << response_frame.can_id << "\t" << static_cast<unsigned>(response_frame.can_dlc) << "\t"
+               << static_cast<unsigned>(response_frame.data[0]) << "\t" << static_cast<unsigned>(response_frame.data[1])
+               << "\t" << static_cast<unsigned>(response_frame.data[2]) << "\t"
+               << static_cast<unsigned>(response_frame.data[3]) << "\t" << static_cast<unsigned>(response_frame.data[4])
+               << "\t" << static_cast<unsigned>(response_frame.data[5]) << "\t"
+               << static_cast<unsigned>(response_frame.data[6]) << "\t"
+               << static_cast<unsigned>(response_frame.data[7]));
+
+  return check ? false : true;
 }
 
 template <typename DataType>

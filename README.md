@@ -184,5 +184,5 @@ sudo apt install python-catkin-lint
 To run catkin lint:
 ```
 cd <catkin_ws location>/src
-catkin_lint --strict -W2 uwrt_mars_rover
+catkin_lint --strict -W2 uwrt_mars_rover --config uwrt_mars_rover/.catkin-lint
 ```

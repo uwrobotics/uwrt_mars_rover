@@ -2,7 +2,7 @@
 
 #include <uwrt_mars_rover_drivetrain_hw/uwrt_mars_rover_drivetrain_hw.h>
 
-#include "RoboteqController.hpp"
+#include "roboteq_driver/RoboteqController.hpp"
 
 namespace uwrt_mars_rover_drivetrain_hw {
 
@@ -14,14 +14,14 @@ class UWRTMarsRoverDrivetrainHWReal : public UWRTRoverHWDrivetrain {
   void read(const ros::Time& time, const ros::Duration& period) override;
   void write(const ros::Time& time, const ros::Duration& period) override;
 
-  // TODO: doswitch to change control modes on roboteq
-
  private:
   bool loadRoboteqConfigFromParamServer(ros::NodeHandle& robot_hw_nh);
 
-  std::map<std::string, uint8_t> roboteq_actuator_index_;
   std::unique_ptr<roboteq::RoboteqController> motor_controller_;
   uint8_t roboteq_canopen_id_{0};
+
+  std::map<std::string, uint8_t> roboteq_actuator_index_;
+  std::map<std::string, int> ticks_per_revolution_;
 };
 
 }  // namespace uwrt_mars_rover_drivetrain_hw

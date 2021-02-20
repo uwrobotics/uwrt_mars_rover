@@ -2,9 +2,8 @@
 
 #include <iostream>
 #include <memory>
+#include <roboteq_driver/CanopenInterface.hpp>
 
-//#include "CommunicationInterface.hpp"
-#include "CanopenInterface.hpp"
 namespace roboteq {
 
 class RoboteqController {

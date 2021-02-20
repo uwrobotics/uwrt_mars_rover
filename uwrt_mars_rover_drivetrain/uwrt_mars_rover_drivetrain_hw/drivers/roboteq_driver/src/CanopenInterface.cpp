@@ -4,7 +4,7 @@
 #include <ros/console.h>
 #include <sys/ioctl.h>
 
-#include <CanopenInterface.hpp>
+#include <roboteq_driver/CanopenInterface.hpp>
 
 namespace roboteq {
 
@@ -233,6 +233,7 @@ DataType CanopenInterface::sendQuery(RuntimeQuery query, uint8_t subindex) {
                << static_cast<unsigned>(response_frame.data[6]) << "\t"
                << static_cast<unsigned>(response_frame.data[7]));
 
+  // Packet Error Checking
   if (bytes_read != sizeof(struct can_frame)) {
     throw std::runtime_error("Read packet size does not match can frame size in " __FILE__);
   }
@@ -248,31 +249,26 @@ DataType CanopenInterface::sendQuery(RuntimeQuery query, uint8_t subindex) {
   if (query_frame.data[3] != response_frame.data[3]) {
     throw std::runtime_error("Mismatched sub-index in query response in " __FILE__);
   }
-  // NOLINTNEXTLINE(readability-else-after-return)
-  else {
-    const size_t data_response_size = SDO_MAX_DATA_SIZE - ((response_frame.data[0] & UNUSED_BYTES_MASK) >> 2);
 
-    uint32_t raw_response_data{};
-    static constexpr size_t START_OF_DATA_INDEX{4};
-    for (size_t data_index = START_OF_DATA_INDEX; data_index < START_OF_DATA_INDEX + data_response_size; data_index++) {
-      raw_response_data |= (response_frame.data[data_index] << bytesToBits(data_index - START_OF_DATA_INDEX));
-    }
+  const size_t data_response_size = SDO_MAX_DATA_SIZE - ((response_frame.data[0] & UNUSED_BYTES_MASK) >> 2);
 
-    // Pad unused bytes with 0xFF if negative and signed
-    if (std::is_signed<DataType>() && std::signbit(response_frame.data[START_OF_DATA_INDEX + data_response_size - 1])) {
-      constexpr uint8_t NEGATIVE_PADDING_BYTE = 0xFF;
-      for (size_t byte_number = data_response_size; byte_number < sizeof(uint32_t); byte_number++) {
-        raw_response_data |= NEGATIVE_PADDING_BYTE << bytesToBits(byte_number);
-      }
-    }
-
-    // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
-    DataType response_data = reinterpret_cast<DataType&>(raw_response_data);
-    return response_data;
+  uint32_t raw_response_data{};
+  static constexpr size_t START_OF_DATA_INDEX{4};
+  for (size_t data_index = START_OF_DATA_INDEX; data_index < START_OF_DATA_INDEX + data_response_size; data_index++) {
+    raw_response_data |= (response_frame.data[data_index] << bytesToBits(data_index - START_OF_DATA_INDEX));
   }
 
-  ROS_DEBUG_STREAM("QUERY RESPONSE ID" << response_frame.can_id);
-  return false;
+  // Pad unused bytes with 0xFF if negative and signed
+  if (std::is_signed<DataType>() && std::signbit(response_frame.data[START_OF_DATA_INDEX + data_response_size - 1])) {
+    constexpr uint8_t NEGATIVE_PADDING_BYTE = 0xFF;
+    for (size_t byte_number = data_response_size; byte_number < sizeof(uint32_t); byte_number++) {
+      raw_response_data |= NEGATIVE_PADDING_BYTE << bytesToBits(byte_number);
+    }
+  }
+
+  // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
+  DataType response_data = reinterpret_cast<DataType&>(raw_response_data);
+  return response_data;
 }
 
 // Explicit Template Instantiation

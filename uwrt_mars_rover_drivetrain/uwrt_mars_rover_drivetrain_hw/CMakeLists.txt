@@ -6,6 +6,7 @@ find_package(catkin REQUIRED COMPONENTS
         joint_limits_interface
         roscpp
         transmission_interface
+        uwrt_mars_rover_hw
         uwrt_mars_rover_utils
         )
 
@@ -21,6 +22,7 @@ catkin_package(
         joint_limits_interface
         roscpp
         transmission_interface
+        uwrt_mars_rover_hw
         uwrt_mars_rover_utils
 )
 
@@ -49,13 +51,16 @@ install(TARGETS
         RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
         )
 
-install(DIRECTORY
-        drivers/roboteq_driver/include/
-        include/${PROJECT_NAME}/
+install(DIRECTORY include/${PROJECT_NAME}/
         DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
         FILES_MATCHING
         PATTERN "*.h"
         PATTERN "*.hpp"
+        PATTERN ".svn" EXCLUDE
+        )
+
+install(DIRECTORY drivers/roboteq_driver/include/
+        DESTINATION ${CATKIN_GLOBAL_INCLUDE_DESTINATION}
         PATTERN ".svn" EXCLUDE
         )
 

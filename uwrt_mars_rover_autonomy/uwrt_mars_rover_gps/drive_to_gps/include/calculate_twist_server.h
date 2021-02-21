@@ -9,10 +9,15 @@
 #include <actionlib/server/simple_action_server.h>
 
 class TwistAction {
+
+    protected:
+        actionlib::SimpleActionServer<uwrt_mars_rover_msgs::gps_goalAction> as;
+
     public:
         TwistAction(std::string name, ros::NodeHandle n) : 
             as(n, name, boost::bind(&TwistAction::executeCB, this, _1), false),
             node(n){}
+
         TwistAction(TwistAction&&) = default;
         TwistAction& operator=(TwistAction&&) = default;
         TwistAction(const TwistAction&) = delete;
@@ -21,26 +26,28 @@ class TwistAction {
 
         ros::CallbackQueue queue_;
         ros::NodeHandle node;
-        uwrt_mars_rover_msgs::gps_headingPtr curr_head = NULL;  // current heading of the rover
-        sensor_msgs::NavSatFixPtr curr_gps = NULL;  // current gps coordinates
 
         void init() {
             as.start();
         }
 
+        // action server callback
         void executeCB(const uwrt_mars_rover_msgs::gps_goalGoalConstPtr &goal) {
             uwrt_mars_rover_msgs::gps_goalFeedback feedback;
             if (curr_gps == NULL || curr_head == NULL) {
                 ros::Rate r(1);
                 ROS_INFO("Waiting for topics to publish data");
+
                 while (ros::ok() && (curr_gps == NULL || curr_head == NULL)) {
                     queue_.callAvailable();
                     r.sleep();
                 }
             }
+
             sensor_msgs::NavSatFixPtr gps_goal(new sensor_msgs::NavSatFix(goal->gps_goal));
             bool end = false;
             ros::Rate rate(1);
+
             while (calculate_distance(gps_goal, curr_gps) > MAX_ERROR && !end && ros::ok()) {
                 ROS_INFO_STREAM("Calculating degrees, heading and sending twist message");
                 geometry_msgs::Twist msg;
@@ -57,17 +64,20 @@ class TwistAction {
                 rate.sleep();
             }
             uwrt_mars_rover_msgs::gps_goalResult r;
+
             r.arrived = !end;
             as.setSucceeded(r);
         }
 
         void update_current_heading(const uwrt_mars_rover_msgs::gps_headingConstPtr &c_head) {
-            if (curr_head == NULL) curr_head = uwrt_mars_rover_msgs::gps_headingPtr(new uwrt_mars_rover_msgs::gps_heading);
+            if (curr_head == NULL) 
+                curr_head = uwrt_mars_rover_msgs::gps_headingPtr(new uwrt_mars_rover_msgs::gps_heading);
             curr_head->degrees = c_head->degrees;
         }
 
         void update_current_gps(const sensor_msgs::NavSatFixConstPtr &gps_current) {
-            if (curr_gps == NULL) curr_gps = sensor_msgs::NavSatFixPtr(new sensor_msgs::NavSatFix);
+            if (curr_gps == NULL)
+                curr_gps = sensor_msgs::NavSatFixPtr(new sensor_msgs::NavSatFix);
             curr_gps->latitude = gps_current->latitude;
             curr_gps->longitude = gps_current->longitude;
         }
@@ -77,7 +87,7 @@ class TwistAction {
         const int MAX_ERROR = 5;
         const double MAX_LINEAR_VEL = 1.0;
         const double MAX_ANGULAR_VEL = 1.0;
+        uwrt_mars_rover_msgs::gps_headingPtr curr_head = NULL;  // current heading of the rover
+        sensor_msgs::NavSatFixPtr curr_gps = NULL;  // current gps coordinates
 
-    protected:
-        actionlib::SimpleActionServer<uwrt_mars_rover_msgs::gps_goalAction> as;
 };

@@ -1,4 +1,4 @@
-#include "utils/utils.h"
+#include <utils.h>
 
 static inline double deg_to_rad(double deg) {
   return M_PI / 180.0 * deg;

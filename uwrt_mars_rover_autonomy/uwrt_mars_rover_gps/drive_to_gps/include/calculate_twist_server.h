@@ -17,11 +17,11 @@ class TwistAction {
         TwistAction(std::string name, ros::NodeHandle n) : 
             as(n, name, boost::bind(&TwistAction::executeCB, this, _1), false),
             node(n){}
-
+        /*
         TwistAction(TwistAction&&) = default;
         TwistAction& operator=(TwistAction&&) = default;
         TwistAction(const TwistAction&) = delete;
-        TwistAction& operator=(const TwistAction&) = delete;
+        TwistAction& operator=(const TwistAction&) = delete; */
         ~TwistAction() = default;
 
         ros::CallbackQueue queue_;
@@ -35,12 +35,12 @@ class TwistAction {
         void executeCB(const uwrt_mars_rover_msgs::gps_goalGoalConstPtr &goal) {
             uwrt_mars_rover_msgs::gps_goalFeedback feedback;
             if (curr_gps == NULL || curr_head == NULL) {
-                ros::Rate r(1);
+                ros::Rate queue_sleep(1);
                 ROS_INFO("Waiting for topics to publish data");
 
                 while (ros::ok() && (curr_gps == NULL || curr_head == NULL)) {
                     queue_.callAvailable();
-                    r.sleep();
+                    queue_sleep.sleep();
                 }
             }
 
@@ -50,11 +50,14 @@ class TwistAction {
 
             while (calculate_distance(gps_goal, curr_gps) > MAX_ERROR && !end && ros::ok()) {
                 ROS_INFO_STREAM("Calculating degrees, heading and sending twist message");
+
                 geometry_msgs::Twist msg;
                 int goal_heading = calculate_degrees(gps_goal, curr_gps);
                 int multiplier = goal_heading > curr_head->degrees ? 1 : -1;
                 int heading_diff = abs(goal_heading - curr_head->degrees);
+
                 ROS_INFO_STREAM("Heading between current heading and goal is " << heading_diff << " and direction is " << multiplier);
+
                 msg.angular.z = heading_diff > 4 ? multiplier * MAX_ANGULAR_VEL : 0;
                 msg.linear.x = MAX_LINEAR_VEL;
                 feedback.go_to_goal = msg;

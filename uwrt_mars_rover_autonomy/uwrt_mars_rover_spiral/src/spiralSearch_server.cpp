@@ -12,11 +12,11 @@ Spiral constant default = 0.25 , Angular velocity default = 1m/s
 
 #include <cmath>
 
-typedef actionlib::SimpleActionServer<uwrt_mars_rover_spiral::spiralSearchAction> Server;
-
 // TODO: grab these from the parameter server
 constexpr int MAX_SPIRAL_RADIUS{10};
 constexpr int MIN_SPIRAL_RADIUS{1};
+constexpr int LOOP_RATE{10};
+constexpr int PUBLISH_RATE{100};
 
 // TODO: grab the max linear speed from parameter server
 constexpr double MAX_LINEAR_SPEED{5};
@@ -30,7 +30,7 @@ class SpiralSearch {
 
   ros::Publisher velocity_publisher;
 
-  Server server;
+  actionlib::SimpleActionServer<uwrt_mars_rover_spiral::spiralSearchAction> server;
 
   std::string node_name;
   std::string cmd_vel;
@@ -41,7 +41,7 @@ class SpiralSearch {
     std::string cmd_vel = uwrt_mars_rover_utils::getParam<std::string>(
         nh, node_name, "cmd_vel", "/uwrt_mars_rover/drivetrain_velocity_controller/cmd_vel");
 
-    velocity_publisher = nh.advertise<geometry_msgs::Twist>(cmd_vel, 1000);
+    velocity_publisher = nh.advertise<geometry_msgs::Twist>(cmd_vel, PUBLISH_RATE);
   }
 
   void execute(const uwrt_mars_rover_spiral::spiralSearchGoalConstPtr &goal) {
@@ -73,7 +73,7 @@ class SpiralSearch {
       geometry_msgs::Twist vel_msg;
 
       // this is the frequency that the loop will follow, by keeping track of "sleep()"
-      ros::Rate loop_rate(10);
+      ros::Rate loop_rate(LOOP_RATE);
 
       double start_time = ros::Time::now().toSec();
       double prev_time = 0.0;

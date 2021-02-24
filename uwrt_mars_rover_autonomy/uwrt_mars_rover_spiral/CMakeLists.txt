@@ -39,7 +39,7 @@ target_link_libraries(
 
 add_dependencies(
     ${PROJECT_NAME}_server
-    ${uwrt_mars_rover_spiral_EXPORTED_TARGETS}
+    ${${PROJECT_NAME}_EXPORTED_TARGETS}
 )
 
 install(TARGETS ${PROJECT_NAME}_server

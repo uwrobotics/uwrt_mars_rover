@@ -1,0 +1,10 @@
+# Action goal : client sends goal of a end position
+float64 spiral_constant
+float64 angular_velocity
+float64 radius
+---
+# Action result
+float64 vel_linear
+---
+# Action Feedback
+float64 current_radius

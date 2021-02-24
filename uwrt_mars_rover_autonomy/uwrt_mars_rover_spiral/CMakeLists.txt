@@ -31,25 +31,14 @@ include_directories(
 )
 
 add_executable(${PROJECT_NAME}_server src/spiralSearch_server.cpp)
-add_executable(${PROJECT_NAME}_client src/spiralSearch_client.cpp)
 
 target_link_libraries(
     ${PROJECT_NAME}_server
     ${catkin_LIBRARIES}
 )
 
-target_link_libraries(
-    ${PROJECT_NAME}_client
-    ${catkin_LIBRARIES}
-)
-
 add_dependencies(
     ${PROJECT_NAME}_server
-    ${uwrt_mars_rover_spiral_EXPORTED_TARGETS}
-)
-
-add_dependencies(
-    ${PROJECT_NAME}_client
     ${uwrt_mars_rover_spiral_EXPORTED_TARGETS}
 )
 

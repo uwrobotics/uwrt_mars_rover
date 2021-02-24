@@ -1,7 +1,6 @@
   
 <launch>
 
-    <node pkg="turtlesim" type="turtlesim_node" name="turtlesim_node"/>
     <node pkg="uwrt_mars_rover_spiral" type="uwrt_mars_rover_spiral_server" name="spiralSearch_server" output="screen"/>
 
 </launch>

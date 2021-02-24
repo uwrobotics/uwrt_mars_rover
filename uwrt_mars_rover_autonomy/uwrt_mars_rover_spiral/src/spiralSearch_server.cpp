@@ -12,7 +12,7 @@ Spiral constant default = 0.25 , Angular velocity default = 1m/s
 
 #include <cmath>
 
-using actionlib::SimpleActionServer<uwrt_mars_rover_spiral::spiralSearchAction> Server;
+typedef actionlib::SimpleActionServer<uwrt_mars_rover_spiral::spiralSearchAction> Server;
 
 // TODO: grab these from the parameter server
 constexpr int MAX_SPIRAL_RADIUS{10};

@@ -14,6 +14,8 @@ Current heading is calculated in degrees with 0 degrees at North and positive is
 clockwise
 */
 
+const std::string DEFAULT_GPS_TOPIC = "/gps/fix";
+
 int main(int argc, char **argv) {
   ros::init(argc, argv, "current_heading");
   ros::NodeHandle n;
@@ -23,7 +25,9 @@ int main(int argc, char **argv) {
 
   CurrentHeading currHead(pub_curr_head, gps_stack);
 
-  ros::Subscriber sub_heading = n.subscribe("/fix", 3, &CurrentHeading::add_gps_to_queue, &currHead);
+  std::string topic = uwrt_mars_rover_utils::getParam(n, "current_heading", "gps_topic", DEFAULT_GPS_TOPIC);
+  
+  ros::Subscriber sub_heading = n.subscribe(topic, 3, &CurrentHeading::add_gps_to_queue, &currHead);
   ros::Timer timer = n.createTimer(ros::Duration(4), &CurrentHeading::determine_curr_heading, &currHead);
 
   /*

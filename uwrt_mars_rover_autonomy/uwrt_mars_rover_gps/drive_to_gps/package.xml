@@ -19,6 +19,7 @@
   <depend>dynamic_reconfigure</depend>
   <depend>actionlib</depend>
   <depend>uwrt_mars_rover_msgs</depend>
+  <depend>uwrt_mars_rover_utils</depend>
 
   <export>
 

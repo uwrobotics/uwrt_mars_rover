@@ -5,6 +5,7 @@
 #include <uwrt_mars_rover_msgs/gps_heading.h>
 #include <sensor_msgs/NavSatFix.h>
 #include <dynamic_reconfigure/server.h>
+#include <uwrt_mars_rover_utils/uwrt_params.h>
 
 #include <math.h>
 #include <stack>
@@ -58,7 +59,7 @@ class CurrentHeading {
               gps_stack.pop();
             }
             gps_stack.push(curr);
-          }
+          } 
         }
 
     private:

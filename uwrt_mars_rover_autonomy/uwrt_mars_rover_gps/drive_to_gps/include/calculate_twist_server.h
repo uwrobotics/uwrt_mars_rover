@@ -4,6 +4,7 @@
 #include <uwrt_mars_rover_msgs/gps_heading.h>
 #include <uwrt_mars_rover_msgs/gps_goalAction.h>
 #include <geometry_msgs/Twist.h>
+#include <uwrt_mars_rover_utils/uwrt_params.h>
 
 #include <ros/callback_queue.h>
 #include <actionlib/server/simple_action_server.h>
@@ -26,6 +27,7 @@ class TwistAction {
 
         ros::CallbackQueue queue_;
         ros::NodeHandle node;
+        ros::Publisher pub; // for testing
 
         void init() {
             as.start();
@@ -49,9 +51,21 @@ class TwistAction {
             ros::Rate rate(1);
 
             while (calculate_distance(gps_goal, curr_gps) > MAX_ERROR && !end && ros::ok()) {
-                ROS_INFO_STREAM("Calculating degrees, heading and sending twist message");
-
                 geometry_msgs::Twist msg;
+                while (prev_gps.latitude == curr_gps->latitude && prev_gps.longitude == curr_gps->longitude && ros::ok()) {
+                        ROS_INFO_STREAM("GPS coords remained the same, stopping and awaiting new GPS coords");
+                        msg.angular.z = 0;
+                        msg.linear.x = 0;
+                        feedback.go_to_goal = msg;
+
+                        as.publishFeedback(feedback);
+
+                        pub.publish(msg); // for testing
+
+                        queue_.callAvailable();
+                        rate.sleep();
+                }                     
+                ROS_INFO_STREAM("Calculating degrees, heading and sending twist message");
                 int goal_heading = calculate_degrees(gps_goal, curr_gps);
                 int multiplier = goal_heading > curr_head->degrees ? 1 : -1;
                 int heading_diff = abs(goal_heading - curr_head->degrees);
@@ -63,7 +77,12 @@ class TwistAction {
                 feedback.go_to_goal = msg;
 
                 as.publishFeedback(feedback);
-                queue_.callAvailable();
+                pub.publish(msg); // for testing
+
+                prev_gps.latitude = curr_gps->latitude;
+                prev_gps.longitude = curr_gps->longitude;
+
+                queue_.callAvailable();        
                 rate.sleep();
             }
             uwrt_mars_rover_msgs::gps_goalResult r;
@@ -92,5 +111,6 @@ class TwistAction {
         const double MAX_ANGULAR_VEL = 1.0;
         uwrt_mars_rover_msgs::gps_headingPtr curr_head = NULL;  // current heading of the rover
         sensor_msgs::NavSatFixPtr curr_gps = NULL;  // current gps coordinates
+        sensor_msgs::NavSatFix prev_gps;
 
 };

@@ -5,11 +5,21 @@
 		Run the following command in the terminal to add yourself to the group then restart your computer.
 		sudo adduser $USER dialout
 	-->
-	<arg name="frame_id" default="imu_link"/>
+	<arg name="target_frame" default="map"/>
+	<arg name="frame_id" default="imu"/>
 
 	<node pkg="vectornav" type="vnpub" name="vectornav" output="screen" >
 	  <param name="frame_id" value="$(arg frame_id)"/>
       <rosparam command="load" file="$(find uwrt_mars_rover_localization)/cfg/vn300.yaml" />
-	</node>	
+	</node>
+
+	<!-- TODO SAR: Fix the args to get the right static transform-->
+	<node pkg="tf2_ros" type="static_transform_publisher" name="base_link_to_imu"
+    args="1 2 1 0 3.1416 0 /map /imu"/>
+
+	<node pkg="uwrt_mars_rover_localization" type="uwrt_mars_rover_localization_odom" name="world_odom" output="screen">
+		<param name="target_frame" value="/${target_frame}"/>
+		<param name="odom_topic" value="/vectornav/Odom"/>
+	</node>
 	
 </launch>

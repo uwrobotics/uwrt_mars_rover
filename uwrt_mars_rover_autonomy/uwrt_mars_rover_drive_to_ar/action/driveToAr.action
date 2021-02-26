@@ -1,0 +1,9 @@
+# Action goal : client sends goal of a end position
+uint8 num_of_tags
+geometry_msgs/Pose[] markers
+---
+# Action result
+float64 pos_to_goal
+---
+# Action Feedback - pos relative to the ar tag or the goal
+float64 pos_to_goal

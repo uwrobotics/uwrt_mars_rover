@@ -1,25 +1,26 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>uwrt_mars_rover_spiral</name>
+  <name>uwrt_mars_rover_drive_to_ar</name>
   <version>0.0.0</version>
-  <description>The spiralSearch package</description>
+  <description>Drives to an ar tag or between two ar tags.</description>
 
-  <maintainer email="urban.pistek@gmail.com">urbanpistek</maintainer>
-  
-  <license>TODO</license>
+  <maintainer email="azumnanji@gmail.com">azum</maintainer>
+
+  <license>MIT</license>
 
   <buildtool_depend>catkin</buildtool_depend>
 
+  <depend>nav_msgs</depend>
   <depend>std_msgs</depend>
   <depend>geometry_msgs</depend>
   <depend>message_generation</depend>
   <depend>actionlib_msgs</depend>
   <depend>actionlib</depend>
+  <depend>tf</depend>
   <depend>uwrt_mars_rover_utils</depend>
-
+  
   <exec_depend>message_runtime</exec_depend>
+  <exec_depend>uwrt_mars_rover_ar_tracker</exec_depend>
   <exec_depend>uwrt_mars_rover_localization</exec_depend>
 
-  <export>
-  </export>
 </package>

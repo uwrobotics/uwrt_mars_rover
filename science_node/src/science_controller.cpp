@@ -82,19 +82,19 @@ void controller::shovel_servo_callback(const std_msgs::Float32::ConstPtr& msg) {
 
 bool controller::send_commands(void) {
   // write commands to CAN
-  if (comm->writeToID<float>(cap_cmds, static_cast<uint32_t>(HWBRIDGE::CANID::SET_COVER_ANGLE))) {
+  if (!comm->writeToID<float>(cap_cmds, static_cast<uint32_t>(HWBRIDGE::CANID::SET_COVER_ANGLE))) {
     ROS_ERROR_STREAM_NAMED(_name, "CAN MESSAGE FAILED TO SEND TO CAP");
     return false;
   }
-  if (comm->writeToID<float>(index_cmds, static_cast<uint32_t>(HWBRIDGE::CANID::SET_GENEVA_INDEX))) {
+  if (!comm->writeToID<float>(index_cmds, static_cast<uint32_t>(HWBRIDGE::CANID::SET_GENEVA_INDEX))) {
     ROS_ERROR_STREAM_NAMED(_name, "CAN MESSAGE FAILED TO SEND TO GENENVA INDEXER");
     return false;
   }
-  if (comm->writeToID<float>(elevator_cmds, static_cast<uint32_t>(HWBRIDGE::CANID::SET_ELEVATOR_HEIGHT))) {
+  if (!comm->writeToID<float>(elevator_cmds, static_cast<uint32_t>(HWBRIDGE::CANID::SET_ELEVATOR_HEIGHT))) {
     ROS_ERROR_STREAM_NAMED(_name, "CAN MESSAGE FAILED TO SEND TO ELEVATOR");
     return false;
   }
-  if (comm->writeToID<float>(shovel_cmds, static_cast<uint32_t>(HWBRIDGE::CANID::SET_SCOOPER_ANGLE))) {
+  if (!comm->writeToID<float>(shovel_cmds, static_cast<uint32_t>(HWBRIDGE::CANID::SET_SCOOPER_ANGLE))) {
     ROS_ERROR_STREAM_NAMED(_name, "CAN MESSAGE FAILED TO SEND TO SHOVEL");
     return false;
   }

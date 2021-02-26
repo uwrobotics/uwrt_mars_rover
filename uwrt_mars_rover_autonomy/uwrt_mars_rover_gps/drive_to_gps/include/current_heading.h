@@ -59,7 +59,9 @@ class CurrentHeading {
               gps_stack.pop();
             }
             gps_stack.push(curr);
-          } 
+          }
+          else 
+            ROS_INFO("GPS queue is empty"); 
         }
 
     private:

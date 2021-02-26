@@ -52,13 +52,13 @@ class TwistAction {
 
             while (calculate_distance(gps_goal, curr_gps) > MAX_ERROR && !end && ros::ok()) {
                 geometry_msgs::Twist msg;
-                while (prev_gps.latitude == curr_gps->latitude && prev_gps.longitude == curr_gps->longitude && ros::ok()) {
+                while (prev_gps->latitude == curr_gps->latitude && prev_gps->longitude == curr_gps->longitude && ros::ok()) {
                         ROS_INFO_STREAM("GPS coords remained the same, stopping and awaiting new GPS coords");
-                        msg.angular.z = 0;
+                        msg.angular.z = 0; 
                         msg.linear.x = 0;
                         feedback.go_to_goal = msg;
 
-                        as.publishFeedback(feedback);
+                        as.publishFeedback(feedback); // publish a stopping Twist msg if gps coords are not updated
 
                         pub.publish(msg); // for testing
 
@@ -79,8 +79,8 @@ class TwistAction {
                 as.publishFeedback(feedback);
                 pub.publish(msg); // for testing
 
-                prev_gps.latitude = curr_gps->latitude;
-                prev_gps.longitude = curr_gps->longitude;
+                prev_gps->latitude = curr_gps->latitude;
+                prev_gps->longitude = curr_gps->longitude;
 
                 queue_.callAvailable();        
                 rate.sleep();
@@ -111,6 +111,6 @@ class TwistAction {
         const double MAX_ANGULAR_VEL = 1.0;
         uwrt_mars_rover_msgs::gps_headingPtr curr_head = NULL;  // current heading of the rover
         sensor_msgs::NavSatFixPtr curr_gps = NULL;  // current gps coordinates
-        sensor_msgs::NavSatFix prev_gps;
+        sensor_msgs::NavSatFixPtr prev_gps = NULL;
 
 };

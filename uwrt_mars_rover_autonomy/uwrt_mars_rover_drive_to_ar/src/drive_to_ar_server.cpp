@@ -194,7 +194,7 @@ class DriveToAr {
   }
 
   void startServer() {
-    ROS_INFO_NAMED(node_name, "\n\n\n ********Spiral Search Server Started*********\n");
+    ROS_INFO_NAMED(node_name, "\n\n\n ********Drive to Ar Server Started*********\n");
     server.start();
   }
 };

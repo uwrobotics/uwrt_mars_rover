@@ -52,8 +52,8 @@ int main(int argc, char* argv[]) {  // NOLINT(bugprone-exception-escape)
   }
 
   // construct both can wrappers
-  can_wrapper_int = uwrt_mars_rover_utils::UWRTCANWrapper("can_test_int", can_interface, true);
-  can_wrapper_float = uwrt_mars_rover_utils::UWRTCANWrapper("can_test_float", can_interface, true);
+  can_wrapper_int = uwrt_mars_rover_utils::UWRTCANWrapper("can_test_int", can_interface, false);
+  can_wrapper_float = uwrt_mars_rover_utils::UWRTCANWrapper("can_test_float", can_interface, false);
 
   // can ids for either wrapper
   std::vector<uint32_t> float_ids;

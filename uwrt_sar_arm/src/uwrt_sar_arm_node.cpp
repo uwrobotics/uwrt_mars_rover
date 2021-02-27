@@ -39,16 +39,16 @@ void armCallback(const std_msgs::Float32MultiArrayConstPtr& msg) {
   success &=
       can_wrapper_handle.writeToID<float>(msg->data[2], static_cast<uint32_t>(HWBRIDGE::CANID::SET_ELBOW_MOTIONDATA));
   success &= can_wrapper_handle.writeToID<float>(msg->data[3],
-                                                 static_cast<uint32_t>(HWBRIDGE::CANID::SET_LEFT_WRIST_MOTIONDATA));
+                                                 static_cast<uint32_t>(HWBRIDGE::CANID::SET_CLAW_MOTIONDATA));
   success &= can_wrapper_handle.writeToID<float>(msg->data[4],
-                                                 static_cast<uint32_t>(HWBRIDGE::CANID::SET_RIGHT_WRIST_MOTIONDATA));
-  success &=
-      can_wrapper_handle.writeToID<float>(msg->data[5], static_cast<uint32_t>(HWBRIDGE::CANID::SET_CLAW_MOTIONDATA));
-  success &= can_wrapper_handle.writeToID<float>(msg->data[6],
                                                  static_cast<uint32_t>(HWBRIDGE::CANID::SET_TOOL_TIP_MOTIONDATA));
+  success &=
+      can_wrapper_handle.writeToID<float>(msg->data[5], static_cast<uint32_t>(HWBRIDGE::CANID::SET_LEFT_WRIST_MOTIONDATA));
+  success &= can_wrapper_handle.writeToID<float>(msg->data[6],
+                                                 static_cast<uint32_t>(HWBRIDGE::CANID::SET_RIGHT_WRIST_MOTIONDATA));
 
-  ROS_ERROR_STREAM_COND(!success, "BEEP BOOP CAN ERROR!!!!!!");
-  ROS_INFO_STREAM_COND(success, "wtf this actually works?! msg sent");
+  ROS_ERROR_STREAM_COND(!success, "ERROR unable to send arm msgs");
+  ROS_INFO_STREAM_COND(success, "Arm msgs sent!");
 }
 
 int main(int argc, char** argv) {

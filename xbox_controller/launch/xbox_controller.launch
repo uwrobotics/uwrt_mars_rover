@@ -1,0 +1,19 @@
+<launch>
+	<!-- joy node -->
+		<node respawn="true" pkg="joy"
+			type="joy_node" name="turtle_joy">
+			<param name="dev" type="string" value="/dev/input/js0"/>
+			<param name="deadzone" value="0.2"/>
+		</node>
+	
+	<!-- Axes -->
+		<param name="left_stick_vertical_scale_fast" value="5" type="int"/>
+		<param name="left_stick_vertical_scale_slow" value="1" type="int"/>
+		<param name="left_stick_angular_scale_fast" value="5" type="int"/>
+		<param name="left_stick_angular_scale_slow" value="1" type="int"/>
+		
+		<param name="right_stick_vertical_scale" value="1" type="int"/>
+		<param name="right_stick_angular_scale" value="1" type="int"/>
+		
+		<node pkg="xbox_controller" type="xbox_controller" name="xbox_teleop" output="screen"/>
+</launch>

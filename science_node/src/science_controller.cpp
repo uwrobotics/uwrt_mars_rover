@@ -1,6 +1,6 @@
 
 #include "ros/ros.h"
-#include "std_msgs/Float32.h"
+#include "std_msgs/Float32MultiArray.h"
 #include "uwrt_mars_rover_utils/hw_bridge.h"
 #include "uwrt_mars_rover_utils/uwrt_can.h"
 
@@ -10,37 +10,22 @@ class controller {
   explicit controller(std::string _name);
   ~controller();
 
-  bool send_commands(void);
-
   ros::Rate loop_rate{10};
 
   inline std::string getName() const {
     return _name;
   }
 
+  void scienceCallback(const std_msgs::Float32MultiArrayConstPtr& msg);
+
  private:
   // name of controller
   std::string _name;
 
   // Subs
-  ros::Subscriber cap_servo;
-  ros::Subscriber geneva_motor;
-  ros::Subscriber elevator_motor;
-  ros::Subscriber shovel_servo;
+  ros::Subscriber science_sub;
 
   ros::NodeHandle nh;
-
-  // Callback functions
-  void cap_servo_callback(const std_msgs::Float32::ConstPtr& msg);
-  void geneva_motor_callback(const std_msgs::Float32::ConstPtr& msg);
-  void elevator_motor_callback(const std_msgs::Float32::ConstPtr& msg);
-  void shovel_servo_callback(const std_msgs::Float32::ConstPtr& msg);
-
-  // variables to write to
-  float index_cmds;
-  float cap_cmds;
-  float shovel_cmds;
-  float elevator_cmds;
 
   // CAN
   uwrt_mars_rover_utils::UWRTCANWrapper* comm;
@@ -50,11 +35,9 @@ class controller {
 };
 
 controller::controller(std::string) : _name(_name) {
-  elevator_motor =
-      nh.subscribe<std_msgs::Float32>("/science/elevator", QUERY, &controller::elevator_motor_callback, this);
-  cap_servo = nh.subscribe<std_msgs::Float32>("/science/cap", QUERY, &controller::cap_servo_callback, this);
-  geneva_motor = nh.subscribe<std_msgs::Float32>("/science/indexer", QUERY, &controller::geneva_motor_callback, this);
-  shovel_servo = nh.subscribe<std_msgs::Float32>("/science/shovel", QUERY, &controller::shovel_servo_callback, this);
+  science_sub =
+      nh.subscribe<std_msgs::Float32MultiArray>("/science_sar_commands", QUERY, &controller::scienceCallback, this);
+
   // set up CAN
   comm = new uwrt_mars_rover_utils::UWRTCANWrapper(_name, "can0", false);
   comm->init(std::vector<uint32_t>());  // empty list because no receive
@@ -64,51 +47,37 @@ controller::~controller() {
   delete comm;
   comm = nullptr;
 }
-void controller::cap_servo_callback(const std_msgs::Float32::ConstPtr& msg) {
-  cap_cmds = msg->data;
-}
 
-void controller::geneva_motor_callback(const std_msgs::Float32::ConstPtr& msg) {
-  index_cmds = msg->data;
-}
+void controller::scienceCallback(const std_msgs::Float32MultiArrayConstPtr& msg) {
+  static const unsigned NUM_JOINTS = 4;
+  ROS_ASSERT(msg->layout.dim[0].size == NUM_JOINTS);
+  ROS_ASSERT(msg->layout.dim[0].stride == NUM_JOINTS);
 
-void controller::elevator_motor_callback(const std_msgs::Float32::ConstPtr& msg) {
-  elevator_cmds = msg->data;
-}
+  std::stringstream ss;
+  for (int i = 0; i < NUM_JOINTS; i++) {
+    ss << msg->data[i] << " ";
+  }
+  ROS_INFO_STREAM("data being sent: " << ss.str());
 
-void controller::shovel_servo_callback(const std_msgs::Float32::ConstPtr& msg) {
-  shovel_cmds = msg->data;
-}
+  bool success = true;
+  success &= comm->writeToID<float>(msg->data[0],
+                                                 static_cast<uint32_t>(HWBRIDGE::CANID::SET_COVER_ANGLE));
+  success &= comm->writeToID<float>(msg->data[1],
+                                                 static_cast<uint32_t>(HWBRIDGE::CANID::SET_GENEVA_ANGLE));
+  success &=
+      comm->writeToID<float>(msg->data[2], static_cast<uint32_t>(HWBRIDGE::CANID::SET_ELEVATOR_HEIGHT));
+  success &= comm->writeToID<float>(msg->data[3],
+                                                 static_cast<uint32_t>(HWBRIDGE::CANID::SET_SCOOPER_ANGLE));
 
-bool controller::send_commands(void) {
-  // write commands to CAN
-  if (!comm->writeToID<float>(cap_cmds, static_cast<uint32_t>(HWBRIDGE::CANID::SET_COVER_ANGLE))) {
-    ROS_ERROR_STREAM_NAMED(_name, "CAN MESSAGE FAILED TO SEND TO CAP");
-    return false;
-  }
-  if (!comm->writeToID<float>(index_cmds, static_cast<uint32_t>(HWBRIDGE::CANID::SET_GENEVA_INDEX))) {
-    ROS_ERROR_STREAM_NAMED(_name, "CAN MESSAGE FAILED TO SEND TO GENENVA INDEXER");
-    return false;
-  }
-  if (!comm->writeToID<float>(elevator_cmds, static_cast<uint32_t>(HWBRIDGE::CANID::SET_ELEVATOR_HEIGHT))) {
-    ROS_ERROR_STREAM_NAMED(_name, "CAN MESSAGE FAILED TO SEND TO ELEVATOR");
-    return false;
-  }
-  if (!comm->writeToID<float>(shovel_cmds, static_cast<uint32_t>(HWBRIDGE::CANID::SET_SCOOPER_ANGLE))) {
-    ROS_ERROR_STREAM_NAMED(_name, "CAN MESSAGE FAILED TO SEND TO SHOVEL");
-    return false;
-  }
-  return true;
+  ROS_ERROR_STREAM_COND(!success, "ERROR unable to send science msgs");
+  ROS_INFO_STREAM_COND(success, "Science msgs sent");
 }
 
 int main(int argc, char** argv) {
   ros::init(argc, argv, "science_control_node");
-  controller science = controller("science controller");
+  controller science = controller("science_controller");
 
-  while (ros::ok) {
-    if (!science.send_commands()) {
-      ROS_ERROR_STREAM_NAMED(science.getName(), "Failed to send CAN message");
-    }
+  while (ros::ok()) {
     ros::spinOnce();
     science.loop_rate.sleep();
   }

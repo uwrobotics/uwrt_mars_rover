@@ -12,5 +12,10 @@
 
   <exec_depend>uwrt_mars_rover_control</exec_depend>
   <exec_depend>uwrt_mars_rover_localization</exec_depend>
+  <exec_depend>uwrt_mars_rover_spiral</exec_depend>
+  <exec_depend>uwrt_mars_rover_drive_to_ar</exec_depend>
+  <exec_depend>science_node</exec_depend>
+  <exec_depend>uwrt_sar_arm</exec_depend>
+  <exec_depend>xbox_controller</exec_depend>
 
 </package>

@@ -1,4 +1,4 @@
-launch>
+<launch>
     <arg name="control_mode"
          doc="Control mode that the rover should start in.
               Valid options are: [arm_mission, science_mission, arm_only, science_only, drivetrain_only]"/>

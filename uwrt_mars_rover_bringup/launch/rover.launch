@@ -9,12 +9,23 @@
 
     <include file="$(find uwrt_mars_rover_control)/launch/rover_control.launch" pass_all_args="true"/>
 
-    <group if="$(eval control_mode in ['arm_mission' , 'science_mission', 'autonomy_mission'])">
+    <group if="$(eval control_mode == 'autonomy_mission')">
         <include file="$(find uwrt_mars_rover_localization)/launch/vectornav300.launch">
             <!--Additional params can be found in uwrt_mars_rover_autonomy/uwrt_mars_rover_localization/cfg/vn300.yaml-->
             <!--Need to be part of the dialout group to run this node, see launch file for instructions-->
-            <arg name="frame_id" value="imu_link"/>
+            <arg name="frame_id" value="imu"/>
         </include>
+        <!-- TODO: Add autonomy state machine node -->
+        <include file="$(find uwrt_mars_rover_drive_to_ar)/launch/drive_to_ar.launch"/>
+        <include file="$(find uwrt_mars_rover_spiral)/launch/spiralSearch.launch"/>
+    </group>
+
+    <group if="$(eval control_mode == 'science_mission')">
+        <node pkg="science_node" type="science_node" name="science_controller" output="screen"/>
+    </group>
+
+    <group if="$(eval control_mode == 'arm_mission')">
+        <node pkg="uwrt_sar_arm" type="uwrt_sar_arm_node" name="arm_controller" output="screen"/>
     </group>
 
 </launch>

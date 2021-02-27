@@ -10,6 +10,8 @@
 <!--	<node pkg="usb_cam" type="usb_cam_node" name="camera_node">-->
 <!--		<param name="pixel_format"			type="string" value="yuyv"/>-->
 <!--	</node>-->
+
+	<include file="$(find uwrt_mars_rover_ar_tracker)/launch/camera.launch"/>
 	<node pkg="image_view" type="image_view" name="viewer">
 		<remap from="image"  to="$(arg cam_image_topic)" />
 	</node>

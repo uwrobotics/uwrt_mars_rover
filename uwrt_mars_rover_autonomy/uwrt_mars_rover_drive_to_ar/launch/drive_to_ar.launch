@@ -4,6 +4,8 @@
     <arg name="angle_approach" value="1.5"/>
     <arg name="linear_approach" value="3.0"/>
 
+    <include file="$(find uwrt_mars_rover_ar_tracker)/launch/start_ar_tracker.launch"/>
+
     <node pkg="uwrt_mars_rover_drive_to_ar" type="uwrt_mars_rover_drive_to_ar_server" name="drive_to_arSearch_server" output="screen">
         <param name="odom_topic" value="${odom}"/>
         <param name="cmd_vel" value="${cmd_vel}"/>

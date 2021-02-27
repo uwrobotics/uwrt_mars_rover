@@ -1,54 +1,26 @@
-
+#include "ros/assert.h"
 #include "ros/ros.h"
 #include "std_msgs/Float32MultiArray.h"
 #include "uwrt_mars_rover_utils/hw_bridge.h"
 #include "uwrt_mars_rover_utils/uwrt_can.h"
 
-class controller {
- public:
-  controller() = delete;
-  explicit controller(std::string _name);
-  ~controller();
+// This code is PURE garbage and was written in 30 mins for a demo....... NEVER MERGE THIS INTO MASTER
 
-  ros::Rate loop_rate{10};
+uwrt_mars_rover_utils::UWRTCANWrapper can_wrapper_handle("can_test_int", "can0", false);
 
-  inline std::string getName() const {
-    return _name;
-  }
-
-  void scienceCallback(const std_msgs::Float32MultiArrayConstPtr& msg);
-
- private:
-  // name of controller
-  std::string _name;
-
-  // Subs
-  ros::Subscriber science_sub;
-
-  ros::NodeHandle nh;
-
-  // CAN
-  uwrt_mars_rover_utils::UWRTCANWrapper* comm;
-
-  // constants
-  static constexpr int QUERY{1000};
-};
-
-controller::controller(std::string) : _name(_name) {
-  science_sub =
-      nh.subscribe<std_msgs::Float32MultiArray>("/science_sar_commands", QUERY, &controller::scienceCallback, this);
-
-  // set up CAN
-  comm = new uwrt_mars_rover_utils::UWRTCANWrapper(_name, "can0", false);
-  comm->init(std::vector<uint32_t>());  // empty list because no receive
-}
-
-controller::~controller() {
-  delete comm;
-  comm = nullptr;
-}
-
-void controller::scienceCallback(const std_msgs::Float32MultiArrayConstPtr& msg) {
+// @azum: multiarray published docs if u need it:
+// https://answers.ros.org/question/226726/push-vector-into-multiarray-message-and-publish-it/
+/**
+ * Example on how to fake a multiarray with rostopic pub
+ * rostopic pub /science_sar_commands std_msgs/Float32MultiArray "layout:
+ *   dim:
+ *   - label: ''
+ *     size: 7
+ *     stride: 7
+ *   data_offset: 0
+ * data: [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0]" -r 1
+ */
+void scienceCallback(const std_msgs::Float32MultiArrayConstPtr& msg) {
   static const unsigned NUM_JOINTS = 4;
   ROS_ASSERT(msg->layout.dim[0].size == NUM_JOINTS);
   ROS_ASSERT(msg->layout.dim[0].stride == NUM_JOINTS);
@@ -60,13 +32,13 @@ void controller::scienceCallback(const std_msgs::Float32MultiArrayConstPtr& msg)
   ROS_INFO_STREAM("data being sent: " << ss.str());
 
   bool success = true;
-  success &= comm->writeToID<float>(msg->data[0],
+  success &= can_wrapper_handle.writeToID<float>(msg->data[0],
                                                  static_cast<uint32_t>(HWBRIDGE::CANID::SET_COVER_ANGLE));
-  success &= comm->writeToID<float>(msg->data[1],
+  success &= can_wrapper_handle.writeToID<float>(msg->data[1],
                                                  static_cast<uint32_t>(HWBRIDGE::CANID::SET_GENEVA_ANGLE));
   success &=
-      comm->writeToID<float>(msg->data[2], static_cast<uint32_t>(HWBRIDGE::CANID::SET_ELEVATOR_HEIGHT));
-  success &= comm->writeToID<float>(msg->data[3],
+      can_wrapper_handle.writeToID<float>(msg->data[2], static_cast<uint32_t>(HWBRIDGE::CANID::SET_ELEVATOR_HEIGHT));
+  success &= can_wrapper_handle.writeToID<float>(msg->data[3],
                                                  static_cast<uint32_t>(HWBRIDGE::CANID::SET_SCOOPER_ANGLE));
 
   ROS_ERROR_STREAM_COND(!success, "ERROR unable to send science msgs");
@@ -74,13 +46,15 @@ void controller::scienceCallback(const std_msgs::Float32MultiArrayConstPtr& msg)
 }
 
 int main(int argc, char** argv) {
-  ros::init(argc, argv, "science_control_node");
-  controller science = controller("science_controller");
+  ros::init(argc, argv, "science_node");
+  ros::NodeHandle nh;
 
+  can_wrapper_handle.init(std::vector<uint32_t>());  // hack empty recv list cuz not reading anything
+
+  ros::Subscriber science_sub = nh.subscribe("/science_sar_commands", 1000, scienceCallback);
+  ros::Rate loop_rate(100);
   while (ros::ok()) {
     ros::spinOnce();
-    science.loop_rate.sleep();
+    loop_rate.sleep();
   }
-
-  return 0;
 }

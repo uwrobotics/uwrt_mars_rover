@@ -28,20 +28,31 @@ void UWRTMarsRoverDrivetrainHWReal::read(const ros::Time & /*time*/, const ros::
   // TODO: change to use tpdos instead of queries
   for (const auto &joint_name : joint_names_) {
     // position measured in Radians from starting position
-    actuator_joint_states_[joint_name].actuator_position =
-        REVOLUTIONS_TO_RADIANS_FACTOR *
-        motor_controller_->readAbsoluteEncoderCount(roboteq_actuator_index_[joint_name]) /
-        ticks_per_revolution_[joint_name];
+    try {
+      actuator_joint_states_[joint_name].actuator_position =
+          REVOLUTIONS_TO_RADIANS_FACTOR *
+          motor_controller_->readAbsoluteEncoderCount(roboteq_actuator_index_[joint_name]) /
+          ticks_per_revolution_[joint_name];
+    } catch (const std::exception &e) {
+      // TODO: replace roboteq exceptions with ros diagnostics!! #106
+      ROS_ERROR_STREAM_NAMED(name_, "CAUGHT EXCEPTION: " << e.what());
+    }
 
     // velocity in Radians/sec
-    actuator_joint_states_[joint_name].actuator_velocity =
-        motor_controller_->readEncoderMotorSpeed(roboteq_actuator_index_[joint_name]) *
-        RPM_TO_RADIANS_PER_SECOND_FACTOR;
+    try {
+      actuator_joint_states_[joint_name].actuator_velocity =
+          motor_controller_->readEncoderMotorSpeed(roboteq_actuator_index_[joint_name]) *
+          RPM_TO_RADIANS_PER_SECOND_FACTOR;
+    } catch (const std::exception &e) {
+      // TODO: replace roboteq exceptions with ros diagnostics!! #106
+      ROS_ERROR_STREAM_NAMED(name_, "CAUGHT EXCEPTION: " << e.what());
+    }
 
     // TODO #121: populate actuator current and voltage to new state interface
     // motor_controller_->readMotorAmps(roboteq_actuator_index_[joint_name]) * MOTOR_READING_TO_AMPS_CONVERSION_FACTOR;
 
-    motor_controller_->readMotorStatusFlags(roboteq_actuator_index_[joint_name]);
+    //  TODO: #121 maybe? add interface for motor fault flags
+    // motor_controller_->readMotorStatusFlags(roboteq_actuator_index_[joint_name]);
   }
   actuator_to_joint_state_interface_.propagate();
 
@@ -71,9 +82,16 @@ void UWRTMarsRoverDrivetrainHWReal::write(const ros::Time & /*time*/, const ros:
 
       case UWRTRoverHWDrivetrain::DrivetrainActuatorJointCommand::Type::VELOCITY:
         joint_to_actuator_velocity_interface_.propagate();
-        successful_joint_write = motor_controller_->setVelocity(
-            static_cast<int32_t>(actuator_joint_commands_[joint_name].actuator_data * RADIANS_PER_SECOND_TO_RPM_FACTOR),
-            roboteq_actuator_index_[joint_name]);
+        try {
+          successful_joint_write =
+              motor_controller_->setVelocity(static_cast<int32_t>(actuator_joint_commands_[joint_name].actuator_data *
+                                                                  RADIANS_PER_SECOND_TO_RPM_FACTOR),
+                                             roboteq_actuator_index_[joint_name]);
+        } catch (const std::exception &e) {
+          // TODO: replace roboteq exceptions with ros diagnostics!! #106
+          ROS_ERROR_STREAM_NAMED(name_, "CAUGHT EXCEPTION: " << e.what());
+        }
+
         break;
 
       case UWRTRoverHWDrivetrain::DrivetrainActuatorJointCommand::Type::VOLTAGE:

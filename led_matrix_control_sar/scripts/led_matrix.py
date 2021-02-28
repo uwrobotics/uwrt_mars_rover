@@ -44,7 +44,7 @@ class LEDMatrix:
             self.clear()
             time.sleep(0.5)
             global continue_flashing
-            if continue_flashing:
+            if not continue_flashing:
                 break
 
     # range is [0, 255]

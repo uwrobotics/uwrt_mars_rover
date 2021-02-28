@@ -16,22 +16,22 @@ matrix = None
 def set_led_matrix_handler(req):
     retval = False
 
-    if (req.requested_mode.value == NeopixelArrayMode.AUTONOMOUS_OPERATION):
+    if req.requested_mode.value == NeopixelArrayMode.AUTONOMOUS_OPERATION:
         matrix.solid(255, 0, 0) # solid red
         print('LED Matrix set to AUTONOMOUS_OPERATION')
         retval = True
     
-    elif (req.requested_mode.value == NeopixelArrayMode.TELEOPERATED_OPERATION):
+    elif req.requested_mode.value == NeopixelArrayMode.TELEOPERATED_OPERATION:
         matrix.solid(0, 0, 255) # solid blue
         print('LED Matrix set to TELEOPERATED_OPERATION')
         retval = True
 
-    elif (req.requested_mode.value == NeopixelArrayMode.AUTONOMOUS_GOAL_REACHED):
+    elif req.requested_mode.value == NeopixelArrayMode.AUTONOMOUS_GOAL_REACHED:
         matrix.flash(0, 255, 0) # flash green
         print('LED Matrix set to AUTONOMOUS_GOAL_REACHED')
         retval = True
     
-    elif (req.requested_mode.value == NeopixelArrayMode.OFF):
+    elif req.requested_mode.value == NeopixelArrayMode.OFF:
         matrix.solid(0, 0, 0) # clear
         print('LED Matrix set to OFF')
         retval = True

@@ -163,7 +163,7 @@ bool CanopenInterface::sendCommand(RuntimeCommand command, uint8_t subindex, Dat
     throw std::runtime_error("Mismatched sub-index in command response in " __FILE__);
   }
   ROS_DEBUG_STREAM("COMMAND RESPONSE ID" << response_frame.can_id);
-  return false;
+  return true;
 }
 
 template <>
@@ -198,7 +198,7 @@ bool CanopenInterface::sendCommand<empty_data_payload>(RuntimeCommand command, u
                << static_cast<unsigned>(response_frame.data[7]));
 
   ROS_DEBUG_STREAM("COMMAND RESPONSE ID" << response_frame.can_id);
-  return false;
+  return true;
 }
 
 template <typename DataType>

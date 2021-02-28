@@ -97,8 +97,8 @@ CanopenInterface::CanopenInterface(canid_t roboteq_can_id, const std::string& if
   can_receive_filter[1].can_id = SDO_RESPONSE_COB_ID_OFFSET + roboteq::CanopenInterface::roboteq_can_id_;
   can_receive_filter[1].can_mask = (CAN_EFF_FLAG | CAN_RTR_FLAG | CAN_EFF_MASK);
 
-  //   struct timeval receive_timeout = {.tv_usec=500000}; //0.5 seconds
-  // setsockopt(socket_handle_, SOL_SOCKET, SO_RCVTIMEO, &receive_timeout, sizeof(receive_timeout));
+  struct timeval receive_timeout = {.tv_usec = 500000};  // 0.5 seconds
+  setsockopt(socket_handle_, SOL_SOCKET, SO_RCVTIMEO, &receive_timeout, sizeof(receive_timeout));
 
   int socket_opt_ret_val = setsockopt(socket_handle_, SOL_CAN_RAW, CAN_RAW_FILTER, can_receive_filter.data(),
                                       can_receive_filter.size() * sizeof(struct can_filter));

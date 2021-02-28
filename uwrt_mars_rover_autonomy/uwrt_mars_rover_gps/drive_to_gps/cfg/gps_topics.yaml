@@ -1,0 +1,4 @@
+uwrt_mars_rover:
+
+  gps_topics:
+    gps_topic: "/gps/fix"

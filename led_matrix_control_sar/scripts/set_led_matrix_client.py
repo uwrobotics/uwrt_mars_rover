@@ -4,6 +4,8 @@ import rospy
 from uwrt_mars_rover_msgs.srv import set_state
 from uwrt_mars_rover_msgs.msg import NeopixelArrayMode
 
+# FOR TESTING
+
 def set_led_matrix_client(x):
     rospy.wait_for_service('set_led_matrix')
     try:

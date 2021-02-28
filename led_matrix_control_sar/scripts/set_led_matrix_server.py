@@ -46,7 +46,7 @@ def set_led_matrix_server():
 
 
 if __name__ == "__main__":
-    # GPIO.setmode(GPIO.BOARD)
-    # matrix = LEDMatrix(R_PWM1, G_PWM2, B_PWM3)
+    GPIO.setmode(GPIO.BOARD)
+    matrix = LEDMatrix(R_PWM1, G_PWM2, B_PWM3)
 
     set_led_matrix_server()

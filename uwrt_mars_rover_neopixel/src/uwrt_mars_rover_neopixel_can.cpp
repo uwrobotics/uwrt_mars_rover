@@ -34,17 +34,17 @@ void NeopixelCan::sendCAN(const uint8_t data) {
   // Send out the CAN packet
   write(socket_handle_, &outgoing_can_frame_, sizeof(outgoing_can_frame_));
 }
-bool NeopixelCan::waitforAck() {
-  ROS_INFO_NAMED(log_filter_, "Now waiting for acknowledgement message.");
-  do {
-    recv(socket_handle_, &incoming_can_frame_, sizeof(incoming_can_frame_), 0);
-    ROS_INFO_NAMED(log_filter_, "CAN message received. Checking validity...");
-    ROS_INFO_COND_NAMED(incoming_can_frame_.can_id != NEOPIXEL_CAN_ID_INCOMING || incoming_can_frame_.data[0] != 1,
-                        log_filter_,
-                        "The received CAN message did not match the expected acknowledgment message. Waiting again.");
-  } while (incoming_can_frame_.can_id != NEOPIXEL_CAN_ID_INCOMING || incoming_can_frame_.data[0] != 1);
-  ROS_INFO_NAMED(log_filter_, "The expected acknowledgement message was received.");
-  return true;
-  // for now, this function cannot time out and return false
-  // this will be implemented in a wrapper lib for can later
-}
+// bool NeopixelCan::waitforAck() {
+//  ROS_INFO_NAMED(log_filter_, "Now waiting for acknowledgement message.");
+//  do {
+//    recv(socket_handle_, &incoming_can_frame_, sizeof(incoming_can_frame_), 0);
+//    ROS_INFO_NAMED(log_filter_, "CAN message received. Checking validity...");
+//    ROS_INFO_COND_NAMED(incoming_can_frame_.can_id != NEOPIXEL_CAN_ID_INCOMING || incoming_can_frame_.data[0] != 1,
+//                        log_filter_,
+//                        "The received CAN message did not match the expected acknowledgment message. Waiting again.");
+//  } while (incoming_can_frame_.can_id != NEOPIXEL_CAN_ID_INCOMING || incoming_can_frame_.data[0] != 1);
+//  ROS_INFO_NAMED(log_filter_, "The expected acknowledgement message was received.");
+//  return true;
+//  // for now, this function cannot time out and return false
+//  // this will be implemented in a wrapper lib for can later
+//}

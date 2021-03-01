@@ -3,7 +3,7 @@
 
 constexpr uint8_t DEFAULT_LOOP_RATE{1};
 constexpr uint16_t DEFAULT_NEOPIXEL_CAN_ID_OUTGOING{0x784};
-const std::string DEFAULT_CAN_INTERFACE{"vcan0"};
+const std::string DEFAULT_CAN_INTERFACE{"can0"};
 const std::string DEFAULT_LOG_FILTER{"neopixel"};
 const std::string NODE_NAME{"neopixel_control_server"};
 

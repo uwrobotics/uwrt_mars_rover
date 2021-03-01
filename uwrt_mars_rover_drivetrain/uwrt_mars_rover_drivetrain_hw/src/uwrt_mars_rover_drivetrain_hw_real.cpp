@@ -106,6 +106,39 @@ void UWRTMarsRoverDrivetrainHWReal::write(const ros::Time & /*time*/, const ros:
   }
 }
 
+void UWRTMarsRoverDrivetrainHWReal::doSwitch(const std::list<hardware_interface::ControllerInfo> &start_list,
+              const std::list<hardware_interface::ControllerInfo> &stop_list) {
+  uint8_t MAX_WHILE {100};
+  uint8_t count_while {0};
+  uint8_t target_mode {0};
+  for (const auto &controller : start_list) {
+    for (const auto &claimed : controller.claimed_resources) {
+      for (const auto &joint_name : claimed.resources) {
+        if (claimed.hardware_interface == "hardware_interface::PositionJointInterface") {
+          target_mode = 3;
+        } else if (claimed.hardware_interface == "hardware_interface::VelocityJointInterface") {
+          target_mode = 1;
+        } else if (claimed.hardware_interface == "uwrt_hardware_interface::VoltageJointInterface") {
+          target_mode = 2;
+        }
+      }
+    }
+  }
+  uint8_t received_msg1 {0};
+  uint8_t received_msg2 {0};
+
+  if (target_mode != 0){
+    do{
+      motor_controller_->setUserIntVariable(target_mode, 9);
+      received_msg1 = motor_controller_->readUserIntegerVariable(1);
+      received_msg2 = motor_controller_->readUserIntegerVariable(2);
+      count_while++;
+    }while((received_msg1 != target_mode || received_msg2 != target_mode) && count_while < MAX_WHILE);
+  }
+
+  UWRTRoverHWDrivetrain::doSwitch(start_list, stop_list);
+}
+
 bool UWRTMarsRoverDrivetrainHWReal::loadRoboteqConfigFromParamServer(ros::NodeHandle &robot_hw_nh) {
   roboteq_canopen_id_ = uwrt_mars_rover_utils::getParam<int>(robot_hw_nh, name_, "roboteq_canopen_id", 0x01);
 

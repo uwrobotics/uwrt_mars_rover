@@ -1,8 +1,10 @@
 #include <uwrt_mars_rover_drivetrain_hw/uwrt_mars_rover_drivetrain_hw.h>
+#include <roboteq_driver/CanopenInterface.hpp>
+#include <uwrt_mars_rover_utils/uwrt_params.h>
 
 namespace uwrt_mars_rover_drivetrain_hw {
 
-bool UWRTRoverHWDrivetrain::init(ros::NodeHandle & /*root_nh*/, ros::NodeHandle &robot_hw_nh) {
+bool UWRTRoverHWDrivetrain::init(ros::NodeHandle &root_nh, ros::NodeHandle &robot_hw_nh) {
   if (!loadJointInfoFromParameterServer(robot_hw_nh)) {
     return false;
   }
@@ -16,6 +18,7 @@ bool UWRTRoverHWDrivetrain::init(ros::NodeHandle & /*root_nh*/, ros::NodeHandle 
   this->registerInterface(&joint_position_interface_);
   this->registerInterface(&joint_velocity_interface_);
   this->registerInterface(&joint_voltage_interface_);
+
 
   return true;
 }
@@ -61,6 +64,7 @@ void UWRTRoverHWDrivetrain::doSwitch(const std::list<hardware_interface::Control
   }
 
   // TODO: doswitch to change control modes on roboteq (to go to and from open loop mode)
+
 }
 
 bool UWRTRoverHWDrivetrain::loadJointInfoFromParameterServer(ros::NodeHandle &robot_hw_nh) {

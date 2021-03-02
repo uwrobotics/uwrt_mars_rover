@@ -58,10 +58,14 @@ class DriveToAr {
   double goal_x;
   double goal_y;
 
+  double last_command_time;
+
   // higher these are the more aggressive the approach is to the tag
   // range should be between 0 - 10
   double linear_approach;
   double angular_approach;
+
+  bool janky_hack; // uses theoretical kinematics to calculate rover position, not based on any real encoder / IMU data
 
  public:
   DriveToAr(std::string name, ros::NodeHandle &nh)
@@ -76,7 +80,9 @@ class DriveToAr {
         _y(0),
         _theta(0),
         goal_x(0),
-        goal_y(0) {
+        goal_y(0),
+        last_command_time(ros::Time::now().toSec()),
+        janky_hack(true) {
     std::string vel_topic = uwrt_mars_rover_utils::getParam<std::string>(
         nh, node_name, "cmd_vel", "/uwrt_mars_rover/drivetrain_velocity_controller/cmd_vel");
 
@@ -116,12 +122,16 @@ class DriveToAr {
     goal_y = goal_pose.position.y;
 
     while (euclideanDist() >= DISTANCE_TOLERANCE) {
+      if (janky_hack) {
+        forceUpdatePose(cmd_vel.linear.x, cmd_vel.angular.z);
+      }
+
       if (server.isPreemptRequested() || !ros::ok()) {
         server.setPreempted();
         success = false;
         break;
       }
-
+      
       cmd_vel.linear.x = setLinearVel(linear_approach);
       cmd_vel.linear.y = 0;
       cmd_vel.linear.z = 0;
@@ -131,6 +141,7 @@ class DriveToAr {
       cmd_vel.angular.z = setAngularVel(angular_approach);
 
       velocity_publisher.publish(cmd_vel);
+      last_command_time = ros::Time::now().toSec();
 
       feedback.pos_to_goal = euclideanDist();
 
@@ -153,7 +164,28 @@ class DriveToAr {
     }
   }
 
-  // this is coming from publish_world_odom
+  void forceUpdatePose(double angular_vel, double linear_vel) {
+    if (server_start) {
+      _x = 0;
+      _y = 0;
+      _theta = 0;
+
+      server_start = false;
+    }
+    double dx, dy, d_theta, time_now;
+
+    time_now = ros::Time::now().toSec();
+
+    d_theta = angular_vel * (time_now - last_command_time);
+    _theta += d_theta;
+
+    dx = cos(d_theta) * linear_vel * (time_now - last_command_time);
+    dy = sin(d_theta) * linear_vel * (time_now - last_command_time);
+
+    _x += dx;
+    _y += dy;
+  }
+
   void updatePose(const nav_msgs::OdometryConstPtr &odom) {
     geometry_msgs::Pose pose;
 

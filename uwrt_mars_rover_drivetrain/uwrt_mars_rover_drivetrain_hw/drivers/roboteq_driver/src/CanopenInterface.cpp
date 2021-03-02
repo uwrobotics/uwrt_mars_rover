@@ -147,6 +147,7 @@ bool CanopenInterface::sendCommand(RuntimeCommand command, uint8_t subindex, Dat
                << static_cast<unsigned>(response_frame.data[6]) << "\t"
                << static_cast<unsigned>(response_frame.data[7]));
 
+  
   if (bytes_read != sizeof(struct can_frame)) {
     throw std::runtime_error("Read packet size does not match can frame size in " __FILE__);
   }

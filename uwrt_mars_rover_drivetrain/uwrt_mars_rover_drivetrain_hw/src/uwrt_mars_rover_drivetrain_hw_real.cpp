@@ -128,7 +128,7 @@ void UWRTMarsRoverDrivetrainHWReal::doSwitch(const std::list<hardware_interface:
               const std::list<hardware_interface::ControllerInfo> &stop_list) {
   uint8_t MAX_WHILE {100};
   uint8_t count_while {0};
-  uint8_t target_mode {0};
+  int32_t target_mode {0};
   for (const auto &controller : start_list) {
     for (const auto &claimed : controller.claimed_resources) {
       for (const auto &joint_name : claimed.resources) {
@@ -144,10 +144,11 @@ void UWRTMarsRoverDrivetrainHWReal::doSwitch(const std::list<hardware_interface:
   }
   uint8_t received_msg1 {0};
   uint8_t received_msg2 {0};
-
   if (target_mode != 0){
     do{
       motor_controller_->setUserIntVariable(target_mode, 9);
+      received_msg1=target_mode;
+      received_msg2=target_mode;
       received_msg1 = motor_controller_->readUserIntegerVariable(1);
       received_msg2 = motor_controller_->readUserIntegerVariable(2);
       count_while++;

@@ -17,10 +17,11 @@ class UWRTRoverHWDrivetrain : public hardware_interface::RobotHW {
   struct DrivetrainActuatorJointState {
     double joint_position;
     double joint_velocity;
-    double joint_effort;  // Not Populated and not used. Required for hardware_interface::JointStateHandle.
+    double dummy_joint_effort;  // Not Populated and not used. Required for hardware_interface::JointStateHandle.
 
     double actuator_position;
     double actuator_velocity;
+    double dummy_actuator_effort;  // Not Populated and not used. Required for hardware_interface::JointStateHandle.
   };
 
   struct DrivetrainActuatorJointCommand {

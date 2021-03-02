@@ -167,13 +167,16 @@ void XboxController::joyCallback(const sensor_msgs::Joy::ConstPtr& joy) {
     if (!emergency_stop) {
         switch(econtrol_mode) {
             case DRIVETRAIN:
+            {
                 if (switch_mode) {
                     econtrol_mode = ARM_CONTROL;
                     ROS_INFO_STREAM_NAMED(node_name, "Switched control mode to: " << modes[econtrol_mode]);
                     switch_mode = false;
                 }
                 break;
+            }
             case ARM_CONTROL:
+            {
                 dim.stride = arm_num_joints;
                 dim.size = arm_num_joints;
 
@@ -196,21 +199,23 @@ void XboxController::joyCallback(const sensor_msgs::Joy::ConstPtr& joy) {
                 }
                 
                 break;
+            }
             case WRIST_CONTROL:
+            {
                 // we need to move entire wrist up or turn the wrist
                 dim.stride = arm_num_joints;
                 dim.size = arm_num_joints;
 
-                if (joy->buttons[A_] == 1) {
-                    ROS_INFO_STREAM_NAMED(node_name, "Controlling the wrist in raise mode.");
-                    command = joy->axes[right_stick_up_down_];
+                float rotate = joy->axes[right_stick_left_right_];
+                command = joy->axes[right_stick_up_down_];
+
+                // only rotate if we aren't trying to move up and vice versa
+                if (command < 0.1 || command > -0.1) {
+                    arm_data[left_wrist] = rotate;
+                    arm_data[right_wrist] = -rotate;
+                } else if (rotate < 0.1 || rotate > -0.1) {
                     arm_data[left_wrist] = command;
                     arm_data[right_wrist] = command;
-                } else if (joy->buttons[A_] == 0) {
-                    ROS_INFO_STREAM_NAMED(node_name, "Controlling the wrist in rotate mode.");
-                    command = joy->axes[right_stick_left_right_];
-                    arm_data[left_wrist] = command;
-                    arm_data[right_wrist] = -command;
                 }
 
                 arm_command.layout.dim.push_back(dim);
@@ -225,7 +230,9 @@ void XboxController::joyCallback(const sensor_msgs::Joy::ConstPtr& joy) {
                 }
 
                 break;
+            }
             case SCIENCE_CONTROL:
+            {
                 dim.stride = science_num_joints;
                 dim.size = science_num_joints;
 
@@ -236,7 +243,12 @@ void XboxController::joyCallback(const sensor_msgs::Joy::ConstPtr& joy) {
                 // are we a servo or a motor
                 if (science_joint == 0 || science_joint == 3) {
                     // map -1 to 1 to -pi to pi?? TODO SAR: change depending on servo
-                    command = command * M_PI;
+                    if (joy->buttons[A_] == 1) {
+                        command = M_PI;
+                    }
+                    else if (joy->buttons[B_] == 1) {
+                        command = -M_PI;
+                    }
                 }
 
                 science_data[science_joint] = command;
@@ -253,6 +265,7 @@ void XboxController::joyCallback(const sensor_msgs::Joy::ConstPtr& joy) {
                 }
 
                 break;
+            }
             default:
                 break;
         };

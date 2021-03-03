@@ -15,8 +15,8 @@ Spiral constant default = 0.25 , Angular velocity default = 1m/s
 // TODO: grab these from the parameter server
 constexpr int MAX_SPIRAL_RADIUS{10};
 constexpr int MIN_SPIRAL_RADIUS{1};
-constexpr int LOOP_RATE{10};
-constexpr int PUBLISH_RATE{100};
+constexpr int LOOP_RATE{50};
+constexpr int PUBLISH_RATE{1};
 
 // TODO: grab the max linear speed from parameter server
 constexpr double MAX_LINEAR_SPEED{5};
@@ -136,6 +136,8 @@ class SpiralSearch {
       } else if (linear_velocity >= MAX_LINEAR_SPEED) {
         ROS_WARN_STREAM_NAMED(node_name,
                               "Reached max linear speed so unable to complete spiral, try decreasing spiral constant");
+        server.setAborted(result);
+      } else {
         server.setAborted(result);
       }
     }

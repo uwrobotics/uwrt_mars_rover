@@ -19,8 +19,8 @@ Spiral constant default = 0.25 , Angular velocity default = 1m/s
 constexpr double DISTANCE_TOLERANCE{0.5};
 constexpr double MAX_LINEAR_SPEED{5};
 constexpr double MAX_ANGULAR_SPEED{2.5};
-constexpr int LISTEN_DURATION{10};
-constexpr int PUBLISH_RATE{10};
+constexpr int LISTEN_DURATION{50};
+constexpr int PUBLISH_RATE{1};
 constexpr double DEFAULT_LINEAR_APPROACH{3.0};
 constexpr double DEFAULT_ANGULAR_APPROACH{1.5};
 
@@ -179,8 +179,8 @@ class DriveToAr {
     d_theta = angular_vel * (time_now - last_command_time);
     _theta += d_theta;
 
-    dx = cos(d_theta) * linear_vel * (time_now - last_command_time);
-    dy = sin(d_theta) * linear_vel * (time_now - last_command_time);
+    dx = cos(_theta) * linear_vel * (time_now - last_command_time);
+    dy = sin(_theta) * linear_vel * (time_now - last_command_time);
 
     _x += dx;
     _y += dy;

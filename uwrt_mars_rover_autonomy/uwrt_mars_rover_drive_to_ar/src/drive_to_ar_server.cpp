@@ -16,7 +16,7 @@ Spiral constant default = 0.25 , Angular velocity default = 1m/s
 #include <cmath>
 
 // 0.5m within goal is considered accurate enough
-constexpr double DISTANCE_TOLERANCE{0.5};
+constexpr double DISTANCE_TOLERANCE{1.5};
 constexpr double MAX_LINEAR_SPEED{5};
 constexpr double MAX_ANGULAR_SPEED{2.5};
 constexpr int LISTEN_DURATION{50};

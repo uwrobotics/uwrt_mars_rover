@@ -123,8 +123,7 @@ class SpiralSearch {
 
         loop_rate.sleep();
       }
-
-      result.vel_linear = vel_msg.linear.x;
+      result.spiral_complete = false;
 
       // this stops the turtle
       vel_msg.linear.x = 0;
@@ -132,6 +131,7 @@ class SpiralSearch {
       velocity_publisher.publish(vel_msg);
 
       if (final_circle_dist >= circumference) {
+        result.spiral_complete = true;
         server.setSucceeded(result);
       } else if (linear_velocity >= MAX_LINEAR_SPEED) {
         ROS_WARN_STREAM_NAMED(node_name,

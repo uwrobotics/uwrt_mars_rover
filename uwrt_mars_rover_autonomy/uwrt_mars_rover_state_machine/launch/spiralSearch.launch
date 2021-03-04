@@ -1,0 +1,6 @@
+  
+<launch>
+
+    <node pkg="uwrt_mars_rover_spiral" type="uwrt_mars_rover_spiral_server" name="spiralSearch_server" output="screen"/>
+
+</launch>

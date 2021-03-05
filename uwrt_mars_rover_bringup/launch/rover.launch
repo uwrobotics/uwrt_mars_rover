@@ -1,30 +1,35 @@
+<?xml version="1.0"?>
 <launch>
-    <arg name="control_mode"
+    <arg name="control_mode" default="drivetrain_only"
          doc="Control mode that the rover should start in.
               Valid options are: [arm_mission, science_mission, arm_only, science_only, drivetrain_only]"/>
     <arg name="use_realtime_kernel"
          default="true"
          doc="A bool that controls whether or not to set realtime thread priority and lock memory pages. This can only
               be enabled if you are using a realtime linux kernel. Valid options are: [true, false]"/>
-
+    <arg name="control_option" default="drivetrain_only"/>
     <include file="$(find uwrt_mars_rover_control)/launch/rover_control.launch" pass_all_args="true"/>
 
-    <group if="$(eval control_mode == 'autonomy_mission')">
+    <group if="$(eval control_option == 'autonomy_mission')">
         <include file="$(find uwrt_mars_rover_localization)/launch/vectornav300.launch">
             <!--Additional params can be found in uwrt_mars_rover_autonomy/uwrt_mars_rover_localization/cfg/vn300.yaml-->
             <!--Need to be part of the dialout group to run this node, see launch file for instructions-->
             <arg name="frame_id" value="imu"/>
         </include>
-        <!-- TODO: Add autonomy state machine node -->
         <include file="$(find uwrt_mars_rover_drive_to_ar)/launch/drive_to_ar.launch"/>
+        <!-- <include file="$(find spinnaker_camera_driver)/launch/camera.launch"/> -->
+        <!-- <include file="$(find zed_wrapper)/launch/zed.launch"/> -->
+        <include file="$(find uwrt_mars_rover_state_machine)/launch/state_machine.launch"/>
+        <include file="$(find uwrt_mars_rover_bringup)/launch/cameras.launch"/>
         <include file="$(find uwrt_mars_rover_spiral)/launch/spiralSearch.launch"/>
+	<node pkg="uwrt_mars_rover_neopixel" type="node" name="neopixel_controller" output="screen"/>
     </group>
 
-    <group if="$(eval control_mode == 'science_mission')">
+    <group if="$(eval control_option == 'science_mission')">
         <node pkg="science_node" type="science_node" name="science_controller" output="screen"/>
     </group>
 
-    <group if="$(eval control_mode == 'arm_mission')">
+    <group if="$(eval control_option == 'arm_mission')">
         <node pkg="uwrt_sar_arm" type="uwrt_sar_arm_node" name="arm_controller" output="screen"/>
     </group>
 

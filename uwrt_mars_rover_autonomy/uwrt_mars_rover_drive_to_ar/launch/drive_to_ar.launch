@@ -1,16 +1,16 @@
 <launch>
     <arg name="odom" value="map/Odom"/>
     <arg name="cmd_vel" value="/uwrt_mars_rover/drivetrain_velocity_controller/cmd_vel"/>
-    <arg name="angle_approach" value="1.5"/>
-    <arg name="linear_approach" value="3.0"/>
+    <arg name="angle_approach" value="1.0"/>
+    <arg name="linear_approach" value="2.0"/>
 
     <include file="$(find uwrt_mars_rover_ar_tracker)/launch/start_ar_tracker.launch"/>
 
-    <node pkg="uwrt_mars_rover_drive_to_ar" type="uwrt_mars_rover_drive_to_ar_server" name="drive_to_arSearch_server" output="screen">
-        <param name="odom_topic" value="${odom}"/>
-        <param name="cmd_vel" value="${cmd_vel}"/>
-        <param name="linear_approach" value="${linear_approach}"/>
-        <param name="angular_approach" value="${angle_approach}"/>
+    <node pkg="uwrt_mars_rover_drive_to_ar" type="uwrt_mars_rover_drive_to_ar_server" name="drive_to_ar_server" output="screen">
+        <param name="odom_topic" value="$(arg odom)"/>
+        <param name="cmd_vel" value="$(arg cmd_vel)"/>
+        <param name="linear_approach" value="$(arg linear_approach"/>
+        <param name="angular_approach" value="$(arg angle_approach)"/>
     </node>
 
 </launch>

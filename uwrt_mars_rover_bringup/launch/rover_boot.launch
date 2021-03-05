@@ -1,0 +1,9 @@
+<launch>
+    <node name="can_bringup" pkg="uwrt_mars_rover_bringup" type="bringup_can.sh" output="screen"/>
+
+    <include file="$(find uwrt_mars_rover_bringup)/launch/rover.launch">
+        <arg name="control_mode" value="drivetrain_only"/>
+        <arg name="use_realtime_kernel" value="true"/>
+	<arg name="control_option" value="autonomy_mission"/>
+    </include>
+</launch>

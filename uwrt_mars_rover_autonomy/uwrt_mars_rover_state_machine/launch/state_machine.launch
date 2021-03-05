@@ -1,0 +1,6 @@
+  
+<launch>
+
+    <node pkg="uwrt_mars_rover_state_machine" type="uwrt_mars_rover_state_machine_server" name="stateMachine_server" output="screen"/>
+
+</launch>

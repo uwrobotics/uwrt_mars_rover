@@ -113,7 +113,7 @@ class StateMachine {
         case STATE_INIT_SPIRAL_SEARCH:
         {
           spiral_goal.radius = 3;
-          spiral_goal.angular_velocity = 2;
+          spiral_goal.angular_velocity = 0.5;
           spiral_goal.spiral_constant = 0.1;
           if (start_server) {
             eState = STATE_SEND_GOAL_SPIRAL_SEARCH;
@@ -186,7 +186,7 @@ class StateMachine {
         {
           // backtrack here
           ROS_WARN_STREAM_NAMED(node_name, "FAILED TO REACH GOAL AUTONOMOUSLY.......");
-          if (backtrack_count++ < 3)
+          if (backtrack_count < 3)
           {
             ROS_WARN_STREAM_NAMED(node_name, "RETRYING ATTEMPT " << backtrack_count << ".......");
             eState = STATE_BACKTRACK;
@@ -204,6 +204,7 @@ class StateMachine {
           spiral_finished = false;
           ar_update = false;
           command_time = ros::Time::now().toSec();
+          backtrack_count++;
           // set cmd vel 0
           eState = STATE_SPIRAL_SEARCH_AND_DETECT;
           break;
@@ -217,6 +218,32 @@ class StateMachine {
         default:
           break;
       }
+    }
+
+    bool flash_leds(double time) {
+      double time_now = ros::Time::now().toSec();
+      double time_curr = ros::Time::now().toSec();
+      double value = 2;
+
+      ros::Rate loop{2};
+
+      while ((time_curr - time_now) < time && ros::ok()) {
+        srv.request.requested_mode.value = value;
+        if (!neopixel_client.call(srv)) {
+          ROS_WARN_STREAM_NAMED(node_name, "Failed to send LED command " << value);
+          return false;
+        }
+
+        if (value == 2) {
+          value = 1;
+        } else {
+          value = 2;
+        }
+        loop.sleep();
+        time_curr = ros::Time::now().toSec();
+      }
+
+      return true;
     }
 
     void ar_detection(const ar_track_alvar_msgs::AlvarMarkers::ConstPtr& ar_tags) {

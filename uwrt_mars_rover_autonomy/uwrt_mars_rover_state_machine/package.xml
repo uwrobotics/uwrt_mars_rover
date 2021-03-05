@@ -16,7 +16,6 @@
   <depend>uwrt_mars_rover_utils</depend>
   <depend>uwrt_mars_rover_drive_to_ar</depend>
   <depend>uwrt_mars_rover_spiral</depend>
-  <depend>uwrt_mars_rover_drive_to_ar</depend>
   <depend>uwrt_mars_rover_msgs</depend>
   <depend>ar_track_alvar_msgs</depend>
 

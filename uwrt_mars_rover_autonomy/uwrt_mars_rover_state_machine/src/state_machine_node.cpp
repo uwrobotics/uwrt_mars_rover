@@ -1,11 +1,11 @@
 
 #include <ros/ros.h>
 #include <geometry_msgs/PoseStamped.h>
-#include <actionlib/server/simple_action_client.h>
+#include <actionlib/client/simple_action_client.h>
 #include <ar_track_alvar_msgs/AlvarMarkers.h>
 #include <uwrt_mars_rover_spiral/spiralSearchAction.h>
 #include <uwrt_mars_rover_drive_to_ar/driveToArAction.h>
-#include <uwrt_mars_rover_state_machine/state_machine.h>
+#include "uwrt_mars_rover_state_machine/state_machine.h"
 #include <uwrt_mars_rover_msgs/set_state.h>
 
 #include <cmath>
@@ -53,6 +53,8 @@ class StateMachine {
     bool ar_finished;
     bool ar_update;
 
+    std::string node_name;
+
     double command_time;
 
 
@@ -79,7 +81,7 @@ class StateMachine {
 
     void run() {
 
-      switch(eStates)
+      switch(eState)
       {
         case STATE_INIT:
         {
@@ -94,7 +96,7 @@ class StateMachine {
           spiral_finished = false;
           ar_finished = false;
 
-          srv.req.requested_mode.value = 0;
+          srv.request.requested_mode.value = 0;
           if (!neopixel_client.call(srv)) {
             backtrack_count = 3;
             ROS_WARN_STREAM_NAMED(node_name, "FAILED TO SET NEOPIXEL STATE");
@@ -123,8 +125,8 @@ class StateMachine {
           command_time = ros::Time::now().toSec();
           spiral_client.sendGoal(spiral_goal,
                 boost::bind(&StateMachine::spiral_server_callback, this, _1, _2),
-                Client::SimpleActiveCallback(),
-                Client::SimpleFeedbackCallback());
+                actionlib::SimpleActionClient<uwrt_mars_rover_spiral::spiralSearchAction>::SimpleActiveCallback(),
+                actionlib::SimpleActionClient<uwrt_mars_rover_spiral::spiralSearchAction>::SimpleFeedbackCallback());
           eState = STATE_SPIRAL_SEARCH_AND_DETECT;
           break;
         }
@@ -136,8 +138,8 @@ class StateMachine {
             command_time = ros::Time::now().toSec();
             ar_client.sendGoal(ar_goal,
                 boost::bind(&StateMachine::ar_server_callback, this, _1, _2),
-                Client::SimpleActiveCallback(),
-                Client::SimpleFeedbackCallback());
+                actionlib::SimpleActionClient<uwrt_mars_rover_drive_to_ar::driveToArAction>::SimpleActiveCallback(),
+                actionlib::SimpleActionClient<uwrt_mars_rover_drive_to_ar::driveToArAction>::SimpleFeedbackCallback());
             spiral_client.cancelAllGoals();
             eState = STATE_DRIVE_TO_AR_TAGS;
           }
@@ -164,7 +166,7 @@ class StateMachine {
         }
         case STATE_FLASH_LEDS:
         {
-          srv.req.requested_mode.value = 2;
+          srv.request.requested_mode.value = 2;
           if (neopixel_client.call(srv)) {
             eState = STATE_SUCCESS;
           }
@@ -198,7 +200,7 @@ class StateMachine {
           // spin gimbal to detect ar tags
           // for now just see if we have any ar tags
           ar_count = 0;
-          ar_tags->markers.clear();
+          ar_goal.markers.clear();
           spiral_finished = false;
           ar_update = false;
           command_time = ros::Time::now().toSec();
@@ -208,7 +210,7 @@ class StateMachine {
         }
         case STATE_WATSON:
         {
-          server_start = false;
+          start_server = false;
           eState = STATE_INIT;
           break;
         }
@@ -245,21 +247,21 @@ class StateMachine {
       }
     }
 
-    void spiral_server_callback(const uwrt_mars_rover_spiral::spiralSearchResultConstPtr & spiral_result) {
-      if (spiral_result->sprial_complete) {
+    void spiral_server_callback(const actionlib::SimpleClientGoalState & state, const uwrt_mars_rover_spiral::spiralSearchResult::ConstPtr & spiral_result) {
+      if (spiral_result->spiral_complete) {
         // did not detect ar tags 
         spiral_finished = true;
       }
     }
 
-    void ar_server_callback(const uwrt_mars_rover_spiral::driveToArResultConstPtr & ar_result) {
+    void ar_server_callback(const actionlib::SimpleClientGoalState & state, const uwrt_mars_rover_drive_to_ar::driveToArResult::ConstPtr & ar_result) {
       // are we within 3 m of the ar tag
       if (ar_result->pos_to_goal < 3) {
         ar_finished = true;
       }
     }
 
-    bool setState(uwrt_mars_rover_drive_to_ar::state_machine::Request &req, uwrt_mars_rover_drive_to_ar::state_machine::Response &res)
+    bool setState(uwrt_mars_rover_state_machine::state_machine::Request &req, uwrt_mars_rover_state_machine::state_machine::Response &res)
     {
       if (req.requested_mode == 1) {
         start_server = true;
@@ -267,7 +269,7 @@ class StateMachine {
       res.success = true;
       return true;
     }
-}
+};
 
 
 

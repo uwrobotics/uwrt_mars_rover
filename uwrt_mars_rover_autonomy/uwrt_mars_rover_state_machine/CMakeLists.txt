@@ -1,7 +1,8 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(uwrt_mars_rover_spiral)
+project(uwrt_mars_rover_state_machine)
 
 find_package(catkin REQUIRED COMPONENTS 
+    roscpp
     ar_track_alvar_msgs
     geometry_msgs
     message_generation
@@ -15,6 +16,7 @@ find_package(catkin REQUIRED COMPONENTS
 find_package(Boost REQUIRED COMPONENTS system)
 
 add_service_files(
+    DIRECTORY srv
     FILES
     state_machine.srv
 )
@@ -28,7 +30,7 @@ catkin_package(
     CATKIN_DEPENDS
     ar_track_alvar_msgs
     geometry_msgs
-    message_generation
+    message_runtime
     std_msgs
     uwrt_mars_rover_utils
     uwrt_mars_rover_spiral
@@ -50,6 +52,7 @@ target_link_libraries(
 
 add_dependencies(
     ${PROJECT_NAME}_server
+    ${PROJECT_NAME}_gencpp
     ${${PROJECT_NAME}_EXPORTED_TARGETS}
     ${catkin_EXPORTED_TARGETS}
 )

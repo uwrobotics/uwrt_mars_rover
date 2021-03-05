@@ -19,8 +19,8 @@ constexpr int LOOP_RATE{50};
 constexpr int PUBLISH_RATE{1};
 
 // TODO: grab the max linear speed from parameter server
-constexpr double MAX_LINEAR_SPEED{5};
-constexpr double MAX_ANGULAR_VEL{3};
+constexpr double MAX_LINEAR_SPEED{2.5};
+constexpr double MAX_ANGULAR_VEL{2};
 constexpr double MAX_SPIRAL_CONSTANT{0.25};
 
 class SpiralSearch {

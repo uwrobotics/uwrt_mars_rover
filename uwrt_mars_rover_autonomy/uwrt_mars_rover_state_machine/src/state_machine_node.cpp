@@ -13,7 +13,7 @@
 
 // TODO: grab these from the parameter server
 constexpr int LISTEN_DURATION{10};
-constexpr int COMMAND_TIMEOUT{15};
+ros::Duration COMMAND_TIMEOUT(15);
 
 class StateMachine {
   private:
@@ -48,6 +48,7 @@ class StateMachine {
 
     int ar_count;
     int backtrack_count;
+    int ar_num_detected;
     bool start_server;
     bool spiral_finished;
     bool ar_finished;
@@ -55,7 +56,7 @@ class StateMachine {
 
     std::string node_name;
 
-    double command_time;
+    ros::Time command_time;
 
 
 
@@ -72,7 +73,8 @@ class StateMachine {
       ar_finished(false),
       backtrack_count(0),
       command_time(0),
-      ar_update(false)
+      ar_update(false),
+      ar_num_detected(0)
     {
       ar_tracker = nh.subscribe("/ar_pose_marker", LISTEN_DURATION, &StateMachine::ar_detection, this);
       service_ = nh.advertiseService("state_machine", &StateMachine::setState, this);
@@ -86,6 +88,7 @@ class StateMachine {
         case STATE_INIT:
         {
           ar_count = 0;
+	  ar_num_detected = 0;
           ar_goal.markers.clear();
           ar_goal.num_of_tags = 0;
 
@@ -97,6 +100,7 @@ class StateMachine {
           ar_finished = false;
 
           srv.request.requested_mode.value = 0;
+	  ros::Duration(1).sleep();
           if (!neopixel_client.call(srv)) {
             backtrack_count = 3;
             ROS_WARN_STREAM_NAMED(node_name, "FAILED TO SET NEOPIXEL STATE");
@@ -112,36 +116,35 @@ class StateMachine {
         }
         case STATE_INIT_SPIRAL_SEARCH:
         {
-          spiral_goal.radius = 3;
-          spiral_goal.angular_velocity = 0.5;
-          spiral_goal.spiral_constant = 0.1;
+          spiral_goal.radius = 2.2;
+          spiral_goal.angular_velocity = 1.2;
+          spiral_goal.spiral_constant = 0.04;
           if (start_server) {
+            ROS_INFO_STREAM_NAMED(node_name, "SENDING SPIRAL GOAL");
             eState = STATE_SEND_GOAL_SPIRAL_SEARCH;
           }
           break;
         }
         case STATE_SEND_GOAL_SPIRAL_SEARCH:
         {
-          command_time = ros::Time::now().toSec();
+          command_time = ros::Time::now();
           spiral_client.sendGoal(spiral_goal,
                 boost::bind(&StateMachine::spiral_server_callback, this, _1, _2),
                 actionlib::SimpleActionClient<uwrt_mars_rover_spiral::spiralSearchAction>::SimpleActiveCallback(),
                 actionlib::SimpleActionClient<uwrt_mars_rover_spiral::spiralSearchAction>::SimpleFeedbackCallback());
+	  ROS_INFO_STREAM_NAMED(node_name, "ATTEMPTING TO DETECT AR TAGS");
           eState = STATE_SPIRAL_SEARCH_AND_DETECT;
           break;
         }
         case STATE_SPIRAL_SEARCH_AND_DETECT:
         {
-          double time_now = ros::Time::now().toSec();
+	  ros::Time time_now = ros::Time::now();
           // check ar tags
-          if (ar_goal.num_of_tags > 0) {
-            command_time = ros::Time::now().toSec();
-            ar_client.sendGoal(ar_goal,
-                boost::bind(&StateMachine::ar_server_callback, this, _1, _2),
-                actionlib::SimpleActionClient<uwrt_mars_rover_drive_to_ar::driveToArAction>::SimpleActiveCallback(),
-                actionlib::SimpleActionClient<uwrt_mars_rover_drive_to_ar::driveToArAction>::SimpleFeedbackCallback());
+          if (ar_count > 2) {
+            command_time = ros::Time::now();
             spiral_client.cancelAllGoals();
-            eState = STATE_DRIVE_TO_AR_TAGS;
+	    ar_count = 0;
+	    eState = STATE_AR_TAGS_DETECTED;
           }
 
           if (spiral_finished || (time_now - command_time) > COMMAND_TIMEOUT) {
@@ -150,9 +153,29 @@ class StateMachine {
           }
           break;
         }
+	case STATE_AR_TAGS_DETECTED:
+	{
+	  ros::Duration(1).sleep();
+	  ros::Time time_now = ros::Time::now();
+
+	  if ((time_now - command_time) > COMMAND_TIMEOUT) {
+		eState = STATE_SEND_GOAL_SPIRAL_SEARCH;
+	  }
+
+	  else if (ar_goal.num_of_tags > 0) {
+	  	ROS_INFO_STREAM_NAMED(node_name, "DRIVING TO AR TAGS");
+		command_time = ros::Time::now();
+	  	ar_client.sendGoal(ar_goal,
+             		boost::bind(&StateMachine::ar_server_callback, this, _1, _2),
+             		actionlib::SimpleActionClient<uwrt_mars_rover_drive_to_ar::driveToArAction>::SimpleActiveCallback(),
+             	actionlib::SimpleActionClient<uwrt_mars_rover_drive_to_ar::driveToArAction>::SimpleFeedbackCallback());
+          	eState = STATE_DRIVE_TO_AR_TAGS;
+	  }
+	  break;
+	}
         case STATE_DRIVE_TO_AR_TAGS:
         {
-          double time_now = ros::Time::now().toSec();
+      	  ros::Time time_now = ros::Time::now();
           if (ar_finished) {
             eState = STATE_FLASH_LEDS;
           }
@@ -166,10 +189,9 @@ class StateMachine {
         }
         case STATE_FLASH_LEDS:
         {
-          srv.request.requested_mode.value = 2;
-          if (neopixel_client.call(srv)) {
+          if (flash_leds(10)) {
             eState = STATE_SUCCESS;
-          }
+      	  }
           else {
             ROS_WARN_STREAM_NAMED(node_name, "FAILED TO CALL NEOPIXEL SERVER, eState = STATE_FLASH_LEDS");
             eState = STATE_FAILURE;
@@ -200,10 +222,11 @@ class StateMachine {
           // spin gimbal to detect ar tags
           // for now just see if we have any ar tags
           ar_count = 0;
+	  ar_num_detected = 0;
           ar_goal.markers.clear();
           spiral_finished = false;
           ar_update = false;
-          command_time = ros::Time::now().toSec();
+          command_time = ros::Time::now();
           backtrack_count++;
           // set cmd vel 0
           eState = STATE_SPIRAL_SEARCH_AND_DETECT;
@@ -221,13 +244,14 @@ class StateMachine {
     }
 
     bool flash_leds(double time) {
-      double time_now = ros::Time::now().toSec();
-      double time_curr = ros::Time::now().toSec();
+      ros::Time time_now = ros::Time::now();
+      ros::Time time_curr = ros::Time::now();
+      ros::Duration d(time);
       double value = 2;
 
       ros::Rate loop{2};
 
-      while ((time_curr - time_now) < time && ros::ok()) {
+      while ((time_curr - time_now) < d && ros::ok()) {
         srv.request.requested_mode.value = value;
         if (!neopixel_client.call(srv)) {
           ROS_WARN_STREAM_NAMED(node_name, "Failed to send LED command " << value);
@@ -240,7 +264,7 @@ class StateMachine {
           value = 2;
         }
         loop.sleep();
-        time_curr = ros::Time::now().toSec();
+        time_curr = ros::Time::now();
       }
 
       return true;
@@ -251,7 +275,7 @@ class StateMachine {
       int size = ar_tags->markers.size();
 
       // detected different number of tags so lets backtrack and determine what to do
-      if (size != ar_goal.num_of_tags && ar_count == 5) {
+      if (size != ar_goal.num_of_tags && ar_num_detected == 10) {
         // this could be cause we approached the pole or gate and its not in vision anymore
         // trust that we saw the tag and just go with it
         if (size != 0)
@@ -261,12 +285,17 @@ class StateMachine {
         }
       }
 
-      // capture 5 events before we say that we have found tags
-      if (size > 0 && ar_count < 5) {
+      // capture 2 events before we say that we have found tags
+      if (size > 0 && ar_count < 3) {
         ar_count = ar_count + 1;
       }
+	
+      if (size == 1) {
+	      ar_num_detected++;
+      }
 
-      if (ar_count == 5) {
+
+      if (ar_num_detected == 10) {
         for (int i = 0; i < ar_tags->markers.size(); i++) {
           ar_goal.markers.push_back(ar_tags->markers[i].pose.pose);
         }
@@ -311,6 +340,7 @@ int main(int argc, char **argv) {
   while (ros::ok())
   {
     state_machine.run();
+    ros::spinOnce();
     loop_rate.sleep();
   }
 

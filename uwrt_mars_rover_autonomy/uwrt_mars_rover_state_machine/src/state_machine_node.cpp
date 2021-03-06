@@ -88,7 +88,7 @@ class StateMachine {
         case STATE_INIT:
         {
           ar_count = 0;
-	  ar_num_detected = 0;
+	        ar_num_detected = 0;
           ar_goal.markers.clear();
           ar_goal.num_of_tags = 0;
 
@@ -100,7 +100,7 @@ class StateMachine {
           ar_finished = false;
 
           srv.request.requested_mode.value = 0;
-	  ros::Duration(1).sleep();
+	        ros::Duration(1).sleep();
           if (!neopixel_client.call(srv)) {
             backtrack_count = 3;
             ROS_WARN_STREAM_NAMED(node_name, "FAILED TO SET NEOPIXEL STATE");
@@ -127,24 +127,28 @@ class StateMachine {
         }
         case STATE_SEND_GOAL_SPIRAL_SEARCH:
         {
+          ar_num_detected = 0;
+          ar_goal.markers.clear();
+          ar_goal.num_of_tags = 0;
           command_time = ros::Time::now();
           spiral_client.sendGoal(spiral_goal,
                 boost::bind(&StateMachine::spiral_server_callback, this, _1, _2),
                 actionlib::SimpleActionClient<uwrt_mars_rover_spiral::spiralSearchAction>::SimpleActiveCallback(),
                 actionlib::SimpleActionClient<uwrt_mars_rover_spiral::spiralSearchAction>::SimpleFeedbackCallback());
-	  ROS_INFO_STREAM_NAMED(node_name, "ATTEMPTING TO DETECT AR TAGS");
+	        ROS_INFO_STREAM_NAMED(node_name, "ATTEMPTING TO DETECT AR TAGS");
           eState = STATE_SPIRAL_SEARCH_AND_DETECT;
           break;
         }
         case STATE_SPIRAL_SEARCH_AND_DETECT:
         {
-	  ros::Time time_now = ros::Time::now();
+	        ros::Time time_now = ros::Time::now();
           // check ar tags
           if (ar_count > 2) {
             command_time = ros::Time::now();
             spiral_client.cancelAllGoals();
-	    ar_count = 0;
-	    eState = STATE_AR_TAGS_DETECTED;
+	          ar_count = 0;
+	          eState = STATE_AR_TAGS_DETECTED;
+            ros::Duration(1).sleep();
           }
 
           if (spiral_finished || (time_now - command_time) > COMMAND_TIMEOUT) {
@@ -153,34 +157,41 @@ class StateMachine {
           }
           break;
         }
-	case STATE_AR_TAGS_DETECTED:
-	{
-	  ros::Duration(1).sleep();
-	  ros::Time time_now = ros::Time::now();
+	      case STATE_AR_TAGS_DETECTED:
+	      {
+          ros::Time time_now = ros::Time::now();
 
-	  if ((time_now - command_time) > COMMAND_TIMEOUT) {
-		eState = STATE_SEND_GOAL_SPIRAL_SEARCH;
-	  }
+          if ((time_now - command_time) > COMMAND_TIMEOUT) {
+            eState = STATE_SEND_GOAL_SPIRAL_SEARCH;
+          }
 
-	  else if (ar_goal.num_of_tags > 0) {
-	  	ROS_INFO_STREAM_NAMED(node_name, "DRIVING TO AR TAGS");
-		command_time = ros::Time::now();
-	  	ar_client.sendGoal(ar_goal,
-             		boost::bind(&StateMachine::ar_server_callback, this, _1, _2),
-             		actionlib::SimpleActionClient<uwrt_mars_rover_drive_to_ar::driveToArAction>::SimpleActiveCallback(),
-             	actionlib::SimpleActionClient<uwrt_mars_rover_drive_to_ar::driveToArAction>::SimpleFeedbackCallback());
-          	eState = STATE_DRIVE_TO_AR_TAGS;
-	  }
-	  break;
-	}
+          else if (ar_goal.num_of_tags > 0) {
+            ROS_INFO_STREAM_NAMED(node_name, "DRIVING TO AR TAGS");
+            command_time = ros::Time::now();
+            ar_client.sendGoal(ar_goal,
+                  boost::bind(&StateMachine::ar_server_callback, this, _1, _2),
+                  actionlib::SimpleActionClient<uwrt_mars_rover_drive_to_ar::driveToArAction>::SimpleActiveCallback(),
+                  actionlib::SimpleActionClient<uwrt_mars_rover_drive_to_ar::driveToArAction>::SimpleFeedbackCallback());
+            eState = STATE_DRIVE_TO_AR_TAGS;
+          }
+          break;
+	      }
         case STATE_DRIVE_TO_AR_TAGS:
         {
       	  ros::Time time_now = ros::Time::now();
           if (ar_finished) {
             eState = STATE_FLASH_LEDS;
           }
-          // we should be checking if we detected another ar tag or if we are stuck or if we are off track somehow 
-          if ((time_now - command_time) > COMMAND_TIMEOUT || ar_update)
+          // we should be checking if we detected another ar tag or if we are stuck or if we are off track somehow
+          if (ar_update) {
+            ar_client.cancelAllGoals();
+            // clear ar data
+            ar_num_detected = 0;
+            ar_goal.markers.clear();
+            ar_goal.num_of_tags = 0;
+            eState = STATE_AR_TAGS_DETECTED;
+          }
+          else if ((time_now - command_time) > COMMAND_TIMEOUT)
           {
             ar_client.cancelAllGoals();
             eState = STATE_FAILURE;
@@ -222,8 +233,9 @@ class StateMachine {
           // spin gimbal to detect ar tags
           // for now just see if we have any ar tags
           ar_count = 0;
-	  ar_num_detected = 0;
+	        ar_num_detected = 0;
           ar_goal.markers.clear();
+          ar_goal.num_of_tags = 0;
           spiral_finished = false;
           ar_update = false;
           command_time = ros::Time::now();

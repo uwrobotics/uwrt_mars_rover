@@ -5,6 +5,7 @@
 #include <sys/ioctl.h>
 
 #include <roboteq_driver/CanopenInterface.hpp>
+#include <uwrt_mars_rover_utils/uwrt_can.h>
 
 namespace roboteq {
 
@@ -74,66 +75,34 @@ const std::unordered_map<RuntimeQuery, uint16_t> CanopenInterface::QUERY_CANOPEN
 
 CanopenInterface::CanopenInterface(canid_t roboteq_can_id, const std::string& ifname)
     : roboteq_can_id_(roboteq_can_id) {
-  if ((socket_handle_ = socket(PF_CAN, SOCK_RAW, CAN_RAW)) < 0) {
-    throw std::runtime_error("Error while opening CAN socket in " __FILE__);
-  }
+  
+  socket_handle_ = socket(PF_CAN, SOCK_RAW, CAN_RAW);
 
-  struct ifreq ifr {};
+  std::vector<uint32_t> ids;
+  ids.push_back(SDO_COB_ID_OFFSET + CanopenInterface::roboteq_can_id_);
+  ids.push_back(SDO_RESPONSE_COB_ID_OFFSET + CanopenInterface::roboteq_can_id_);
 
-  std::strcpy(ifr.ifr_name, ifname.c_str());
-  ioctl(socket_handle_, SIOCGIFINDEX, &ifr);
-
-  struct sockaddr_can addr {};
-
-  addr.can_family = AF_CAN;
-  addr.can_ifindex = ifr.ifr_ifindex;
-
-  ROS_DEBUG_STREAM(ifname << " at index " << ifr.ifr_ifindex);
-
-  std::array<struct can_filter, 2> can_receive_filter{};
-
-  can_receive_filter[0].can_id = SDO_COB_ID_OFFSET + roboteq::CanopenInterface::roboteq_can_id_;
-  can_receive_filter[0].can_mask = (CAN_EFF_FLAG | CAN_RTR_FLAG | CAN_EFF_MASK);
-  can_receive_filter[1].can_id = SDO_RESPONSE_COB_ID_OFFSET + roboteq::CanopenInterface::roboteq_can_id_;
-  can_receive_filter[1].can_mask = (CAN_EFF_FLAG | CAN_RTR_FLAG | CAN_EFF_MASK);
-
-  //   struct timeval receive_timeout = {.tv_usec=500000}; //0.5 seconds
-  // setsockopt(socket_handle_, SOL_SOCKET, SO_RCVTIMEO, &receive_timeout, sizeof(receive_timeout));
-
-  int socket_opt_ret_val = setsockopt(socket_handle_, SOL_CAN_RAW, CAN_RAW_FILTER, can_receive_filter.data(),
-                                      can_receive_filter.size() * sizeof(struct can_filter));
-  if (socket_opt_ret_val != 0) {
-    throw std::runtime_error("Error setting socket options in " __FILE__);
-  }
-
-  // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast): reinterpret cast required by syscall
-  if (bind(socket_handle_, reinterpret_cast<struct sockaddr*>(&addr), sizeof(addr)) < 0) {
-    throw std::runtime_error("Error binding socket in " __FILE__);
-  }
+  uwrt_mars_rover_utils::UWRTCANWrapper wrapper_("roboteq", ifname, false);
+  wrapper_.init(ids);
 }
 
 template <typename DataType>
 bool CanopenInterface::sendCommand(RuntimeCommand command, uint8_t subindex, DataType data) {
-  struct can_frame command_frame {};
 
-  command_frame.can_id = SDO_COB_ID_OFFSET + roboteq::CanopenInterface::roboteq_can_id_;
-  command_frame.can_dlc = CAN_FRAME_SIZE_BYTES;
-  command_frame.data[0] = (SDO_COMMAND_ID << 4) | ((SDO_MAX_DATA_SIZE - sizeof(DataType)) << 2);
-  command_frame.data[1] = CanopenInterface::COMMAND_CANOPEN_ID_MAP_.at(command);
-  command_frame.data[2] = CanopenInterface::COMMAND_CANOPEN_ID_MAP_.at(command) >> bytesToBits(1);
-  command_frame.data[3] = subindex;
-  command_frame.data[4] = data;
+  std::vector<uint8_t> package;
+  package[0] = (SDO_COMMAND_ID << 4) | ((SDO_MAX_DATA_SIZE - sizeof(DataType)) << 2);
+  package[1] = CanopenInterface::COMMAND_CANOPEN_ID_MAP_.at(command);
+  package[2] = CanopenInterface::COMMAND_CANOPEN_ID_MAP_.at(command) >> bytesToBits(1);
+  package[3] = subindex;
+  package[4] = data;
   // NOLINTNEXTLINE(readability-magic-numbers, cppcoreguidelines-avoid-magic-numbers)
-  command_frame.data[5] = data >> bytesToBits(1);
+  package[5] = data >> bytesToBits(1);
   // NOLINTNEXTLINE(readability-magic-numbers, cppcoreguidelines-avoid-magic-numbers)
-  command_frame.data[6] = data >> bytesToBits(2);
+  package[6] = data >> bytesToBits(2);
   // NOLINTNEXTLINE(readability-magic-numbers, cppcoreguidelines-avoid-magic-numbers)
-  command_frame.data[7] = data >> bytesToBits(3);
+  package[7] = data >> bytesToBits(3);
 
-  ssize_t bytes_written = write(roboteq::CanopenInterface::socket_handle_, &command_frame, sizeof(struct can_frame));
-  if (bytes_written != sizeof(struct can_frame)) {
-    throw std::runtime_error("Written packet size does not match can frame size in " __FILE__);
-  }
+  bool check = wrapper_.writeToIDwithAck(package, roboteq_can_id_);
 
   struct can_frame response_frame = {};
   ssize_t bytes_read = read(roboteq::CanopenInterface::socket_handle_, &response_frame, sizeof(struct can_frame));
@@ -147,43 +116,23 @@ bool CanopenInterface::sendCommand(RuntimeCommand command, uint8_t subindex, Dat
                << static_cast<unsigned>(response_frame.data[6]) << "\t"
                << static_cast<unsigned>(response_frame.data[7]));
 
-  if (bytes_read != sizeof(struct can_frame)) {
-    throw std::runtime_error("Read packet size does not match can frame size in " __FILE__);
-  }
-  if ((response_frame.data[0] & RESPONSE_TYPE_MASK) != SUCCESSFUL_COMMAND_RESPONSE) {
-    throw std::runtime_error("Unsuccessful command response in " __FILE__);
-  }
-  if ((command_frame.data[0] & UNUSED_BYTES_MASK) != (response_frame.data[0] & UNUSED_BYTES_MASK)) {
-    throw std::runtime_error("Mismatched unused bytes value in command response in " __FILE__);
-  }
-  if (command_frame.data[1] != response_frame.data[1] || command_frame.data[2] != response_frame.data[2]) {
-    throw std::runtime_error("Mismatched index in command response in " __FILE__);
-  }
-  if (command_frame.data[3] != response_frame.data[3]) {
-    throw std::runtime_error("Mismatched sub-index in command response in " __FILE__);
-  }
-  ROS_DEBUG_STREAM("COMMAND RESPONSE ID" << response_frame.can_id);
-  return false;
+  return check ? false : true;
 }
 
 template <>
 bool CanopenInterface::sendCommand<empty_data_payload>(RuntimeCommand command, uint8_t subindex, empty_data_payload) {
-  struct can_frame command_frame {};
-  command_frame.can_id = SDO_COB_ID_OFFSET + roboteq::CanopenInterface::roboteq_can_id_;
-  command_frame.can_dlc = CAN_FRAME_SIZE_BYTES;
-  command_frame.data[0] = (SDO_COMMAND_ID << 4) | (3 << 2);
-  command_frame.data[1] = CanopenInterface::COMMAND_CANOPEN_ID_MAP_.at(command);
-  command_frame.data[2] = CanopenInterface::COMMAND_CANOPEN_ID_MAP_.at(command) >> bytesToBits(1);
-  command_frame.data[3] = subindex;
-  command_frame.data[4] = 0;
-  command_frame.data[5] = 0;  // NOLINT(readability-magic-numbers, cppcoreguidelines-avoid-magic-numbers)
-  command_frame.data[6] = 0;  // NOLINT(readability-magic-numbers, cppcoreguidelines-avoid-magic-numbers)
-  command_frame.data[7] = 0;  // NOLINT(readability-magic-numbers, cppcoreguidelines-avoid-magic-numbers)
+  
+  std::vector<uint8_t> package;
+  package[0] = (SDO_COMMAND_ID << 4) | (3 << 2);
+  package[1] = CanopenInterface::COMMAND_CANOPEN_ID_MAP_.at(command);
+  package[2] = CanopenInterface::COMMAND_CANOPEN_ID_MAP_.at(command) >> bytesToBits(1);
+  package[3] = subindex;
+  package[4] = 0;
+  package[5] = 0; // NOLINT(readability-magic-numbers, cppcoreguidelines-avoid-magic-numbers)
+  package[6] = 0; // NOLINT(readability-magic-numbers, cppcoreguidelines-avoid-magic-numbers)
+  package[7] = 0; // NOLINT(readability-magic-numbers, cppcoreguidelines-avoid-magic-numbers)
 
-  ssize_t bytes_written = write(roboteq::CanopenInterface::socket_handle_, &command_frame, sizeof(struct can_frame));
-  if (bytes_written != sizeof(struct can_frame)) {
-    throw std::runtime_error("Written packet size does not match can frame size in " __FILE__);
-  }
+  bool check = wrapper_.writeToIDwithAck(package, roboteq_can_id_);
 
   struct can_frame response_frame = {};
   ssize_t bytes_read = read(roboteq::CanopenInterface::socket_handle_, &response_frame, sizeof(struct can_frame));
@@ -197,29 +146,23 @@ bool CanopenInterface::sendCommand<empty_data_payload>(RuntimeCommand command, u
                << static_cast<unsigned>(response_frame.data[6]) << "\t"
                << static_cast<unsigned>(response_frame.data[7]));
 
-  ROS_DEBUG_STREAM("COMMAND RESPONSE ID" << response_frame.can_id);
-  return false;
+  return check ? false : true;
 }
 
 template <typename DataType>
 DataType CanopenInterface::sendQuery(RuntimeQuery query, uint8_t subindex) {
-  struct can_frame query_frame {};
 
-  query_frame.can_id = SDO_COB_ID_OFFSET + roboteq::CanopenInterface::roboteq_can_id_;
-  query_frame.can_dlc = CAN_FRAME_SIZE_BYTES;
-  query_frame.data[0] = (SDO_QUERY_ID << 4) | ((SDO_MAX_DATA_SIZE - sizeof(DataType)) << 2);
-  query_frame.data[1] = CanopenInterface::QUERY_CANOPEN_ID_MAP_.at(query);
-  query_frame.data[2] = CanopenInterface::QUERY_CANOPEN_ID_MAP_.at(query) >> bytesToBits(1);
-  query_frame.data[3] = subindex;
-  query_frame.data[4] = 0;
-  query_frame.data[5] = 0;  // NOLINT(readability-magic-numbers, cppcoreguidelines-avoid-magic-numbers)
-  query_frame.data[6] = 0;  // NOLINT(readability-magic-numbers, cppcoreguidelines-avoid-magic-numbers)
-  query_frame.data[7] = 0;  // NOLINT(readability-magic-numbers, cppcoreguidelines-avoid-magic-numbers)
+  std::vector<uint8_t> package;
+  package[0] = (SDO_QUERY_ID << 4) | ((SDO_MAX_DATA_SIZE - sizeof(DataType)) << 2);
+  package[1] = CanopenInterface::QUERY_CANOPEN_ID_MAP_.at(query);
+  package[2] = CanopenInterface::QUERY_CANOPEN_ID_MAP_.at(query) >> bytesToBits(1);
+  package[3] = subindex;
+  package[4] = 0;
+  package[5] = 0; // NOLINT(readability-magic-numbers, cppcoreguidelines-avoid-magic-numbers)
+  package[6] = 0; // NOLINT(readability-magic-numbers, cppcoreguidelines-avoid-magic-numbers)
+  package[7] = 0; // NOLINT(readability-magic-numbers, cppcoreguidelines-avoid-magic-numbers)
 
-  ssize_t bytes_written = write(roboteq::CanopenInterface::socket_handle_, &query_frame, sizeof(struct can_frame));
-  if (bytes_written != sizeof(struct can_frame)) {
-    throw std::runtime_error("Written packet size does not match can frame size in " __FILE__);
-  }
+  wrapper_.writeToIDwithAck(package, roboteq_can_id_);
 
   struct can_frame response_frame = {};
   ssize_t bytes_read = read(roboteq::CanopenInterface::socket_handle_, &response_frame, sizeof(struct can_frame));
@@ -233,22 +176,6 @@ DataType CanopenInterface::sendQuery(RuntimeQuery query, uint8_t subindex) {
                << static_cast<unsigned>(response_frame.data[6]) << "\t"
                << static_cast<unsigned>(response_frame.data[7]));
 
-  // Packet Error Checking
-  if (bytes_read != sizeof(struct can_frame)) {
-    throw std::runtime_error("Read packet size does not match can frame size in " __FILE__);
-  }
-  if (static_cast<unsigned>(response_frame.can_dlc) != CAN_FRAME_SIZE_BYTES) {
-    throw std::runtime_error("Mismatched DLC value in " __FILE__);
-  }
-  if ((response_frame.data[0] & RESPONSE_TYPE_MASK) != SUCCESSFUL_QUERY_RESPONSE) {
-    throw std::runtime_error("Unssuccessful query response in " __FILE__);
-  }
-  if (query_frame.data[1] != response_frame.data[1] || query_frame.data[2] != response_frame.data[2]) {
-    throw std::runtime_error("Mismatched index in query response in " __FILE__);
-  }
-  if (query_frame.data[3] != response_frame.data[3]) {
-    throw std::runtime_error("Mismatched sub-index in query response in " __FILE__);
-  }
 
   const size_t data_response_size = SDO_MAX_DATA_SIZE - ((response_frame.data[0] & UNUSED_BYTES_MASK) >> 2);
 

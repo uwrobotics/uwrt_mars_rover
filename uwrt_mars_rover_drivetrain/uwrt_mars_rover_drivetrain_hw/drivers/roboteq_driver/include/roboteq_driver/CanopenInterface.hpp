@@ -3,6 +3,7 @@
 #include <linux/can.h>
 
 #include <unordered_map>
+#include <uwrt_mars_rover_utils/uwrt_can.h>
 
 namespace roboteq {
 using empty_data_payload = std::nullptr_t;
@@ -96,6 +97,8 @@ class CanopenInterface {
     constexpr unsigned BITS_PER_BYTE = 8;
     return num_bytes * BITS_PER_BYTE;
   }
+
+  uwrt_mars_rover_utils::UWRTCANWrapper wrapper_;
 
   int roboteq_can_id_;
   int socket_handle_;

@@ -1,0 +1,1 @@
+rqt_gps/DDGPS[] coord_array

@@ -1,0 +1,23 @@
+<?xml version="1.0" ?>
+<robot name="uwrt_mars_rover_sim" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+<!-- Add plugins for chassis control or sensors on chassis here -->
+
+<xacro:macro name="wheel_gazebo" params="wheel_link color">
+    <!-- TODO: Fix these physics parameters to make them accurate -->
+    <gazebo reference="${wheel_link}">
+        <material>${color}</material>
+        <mu1>1</mu1>
+        <mu2>1</mu2>
+        <fdir1>1 0 0</fdir1>
+        <minDepth>0.001</minDepth>
+        <maxVel>3.0</maxVel>
+        <gravity>true</gravity>
+        <kp  value="10000000.0" />
+        <kd  value="1.0" />
+        <selfCollide>false</selfCollide>
+    </gazebo>
+</xacro:macro>
+
+
+</robot>

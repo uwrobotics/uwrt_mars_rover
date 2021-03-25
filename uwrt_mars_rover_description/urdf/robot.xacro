@@ -1,0 +1,60 @@
+<?xml version="1.0" ?>
+<robot name="uwrt_mars_rover_sim" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+<xacro:include filename="$(find uwrt_mars_rover_description)/urdf/common.gazebo"/>
+<xacro:include filename="$(find uwrt_mars_rover_description)/urdf/robot.gazebo"/>
+<xacro:include filename="$(find uwrt_mars_rover_description)/urdf/arm/robot_arm.xacro"/>
+<xacro:include filename="$(find uwrt_mars_rover_description)/urdf/chassis/robot_chassis.xacro"/>
+
+<xacro:property name="body_color" value="Gazebo/Cyan"/>
+
+<!-- Get the control_mode from the passed argument. -->
+<xacro:property name="_mode" value="$(arg mode)"/>
+
+<!-- TODO: add transmissions (maybe separate file) to actively controlled joints-->
+<!-- TODO: reconfigure the collisions into simple shapes for reduced CPU load -->
+<!-- TODO: add the counter weight for the chassis / rocker bogey (may need to recalculate inertia / split into two components)-->
+
+<link name="base_link">
+  <inertial>
+    <origin rpy="0 0 0" xyz="-0.037262 0.0004 0.05814"/>
+    <mass value="16.69"/>
+    <inertia ixx="1.19749" ixy="0.005489" ixz="0.017255" iyy="1.901358" iyz="0.01166538" izz="1.15907"/>
+  </inertial>
+  <visual>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <geometry>
+      <mesh filename="package://uwrt_mars_rover_description/meshes/chassis.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="Cyan">
+      <color rgba="0 1.0 1.0 1.0"/>
+    </material>
+  </visual>
+  <collision>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <geometry>
+      <mesh filename="package://uwrt_mars_rover_description/meshes/chassis.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<xacro:basic_gazebo_ref link_name="base_link" color="${body_color}"/>
+
+<!-- Only the arm or science module will be added to the chassis of the robot for any launch configuration. -->
+<!--  Add the arm to the chassis of the robot. -->
+<xacro:if value="${_mode == 'arm_mission' or _mode == 'arm_only'}">
+  <xacro:arm_to_base base_object="base_link"/>
+</xacro:if>
+
+<!-- Add the science module to the chassis of the robot. -->
+<xacro:if value="${_mode == 'science_mission' or _mode == 'science_only'}">
+  <!-- TODO: Add the science macro here. -->
+</xacro:if>
+
+<!-- Add the drivetrain to the chassis. This will be launched in any mode configuration. -->
+<xacro:chassis_to_rocker _suffix="left" _side="1" rotate="0" base_object="base_link"/>
+<xacro:chassis_to_rocker _suffix="right" _side="-1" rotate="1" base_object="base_link"/>
+
+</robot>
+
+

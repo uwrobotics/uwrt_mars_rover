@@ -1,0 +1,6 @@
+<?xml version="1.0" ?>
+<robot name="uwrt_mars_rover_sim" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+<!-- TODO: Add wrist transmission here -->
+
+</robot>

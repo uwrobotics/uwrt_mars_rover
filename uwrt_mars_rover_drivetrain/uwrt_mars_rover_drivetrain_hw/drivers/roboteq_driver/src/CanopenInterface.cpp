@@ -97,8 +97,10 @@ CanopenInterface::CanopenInterface(canid_t roboteq_can_id, const std::string& if
   can_receive_filter[1].can_id = SDO_RESPONSE_COB_ID_OFFSET + roboteq::CanopenInterface::roboteq_can_id_;
   can_receive_filter[1].can_mask = (CAN_EFF_FLAG | CAN_RTR_FLAG | CAN_EFF_MASK);
 
-  //   struct timeval receive_timeout = {.tv_usec=500000}; //0.5 seconds
-  // setsockopt(socket_handle_, SOL_SOCKET, SO_RCVTIMEO, &receive_timeout, sizeof(receive_timeout));
+  constexpr unsigned RECEIVE_TIMEOUT_US{500000};  // 0.5 seconds
+  struct timeval receive_timeout = {0};
+  receive_timeout.tv_usec = RECEIVE_TIMEOUT_US;
+  setsockopt(socket_handle_, SOL_SOCKET, SO_RCVTIMEO, &receive_timeout, sizeof(receive_timeout));
 
   int socket_opt_ret_val = setsockopt(socket_handle_, SOL_CAN_RAW, CAN_RAW_FILTER, can_receive_filter.data(),
                                       can_receive_filter.size() * sizeof(struct can_filter));
@@ -163,7 +165,7 @@ bool CanopenInterface::sendCommand(RuntimeCommand command, uint8_t subindex, Dat
     throw std::runtime_error("Mismatched sub-index in command response in " __FILE__);
   }
   ROS_DEBUG_STREAM("COMMAND RESPONSE ID" << response_frame.can_id);
-  return false;
+  return true;
 }
 
 template <>
@@ -198,7 +200,7 @@ bool CanopenInterface::sendCommand<empty_data_payload>(RuntimeCommand command, u
                << static_cast<unsigned>(response_frame.data[7]));
 
   ROS_DEBUG_STREAM("COMMAND RESPONSE ID" << response_frame.can_id);
-  return false;
+  return true;
 }
 
 template <typename DataType>

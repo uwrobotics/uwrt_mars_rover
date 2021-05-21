@@ -1,91 +1,137 @@
 name: CI
 
 on:
-  push:
   pull_request:
-  schedule: # Trigger a job on master at midnight UTC every day
+  push:
+    branches:
+      - ros2
+      - ci-dev
+  schedule: 
     - cron: '0 0 * * *'
-
+ 
 jobs:
-  amd64_build:
+  # Tests
+  # - xmllint      (xml linter) 
+  # - clang-format (version 10)  
+  # - flake8       (python linter) 
+  # - cppcheck     (static c/c++ analysis tool)   
+  ament_lint_cpp:
+    name: ament-${{ matrix.linter }}
+    runs-on: ${{ matrix.os }}
+    container:
+      image: rostooling/setup-ros-docker:ubuntu-focal-ros-foxy-ros-base-latest
+      options: -u root
     strategy:
+      # We want all the linters to run even if one fails
+      fail-fast: false
       matrix:
-        env:
-          - {ROS_DISTRO: melodic, ROS_REPO: main, CMAKE_ARGS: "-Wall -Wextra -Wpedantic -Werror", TARGET_WORKSPACE: "$TARGET_REPO_PATH metapackage_dependencies.rosinstall", UPSTREAM_WORKSPACE: "upstream_dependencies.rosinstall"}
-          - {ROS_DISTRO: melodic, ROS_REPO: testing, CMAKE_ARGS: "-Wall -Wextra -Wpedantic -Werror", TARGET_WORKSPACE: "$TARGET_REPO_PATH metapackage_dependencies.rosinstall", UPSTREAM_WORKSPACE: "upstream_dependencies.rosinstall"}
-
-    runs-on: ubuntu-18.04
+          os: [ubuntu-20.04]
+          linter: [flake8, clang-format, xmllint, cppcheck]
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+    - name: Checkout Repository
+      uses: actions/checkout@v2
 
-      - name: Run ROS Industrial CI
-        uses: ros-industrial/industrial_ci@master
-        env: ${{matrix.env}}
+    - name: ROS2 Linter - [ament-${{ matrix.linter }}]
+      uses: ros-tooling/action-ros-lint@master
+      with:
+        distribution: rolling
+        linter: ${{ matrix.linter }}
+        package-name: uwrt_mars_rover
 
-  clang-format:
+
+  # Tests on AMD64:
+  # - builds code & runs all tests
+  # - clang-tidy (clang based c++ linter)
+  # - Asan memory report
+  amd64-build:
+    runs-on: ${{ matrix.os }}
+    container:
+      image: rostooling/setup-ros-docker:ubuntu-focal-ros-foxy-ros-base-latest
+      options: -u root
     strategy:
+      fail-fast: true
       matrix:
-        env:
-          - {ROS_DISTRO: melodic, ROS_REPO: main, CLANG_FORMAT_CHECK: file}
-
-    runs-on: ubuntu-18.04
+        os: [ubuntu-20.04]
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+    
+    - name: Install clang-tidy-6
+      run: |
+        sudo apt-get update -y
+        sudo apt-get install -y clang-tidy-6.0
+  
+    - name: Run ROS2 Tests
+      uses: ros-tooling/action-ros-ci@0.2.0
+      with:
+        colcon-defaults: |
+          {
+            "build": {
+              "mixin": ["asan-gcc"]
+            }
+          }
+        colcon-mixin-repository: https://raw.githubusercontent.com/colcon/colcon-mixin-repository/3e627e0fa30db85aea05a50e2c61a9832664d236/index.yaml
+        target-ros2-distro: foxy
+        package-name: uwrt_mars_rover
 
-      - name: Run ROS Industrial CI
-        uses: ros-industrial/industrial_ci@master
-        env: ${{matrix.env}}
+################################ ARM BUILD CI DEVELOPMENT ##################################
 
-  clang-tidy:
-    strategy:
-      matrix:
-        env:
-          - {ROS_DISTRO: melodic, ROS_REPO: main, ADDITIONAL_DEBS: "clang-tidy-9", TARGET_CMAKE_ARGS: "-DCMAKE_CXX_CLANG_TIDY=clang-tidy-9", TARGET_WORKSPACE: "$TARGET_REPO_PATH metapackage_dependencies.rosinstall", UPSTREAM_WORKSPACE: "upstream_dependencies.rosinstall"}
+#  arm64-build-test:
+#    runs-on: ${{matrix.os}}
+#    strategy:
+#      fail-fast: true
+#      matrix:
+#        os: [ubuntu-20.04]
+#    steps:
 
-    runs-on: ubuntu-18.04
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+#    - name: Checkout Repository
+#      uses: actions/checkout@v2
 
-      - name: Run ROS Industrial CI
-        uses: ros-industrial/industrial_ci@master
-        env: ${{matrix.env}}
+    # setup virtualization software to host ARM64 architecture then start a docker container
+#    - name: Install Qemu and start Qemu Docker
+#      shell: bash
+#      run: |
+#        sudo apt-get update -y
+#        sudo apt-get install -y qemu-user-static
+#        docker run --rm --privileged multiarch/qemu-user-static --reset --credential yes --persistent yes
 
-  catkin_lint:
-    strategy:
-      matrix:
-        env:
-          - { ROS_DISTRO: melodic, ROS_REPO: main, CATKIN_LINT: pedantic, CATKIN_LINT_ARGS: "--config $TARGET_REPO_PATH/.catkin-lint", TARGET_WORKSPACE: "$TARGET_REPO_PATH metapackage_dependencies.rosinstall", UPSTREAM_WORKSPACE: "upstream_dependencies.rosinstall" }
+    # start ros2 foxy docker 
+#    - name: Run ROS2 Docker
+#      shell: bash
+#      run: |
+#        docker run --rm arm64v8/ros:foxy
 
-    runs-on: ubuntu-18.04
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+#    - name: Install clang-tidy
+#      shell: bash
+#      run: |
+#        sudo apt-get update -y
+#        sudo apt-get install -y clang-tidy-6.0
+  
+    # need this to install rosdep, colcon build, and colcon test in the docker in docker container 
+#    - name: Setup ROS2
+#      uses: ros-tooling/setup-ros@v0.2
+#      with:
+#        required-ros-distributions: foxy
+  
+#    - name: Run ROS2 Tests - AMD
+#      uses: ros-tooling/action-ros-ci@0.2.0
+#      with:
+#        colcon-defaults: |
+#          {
+#            "build": {
+#              "mixin": ["asan-gcc"]
+#            }
+#          }
+#        colcon-mixin-repository: https://raw.githubusercontent.com/colcon/colcon-mixin-repository/3e627e0fa30db85aea05a50e2c61a9832664d236/index.yaml
+#        target-ros2-distro: foxy
+#        package-name: uwrt_mars_rover
 
-      - name: Run ROS Industrial CI
-        uses: ros-industrial/industrial_ci@master
-        env: ${{matrix.env}}
+    
+################################ ARM BUILD CI DEVELOPMENT ##################################
+        
 
-  arm64_build:
-    strategy:
-      matrix:
-        env:
-          - {DOCKER_IMAGE: "arm64v8/ros:melodic-perception", ADDITIONAL_DEBS: "build-essential python-catkin-tools python-pip", BEFORE_INIT: "echo -e This test should run on aarch64. It is running on: $(uname -p) && [[ $(uname -p) == aarch64 ]]", CMAKE_ARGS: "-Wall -Wextra -Wpedantic -Werror", TARGET_WORKSPACE: "$TARGET_REPO_PATH metapackage_dependencies.rosinstall", UPSTREAM_WORKSPACE: "upstream_dependencies.rosinstall"}
 
-    runs-on: ubuntu-18.04
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+ 
 
-      - name: Install Qemu and Start Qemu Docker
-        shell: bash
-        run: |
-          sudo apt update
-          sudo apt install qemu-user-static
-          docker run --rm --privileged multiarch/qemu-user-static --reset --credential yes --persistent yes
+  
 
-      - name: Run ROS Industrial CI
-        uses: ros-industrial/industrial_ci@master
-        env: ${{matrix.env}}
+
+

@@ -1,30 +1,27 @@
 <?xml version="1.0"?>
-<package format="2">
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>uwrt_mars_rover</name>
+  <version>0.0.0</version>
+  <description>TODO: Package description</description>
+  <maintainer email="omarmon@uwaterloo.ca">niiquaye</maintainer>
+  <license>TODO: License declaration</license>
 
-    <name>uwrt_mars_rover</name>
-    <version>0.0.0</version>
-    <description>Metapackage containing all of UWRT's packages for our URC Mars Rover</description>
+  <buildtool_depend>ament_cmake</buildtool_depend>
 
-    <maintainer email="melvin.mc.wang@gmail.com">Melvin Wang</maintainer>
+  <build_depend>rclcpp</build_depend>	
 
-    <license>MIT</license>
+  <exec_depend>rclcpp</exec_depend>
 
-    <buildtool_depend>catkin</buildtool_depend>
+  <test_depend>ament_cmake_cppcheck</test_depend>
+  <test_depend>ament_clang_tidy</test_depend>
+  <test_depend>ament_cmake_clang_tidy</test_depend>
+  <test_depend>ament_cmake_clang_format</test_depend>
+  <test_depend>ament_cmake_flake8</test_depend>
+  <test_depend>ament_cmake_xmllint</test_depend>
+  <test_depend>ament_cmake_cppcheck</test_depend>
 
-    <exec_depend>uwrt_mars_rover_arm</exec_depend>
-    <exec_depend>uwrt_mars_rover_autonomy</exec_depend>
-    <exec_depend>uwrt_mars_rover_bringup</exec_depend>
-    <exec_depend>uwrt_mars_rover_control</exec_depend>
-    <exec_depend>uwrt_mars_rover_description</exec_depend>
-    <exec_depend>uwrt_mars_rover_drivetrain</exec_depend>
-    <exec_depend>uwrt_mars_rover_msgs</exec_depend>
-    <exec_depend>uwrt_mars_rover_neopixel</exec_depend>
-    <exec_depend>uwrt_mars_rover_science</exec_depend>
-    <exec_depend>uwrt_mars_rover_utils</exec_depend>
-
-    <export>
-        <metapackage/>
-    </export>
-
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
 </package>
-

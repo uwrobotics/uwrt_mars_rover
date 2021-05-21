@@ -1,0 +1,13 @@
+uwrt_mars_rover:
+  can_interface_name: can0
+
+  combined_robot_hw:
+   science:
+      type: uwrt_mars_rover_hw/UWRTRoverHWScienceReal
+      joints:
+        - science_elevator_joint
+      indexers:
+        - science_geneva_indexer
+        - science_scooper_indexer
+        - science_cover_indexer
+        # TODO (wraftus) Add sensors

@@ -18,9 +18,17 @@ devel_isolated/
 /cfg/cpp/
 /cfg/*.py
 
-#ignore IDE config files
-.vscode/
-.ycm_extra_configs.py 
+#ignore colcon build dirs
+build/uwrt_mars_rover
+build/COLCON_IGNORE
+build/.built_by
+log/
+install/*.sh 
+install/*.zsh
+install/*.py
+install/*.bash
+install/*.ps1
+install/* 
 
 # Ignore generated docs
 *.dox

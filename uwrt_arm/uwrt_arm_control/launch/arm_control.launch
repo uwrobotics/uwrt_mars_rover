@@ -1,0 +1,40 @@
+<?xml version="1.0" ?>
+<launch>
+  <arg name="debug"           default="false"/>
+  <arg name="sim"             default="false"/>
+  <arg name="arm_hw_ns"       default="$(eval 'arm_hw_sim' if sim
+                                               else 'arm_hw_real')"/>
+  <!-- The CAN device on which arm feedback/states are written to/from -->
+  <arg name="can_device" default="can0"/>
+  <!-- The CAN ID for can frames containing joints feedback for arm -->
+  <arg name="can_id"     default="1"/>
+
+  <!-- Load local namespace of arm hw to parameter server -->
+  <param name="arm_hw_ns" value="$(arg arm_hw_ns)"/>
+
+  <!-- Load Joint Names for the arm -->
+  <rosparam command="load" file="$(find uwrt_arm_control)/config/joint_names.yaml"/>
+
+  <!-- Load the ros_controller controller parameters -->
+  <rosparam command="load" file="$(find uwrt_arm_control)/config/ros_controllers.yaml"/>
+
+  <!-- Spawn the ros_control controllers (enabled at startup) -->
+  <node name="controller_spawner" pkg="controller_manager" type="spawner"
+        args="joint_state_controller
+	      arm_cartesian_controller"
+        respawn="true" output="screen"/>
+
+  <!-- Run Real Interface -->
+  <group unless="$(arg sim)">
+    <!-- Load private parameters for the hardware interface in its namespace -->
+    <group ns="$(arg arm_hw_ns)">
+      <param name="can_dev" value="$(arg can_device)"/>
+      <param name="can_id"  value="$(arg can_id)"/>
+    </group>
+
+    <!-- Run the Real Arm Hardware Interface -->
+    <node name="arm_hw_real_node" pkg="uwrt_arm_hw" type="uwrt_arm_hw_real"
+	        output="screen"/>
+  </group>
+
+</launch>

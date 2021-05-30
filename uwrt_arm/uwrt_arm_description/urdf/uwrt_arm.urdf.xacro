@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<robot name="uwrt_arm" xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <!-- Define a default link for the world -->
+  <link name="world"/>
+
+  <xacro:include filename="$(find uwrt_arm_description)/urdf/arm/arm.urdf.xacro"/>
+  <arm parent="world" name="arm"/>
+</robot>

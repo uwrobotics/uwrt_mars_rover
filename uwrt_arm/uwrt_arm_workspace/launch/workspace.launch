@@ -1,0 +1,21 @@
+<launch>
+    <!-- Markers -->
+    <arg name="markers" default="$(find uwrt_arm_workspace)/meshes/workspace_markers.xyz" />
+
+    <!-- Mesh -->
+    <!-- <arg name="mesh_mean" default="$(find uwrt_arm_workspace)/meshes/mean/mean_workspace_mesh_blender.stl" /> -->
+    <arg name="mesh_mean" default="$(find uwrt_arm_workspace)/meshes/mean/filtered_mesh.stl" />
+    <arg name="mesh_max" default="$(find uwrt_arm_workspace)/meshes/max/filtered_mesh.stl" />
+    <arg name="mesh_min" default="$(find uwrt_arm_workspace)/meshes/min/filtered_mesh.stl" />
+    <node type="rviz" name="rviz" pkg="rviz" args="-d $(find uwrt_arm_workspace)/rviz/workspace.rviz" />
+
+    <!-- Starting Marker node -->
+    <node pkg="uwrt_arm_workspace" name="publish_workspace_markers" type="publish_workspace_markers" output="screen" cwd="node"></node>
+        <param name="markers" value="$(arg markers)" />
+ 
+    <!-- Starting Mesh node -->
+    <node pkg="uwrt_arm_workspace" name="publish_workspace_mesh" type="publish_workspace_mesh" output="screen" cwd="node"></node>
+        <param name="mesh_mean" value="$(arg mesh_mean)" />
+        <param name="mesh_max" value="$(arg mesh_max)" />
+        <param name="mesh_min" value="$(arg mesh_min)" />
+</launch>

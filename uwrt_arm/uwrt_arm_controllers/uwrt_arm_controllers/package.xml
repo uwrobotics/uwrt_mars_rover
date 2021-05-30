@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package format="2">
+
+    <name>uwrt_arm_controllers</name>
+    <version>0.0.0</version>
+    <description>Metapackage containing all of the arm controllers for our URC Mars Rover</description>
+
+    <maintainer email="akeaveny@uwaterloo.ca">Aidan Keaveny</maintainer>
+
+    <license>MIT</license>
+
+    <buildtool_depend>catkin</buildtool_depend>
+
+    <exec_depend>uwrt_cartesian_controller</exec_depend>
+
+    <export>
+        <metapackage/>
+    </export>
+
+</package>

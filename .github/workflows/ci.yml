@@ -23,7 +23,7 @@ jobs:
     strategy:
       fail-fast: false # We want all the linters to run even if one fails
       matrix:
-        linter: [ flake8]
+        linter: [flake8, clang-format, xmllint]
         # , clang-format, xmllint, cppcheck
         #   - flake8       (python linter)
         #   - clang-format (code format checking)
@@ -48,6 +48,13 @@ jobs:
       image: rostooling/setup-ros-docker:ubuntu-focal-ros-foxy-ros-base-latest
       options: -u root
     steps:
+
+      - name: Install clang-tidy-6
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y clang-tidy-6.0
+
+      
       - name: Build ROS2 Packages and Run Tests
         uses: ros-tooling/action-ros-ci@v0.2
         with:
@@ -57,10 +64,9 @@ jobs:
                 "mixin": ["asan-gcc"]
               }
             }
-          }
-        colcon-mixin-repository: https://raw.githubusercontent.com/colcon/colcon-mixin-repository/3e627e0fa30db85aea05a50e2c61a9832664d236/index.yaml
-        target-ros2-distro: foxy
-        package-name: uwrt_mars_rover uwrt_mars_rover_description
+          colcon-mixin-repository: https://raw.githubusercontent.com/colcon/colcon-mixin-repository/3e627e0fa30db85aea05a50e2c61a9832664d236/index.yaml
+          target-ros2-distro: foxy
+          package-name: uwrt_mars_rover
 
 
   arm64-build:

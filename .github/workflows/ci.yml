@@ -57,9 +57,11 @@ jobs:
                 "mixin": ["asan-gcc"]
               }
             }
-          colcon-mixin-repository: https://raw.githubusercontent.com/colcon/colcon-mixin-repository/3e627e0fa30db85aea05a50e2c61a9832664d236/index.yaml
-          target-ros2-distro: foxy
-          package-name: uwrt_mars_rover
+          }
+        colcon-mixin-repository: https://raw.githubusercontent.com/colcon/colcon-mixin-repository/3e627e0fa30db85aea05a50e2c61a9832664d236/index.yaml
+        target-ros2-distro: foxy
+        package-name: uwrt_mars_rover uwrt_mars_rover_description
+
 
   arm64-build:
     runs-on: ubuntu-latest

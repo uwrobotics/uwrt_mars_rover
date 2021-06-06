@@ -30,6 +30,10 @@ install/*.bash
 install/*.ps1
 install/* 
 
+#ignore IDE config files
+.vscode/
+.ycm_extra_configs.py 
+
 # Ignore generated docs
 *.dox
 *.wikidoc

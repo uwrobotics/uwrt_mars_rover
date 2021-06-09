@@ -1,137 +1,104 @@
 name: CI
 
 on:
-  pull_request:
   push:
+  pull_request:
     branches:
       - ros2
-      - ci-dev
-  schedule: 
+      - master
+  schedule: # Trigger a job on master at midnight UTC every day
     - cron: '0 0 * * *'
- 
+
+defaults:
+  run:
+    shell: bash
+
 jobs:
-  # Tests
-  # - xmllint      (xml linter) 
-  # - clang-format (version 10)  
-  # - flake8       (python linter) 
-  # - cppcheck     (static c/c++ analysis tool)   
-  ament_lint_cpp:
+  linters:
     name: ament-${{ matrix.linter }}
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     container:
       image: rostooling/setup-ros-docker:ubuntu-focal-ros-foxy-ros-base-latest
       options: -u root
     strategy:
-      # We want all the linters to run even if one fails
-      fail-fast: false
+      fail-fast: false # We want all the linters to run even if one fails
       matrix:
-          os: [ubuntu-20.04]
-          linter: [flake8, clang-format, xmllint, cppcheck]
+        linter: [ flake8]
+        # , clang-format, xmllint, cppcheck
+        #   - flake8       (python linter)
+        #   - clang-format (code format checking)
+        #   - xmllint      (xml linter)
+        #   - cppcheck     (static c/c++ analysis tool)
+
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v2
+      - name: Checkout Repository
+        uses: actions/checkout@v2
 
-    - name: ROS2 Linter - [ament-${{ matrix.linter }}]
-      uses: ros-tooling/action-ros-lint@master
-      with:
-        distribution: rolling
-        linter: ${{ matrix.linter }}
-        package-name: uwrt_mars_rover
+      - name: ROS2 Linter - [ament-${{ matrix.linter }}]
+        uses: ros-tooling/action-ros-lint@master
+        with:
+          distribution: rolling
+          linter: ${{ matrix.linter }}
+          package-name: uwrt_mars_rover
 
 
-  # Tests on AMD64:
-  # - builds code & runs all tests
-  # - clang-tidy (clang based c++ linter)
-  # - Asan memory report
   amd64-build:
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     container:
       image: rostooling/setup-ros-docker:ubuntu-focal-ros-foxy-ros-base-latest
       options: -u root
-    strategy:
-      fail-fast: true
-      matrix:
-        os: [ubuntu-20.04]
     steps:
-    
-    - name: Install clang-tidy-6
-      run: |
-        sudo apt-get update -y
-        sudo apt-get install -y clang-tidy-6.0
-  
-    - name: Run ROS2 Tests
-      uses: ros-tooling/action-ros-ci@0.2.0
-      with:
-        colcon-defaults: |
-          {
-            "build": {
-              "mixin": ["asan-gcc"]
+      - name: Build ROS2 Packages and Run Tests
+        uses: ros-tooling/action-ros-ci@v0.2
+        with:
+          colcon-defaults: |
+            {
+              "build": {
+                "mixin": ["asan-gcc"]
+              }
             }
-          }
-        colcon-mixin-repository: https://raw.githubusercontent.com/colcon/colcon-mixin-repository/3e627e0fa30db85aea05a50e2c61a9832664d236/index.yaml
-        target-ros2-distro: foxy
-        package-name: uwrt_mars_rover
+          colcon-mixin-repository: https://raw.githubusercontent.com/colcon/colcon-mixin-repository/3e627e0fa30db85aea05a50e2c61a9832664d236/index.yaml
+          target-ros2-distro: foxy
+          package-name: uwrt_mars_rover
 
-################################ ARM BUILD CI DEVELOPMENT ##################################
+  arm64-build:
+    runs-on: ubuntu-latest
 
-#  arm64-build-test:
-#    runs-on: ${{matrix.os}}
-#    strategy:
-#      fail-fast: true
-#      matrix:
-#        os: [ubuntu-20.04]
-#    steps:
+    # Cannot use action-ros-ci since cant trigger action steps from within the docker container. Must use `docker exec`
+    # to run actions within docker container since we cannot directly use arm64v8/ros:foxy container because there
+    # exists no way of setting up Docker to work with Qemu before loading a docker image onto the runner.
+    # Possibly resolveable with https://github.com/actions/runner/issues/320
+    steps:
 
-#    - name: Checkout Repository
-#      uses: actions/checkout@v2
+      - name: Checkout Repository
+        uses: actions/checkout@v2
 
-    # setup virtualization software to host ARM64 architecture then start a docker container
-#    - name: Install Qemu and start Qemu Docker
-#      shell: bash
-#      run: |
-#        sudo apt-get update -y
-#        sudo apt-get install -y qemu-user-static
-#        docker run --rm --privileged multiarch/qemu-user-static --reset --credential yes --persistent yes
+      - name: Install Docker/QEMU dependencies
+        id: qemu
+        uses: docker/setup-qemu-action@v1
+        with:
+          image: tonistiigi/binfmt:latest
+          platforms: arm64
 
-    # start ros2 foxy docker 
-#    - name: Run ROS2 Docker
-#      shell: bash
-#      run: |
-#        docker run --rm arm64v8/ros:foxy
+      - name: Setup Docker to Run ARM64 Containers in QEMU
+        run: |
+          docker run --privileged --rm multiarch/qemu-user-static --reset --credential yes --persistent yes
 
-#    - name: Install clang-tidy
-#      shell: bash
-#      run: |
-#        sudo apt-get update -y
-#        sudo apt-get install -y clang-tidy-6.0
-  
-    # need this to install rosdep, colcon build, and colcon test in the docker in docker container 
-#    - name: Setup ROS2
-#      uses: ros-tooling/setup-ros@v0.2
-#      with:
-#        required-ros-distributions: foxy
-  
-#    - name: Run ROS2 Tests - AMD
-#      uses: ros-tooling/action-ros-ci@0.2.0
-#      with:
-#        colcon-defaults: |
-#          {
-#            "build": {
-#              "mixin": ["asan-gcc"]
-#            }
-#          }
-#        colcon-mixin-repository: https://raw.githubusercontent.com/colcon/colcon-mixin-repository/3e627e0fa30db85aea05a50e2c61a9832664d236/index.yaml
-#        target-ros2-distro: foxy
-#        package-name: uwrt_mars_rover
+      - name: Start ARM64 ROS2 Container
+        run: |
+          docker run --name arm64-ros --mount type=bind,source=$(pwd),target=/rosws/src/$(basename $(pwd)) --workdir /rosws --detach -i --rm arm64v8/ros:foxy
 
-    
-################################ ARM BUILD CI DEVELOPMENT ##################################
-        
+      - name: Install ROS Package Dependencies
+        run: |
+          docker exec arm64-ros sudo apt update
+          docker exec arm64-ros rosdep install -r --from-paths . --ignore-src --rosdistro foxy -y
+        # todo foxy
 
+      - name: Build ROS2 Packages and Run Tests
+        run: >
+          docker exec arm64-ros bash -c "source /opt/ros/foxy/setup.bash;
+          colcon build --event-handlers console_cohesion+;
+          colcon test --event-handlers console_cohesion+"
+        # --packages-up-to
 
- 
-
-  
-
-
-
+# todo: distro matrix, windows build, global packages list

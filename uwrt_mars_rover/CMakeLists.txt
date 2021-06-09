@@ -2,19 +2,18 @@ cmake_minimum_required(VERSION 3.5)
 project(uwrt_mars_rover)
 
 # Default to C99
-if(NOT CMAKE_C_STANDARD)
+if (NOT CMAKE_C_STANDARD)
   set(CMAKE_C_STANDARD 99)
-endif()
+endif ()
 
-# Default to C++14
-if(NOT CMAKE_CXX_STANDARD)
-  set(CMAKE_CXX_STANDARD 14)
-endif()
+# Default to C++17
+if (NOT CMAKE_CXX_STANDARD)
+  set(CMAKE_CXX_STANDARD 17)
+endif ()
 
-if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
-endif()
-
+endif ()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
@@ -24,19 +23,19 @@ find_package(rclcpp REQUIRED)
 # find_package(<dependency> REQUIRED)
 
 add_executable(tester src/main.cpp)
-ament_target_dependencies(tester 
-	"rclcpp")
+ament_target_dependencies(tester
+    "rclcpp")
 
 
-if(BUILD_TESTING)
+if (BUILD_TESTING)
   # generate compile_commands.json for clang-tidy
-  set(CMAKE_EXPORT_COMPILE_COMMANDS ON CACHE INTERNAL "") # works
+  set(CMAKE_EXPORT_COMPILE_COMMANDS ON CACHE INTERNAL "")
 
   # cppcheck
   find_package(ament_cmake_cppcheck REQUIRED)
   ament_cppcheck()
 
-  # clang-format 
+  # clang-format
   find_package(ament_cmake_clang_format REQUIRED)
   ament_clang_format()
 
@@ -48,17 +47,14 @@ if(BUILD_TESTING)
   find_package(ament_cmake_xmllint REQUIRED)
   ament_xmllint()
 
-  # clang-tidy can only build locally as of now
-  # clang-tidy 
+  # clang-tidy
   find_package(ament_cmake_clang_tidy REQUIRED)
   ament_clang_tidy(${CMAKE_BINARY_DIR})
-  # the following line skips the linter which checks for copyrights
-  # uncomment the line when a copyright and license is not present in all source files
-  #set(ament_cmake_copyright_FOUND TRUE)
+
   # the following line skips cpplint (only works in a git repo)
   # uncomment the line when this package is not in a git repo
   #set(ament_cmake_cpplint_FOUND TRUE)
-  #ament_lint_auto_find_test_dependencies()
-endif()
+
+endif ()
 
 ament_package()

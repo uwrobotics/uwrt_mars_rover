@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>uwrt_mars_rover</name>
+  <name>uwrt_mars_rover_utils</name>
   <version>0.0.0</version>
   <description>TODO: Package description</description>
   <maintainer email="omarmon@uwaterloo.ca">niiquaye</maintainer>
@@ -11,8 +11,8 @@
 
   <build_depend>rclcpp</build_depend>
 
-  <depend>uwrt_mars_rover_utils</depend>
 
+  <exec_depend>rclcpp</exec_depend>
 
   <test_depend>ament_cmake_cppcheck</test_depend>
   <test_depend>ament_clang_tidy</test_depend>

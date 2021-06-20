@@ -1,6 +1,4 @@
 devel/
-logs/
-build/
 bin/
 msg_gen/
 srv_gen/
@@ -19,6 +17,22 @@ devel_isolated/
 *.cfgc
 /cfg/cpp/
 /cfg/*.py
+
+#ignore colcon build dirs
+build/uwrt_mars_rover
+build/COLCON_IGNORE
+build/.built_by
+log/
+install/*.sh 
+install/*.zsh
+install/*.py
+install/*.bash
+install/*.ps1
+install/* 
+
+#ignore IDE config files
+.vscode/
+.ycm_extra_configs.py 
 
 # Ignore generated docs
 *.dox
@@ -48,6 +62,7 @@ qtcreator-*
 
 # Catkin custom files
 CATKIN_IGNORE
+COLCON_IGNORE
 
 # uwrt_mars_rover_hw_bridge shouldnt be added as a git submodule
 uwrt_mars_rover_utils/lib/uwrt_mars_rover_hw_bridge/

@@ -1,145 +1,120 @@
-#include <uwrt_mars_rover_drivetrain_hw/uwrt_mars_rover_drivetrain_hw.h>
+#include "uwrt_mars_rover_drivetrain_hw/uwrt_mars_rover_drivetrain_hw.hpp"
 
+using hardware_interface::return_type;
+using transmission_interface::ActuatorHandle;
+using transmission_interface::JointHandle;
 namespace uwrt_mars_rover_drivetrain_hw {
 
-bool UWRTRoverHWDrivetrain::init(ros::NodeHandle & /*root_nh*/, ros::NodeHandle &robot_hw_nh) {
-  if (!loadJointInfoFromParameterServer(robot_hw_nh)) {
-    return false;
-  }
+return_type UWRTMarsRoverDrivetrainHardware::configure(const hardware_interface::HardwareInfo& actuator_info) {
+  bool configure_success{true};
 
-  for (const auto &joint_name : joint_names_) {
-    registerStateInterfacesAndTransmissions(joint_name);
-    registerCommandInterfacesAndTransmissions(joint_name);
-  }
+  configure_success &= (configure_default(actuator_info) == return_type::OK);
+  configure_success &= configureDrivetrainHardwareInfo(actuator_info);
+  configure_success &= configureDrivetrainJoints(actuator_info.joints);
+  configure_success &= configureDrivetrainTransmissions(actuator_info.transmissions);
 
-  this->registerInterface(&joint_state_interface_);
-  this->registerInterface(&joint_position_interface_);
-  this->registerInterface(&joint_velocity_interface_);
-  this->registerInterface(&joint_voltage_interface_);
+  if (configure_success) {
+    RCLCPP_INFO(rclcpp::get_logger(this->get_name()), "Hardware Configured ...");
+
+    return return_type::OK;
+  } else {
+    RCLCPP_ERROR(rclcpp::get_logger(this->get_name()), "Hardware Configuration Failed ...");
+    return return_type::ERROR;
+  }
+}
+
+// load parameters if there are any
+bool UWRTMarsRoverDrivetrainHardware::configureDrivetrainHardwareInfo(
+    const hardware_interface::HardwareInfo& drivetrainHardwareInfo) {
+  (void)drivetrainHardwareInfo;
+  return true;
+}
+
+bool UWRTMarsRoverDrivetrainHardware::configureDrivetrainJoints(
+    const std::vector<hardware_interface::ComponentInfo>& drivetrainJoints) {
+  // resize command vector to the number of joints available in the urdf
+  drivetrain_commands_velocities.resize(drivetrainJoints.size(), std::numeric_limits<double>::quiet_NaN());
+  drivetrain_joint_position.resize(drivetrainJoints.size(), std::numeric_limits<double>::quiet_NaN());
+
+  for (const hardware_interface::ComponentInfo& joint : drivetrainJoints) {
+    // set joint names
+    set_joint_name(joint.name);
+
+    // check for number of command interfaces - there should only be one
+    if (joint.command_interfaces.size() != NUM_COMMAND_INTERFACES) {
+      RCLCPP_FATAL(rclcpp::get_logger(this->get_name()), "Incorrect number of command interfaces found");
+      return false;
+    }
+
+    // check the command interface type - there should be one command interface
+    if (joint.command_interfaces[command_interface::VELOCITY_COMMAND].name != hardware_interface::HW_IF_VELOCITY) {
+      RCLCPP_FATAL(rclcpp::get_logger(this->get_name()), "Velcoity Command Interface not found");
+      return false;
+    }
+
+    // check for number of state interfaces - there should be two .... velocity and position
+    if (joint.state_interfaces.size() != NUM_STATE_INTERFACES) {
+      RCLCPP_FATAL(rclcpp::get_logger(this->get_name()), "Incorrect number of state interfaces found");
+      return false;
+    }
+
+    // check for state interface type - there should be two state interfaces .... i.e. position & velocity
+    if (joint.state_interfaces[state_interface::VELOCITY_STATE].name != hardware_interface::HW_IF_VELOCITY) {
+      RCLCPP_FATAL(rclcpp::get_logger(this->get_name()), "Velocity State Interface not found");
+      return false;
+    }
+    if (joint.state_interfaces[state_interface::POSITION_STATE].name != hardware_interface::HW_IF_POSITION) {
+      RCLCPP_FATAL(rclcpp::get_logger(this->get_name()), "Position State Interface not found");
+      return false;
+    }
+  }
 
   return true;
 }
 
-void UWRTRoverHWDrivetrain::read(const ros::Time & /*time*/, const ros::Duration & /*period*/) {
-  ROS_ERROR_STREAM_NAMED(name_, "read function called from "
-                                    << name_ << " class. read calls should only happen to the overloaded function.");
-}
+bool UWRTMarsRoverDrivetrainHardware::configureDrivetrainTransmissions(
+    const std::vector<hardware_interface::ComponentInfo>& drivetrainTransmissions) {
+  // there is only one transmission per joint .... dont really need a loop
+  for (const hardware_interface::ComponentInfo& transmission_info : drivetrainTransmissions) {
+    // get transmission reduction value from urdf
+    double mechanicle_reduction{std::stod(transmission_info.parameters.at("mechanical_reduction"))};
 
-void UWRTRoverHWDrivetrain::write(const ros::Time & /*time*/, const ros::Duration & /*period*/) {
-  ROS_ERROR_STREAM_NAMED(name_, "write function called from "
-                                    << name_ << " class. write calls should only happen to the overloaded function.");
-}
+    // instantiate transmission
+    transmission = std::move(transmission_interface::SimpleTransmission(mechanicle_reduction));
 
-void UWRTRoverHWDrivetrain::doSwitch(const std::list<hardware_interface::ControllerInfo> &start_list,
-                                     const std::list<hardware_interface::ControllerInfo> &stop_list) {
-  // Reset commands for joints claimed by stopping controllers
-  for (const auto &controller : stop_list) {
-    for (const auto &hardware_interface_resource_list : controller.claimed_resources) {
-      for (const auto &joint_name : hardware_interface_resource_list.resources) {
-        actuator_joint_commands_[joint_name].type = DrivetrainActuatorJointCommand::Type::NONE;
-        actuator_joint_commands_[joint_name].joint_data = 0.0;
-      }
-    }
-  }
+    // create jointhandle
+    positon_joint_handle =
+        std::move(JointHandle(this->get_joint_name(), hardware_interface::HW_IF_POSITION, &CommandData::joint_position));
+    velocity_joint_handle =
+        std::move(JointHandle(this->get_joint_name(), hardware_interface::HW_IF_VELOCITY, &CommandData::joint_velocity));
 
-  // Set command type for joints claimed by starting controllers
-  for (const auto &controller : start_list) {
-    for (const auto &claimed : controller.claimed_resources) {
-      for (const auto &joint_name : claimed.resources) {
-        if (claimed.hardware_interface == "hardware_interface::PositionJointInterface") {
-          actuator_joint_commands_[joint_name].type = DrivetrainActuatorJointCommand::Type::POSITION;
-          actuator_joint_commands_[joint_name].joint_data = actuator_joint_states_[joint_name].joint_position;
-        } else if (claimed.hardware_interface == "hardware_interface::VelocityJointInterface") {
-          actuator_joint_commands_[joint_name].type = DrivetrainActuatorJointCommand::Type::VELOCITY;
-          actuator_joint_commands_[joint_name].joint_data = 0.0;
-        } else if (claimed.hardware_interface == "uwrt_hardware_interface::VoltageJointInterface") {
-          actuator_joint_commands_[joint_name].type = DrivetrainActuatorJointCommand::Type::VOLTAGE;
-          actuator_joint_commands_[joint_name].joint_data = 0.0;
-        }
-      }
-    }
-  }
+    // create actuator handle
+    velocity_actuator_handle = std::move(
+        ActuatorHandle(this->get_name(), hardware_interface::HW_IF_VELOCITY, &CommandData::actuator_velocity));
 
-  // TODO: doswitch to change control modes on roboteq (to go to and from open loop mode)
-}
-
-bool UWRTRoverHWDrivetrain::loadJointInfoFromParameterServer(ros::NodeHandle &robot_hw_nh) {
-  XmlRpc::XmlRpcValue joints_list;
-  bool param_fetched = robot_hw_nh.getParam("joints", joints_list);
-  if (!param_fetched) {
-    ROS_WARN_STREAM_NAMED(name_, robot_hw_nh.getNamespace() << "/joints could not be loaded from parameter server.");
-    return false;
-  }
-  ROS_DEBUG_STREAM_NAMED(name_, robot_hw_nh.getNamespace() << "/joints loaded from parameter server.");
-  ROS_ASSERT(joints_list.getType() == XmlRpc::XmlRpcValue::TypeArray);
-
-  // NOLINTNEXTLINE(modernize-loop-convert): iterator only valid for XmlRpcValue::TypeStruct
-  for (size_t joint_index = 0; joint_index < joints_list.size(); joint_index++) {
-    ROS_ASSERT(joints_list[joint_index].getType() == XmlRpc::XmlRpcValue::TypeStruct);
-    ROS_ASSERT(joints_list[joint_index].hasMember("name"));
-    ROS_ASSERT(joints_list[joint_index]["name"].getType() == XmlRpc::XmlRpcValue::TypeString);
-    std::string joint_name = joints_list[joint_index]["name"];
-    joint_names_.push_back(joint_name);
-    ROS_ASSERT(joints_list[joint_index].hasMember("transmission_reduction"));
-    ROS_ASSERT(joints_list[joint_index]["transmission_reduction"].getType() == XmlRpc::XmlRpcValue::TypeDouble);
-    joint_transmissions_.emplace(joint_name, joints_list[joint_index]["transmission_reduction"]);
+    // configure transmission
+    transmission.configure({positon_joint_handle, velocity_joint_handle}, {velocity_actuator_handle});
   }
   return true;
 }
 
-void UWRTRoverHWDrivetrain::registerStateInterfacesAndTransmissions(const std::string &joint_name) {
-  // Register JointStateHandle to the JointStateInterface
-  hardware_interface::JointStateHandle joint_state_handle(
-      joint_name, &actuator_joint_states_[joint_name].joint_position,
-      &actuator_joint_states_[joint_name].joint_velocity, &actuator_joint_states_[joint_name].dummy_joint_effort);
-  joint_state_interface_.registerHandle(joint_state_handle);
+std::vector<hardware_interface::StateInterface> UWRTMarsRoverDrivetrainHardware::export_state_interfaces(){
+    // create state interface to export
+    std::vector<hardware_interface::StateInterface> state_interfaces_list;
 
-  // Wrap Actuators States
-  actuator_state_data_[joint_name].position.push_back(&actuator_joint_states_[joint_name].actuator_position);
-  actuator_state_data_[joint_name].velocity.push_back(&actuator_joint_states_[joint_name].actuator_velocity);
-  actuator_state_data_[joint_name].effort.push_back(&actuator_joint_states_[joint_name].dummy_joint_effort);
 
-  // Wrap Joint States
-  joint_state_data_[joint_name].position.push_back(&actuator_joint_states_[joint_name].joint_position);
-  joint_state_data_[joint_name].velocity.push_back(&actuator_joint_states_[joint_name].joint_velocity);
-  joint_state_data_[joint_name].effort.push_back(&actuator_joint_states_[joint_name].dummy_joint_effort);
-
-  // Register ActuatorToJointStateHandle with wrapped state data to a ActuatorToJointStateInterface
-  transmission_interface::ActuatorToJointStateHandle actuator_to_joint_state_handle(
-      joint_name, &joint_transmissions_.find(joint_name)->second, actuator_state_data_[joint_name],
-      joint_state_data_[joint_name]);
-  actuator_to_joint_state_interface_.registerHandle(actuator_to_joint_state_handle);
-
-  // TODO #121: register new state interface for motor voltage, current, etc.
+    return state_interfaces_list;
 }
 
-void UWRTRoverHWDrivetrain::registerCommandInterfacesAndTransmissions(const std::string &joint_name) {
-  // Register JointHandle associated with a JointStateHandle to command interfaces
-  hardware_interface::JointHandle joint_command_handle(joint_state_interface_.getHandle(joint_name),
-                                                       &actuator_joint_commands_[joint_name].joint_data);
-  joint_position_interface_.registerHandle(joint_command_handle);
-  joint_velocity_interface_.registerHandle(joint_command_handle);
-  joint_voltage_interface_.registerHandle(joint_command_handle);
+std::vector<hardware_interface::CommandInterface> UWRTMarsRoverDrivetrainHardware::export_command_interfaces(){
+   // create command interfaces to export
+   std::vector<hardware_interface::CommandInterface> command_interfaces_list;
 
-  // Wrap Actuator Commands
-  actuator_command_data_[joint_name].position.push_back(&actuator_joint_commands_[joint_name].actuator_data);
-  actuator_command_data_[joint_name].velocity.push_back(&actuator_joint_commands_[joint_name].actuator_data);
-
-  // Wrap Joint Commands
-  joint_command_data_[joint_name].position.push_back(&actuator_joint_commands_[joint_name].joint_data);
-  joint_command_data_[joint_name].velocity.push_back(&actuator_joint_commands_[joint_name].joint_data);
-
-  // Register JointToActuatorPositionHandle with wrapped command data to a JointToActuatorPositionInterface
-  transmission_interface::JointToActuatorPositionHandle joint_to_actuator_position_handle(
-      joint_name, &joint_transmissions_.find(joint_name)->second, actuator_command_data_[joint_name],
-      joint_command_data_[joint_name]);
-  joint_to_actuator_position_interface_.registerHandle(joint_to_actuator_position_handle);
-
-  // Register JointToActuatorVelocityHandle with wrapped command data to a JointToActuatorVelocityInterface
-  transmission_interface::JointToActuatorVelocityHandle joint_to_actuator_velocity_handle(
-      joint_name, &joint_transmissions_.find(joint_name)->second, actuator_command_data_[joint_name],
-      joint_command_data_[joint_name]);
-  joint_to_actuator_velocity_interface_.registerHandle(joint_to_actuator_velocity_handle);
+   return command_interfaces_list;
 }
 
 }  // namespace uwrt_mars_rover_drivetrain_hw
+
+#include <pluginlib/class_list_macros.hpp>
+PLUGINLIB_EXPORT_CLASS(uwrt_mars_rover_drivetrain_hw::UWRTMarsRoverDrivetrainHardware,
+                       hardware_interface::ActuatorInterface)

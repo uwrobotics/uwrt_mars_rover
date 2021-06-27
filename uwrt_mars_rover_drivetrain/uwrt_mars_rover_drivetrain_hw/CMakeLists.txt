@@ -1,73 +1,82 @@
-cmake_minimum_required(VERSION 3.0.2)
+cmake_minimum_required(VERSION 3.5)
 project(uwrt_mars_rover_drivetrain_hw)
 
-find_package(catkin REQUIRED COMPONENTS
-        hardware_interface
-        joint_limits_interface
-        roscpp
-        transmission_interface
-        uwrt_mars_rover_hw
-        uwrt_mars_rover_utils
-        )
+# Default to C99
+if(NOT CMAKE_C_STANDARD)
+  set(CMAKE_C_STANDARD 99)
+endif()
 
-catkin_package(
-        INCLUDE_DIRS
-        include
-        drivers/roboteq_driver/include
-        LIBRARIES
-        ${PROJECT_NAME}
-        roboteq_driver
-        CATKIN_DEPENDS
-        hardware_interface
-        joint_limits_interface
-        roscpp
-        transmission_interface
-        uwrt_mars_rover_hw
-        uwrt_mars_rover_utils
+# Default to C++14
+if(NOT CMAKE_CXX_STANDARD)
+  set(CMAKE_CXX_STANDARD 14)
+endif()
+
+if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+  add_compile_options(-Wall -Wextra -Wpedantic)
+endif()
+
+# find dependencies
+find_package(ament_cmake REQUIRED)
+find_package(hardware_interface REQUIRED)
+find_package(transmission_interface REQUIRED)
+find_package(pluginlib REQUIRED)
+find_package(rclcpp REQUIRED)
+# uncomment the following section in order to fill in
+# further dependencies manually.
+# find_package(<dependency> REQUIRED)
+
+add_library(
+  ${PROJECT_NAME}
+  src/${PROJECT_NAME}.cpp 
+  src/${PROJECT_NAME}_real.cpp
 )
 
-include_directories(
-        include
-        drivers/roboteq_driver/include
-        ${catkin_INCLUDE_DIRS}
+target_include_directories(
+  ${PROJECT_NAME}
+  PRIVATE
+  include
 )
 
-add_library(roboteq_driver
-        drivers/roboteq_driver/src/CanopenInterface.cpp
-        drivers/roboteq_driver/src/RoboteqController.cpp
-        )
+ament_target_dependencies(
+  ${PROJECT_NAME}
+  hardware_interface
+  transmission_interface
+  pluginlib
+  rclcpp
+)
 
-add_library(${PROJECT_NAME}
-        src/${PROJECT_NAME}.cpp
-        src/${PROJECT_NAME}_real.cpp
-        )
-target_link_libraries(${PROJECT_NAME} roboteq_driver ${catkin_LIBRARIES})
+pluginlib_export_plugin_description_file(hardware_interface ${PROJECT_NAME}.xml)
 
-install(TARGETS
-        roboteq_driver
-        ${PROJECT_NAME}
-        ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-        LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-        RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
-        )
+install(
+  TARGETS ${PROJECT_NAME}
+  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION bin
+)
 
-install(DIRECTORY include/${PROJECT_NAME}/
-        DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
-        FILES_MATCHING
-        PATTERN "*.h"
-        PATTERN "*.hpp"
-        PATTERN ".svn" EXCLUDE
-        )
+if(BUILD_TESTING)
+  # generate compile_commands.json for clang-tidy
+  set(CMAKE_EXPORT_COMPILE_COMMANDS ON CACHE INTERNAL "") # works
 
-install(DIRECTORY drivers/roboteq_driver/include/
-        DESTINATION ${CATKIN_GLOBAL_INCLUDE_DESTINATION}
-        PATTERN ".svn" EXCLUDE
-        )
+  # cppcheck
+  find_package(ament_cmake_cppcheck REQUIRED)
+  ament_cppcheck()
 
-install(DIRECTORY cfg
-        DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
-        )
+  # clang-format 
+  find_package(ament_cmake_clang_format REQUIRED)
+  ament_clang_format()
 
-install(FILES ${PROJECT_NAME}_plugin.xml
-        DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
-        )
+  # flake8
+  find_package(ament_cmake_flake8 REQUIRED)
+  ament_flake8()
+
+  # xmllint
+  find_package(ament_cmake_xmllint REQUIRED)
+  ament_xmllint()
+
+  # clang-tidy 
+  find_package(ament_cmake_clang_tidy REQUIRED)
+  ament_clang_tidy(${CMAKE_BINARY_DIR})
+endif()
+
+ament_package()

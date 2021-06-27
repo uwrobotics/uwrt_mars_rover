@@ -8,7 +8,7 @@ endif()
 
 # Default to C++14
 if(NOT CMAKE_CXX_STANDARD)
-  set(CMAKE_CXX_STANDARD 14)
+  set(CMAKE_CXX_STANDARD 20)
 endif()
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
@@ -21,8 +21,9 @@ include_directories(
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
-find_package(rclcpp)
+find_package(rclcpp REQUIRED)
 
+add_subdirectory(lib/uwrt_mars_rover_hw_bridge)
 
 add_library(
   ${PROJECT_NAME}_library
@@ -35,19 +36,42 @@ ament_target_dependencies(
   "rclcpp"
 )
 
-# uncomment the following section in order to fill in
-# further dependencies manually.
-# find_package(<dependency> REQUIRED)
-
 ament_export_targets(
   ${PROJECT_NAME}_export 
   HAS_LIBRARY_TARGET
   )
 
+ament_export_include_directories(
+  include
+  lib/uwrt_mars_rover_hw_bridge/include
+)
+
+ament_export_libraries(
+  ${PROJECT_NAME}_library
+  uwrt-mars-rover-hw-bridge
+)
+
 ament_export_dependencies(
   "rclcpp"
   )
 
+# uwrt_mars_rover_hw_bridge
+install(
+  DIRECTORY lib/uwrt_mars_rover_hw_bridge/include/
+  DESTINATION include/${PROJECT_NAME}
+  FILES_MATCHING
+  PATTERN "*.h"
+  PATTERN "*.hpp"
+  PATTERN ".svn" EXCLUDE
+)
+install(
+  TARGETS uwrt-mars-rover-hw-bridge
+  LIBRARY DESTINATION lib
+  ARCHIVE DESTINATION lib
+  RUNTIME DESTINATION bin
+)
+
+# uwrt_mars_rover_utils
 install(
   DIRECTORY include/
   DESTINATION include

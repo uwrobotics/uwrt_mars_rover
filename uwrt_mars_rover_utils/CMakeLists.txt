@@ -17,6 +17,9 @@ endif()
 
 include_directories(
   include
+  lib/uwrt_mars_rover_hw_bridge/include
+  lib/uwrt_mars_rover_hw_bridge/can
+  lib/uwrt_mars_rover_hw_bridge/can/generated
 )
 
 # find dependencies

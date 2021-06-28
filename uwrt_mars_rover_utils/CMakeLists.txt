@@ -1,68 +1,122 @@
-cmake_minimum_required(VERSION 3.10.2)
+cmake_minimum_required(VERSION 3.5)
 project(uwrt_mars_rover_utils)
 
-# Load catkin and package dependencies
-find_package(catkin REQUIRED COMPONENTS
-        roscpp
-        )
+# Default to C99
+if(NOT CMAKE_C_STANDARD)
+  set(CMAKE_C_STANDARD 99)
+endif()
 
-# Declare a catkin package
-catkin_package(
-        INCLUDE_DIRS
-        include
-        lib/uwrt_mars_rover_hw_bridge/include
-        LIBRARIES
-        ${PROJECT_NAME}
-        uwrt-mars-rover-hw-bridge
-        CATKIN_DEPENDS
-        roscpp
+# Default to C++14
+if(NOT CMAKE_CXX_STANDARD)
+  set(CMAKE_CXX_STANDARD 20)
+endif()
+
+if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+  add_compile_options(-Wall -Wextra -Wpedantic)
+endif()
+
+include_directories(
+  include
+  lib/uwrt_mars_rover_hw_bridge/include
+  lib/uwrt_mars_rover_hw_bridge/can
+  lib/uwrt_mars_rover_hw_bridge/can/generated
 )
 
-# Adds CMakeLists from hw-bridge
+# find dependencies
+find_package(ament_cmake REQUIRED)
+find_package(rclcpp REQUIRED)
+
 add_subdirectory(lib/uwrt_mars_rover_hw_bridge)
 
-# Specify additional locations of header files
-include_directories(
-        include
-        ${catkin_INCLUDE_DIRS}
+add_library(
+  ${PROJECT_NAME}_library
+  src/uwrt_can.cpp
+
 )
 
-# Declare and link the C++ Library
-add_library(${PROJECT_NAME}
-        src/uwrt_can.cpp
-        src/uwrt_params.cpp
-        )
+ament_target_dependencies(
+  ${PROJECT_NAME}_library
+  "rclcpp"
+)
 
-# uwrt_can_test_node
-add_executable(uwrt_can_test_node src/uwrt_can_test_node.cpp)
-add_dependencies(uwrt_can_test_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-target_link_libraries(uwrt_can_test_node
-        ${PROJECT_NAME}
-        ${catkin_LIBRARIES}
-        )
+ament_export_targets(
+  ${PROJECT_NAME}_export 
+  HAS_LIBRARY_TARGET
+  )
 
-# uwrt_params_test_node
-add_executable(uwrt_params_test_node src/uwrt_params_test_node.cpp)
-add_dependencies(uwrt_params_test_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-target_link_libraries(uwrt_params_test_node
-        ${PROJECT_NAME}
-        ${catkin_LIBRARIES}
-        )
+ament_export_include_directories(
+  include
+  lib/uwrt_mars_rover_hw_bridge/include
+)
 
-# Install executables
-install(TARGETS uwrt_can_test_node uwrt_params_test_node
-        RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-        )
+ament_export_libraries(
+  ${PROJECT_NAME}_library
+  uwrt-mars-rover-hw-bridge
+)
 
-# Install libraries
-install(TARGETS ${PROJECT_NAME}
-        ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-        LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-        RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
-        )
+ament_export_dependencies(
+  "rclcpp"
+  )
 
-# Install headers
-install(DIRECTORY include/${PROJECT_NAME}/
-        DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
-        FILES_MATCHING PATTERN "*.h"
-        )
+# uwrt_mars_rover_hw_bridge
+install(
+  DIRECTORY lib/uwrt_mars_rover_hw_bridge/include/
+  DESTINATION include/${PROJECT_NAME}
+  FILES_MATCHING
+  PATTERN "*.h"
+  PATTERN "*.hpp"
+  PATTERN ".svn" EXCLUDE
+)
+install(
+  TARGETS uwrt-mars-rover-hw-bridge
+  LIBRARY DESTINATION lib
+  ARCHIVE DESTINATION lib
+  RUNTIME DESTINATION bin
+)
+
+# uwrt_mars_rover_utils
+install(
+  DIRECTORY include/
+  DESTINATION include
+)
+install(
+  TARGETS ${PROJECT_NAME}_library
+  EXPORT ${PROJECT_NAME}_export
+  LIBRARY DESTINATION lib
+  ARCHIVE DESTINATION lib
+  RUNTIME DESTINATION bin
+  INCLUDES DESTINATION include
+)
+
+
+if (BUILD_TESTING)
+  # generate compile_commands.json for clang-tidy
+  set(CMAKE_EXPORT_COMPILE_COMMANDS ON CACHE INTERNAL "")
+
+  # cppcheck
+  find_package(ament_cmake_cppcheck REQUIRED)
+  ament_cppcheck()
+
+  # clang-format
+  find_package(ament_cmake_clang_format REQUIRED)
+  ament_clang_format()
+
+  # flake8
+  find_package(ament_cmake_flake8 REQUIRED)
+  ament_flake8()
+
+  # xmllint
+  find_package(ament_cmake_xmllint REQUIRED)
+  ament_xmllint()
+
+  # clang-tidy
+  find_package(ament_cmake_clang_tidy REQUIRED)
+  ament_clang_tidy(${CMAKE_BINARY_DIR})
+
+  # the following line skips cpplint (only works in a git repo)
+  # uncomment the line when this package is not in a git repo
+  #set(ament_cmake_cpplint_FOUND TRUE)
+
+endif ()
+
+ament_package()

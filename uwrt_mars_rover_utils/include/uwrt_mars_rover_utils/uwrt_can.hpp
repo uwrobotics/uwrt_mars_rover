@@ -1,6 +1,7 @@
 #pragma once
 
 #include <rclcpp/rclcpp.hpp>
+#include <unistd.h>
 #include <linux/can.h>
 #include <linux/can/raw.h>
 #include <net/if.h>
@@ -9,6 +10,7 @@
 #include <unordered_map>
 #include <mutex>
 #include <thread>
+#include <queue>
 
 namespace uwrt_mars_rover_utils {
 
@@ -31,7 +33,7 @@ class CANInterface {
         CANInterface(const Config &config);
 
         // Send a one shot message
-        bool sendOneShotMessage(struct can_frame* frame);
+        bool sendOneShotMessage(struct can_frame& frame);
 
         // Update a TX CAN signal
         bool setTXSignalValue(HWBRIDGE::CANID msgID, HWBRIDGE::CANSIGNAL signalName, HWBRIDGE::CANSignalValue_t signalValue);
@@ -51,12 +53,20 @@ class CANInterface {
         std::thread rxPostmanThread_;
         std::thread rxClientThread_;
         std::thread txProcessorThread_;
+        std::chrono::milliseconds THREAD_SLEEP_MILLISEC{1};
+        std::chrono::milliseconds TX_PERIOD_MILLISEC{10};
+
+        // Queues
+        std::queue<struct can_frame> rxMailbox_;
+        std::queue<struct can_frame> txMailboxOneShot_;
 
         void rxPostman(void);
         void rxClient(void);
         void txProcessor(void);
 
         // Mutexes
+        std::timed_mutex rxMailboxMutex_;
+        std::timed_mutex txMailboxOneShotMutex_;
         std::timed_mutex rxMutex_;
         std::timed_mutex txMutex_;
         static constexpr std::chrono::milliseconds MUTEX_LOCK_TIMEOUT{1};

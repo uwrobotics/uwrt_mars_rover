@@ -1,155 +1,190 @@
-#include <ros/ros.h>
-#include <sys/ioctl.h>
-#include <sys/socket.h>
-#include <uwrt_mars_rover_utils/uwrt_can.h>
+#include <uwrt_mars_rover_utils/uwrt_can.hpp>
+#include <vector>
 
 namespace uwrt_mars_rover_utils {
 
-// static constexpr need to be declared again in cpp file (fixed in c++17)
-constexpr std::chrono::milliseconds UWRTCANWrapper::MUTEX_LOCK_TIMEOUT;
-
-UWRTCANWrapper::UWRTCANWrapper(std::string name, std::string interface_name, bool rcv_big_endian,
-                               int thread_sleep_millis)
-    : name_(std::move(name)),
-      _logger_name(uwrt_mars_rover_utils::getLoggerName()),
-      interface_name_(std::move(interface_name)),
-      rcv_endianness_(rcv_big_endian ? __ORDER_BIG_ENDIAN__ : __ORDER_LITTLE_ENDIAN__),
-      thread_sleep_millis_(std::chrono::milliseconds(thread_sleep_millis)){};
-
-// NOLINTNEXTLINE(performance-noexcept-move-constructor, bugprone-exception-escape)
-UWRTCANWrapper::UWRTCANWrapper(UWRTCANWrapper&& to_move)
-    : name_(std::move(to_move.name_)),
-      _logger_name(std::move(to_move._logger_name)),
-      interface_name_(std::move(to_move.interface_name_)),
-      initialized_(to_move.initialized_),
-      rcv_endianness_(to_move.rcv_endianness_),
-      thread_sleep_millis_(std::chrono::milliseconds(to_move.thread_sleep_millis_)) {
-  // if to_move has been initialized, move over other variables
-  if (initialized_) {
-    socket_handle_ = to_move.socket_handle_;
-    sock_addr_ = to_move.sock_addr_;
-    ifr_ = to_move.ifr_;
-
-    read_thread_ = std::thread(std::move(to_move.read_thread_));
-    read_thread_running_ = to_move.read_thread_running_;
-    if (!std::unique_lock<std::timed_mutex>(to_move.recv_map_mtx_, MUTEX_LOCK_TIMEOUT)) {
-      throw std::runtime_error("Timed out while trying to lock vector mutex in " __FILE__);
-    }
-    recv_map_ = std::move(to_move.recv_map_);
-  }
-};
-
-// NOLINTNEXTLINE(performance-noexcept-move-constructor, bugprone-exception-escape)
-UWRTCANWrapper& UWRTCANWrapper::operator=(UWRTCANWrapper&& to_move) {
-  if (this != &to_move) {
-    // move constructor variables
-    name_ = std::move(to_move.name_);
-    interface_name_ = std::move(to_move.interface_name_);
-    rcv_endianness_ = to_move.rcv_endianness_;
-    thread_sleep_millis_ = to_move.thread_sleep_millis_;
-    _logger_name = std::move(to_move._logger_name);
-
-    // stop our thread
-    read_thread_running_ = false;
-    if (read_thread_.joinable()) {
-      read_thread_.join();
+CANInterface::CANInterface(const Config &config) : rxMsgMap_(config.rxMsgMap), txMsgMap_(config.txMsgMap), rxOneShotMsgHandler_(config.rxOneShotMsgHandler) {
+    // Init socket CAN
+    socketHandle_ = socket(PF_CAN, SOCK_RAW, CAN_RAW);
+    if (socketHandle_ < 0) {
+        throw std::runtime_error("Failed to set up a socket for CAN in " __FILE__);
     }
 
-    // if to_move has been initialized, move over other variables
-    initialized_ = to_move.initialized_;
-    if (initialized_) {
-      socket_handle_ = to_move.socket_handle_;
-      sock_addr_ = to_move.sock_addr_;
-      ifr_ = to_move.ifr_;
-
-      read_thread_ = std::thread(std::move(to_move.read_thread_));
-      read_thread_running_ = to_move.read_thread_running_;
-      if (!std::unique_lock<std::timed_mutex>(to_move.recv_map_mtx_, MUTEX_LOCK_TIMEOUT)) {
-        throw std::runtime_error("Timed out while trying to lock vector mutex in " __FILE__);
-      }
-      recv_map_ = std::move(to_move.recv_map_);
-    }
-  }
-
-  return *this;
-}
-
-UWRTCANWrapper::~UWRTCANWrapper() {
-  read_thread_running_ = false;
-  if (read_thread_.joinable()) {
-    read_thread_.join();
-  }
-}
-
-void UWRTCANWrapper::init(const std::vector<uint32_t>& ids) {
-  // if already initialized, stop the thread and clear rcv map
-  if (initialized_) {
-    initialized_ = false;
-    if (read_thread_.joinable()) {
-      read_thread_.join();
-    }
-    recv_map_.clear();
-  }
-
-  // set up can socket
-  socket_handle_ = socket(PF_CAN, SOCK_RAW, CAN_RAW);
-  if (socket_handle_ < 0) {
-    throw std::runtime_error("Failed to set up a socket for CAN in " __FILE__);
-  }
-  strcpy(ifr_.ifr_name, interface_name_.c_str());
-  ioctl(socket_handle_, SIOCGIFINDEX, &ifr_);
-  sock_addr_.can_family = AF_CAN;
-  sock_addr_.can_ifindex = ifr_.ifr_ifindex;
-
-  // set software filters on can_id
-  std::vector<struct can_filter> filters;
-  filters.resize(ids.size());
-  for (int i = 0; i < ids.size(); i++) {
-    filters[i].can_id = (canid_t)ids[i];
-    filters[i].can_mask = (CAN_EFF_FLAG | CAN_RTR_FLAG | CAN_SFF_MASK);
-  }
-  setsockopt(socket_handle_, SOL_CAN_RAW, CAN_RAW_FILTER, filters.data(), sizeof(struct can_filter) * filters.size());
-
-  // set read timeout to be very small, so it's not blocking
-  struct timeval timeout {};
-  timeout.tv_usec = 1;
-  setsockopt(socket_handle_, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout));
-
-  // finally bind can socket to can addr
-  // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
-  if (bind(socket_handle_, reinterpret_cast<struct sockaddr*>(&sock_addr_), sizeof(sock_addr_)) < 0) {
-    throw std::runtime_error("Failed to bind can device to socket in " __FILE__);
-  }
-
-  // start read thread
-  read_thread_running_ = true;
-  read_thread_ = std::thread(&UWRTCANWrapper::readSocketTask, this);
-  initialized_ = true;
-}
-
-void UWRTCANWrapper::readSocketTask() {
-  struct can_frame frame {};
-  int bytes_read;
-
-  while (read_thread_running_) {
-    // keep performing read until buffer is emptied
-    do {
-      bytes_read = recv(socket_handle_, &frame, sizeof(struct can_frame), 0);
-      if (bytes_read == sizeof(struct can_frame)) {
-        if (!recv_map_mtx_.try_lock_for(MUTEX_LOCK_TIMEOUT)) {
-          ROS_WARN_NAMED(name_, "CAN wrapper failed to lock mutex, resulting in a lost CAN frame!");
-          break;
+    // Set up filters
+    if (rxMsgMap_ != nullptr) {
+        std::vector<struct can_filter> filters;
+        for (auto it = rxMsgMap_->begin(); it != rxMsgMap_->end(); it++) {
+            struct can_filter canFilter = {
+                .can_id = (canid_t)(it->first),
+                .can_mask = (canid_t)HWBRIDGE::ROVER_CANID_FILTER_MASK
+            };
+            filters.push_back(canFilter);
         }
-        recv_map_[frame.can_id] = frame;
-        recv_map_mtx_.unlock();
-      } else if (bytes_read < 0 && errno != EWOULDBLOCK) {
-        ROS_WARN_STREAM_NAMED(name_, "CAN wrapper failed to recieve CAN message because: " << strerror(errno));
-      }
-    } while (bytes_read == sizeof(struct can_frame));
+        setsockopt(socketHandle_, SOL_CAN_RAW, CAN_RAW_FILTER, filters.data(), sizeof(struct can_filter)*filters.size());
+    }
 
-    // buffer is emptied, lets wait
-    std::this_thread::sleep_for(thread_sleep_millis_);
-  }
+    // Set read timeout
+    struct timeval timeout;
+    timeout.tv_usec = 1;
+    setsockopt(socketHandle_, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout));
+
+    // Bind socket to CAN addr
+    if (bind(socketHandle_, reinterpret_cast<struct sockaddr*>(&sockaddr_), sizeof(sockaddr_)) < 0) {
+        throw std::runtime_error("Failed to bind can device to socket in " __FILE__);
+    }
+
+    // Start RX and TX threads
+    rxPostmanThread_ = std::thread(&CANInterface::rxPostman, this);
+    rxClientThread_ = std::thread(&CANInterface::rxClient, this);
+    txProcessorThread_ = std::thread(&CANInterface::txProcessor, this);
 }
 
-}  // namespace uwrt_mars_rover_utils
+void CANInterface::rxPostman(void) {
+    struct can_frame frame;
+    int bytesRead;
+
+    while (true) {
+        do {
+            bytesRead = recv(socketHandle_, &frame, sizeof(struct can_frame), 0);
+            if (bytesRead == sizeof(struct can_frame)) {
+                // Put message in queue
+                if (!rxMailboxMutex_.try_lock_for(MUTEX_LOCK_TIMEOUT)) {
+                    RCLCPP_WARN(rclcpp::get_logger("rclcpp"), "CAN wrapper failed to lock mutex, resulting in a lost CAN frame!");
+                    break;
+                }
+                rxMailbox_.push(frame);
+                rxMailboxMutex_.unlock();
+            } 
+            else if (bytesRead < 0 && errno != EWOULDBLOCK) {
+                RCLCPP_WARN(rclcpp::get_logger("rclcpp"), "CAN interface failed to recieve CAN message");
+            }
+        } while (bytesRead == sizeof(struct can_frame));
+
+        std::this_thread::sleep_for(THREAD_SLEEP_MILLISEC);
+    }
+}
+
+void CANInterface::rxClient(void) {
+    struct can_frame frame;
+
+    while (true) {
+        // Wait for a message to arrive
+        while (rxMailbox_.empty()) {
+            std::this_thread::sleep_for(THREAD_SLEEP_MILLISEC);
+        }
+
+        // Grab message from queue
+        frame = rxMailbox_.front();
+
+        // Check if message is intended to be received by this node
+        rxMutex_.lock();
+        bool validMsgReceived = (rxMsgMap_ != nullptr) && rxMsgMap_->contains(static_cast<HWBRIDGE::CANID>(frame.can_id));
+        rxMutex_.unlock();
+
+        if (validMsgReceived) {
+            // Extract message signals and put into RX message map
+            rxMutex_.lock();
+            bool msgUnpacked = HWBRIDGE::unpackCANMsg(frame.data, static_cast<HWBRIDGE::CANID>(frame.can_id), rxMsgMap_);
+            rxMutex_.unlock();
+
+            if (msgUnpacked) {
+                // If message is one-shot, process message
+                if ((rxOneShotMsgHandler_ != nullptr) && rxOneShotMsgHandler_->contains(static_cast<HWBRIDGE::CANID>(frame.can_id))) {
+                    if (rxOneShotMsgHandler_->at(static_cast<HWBRIDGE::CANID>(frame.can_id))() == false) {
+                        RCLCPP_WARN(rclcpp::get_logger("rclcpp"), "CAN interface failed to process CAN message");
+                    }
+                }
+                // Otherwise message is streamed
+                else {
+                }
+            }
+            else {
+                RCLCPP_WARN(rclcpp::get_logger("rclcpp"), "CAN interface failed to unpack CAN message");
+            }
+        }
+
+        // Otherwise invalid message was received
+        else {
+            RCLCPP_WARN(rclcpp::get_logger("rclcpp"), "CAN interface received invalid CAN message");
+        }
+
+        // Remove message from queue
+        rxMailbox_.pop();
+    }
+}
+
+void CANInterface::txProcessor(void) {
+    struct can_frame frame;
+    int bytesSent;
+
+    while (true) {
+        auto startTime = std::chrono::steady_clock::now();
+
+        // Send all one-shot messages that were queued
+        while (!txMailboxOneShot_.empty()) {
+            txMailboxOneShotMutex_.lock();
+            frame = txMailboxOneShot_.front();
+            bytesSent = write(socketHandle_, &frame, sizeof(struct can_frame));
+            if (bytesSent != sizeof(struct can_frame)) {
+                RCLCPP_WARN(rclcpp::get_logger("rclcpp"), "CAN interface failed to send CAN message");
+            }
+            txMailboxOneShot_.pop();
+            txMailboxOneShotMutex_.unlock();
+        }
+
+        // Send all streamed messages
+        if (txMsgMap_ != nullptr) {
+            for (auto it = txMsgMap_->begin(); it != txMsgMap_->end(); it++) {
+                HWBRIDGE::CANID msgID          = it->first;
+                HWBRIDGE::CANMsgData_t msgData = {0};
+                size_t len                     = 0;
+
+                txMutex_.lock();
+                bool msgPacked = HWBRIDGE::packCANMsg(msgData.raw, msgID, txMsgMap_, len);
+                txMutex_.unlock();
+
+                if (msgPacked) {
+                    // Send message
+                    frame.can_id = static_cast<canid_t>(msgID);
+                    memcpy(frame.data, &msgData, len);
+                    bytesSent = write(socketHandle_, &frame, sizeof(struct can_frame));
+                    if (bytesSent != sizeof(struct can_frame)) {
+                        RCLCPP_WARN(rclcpp::get_logger("rclcpp"), "CAN interface failed to send CAN message");
+                    }
+                } 
+                else {
+                    RCLCPP_WARN(rclcpp::get_logger("rclcpp"), "CAN interface failed to pack CAN message");
+                }
+            }
+        }
+
+        std::this_thread::sleep_until(startTime + TX_PERIOD_MILLISEC);
+    }
+}
+
+bool CANInterface::sendOneShotMessage(struct can_frame& frame) {
+    // Put message in queue
+    if (!rxMailboxMutex_.try_lock_for(MUTEX_LOCK_TIMEOUT)) {
+        RCLCPP_WARN(rclcpp::get_logger("rclcpp"), "CAN wrapper failed to lock mutex, resulting in a lost CAN frame!");
+        return false;
+    }
+    txMailboxOneShot_.push(frame);
+    rxMailboxMutex_.unlock();
+    return true;
+}
+
+bool CANInterface::setTXSignalValue(HWBRIDGE::CANID msgID, HWBRIDGE::CANSIGNAL signalName, HWBRIDGE::CANSignalValue_t signalValue) {
+    txMutex_.lock();
+    bool success = (txMsgMap_ != nullptr) && txMsgMap_->setSignalValue(msgID, signalName, signalValue);
+    txMutex_.unlock();
+    return success;
+}
+
+bool CANInterface::getRXSignalValue(HWBRIDGE::CANID msgID, HWBRIDGE::CANSIGNAL signalName, HWBRIDGE::CANSignalValue_t &signalValue) {
+    rxMutex_.lock();
+    bool success = (rxMsgMap_ != nullptr) && rxMsgMap_->getSignalValue(msgID, signalName, signalValue);
+    rxMutex_.unlock();
+    return success;
+}
+
+}

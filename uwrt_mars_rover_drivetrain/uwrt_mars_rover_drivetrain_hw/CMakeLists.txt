@@ -27,6 +27,7 @@ find_package(rclcpp REQUIRED)
 
 add_library(
   ${PROJECT_NAME}
+  SHARED
   src/${PROJECT_NAME}.cpp 
   src/${PROJECT_NAME}_real.cpp
 )
@@ -52,6 +53,11 @@ install(
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION bin
+)
+
+install(
+  DIRECTORY config launch
+  DESTINATION share/${PROJECT_NAME}
 )
 
 if(BUILD_TESTING)

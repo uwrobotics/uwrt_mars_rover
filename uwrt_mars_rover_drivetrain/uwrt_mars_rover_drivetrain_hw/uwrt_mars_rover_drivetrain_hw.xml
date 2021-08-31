@@ -8,7 +8,6 @@
       This is the simulation version
     </description>
   </class>
-
   <class name="uwrt_mars_rover_drivetrain_hw/UWRTMarsRoverDrivetrainHardwareReal"
 	 type="uwrt_mars_rover_drivetrain_hw::UWRTMarsRoverDrivetrainHardwareReal"
 	 base_class_type="hardware_interface::ActuatorInterface">
@@ -19,3 +18,6 @@
     </description>
   </class>
 </library>
+
+uwrt_mars_rover_drivetrain_hw::UWRTMarsRoverDrivetrainHardwareReal,
+  hardware_interface::ActuatorInterface

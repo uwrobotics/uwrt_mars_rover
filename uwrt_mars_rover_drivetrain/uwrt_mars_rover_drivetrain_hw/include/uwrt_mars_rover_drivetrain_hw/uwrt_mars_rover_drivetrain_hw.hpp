@@ -16,16 +16,17 @@
 
 #include "uwrt_mars_rover_drivetrain_hw/visibility.hpp"
 
-using hardware_interface::return_type;
-
-namespace uwrt_mars_rover_drivetrain_hw {
+namespace uwrt_mars_rover_drivetrain_hw
+{
 class UWRTMarsRoverDrivetrainHardware
-    : public hardware_interface::BaseInterface<hardware_interface::ActuatorInterface> {
- public:
+: public hardware_interface::BaseInterface<hardware_interface::ActuatorInterface>
+{
+public:
   RCLCPP_SHARED_PTR_DEFINITIONS(UWRTMarsRoverDrivetrainHardware)
-
+  
   UWRT_MARS_ROVER_DRIVETRAIN_HW_PUBLIC
-  return_type configure(const hardware_interface::HardwareInfo& actuator_info) override;
+  hardware_interface::return_type configure(
+    const hardware_interface::HardwareInfo & actuator_info) override;
 
   UWRT_MARS_ROVER_DRIVETRAIN_HW_PUBLIC
   std::vector<hardware_interface::StateInterface> export_state_interfaces() override;
@@ -33,82 +34,114 @@ class UWRTMarsRoverDrivetrainHardware
   UWRT_MARS_ROVER_DRIVETRAIN_HW_PUBLIC
   std::vector<hardware_interface::CommandInterface> export_command_interfaces() override;
 
+  /****** for simulation  ******/
   UWRT_MARS_ROVER_DRIVETRAIN_HW_PUBLIC
-  return_type prepare_command_mode_switch(const std::vector<std::string>& start_interfaces,
-                                          const std::vector<std::string>& stop_interfaces) override;
+  hardware_interface::return_type prepare_command_mode_switch(
+    const std::vector<std::string> & start_interfaces,
+    const std::vector<std::string> & stop_interfaces) override;
+  
+  UWRT_MARS_ROVER_DRIVETRAIN_HW_PUBLIC
+  hardware_interface::return_type start() override;
 
   UWRT_MARS_ROVER_DRIVETRAIN_HW_PUBLIC
-  return_type start() override;
+  hardware_interface::return_type stop() override;
 
   UWRT_MARS_ROVER_DRIVETRAIN_HW_PUBLIC
-  return_type stop() override;
+  hardware_interface::return_type read() override;
 
   UWRT_MARS_ROVER_DRIVETRAIN_HW_PUBLIC
-  return_type read() override;
+  hardware_interface::return_type write() override;
 
-  UWRT_MARS_ROVER_DRIVETRAIN_HW_PUBLIC
-  return_type write() override;
-
- private:
-  // Parameters for drivetrain simulation
+private:
+  // Parameters for drivetrain simulation - gazebo or something
   double drivetrain_start_sec{};
   double drivetrain_stop_sec{};
   double drivetrain_slowdown{};
 
- protected:
-  // actuator commands for velocity and position
-  std::vector<double> drivetrain_commands_velocities;
-
-  // actuator states for velocity
-  std::vector<double> drivetrain_joint_position;
+protected:
+  std::unordered_map<std::string, std::size_t> joint_state_map;
+  std::unordered_map<std::string, std::size_t> joint_command_map;
   
-  // keep track of which command interface
-  enum command_interface : std::uint32_t {
-    VELOCITY_COMMAND = 0,
+
+  enum class UWRTDrivetrainCommandMode : std::uint32_t {
+    UNDEFINED = 0,
+    VELOCITY = 1,
+    VOLTAGE = 2, /* TODO: make a voltage controller for voltage control mode */
   };
 
-  // keep track of which state interface
-  enum state_interface : std::uint32_t {
-    VELOCITY_STATE = 0,
-    POSITION_STATE = 1,
+  struct Actuator
+  {
+    struct Commands
+    {
+      double actuator_velocity_command;  // rad/sec
+      double joint_velocity_command; // needed for the transmission
+      double joint_voltage_command;
+      UWRTDrivetrainCommandMode actuator_mode;  // which type of commands are being sent
+    };
+
+    using Commands = struct Commands;
+    Commands commands;
+
+    struct States
+    {
+      double joint_velocity;  // rad/sec
+      double joint_voltage;
+    };
+
+    using States = struct States;
+    States states;
   };
 
-  struct CommandData {
-    static double joint_position;
-    static double joint_velocity;
-    static double actuator_velocity;
+  using Actuator = struct Actuator;
+  Actuator actuator;
+
+  struct Conversion
+  {
+    static constexpr double MOTOR_READING_TO_AMPS_CONVERSION_FACTOR{10.0};
+    static constexpr double RPM_TO_RADIANS_PER_SECOND_FACTOR{2 * M_PI / 60};
+    static constexpr double REVOLUTIONS_TO_RADIANS_FACTOR{2 * M_PI};
+    static constexpr double RADIANS_PER_SECOND_TO_RPM_FACTOR{60 / M_PI / 2};
+    static constexpr double REVOLUTIONS_PER_RADIAN{1 / (2 * M_PI)};
   };
 
-  using CommandData = struct CommandData;
 
+  // helpful functions to access joint names
   std::string joint_name;
+  inline std::string get_joint_name() const { return joint_name; }
+  inline void set_joint_name(const std::string & name) { joint_name = std::move(name); }
 
-  inline std::string get_joint_name() const {return joint_name;}
-  inline void set_joint_name(const std::string& name) {joint_name = std::move(name);}
+  // logger for the actuator
+  inline rclcpp::Logger actuator_logger() const { return rclcpp::get_logger(this->get_name()); }
 
   // number of command interfaces for joints - look at urdf
   static constexpr unsigned int NUM_COMMAND_INTERFACES{1};
 
   // number of state interfaces for joints - look at urdf
-  static constexpr unsigned int NUM_STATE_INTERFACES{2};
+  static constexpr unsigned int NUM_STATE_INTERFACES{1};
 
   // transmission stuff - there should only be one actuator linked to one joint
-  transmission_interface::SimpleTransmission transmission = {0.0};
+  // make into a pointer 
+  std::unique_ptr<transmission_interface::SimpleTransmission> command_transmission;
+  std::unique_ptr<transmission_interface::SimpleTransmission> state_transmission;
 
   // joint & actuator handles for the transmission
-  transmission_interface::JointHandle velocity_joint_handle = {"", ""};
-  transmission_interface::JointHandle positon_joint_handle = {"", ""};
-  transmission_interface::ActuatorHandle velocity_actuator_handle = {"", ""};
+
+  std::unique_ptr<transmission_interface::JointHandle> velocity_joint_handle;
+  std::unique_ptr<transmission_interface::ActuatorHandle> actuator_command_handle;
+  
 
   // parse urdf and get all drivetrain joints and transmissions
   UWRT_MARS_ROVER_DRIVETRAIN_HW_LOCAL
-  bool configureDrivetrainJoints(const std::vector<hardware_interface::ComponentInfo>& drivetrainJoints);
+  bool configureDrivetrainJoints(
+    const std::vector<hardware_interface::ComponentInfo> & drivetrainJoints);
 
   UWRT_MARS_ROVER_DRIVETRAIN_HW_LOCAL
-  bool configureDrivetrainTransmissions(const std::vector<hardware_interface::ComponentInfo>& drivetrainTransmissions);
+  bool configureDrivetrainTransmissions(
+    const std::vector<hardware_interface::ComponentInfo> & drivetrainTransmissions);
 
   UWRT_MARS_ROVER_DRIVETRAIN_HW_LOCAL
-  bool configureDrivetrainHardwareInfo(const hardware_interface::HardwareInfo& drivetarinHardwareInfo);
+  bool configureDrivetrainHardwareInfo(
+    const hardware_interface::HardwareInfo & drivetarinHardwareInfo);
 };
 
 }  // namespace uwrt_mars_rover_drivetrain_hw

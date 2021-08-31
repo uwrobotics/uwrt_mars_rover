@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:macro name="uwrt_mars_rover_drivetrain">
+
+    <!-- actuator 1-->
+    <ros2_control name="actuator_front_left" type="actuator">
+      <hardware>
+       <plugin>uwrt_mars_rover_drivetrain_hw/UWRTMarsRoverDrivetrainHardwareReal</plugin>
+       <param name="can_interface"> 0 </param>
+       <param name="can_index"> 0 </param>
+      </hardware>
+      <joint name="wheel_front_left_joint">
+        <command_interface name="velocity"/>
+        <state_interface name="velocity"/>
+      </joint>
+      <transmission name = "transmission_front_left">
+        <plugin>transmission_interface/SimpleTransmission</plugin>
+        <param name="mechanical_reduction">0.43</param>
+      </transmission>
+    </ros2_control>
+
+    <!-- actuator 2-->
+    <ros2_control name="actuator_front_right" type="actuator">
+      <hardware>
+       <plugin>uwrt_mars_rover_drivetrain_hw/UWRTMarsRoverDrivetrainHardwareReal</plugin>
+       <param name="can_interface"> 1 </param>
+       <param name="can_index"> 1 </param>
+      </hardware>
+      <joint name="wheel_front_right_joint">
+        <command_interface name="velocity"/>
+        <state_interface name="velocity"/>
+      </joint>
+      <transmission name = "transmission_front_right">
+        <plugin>transmission_interface/SimpleTransmission</plugin>
+        <param name="mechanical_reduction">0.43</param>
+      </transmission>
+    </ros2_control>  
+
+    <!-- actuator 3-->
+    <ros2_control name="actuator_rear_left" type="actuator">
+      <hardware>
+       <plugin>uwrt_mars_rover_drivetrain_hw/UWRTMarsRoverDrivetrainHardwareReal</plugin>
+       <param name="can_interface"> 2 </param>
+       <param name="can_index"> 2 </param>
+      </hardware>
+      <joint name="wheel_rear_left_joint">
+        <command_interface name="velocity"/>
+        <state_interface name="velocity"/>
+      </joint>
+      <transmission name = "transmission_rear_left">
+        <plugin>transmission_interface/SimpleTransmission</plugin>
+        <param name="mechanical_reduction">0.43</param>
+      </transmission>
+    </ros2_control>  
+
+    <!-- actuator 4-->
+    <ros2_control name="actuator_rear_right" type="actuator">
+      <hardware>
+       <plugin>uwrt_mars_rover_drivetrain_hw/UWRTMarsRoverDrivetrainHardwareReal</plugin>
+       <param name="can_interface"> 3 </param>
+       <param name="can_index"> 3 </param>
+      </hardware>
+      <joint name="wheel_rear_right_joint">
+        <command_interface name="velocity"/>
+        <state_interface name="velocity"/>
+      </joint>
+      <transmission name = "transmission_rear_right">
+        <plugin>transmission_interface/SimpleTransmission</plugin>
+        <param name="mechanical_reduction">0.43</param>
+      </transmission>
+    </ros2_control>
+
+  </xacro:macro>
+
+</robot>
+

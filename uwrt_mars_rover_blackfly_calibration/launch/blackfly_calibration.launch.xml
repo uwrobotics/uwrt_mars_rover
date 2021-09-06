@@ -1,9 +1,0 @@
-<launch>
-
- <arg name="topic" default="/blackfly/image/raw"/>
- 
- <node pkg="uwrt_mars_rover_blackfly_calibration" exec="broadcaster">
-   <param name="topic" value="$(var topic)"/>
- </node>
-
-</launch>

@@ -1,0 +1,126 @@
+<?xml version="1.0" ?>
+<robot name="uwrt_mars_rover_sim" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+<xacro:include filename="$(find uwrt_mars_rover_description)/urdf/common.gazebo"/>
+<xacro:include filename="$(find uwrt_mars_rover_description)/urdf/common.trans"/>
+<xacro:include filename="$(find uwrt_mars_rover_description)/urdf/arm/robot_claw.xacro"/>
+
+<xacro:property name="arm_color" value="Gazebo/Green"/>
+
+<xacro:property name="bicep_z" value="-0.0381"/>
+
+<xacro:property name="forearm_x" value="0.318874"/>
+<xacro:property name="forearm_y" value="-0.151281"/>
+<xacro:property name="forearm_z" value="-0.062292"/>
+
+<xacro:macro name="arm_to_base" params="base_object">
+    <link name="turntable">
+        <inertial>
+            <origin rpy="0 0 0" xyz="-0.00358 0.03422 0.05666"/>
+            <mass value="1.26885"/>
+            <inertia ixx="0.00397" ixy="-0.00035" ixz="0.00084" iyy="0.01033" iyz="-0.00008" izz="0.01305"/>
+        </inertial>
+        <visual>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <geometry>
+                <mesh filename="package://uwrt_mars_rover_description/meshes/turntable.stl" scale="0.0254 0.0254 0.0254"/>
+            </geometry>
+            <material name="Red">
+                <color rgba="1 0 0 1"/>
+            </material>
+        </visual>
+        <collision>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <geometry>
+                <mesh filename="package://uwrt_mars_rover_description/meshes/collisions/turntable.dae" scale="0.0254 0.0254 0.0254"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <xacro:basic_gazebo_ref link_name="turntable" color="${arm_color}"/>
+
+    <joint name="turntable_to_chassis" type="revolute">
+        <origin xyz="0.2445 0 -0.0222" rpy="0.0 0.0 0.0"/>
+        <parent link="${base_object}"/>
+        <child link="turntable"/>
+        <axis xyz="0.0 0.0 1.0"/>
+        <limit lower="${-pi/4}" upper="${pi/4}" effort="10000" velocity="0.5"/>
+    </joint>
+
+    <xacro:basic_transmission link_name="turntable" joint_name="turntable_to_chassis" mech_reduction="1"/>
+
+    <link name="bicep">
+        <inertial>
+            <origin rpy="0 0 0" xyz="0.21949 0.01582 ${0.16754 + bicep_z}"/>
+            <mass value="6.480"/>
+            <inertia ixx="0.049355726" ixy="-0.009202176" ixz="-0.033305137" iyy="0.185953394" iyz="-0.000337776" izz="0.156889351"/>
+        </inertial>
+        <visual>
+            <origin rpy="0 0 0" xyz="0 0 ${bicep_z}"/>
+            <geometry>
+                <mesh filename="package://uwrt_mars_rover_description/meshes/bicep.stl" scale="0.0254 0.0254 0.0254"/>
+            </geometry>
+            <material name="Red">
+                <color rgba="1 0 0 1"/>
+            </material>
+        </visual>
+        <collision>
+            <origin rpy="0 0 0" xyz="0 0 ${bicep_z}"/>
+            <geometry>
+                <mesh filename="package://uwrt_mars_rover_description/meshes/collisions/bicep.dae" scale="0.0254 0.0254 0.0254"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <xacro:basic_gazebo_ref link_name="bicep" color="${arm_color}"/>
+
+    <joint name="shoulder" type="revolute">
+        <origin xyz="0.015875 0 0.0544576" rpy="0.0 0.0 0.0"/>
+        <parent link="turntable"/>
+        <child link="bicep"/>
+        <axis xyz="0.0 1.0 0.0"/>
+        <limit lower="${-pi/4}" upper="${pi/4}" effort="10000" velocity="0.5"/>
+    </joint>
+
+    <xacro:basic_transmission link_name="bicep" joint_name="shoulder" mech_reduction="1"/>
+
+    <link name="forearm">
+        <inertial>
+            <origin rpy="0 0 0" xyz="${-0.045 + forearm_x} ${0.15159 + forearm_y} ${0.05923 + forearm_z}"/>
+            <mass value="1.00758"/>
+            <inertia ixx="0.002383071" ixy="0.0000089677" ixz="-0.000286743" iyy="0.010400499" iyz="-0.000000279" izz="0.012282219"/>
+        </inertial>
+        <visual>
+            <origin rpy="0 0 0" xyz="${forearm_x} ${forearm_y} ${forearm_z}"/>
+            <geometry>
+                <mesh filename="package://uwrt_mars_rover_description/meshes/forearm.stl" scale="0.0254 0.0254 0.0254"/>
+            </geometry>
+            <material name="Red">
+                <color rgba="1 0 0 1"/>
+            </material>
+        </visual>
+        <collision>
+            <origin rpy="0 0 0" xyz="${forearm_x} ${forearm_y} ${forearm_z}"/>
+            <geometry>
+                <mesh filename="package://uwrt_mars_rover_description/meshes/collisions/forearm.dae" scale="0.0254 0.0254 0.0254"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <xacro:basic_gazebo_ref link_name="forearm" color="${arm_color}"/>
+
+    <joint name="elbow" type="revolute">
+        <origin xyz="0.4019042 -0.0011938 0.0596138" rpy="0.0 0.0 0.0"/>
+        <parent link="bicep"/>
+        <child link="forearm"/>
+        <axis xyz="0.0 1.0 0.0"/>
+        <limit lower="${-pi/4}" upper="${pi/4}" effort="10000" velocity="0.5"/>
+    </joint>
+
+    <xacro:basic_transmission link_name="forearm" joint_name="elbow" mech_reduction="1"/>
+
+    <xacro:claw_to_arm forearm_link="forearm"/>
+
+</xacro:macro>
+
+</robot>

@@ -1,0 +1,39 @@
+uwrt_mars_rover_sim:
+  # Publish all joint states -----------------------------------
+  joint_state_controller:
+    type: joint_state_controller/JointStateController
+    publish_rate: 50
+
+  # Position Controllers --------------------------------------
+  wheel_diff_controller:
+    type: "diff_drive_controller/DiffDriveController"
+    publish_rate: 50
+
+    left_wheel: ['wheel_left_back_to_rocker', 'wheel_left_front_to_rocker']
+    right_wheel: ['wheel_right_back_to_rocker', 'wheel_right_front_to_rocker']
+
+    wheel_separation: 0.762
+    wheel_radius: 0.1524
+
+    # Odometry covariances for the encoder output of the robot. These values should
+    # be tuned to your robot's sample odometry data, but these values are a good place
+    # to start
+    pose_covariance_diagonal: [0.001, 0.001, 1000000.0, 1000000.0, 1000000.0, 1000.0]
+    twist_covariance_diagonal: [0.001, 0.001, 1000000.0, 1000000.0, 1000000.0, 1000.0]
+
+    # Top level frame (link) of the robot description
+    base_frame_id: base_link
+
+    # Velocity and acceleration limits for the robot
+    linear:
+      x:
+        has_velocity_limits    : true
+        max_velocity           : 1   # m/s
+        has_acceleration_limits: true
+        max_acceleration       : 2   # m/s^2
+    angular:
+      z:
+        has_velocity_limits    : true
+        max_velocity           : 2.0   # rad/s
+        has_acceleration_limits: true
+        max_acceleration       : 6.0   # rad/s^2

@@ -1,0 +1,20 @@
+<launch>
+  <arg default="$(find uwrt_mars_rover_description)/urdf/robot.xacro" name="model"/>
+
+  <arg name="control_mode" default="drivetrain_only"
+         doc="Control mode that the rover should start in.
+              Valid options are: [arm_mission, science_mission, arm_only, science_only, drivetrain_only]"/>
+
+  <param command="$(find xacro)/xacro $(arg model) mode:=$(arg control_mode)" name="robot_description"/>
+
+  <node args="-x 0.0 -y 0.0 -z 0.35 -param robot_description -urdf -model robot" name="spawn_urdf" pkg="gazebo_ros" type="spawn_model"/>
+
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="paused" value="true"/>
+    <arg name="use_sim_time" value="true"/>
+    <arg name="gui" value="true"/>
+    <arg name="headless" value="false"/>
+    <arg name="debug" value="false"/>
+  </include>
+
+</launch>

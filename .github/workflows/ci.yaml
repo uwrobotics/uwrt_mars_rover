@@ -9,10 +9,6 @@ on:
   schedule: # Trigger a job on master at midnight UTC every day
     - cron: '0 0 * * *'
 
-defaults:
-  run:
-    shell: bash
-
 jobs:
   linters:
     name: ament-${{ matrix.linter }}
@@ -100,13 +96,11 @@ jobs:
         run: |
           docker exec arm64-ros sudo apt update
           docker exec arm64-ros rosdep install -r --from-paths . --ignore-src --rosdistro foxy -y
-        # todo foxy
 
       - name: Build ROS2 Packages and Run Tests
         run: >
           docker exec arm64-ros bash -c "source /opt/ros/foxy/setup.bash;
           colcon build --event-handlers console_cohesion+;
           colcon test --event-handlers console_cohesion+"
-        # --packages-up-to
 
 # todo: distro matrix, windows build, global packages list

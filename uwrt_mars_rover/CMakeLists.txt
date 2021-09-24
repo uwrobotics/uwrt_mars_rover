@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.14.4)
 project(uwrt_mars_rover)
 
 # Default to C99
@@ -18,9 +18,6 @@ endif ()
 # find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
-# uncomment the following section in order to fill in
-# further dependencies manually.
-# find_package(<dependency> REQUIRED)
 
 add_executable(tester src/main.cpp)
 ament_target_dependencies(tester
@@ -50,11 +47,6 @@ if (BUILD_TESTING)
   # clang-tidy
   find_package(ament_cmake_clang_tidy REQUIRED)
   ament_clang_tidy(${CMAKE_BINARY_DIR})
-
-  # the following line skips cpplint (only works in a git repo)
-  # uncomment the line when this package is not in a git repo
-  #set(ament_cmake_cpplint_FOUND TRUE)
-
 endif ()
 
 ament_package()

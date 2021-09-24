@@ -17,7 +17,7 @@ jobs:
     name: ament-${{ matrix.linter }}
     runs-on: ubuntu-latest
     container:
-      image: rostooling/setup-ros-docker:ubuntu-focal-ros-${{ env.ROS_DISTRO }}-ros-desktop-latest
+      image: ${{ format('rostooling/setup-ros-docker:ubuntu-focal-ros-{0}-ros-desktop-latest', 'env.ROS_DISTRO') }}
       options: -u root
     strategy:
       fail-fast: false # We want all the linters to run even if one fails
@@ -38,7 +38,7 @@ jobs:
   linux-amd64-build-and-test:
     runs-on: ubuntu-latest
     container:
-      image: rostooling/setup-ros-docker:ubuntu-focal-ros-${{ env.ROS_DISTRO }}-ros-desktop-latest
+      image: ${{ format('rostooling/setup-ros-docker:ubuntu-focal-ros-{0}-ros-desktop-latest', 'env.ROS_DISTRO') }}
       options: -u root
 
     steps:

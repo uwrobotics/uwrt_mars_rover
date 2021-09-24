@@ -33,7 +33,6 @@ jobs:
         with:
           distribution: rolling
           linter: ${{ matrix.linter }}
-          package-name: uwrt_mars_rover
 
 
   linux-amd64-build-and-test:
@@ -54,7 +53,6 @@ jobs:
             }
           colcon-mixin-repository: https://raw.githubusercontent.com/colcon/colcon-mixin-repository/3e627e0fa30db85aea05a50e2c61a9832664d236/index.yaml
           target-ros2-distro: ${{ env.ROS_DISTRO }}
-          package-name: uwrt_mars_rover
 
 
   linux-arm64-build-and-test:
@@ -109,5 +107,4 @@ jobs:
       - name: Build ROS2 Packages and Run Tests
         uses: ros-tooling/action-ros-ci@v0.2
         with:
-          package-name: uwrt_mars_rover
           target-ros2-distro: ${{ env.ROS_DISTRO }}

@@ -11,6 +11,7 @@ on:
 
 env: 
   ROS_DISTRO: foxy
+  PACAKGES_TO_TEST: "uwrt_mars_rover"
 
 jobs:
   linters:
@@ -33,6 +34,7 @@ jobs:
         with:
           distribution: rolling
           linter: ${{ matrix.linter }}
+          package-name: ${{ PACAKGES_TO_TEST }}
 
 
   linux-amd64-build-and-test:
@@ -53,6 +55,7 @@ jobs:
             }
           colcon-mixin-repository: https://raw.githubusercontent.com/colcon/colcon-mixin-repository/3e627e0fa30db85aea05a50e2c61a9832664d236/index.yaml
           target-ros2-distro: ${{ env.ROS_DISTRO }}
+          package-name: ${{ PACAKGES_TO_TEST }}
 
 
   linux-arm64-build-and-test:
@@ -90,7 +93,8 @@ jobs:
         run: >
           docker exec arm64-ros bash -c "source /opt/ros/${{ env.ROS_DISTRO }}/setup.bash;
           colcon build --event-handlers console_cohesion+;
-          colcon test --return-code-on-test-failure --event-handlers console_cohesion+"
+          colcon test --packages-up-to ${{ PACAKGES_TO_TEST }} --return-code-on-test-failure --event-handlers console_cohesion+"
+          package-name??
 
   windows-amd64-build-and-test: # No rostooling/setup-ros-docker docker images available for Windows.
     runs-on: windows-latest
@@ -108,3 +112,4 @@ jobs:
         uses: ros-tooling/action-ros-ci@v0.2
         with:
           target-ros2-distro: ${{ env.ROS_DISTRO }}
+          package-name: ${{ PACAKGES_TO_TEST }}

@@ -2,6 +2,7 @@
 
 ![CI](https://github.com/uwrobotics/uwrt_mars_rover/workflows/CI/badge.svg)
 
+**NOTE: Some of the info in this README is out of date and WIP because of our transition to ROS2. Feel free to submit PRs to update.**
 ## Repository Setup
 
 To get started with development, clone this repo into the `src` directory of your `catkin` workspace. Use `rosinstall`

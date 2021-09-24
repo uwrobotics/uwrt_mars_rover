@@ -48,11 +48,6 @@ jobs:
       options: -u root
 
     steps:
-      - name: Install clang-tidy-6
-        run: |
-          sudo apt-get update -y
-          sudo apt-get install -y clang-tidy-6.0
-
       - name: Build ROS2 Packages and Run Tests
         uses: ros-tooling/action-ros-ci@v0.2
         with:

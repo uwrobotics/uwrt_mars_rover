@@ -19,8 +19,8 @@ endif ()
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 
-add_executable(tester src/main.cpp)
-ament_target_dependencies(tester
+add_executable(test_node src/main.cpp)
+ament_target_dependencies(test_node
     "rclcpp")
 
 

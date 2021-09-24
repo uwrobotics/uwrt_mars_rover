@@ -167,7 +167,7 @@ may be some bugs etc. Be sure to check the active issues on their repo if you ru
    ```
    touch $HOME/.actrc
    echo "-P ubuntu-latest=catthehacker/ubuntu:full-20.04" >> $HOME/.actrc
-   echo "-S GITHUB_TOKEN=<A NEWLY GENERATED GITHUB PERSONAL ACCESS TOKEN>" >> $HOME/.actrc
+   echo "-s GITHUB_TOKEN=<A NEWLY GENERATED GITHUB PERSONAL ACCESS TOKEN>" >> $HOME/.actrc
    ```
    More info on generating Github Personal Access Tokens [available here](https://docs.github.com/en/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token)
    

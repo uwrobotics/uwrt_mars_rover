@@ -22,12 +22,7 @@ jobs:
     strategy:
       fail-fast: false # We want all the linters to run even if one fails
       matrix:
-        linter: [flake8, clang-format, xmllint]
-        # , clang-format, xmllint, cppcheck TODO FIX
-        #   - flake8       (python linter)
-        #   - clang-format (code format checking)
-        #   - xmllint      (xml linter)
-        #   - cppcheck     (static c/c++ analysis tool)
+        linter: [cppcheck, clang-format, flake8, xmllint]
 
     steps:
       - name: Checkout Repository

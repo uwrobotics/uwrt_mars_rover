@@ -36,6 +36,10 @@ if (BUILD_TESTING)
   find_package(ament_cmake_clang_format REQUIRED)
   ament_clang_format()
 
+  # clang-tidy
+  find_package(ament_cmake_clang_tidy REQUIRED)
+  ament_clang_tidy(${CMAKE_BINARY_DIR})
+
   # flake8
   find_package(ament_cmake_flake8 REQUIRED)
   ament_flake8()
@@ -43,10 +47,6 @@ if (BUILD_TESTING)
   # xmllint
   find_package(ament_cmake_xmllint REQUIRED)
   ament_xmllint()
-
-  # clang-tidy
-  find_package(ament_cmake_clang_tidy REQUIRED)
-  ament_clang_tidy(${CMAKE_BINARY_DIR})
 endif ()
 
 ament_package()

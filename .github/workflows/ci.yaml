@@ -102,7 +102,7 @@ jobs:
         run: >
           docker exec arm64-ros bash -c "source /opt/ros/foxy/setup.bash;
           colcon build --event-handlers console_cohesion+;
-          colcon test --event-handlers console_cohesion+"
+          colcon test --return-code-on-test-failure --event-handlers console_cohesion+"
 
   windows-amd64-build-and-test: # No rostooling/setup-ros-docker docker images available for Windows.
     runs-on: windows-latest

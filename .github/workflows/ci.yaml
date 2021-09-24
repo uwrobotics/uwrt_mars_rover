@@ -11,13 +11,13 @@ on:
 
 env: 
   ROS_DISTRO: foxy
-
+  IMAGE: ${{ format('rostooling/setup-ros-docker:ubuntu-focal-ros-{0}-ros-desktop-latest', env.ROS_DISTRO) }}
 jobs:
   linters:
     name: ament-${{ matrix.linter }}
     runs-on: ubuntu-latest
     container:
-      image: ${{ format('rostooling/setup-ros-docker:ubuntu-focal-ros-{0}-ros-desktop-latest', env.ROS_DISTRO) }}
+      image: ${{ env.IMAGE }}
       options: -u root
     strategy:
       fail-fast: false # We want all the linters to run even if one fails
@@ -38,7 +38,7 @@ jobs:
   linux-amd64-build-and-test:
     runs-on: ubuntu-latest
     container:
-      image: ${{ format('rostooling/setup-ros-docker:ubuntu-focal-ros-{0}-ros-desktop-latest', env.ROS_DISTRO) }}
+      image: ${{ env.IMAGE }} 
       options: -u root
 
     steps:

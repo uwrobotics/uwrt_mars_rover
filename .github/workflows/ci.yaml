@@ -84,18 +84,23 @@ jobs:
       - name: Start ARM64 ROS2 Container
         run: |
           docker run --name arm64-ros --mount type=bind,source=$(pwd),target=/rosws/src/$(basename $(pwd)) --workdir /rosws --detach -i --rm arm64v8/ros:${{ env.ROS_DISTRO }}
+      
+      - name: Install ROS Source Dependencies
+        run: |
+          cd "uwrt_mars_rover" && vcs import --input upstream_dependencies.repos
 
-      - name: Install ROS Package Dependencies
+      - name: Install ROS Binary Package Dependencies
         run: |
           docker exec arm64-ros sudo apt update
           docker exec arm64-ros rosdep install -r --from-paths . --ignore-src --rosdistro ${{ env.ROS_DISTRO }} -y
 
       - name: Build ROS2 Packages and Run Tests
         run: >
-          docker exec arm64-ros bash -c "source /opt/ros/${{ env.ROS_DISTRO }}/setup.bash;
-          colcon build --event-handlers console_cohesion+;
+          docker exec arm64-ros bash -c "source /opt/ros/${{ env.ROS_DISTRO }}/setup.bash &&
+          colcon build --event-handlers console_cohesion+ && 
           colcon test --packages-up-to ${{ env.PACAKGES_TO_TEST }} --return-code-on-test-failure --event-handlers console_cohesion+"
-          package-name??
+
+          # package-name??
 
   windows-amd64-build-and-test: # No rostooling/setup-ros-docker docker images available for Windows.
     runs-on: windows-latest

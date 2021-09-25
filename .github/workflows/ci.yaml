@@ -106,15 +106,16 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-      # - name: Setup ROS
-      #   uses: ros-tooling/setup-ros@v0.2
-      #   with:
-      #     required-ros-distributions: ${{ env.ROS_DISTRO }}
+      - name: Setup ROS
+        uses: ros-tooling/setup-ros@v0.2
+        # with:
+          # required-ros-distributions: ${{ env.ROS_DISTRO }}
 
       - name: Build ROS2 Packages and Run Tests
         uses: ros-tooling/action-ros-ci@v0.2
         with:
           target-ros2-distro: ${{ env.ROS_DISTRO }}
-          # vcs-repo-file-url: |
+          vcs-repo-file-url: |
+            https://raw.githubusercontent.com/ros2/ros2/foxy/ros2.repos
           #   https://raw.githubusercontent.com/${{ github.repository }}/${{ github.sha }}/windows_amd64_upstream_dependencies.repos
           package-name: ${{ env.PACKAGES_TO_TEST }}

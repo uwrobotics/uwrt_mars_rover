@@ -56,6 +56,7 @@ jobs:
           colcon-mixin-repository: https://raw.githubusercontent.com/colcon/colcon-mixin-repository/3e627e0fa30db85aea05a50e2c61a9832664d236/index.yaml
           target-ros2-distro: ${{ env.ROS_DISTRO }}
           package-name: ${{ env.PACAKGES_TO_TEST }}
+          vcs-repo-file-url: upstream_dependencies.repos
 
 
   linux-arm64-build-and-test:

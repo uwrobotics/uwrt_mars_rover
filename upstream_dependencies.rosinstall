@@ -1,6 +1,0 @@
-# These are upstream source dependencies used by all builds.
-
-- git:
-    uri: https://github.com/dawonn/vectornav
-    local-name: vectornav
-    version: 5a4b83a74086819272f055163f4c8afc8f0c65c2

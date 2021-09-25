@@ -83,6 +83,7 @@ jobs:
       - name: Start ARM64 ROS2 Container
         run: |
           pwd
+          ls
           docker run --name arm64-ros --mount type=bind,source=$(pwd),target=/rosws/src/$(basename $(pwd)) --workdir /rosws --detach -i --rm arm64v8/ros:${{ env.ROS_DISTRO }}
 
       - name: Install ROS Source Dependencies

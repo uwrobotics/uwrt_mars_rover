@@ -55,7 +55,6 @@ jobs:
             }
           colcon-mixin-repository: https://raw.githubusercontent.com/colcon/colcon-mixin-repository/3e627e0fa30db85aea05a50e2c61a9832664d236/index.yaml
           target-ros2-distro: ${{ env.ROS_DISTRO }}
-          package-name: ${{ env.PACAKGES_TO_TEST }}
           vcs-repo-file-url: https://raw.githubusercontent.com/${{ github.repository }}/${{ github.sha }}/upstream_dependencies.repos
 
 
@@ -116,5 +115,4 @@ jobs:
         uses: ros-tooling/action-ros-ci@v0.2
         with:
           target-ros2-distro: ${{ env.ROS_DISTRO }}
-          package-name: ${{ env.PACAKGES_TO_TEST }}
           vcs-repo-file-url: https://raw.githubusercontent.com/${{ github.repository }}/${{ github.sha }}/upstream_dependencies.repos

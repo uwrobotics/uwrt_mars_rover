@@ -97,7 +97,7 @@ jobs:
         run: >
           docker exec arm64-ros bash -c "source /opt/ros/${{ env.ROS_DISTRO }}/setup.bash &&
             colcon build --event-handlers console_cohesion+ && 
-            colcon test --packages-up-to ${{ env.PACAKGES_TO_TEST }} --return-code-on-test-failure --event-handlers console_cohesion+"
+            colcon test --packages-select ${{ env.PACAKGES_TO_TEST }} --return-code-on-test-failure --event-handlers console_cohesion+"
 
   windows-amd64-build-and-test: # No rostooling/setup-ros-docker docker images available for Windows.
     runs-on: windows-latest

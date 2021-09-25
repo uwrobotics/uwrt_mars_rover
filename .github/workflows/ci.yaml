@@ -87,7 +87,7 @@ jobs:
 
       - name: Install ROS Source Dependencies
         run: |
-          docker exec arm64-ros --workdir /rosws/src vcs import --input src/uwrt_mars_rover/upstream_dependencies.repos
+          docker exec --workdir /rosws/src vcs arm64-ros  import --input src/uwrt_mars_rover/upstream_dependencies.repos
 
       - name: Install ROS Binary Package Dependencies
         run: |

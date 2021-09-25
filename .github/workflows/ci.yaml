@@ -55,7 +55,7 @@ jobs:
             }
           colcon-mixin-repository: https://raw.githubusercontent.com/colcon/colcon-mixin-repository/3e627e0fa30db85aea05a50e2c61a9832664d236/index.yaml
           target-ros2-distro: ${{ env.ROS_DISTRO }}
-          vcs-repo-file-url: https://raw.githubusercontent.com/${{ github.repository }}/${{ github.sha }}/upstream_dependencies.repos
+          vcs-repo-file-url: https://raw.githubusercontent.com/${{ github.repository }}/${{ github.sha }}/commom_upstream_dependencies.repos
           package-name: ${{ env.PACAKGES_TO_TEST }}
 
   linux-arm64-build-and-test:
@@ -86,8 +86,7 @@ jobs:
 
       - name: Install ROS Source Dependencies
         run: |
-          docker exec --workdir /rosws/src arm64-ros vcs import --input uwrt_mars_rover/upstream_dependencies.repos
-
+          docker exec --workdir /rosws/src arm64-ros vcs import --input uwrt_mars_rover/commom_upstream_dependencies.repos
       - name: Install ROS Binary Package Dependencies
         run: |
           docker exec arm64-ros sudo apt update
@@ -115,5 +114,6 @@ jobs:
         uses: ros-tooling/action-ros-ci@v0.2
         with:
           target-ros2-distro: ${{ env.ROS_DISTRO }}
-          # vcs-repo-file-url: https://raw.githubusercontent.com/${{ github.repository }}/${{ github.sha }}/upstream_dependencies.repos
+          vcs-repo-file-url: |
+            https://raw.githubusercontent.com/${{ github.repository }}/${{ github.sha }}/windows_amd64_upstream_dependencies.repos
           package-name: ${{ env.PACAKGES_TO_TEST }}

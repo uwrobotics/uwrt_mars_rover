@@ -115,5 +115,5 @@ jobs:
         uses: ros-tooling/action-ros-ci@v0.2
         with:
           target-ros2-distro: ${{ env.ROS_DISTRO }}
-          vcs-repo-file-url: https://raw.githubusercontent.com/${{ github.repository }}/${{ github.sha }}/upstream_dependencies.repos
+          # vcs-repo-file-url: https://raw.githubusercontent.com/${{ github.repository }}/${{ github.sha }}/upstream_dependencies.repos
           package-name: ${{ env.PACAKGES_TO_TEST }}

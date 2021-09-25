@@ -56,7 +56,7 @@ jobs:
           colcon-mixin-repository: https://raw.githubusercontent.com/colcon/colcon-mixin-repository/3e627e0fa30db85aea05a50e2c61a9832664d236/index.yaml
           target-ros2-distro: ${{ env.ROS_DISTRO }}
           package-name: ${{ env.PACAKGES_TO_TEST }}
-          vcs-repo-file-url: upstream_dependencies.repos
+          vcs-repo-file-url: https://raw.githubusercontent.com/${{ github.repository }}/${{ github.sha }}/upstream_dependencies.repos
 
 
   linux-arm64-build-and-test:
@@ -85,23 +85,20 @@ jobs:
         run: |
           docker run --name arm64-ros --mount type=bind,source=$(pwd),target=/rosws/src/$(basename $(pwd)) --workdir /rosws --detach -i --rm arm64v8/ros:${{ env.ROS_DISTRO }}
 
-      - name: Download Dependencies
-        run: |
-          docker exec arm64-ros sudo apt update
-
       - name: Install ROS Source Dependencies
         run: |
-          docker exec arm64-ros --workdir vcs import --input upstream_dependencies.repos
+          docker exec arm64-ros vcs import --input upstream_dependencies.repos
 
       - name: Install ROS Binary Package Dependencies
         run: |
+          docker exec arm64-ros sudo apt update
           docker exec arm64-ros rosdep install -r --from-paths . --ignore-src --rosdistro ${{ env.ROS_DISTRO }} -y
 
       - name: Build ROS2 Packages and Run Tests
         run: >
           docker exec arm64-ros bash -c "source /opt/ros/${{ env.ROS_DISTRO }}/setup.bash &&
-          colcon build --event-handlers console_cohesion+ && 
-          colcon test --packages-up-to ${{ env.PACAKGES_TO_TEST }} --return-code-on-test-failure --event-handlers console_cohesion+"
+            colcon build --event-handlers console_cohesion+ && 
+            colcon test --packages-up-to ${{ env.PACAKGES_TO_TEST }} --return-code-on-test-failure --event-handlers console_cohesion+"
 
   windows-amd64-build-and-test: # No rostooling/setup-ros-docker docker images available for Windows.
     runs-on: windows-latest
@@ -120,3 +117,4 @@ jobs:
         with:
           target-ros2-distro: ${{ env.ROS_DISTRO }}
           package-name: ${{ env.PACAKGES_TO_TEST }}
+          vcs-repo-file-url: https://raw.githubusercontent.com/${{ github.repository }}/${{ github.sha }}/upstream_dependencies.repos

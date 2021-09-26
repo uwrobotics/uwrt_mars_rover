@@ -11,7 +11,7 @@ on:
 
 env: 
   ROS_DISTRO: foxy
-  PACKAGES_TO_TEST: >
+  PACKAGES_TO_TEST: |
     "
     uwrt_mars_rover
     "

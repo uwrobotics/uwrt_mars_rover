@@ -1,0 +1,20 @@
+<robot name="uwrt_mars_rover_arm">
+
+    <!-- base link -->
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <box xyz="  "/>
+        </geometry>
+        <material name="black"/>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <box xyz=""/>
+        </geometry>
+      </collision>
+
+
+
+</robot>

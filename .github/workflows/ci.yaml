@@ -107,14 +107,13 @@ jobs:
 
       - name: Setup ROS
         uses: ros-tooling/setup-ros@v0.2
-        # with:
-          # required-ros-distributions: ${{ env.ROS_DISTRO }}
+        with:
+          required-ros-distributions: ${{ env.ROS_DISTRO }}
 
       - name: Build ROS2 Packages and Run Tests
         uses: wmmc88/action-ros-ci@fix-windows-builds # Revert to upstream action-ros-ci once https://github.com/ros-tooling/action-ros-ci/pull/712 merges
         with:
           target-ros2-distro: ${{ env.ROS_DISTRO }}
           vcs-repo-file-url: |
-            https://raw.githubusercontent.com/ros2/ros2/foxy/ros2.repos
-          #   https://raw.githubusercontent.com/${{ github.repository }}/${{ github.sha }}/windows_amd64_upstream_dependencies.repos
+            https://raw.githubusercontent.com/${{ github.repository }}/${{ github.sha }}/windows_amd64_upstream_dependencies.repos
           package-name: ${{ env.PACKAGES_TO_TEST }}

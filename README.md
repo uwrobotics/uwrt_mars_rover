@@ -2,6 +2,7 @@
 
 ![CI](https://github.com/uwrobotics/uwrt_mars_rover/workflows/CI/badge.svg)
 
+**NOTE: Some of the info in this README is out of date and WIP because of our transition to ROS2. Feel free to submit PRs to update.**
 ## Repository Setup
 
 To get started with development, clone this repo into the `src` directory of your `catkin` workspace. Use `rosinstall`
@@ -129,60 +130,73 @@ branch.
 If you have code that's not ready to merge, but you'd still like people thoughts on it, open a
 [draft pull request](https://github.blog/2019-02-14-introducing-draft-pull-requests/).
 
-## Running CI Stages Locally
-### Strict Build
+## Running CI Pipeline Locally
 
-CI builds with extra cmake flags that can help catch common errors in code. Follow the instructions
-[here](https://github.com/uwrobotics/dev_tools) to install our `catkin_tools` profiles. It is highly encouraged for you
-to use this as your default `catkin_tools` profile when developing code. To build using our stricter build flags:
-```
-catkin clean -y
-catkin profile set strict
-catkin build 
-```
+The entire Github Actions Workflow can be run locally using [act](https://github.com/nektos/act). This is particularly
+useful if you're contributing to improving our CI pipeline or if you just want faster feedback on your code without
+needing to push.
 
-### Clang Tidy
+### To install `act` on Ubuntu 20.04:
+These instructions install the latest version of `act` availble on master. Currently, `act` seems to be in very active
+development and a number of bugs in running our workflow was fixed by using the latest builds. But be warned that there 
+may be some bugs etc. Be sure to check the active issues on their repo if you run into issues.
 
-Follow the instructions [here](https://github.com/uwrobotics/dev_tools) to install our `catkin_tools` profiles. You will
-also need to install `clang-tidy-9`
-```
-sudo apt install clang-tidy-9
-```
-To build and invoke clang-tidy:
-```
-catkin clean -y
-catkin profile set clang-tidy
-catkin build 
-```
+1. Install `docker`:
 
-### Release Build
+   Follow official instructions: https://docs.docker.com/engine/install/
 
-The release build profile is a combination of stricter build flags, clang-tidy and `-O3` optimizations. This profile
-also installs the packages in an isolated install space. This is the profile you should use to build code for execution
-on the rover. Assuming you've installed our `catkin_tools` profiles and `clang-tidy-9`, to build in release mode:
+2. Install latest `Go`(required 1.16+):
+   ```
+   # From https://github.com/golang/go/wiki/Ubuntu
+   sudo add-apt-repository ppa:longsleep/golang-backports
+   sudo apt update
+   sudo apt install golang-go
+   ```
+   
+3. Install latest `act`:
+   ```
+   go install github.com/nektos/act@master
+   ```
+
+4. Add GOPATH to PATH: 
+   ```
+   echo "export PATH=${HOME}/go/bin\${PATH:+:\${PATH}}" >> $HOME/.bashrc
+   ```
+   
+5. Create a `.actrc` config file:
+   ```
+   touch $HOME/.actrc
+   echo "-P ubuntu-latest=catthehacker/ubuntu:full-20.04" >> $HOME/.actrc
+   echo "-S GITHUB_TOKEN=<A NEWLY GENERATED GITHUB PERSONAL ACCESS TOKEN>" >> $HOME/.actrc
+   ```
+   More info on generating Github Personal Access Tokens [available here](https://docs.github.com/en/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token)
+   
+   **Warning: This image listed above in the `-P` flag will download a >20GB docker image that is >60GB when
+   uncompressed. This is just how big the ubuntu installs running on Github's free runner machines are and its required 
+   to use them to get as close as possible to the exact environment our CI pipelines run in. You may try some of the
+   images listed [here](https://github.com/nektos/act#runners), but may run into issues that are your responsiblity to 
+   resolve.**
+
+### Running Github Workflow Jobs:
 ```
-catkin clean -y
-catkin profile set release
-catkin build 
+cd <repo root>
+
+# Run whole workflow
+act
+
+# Run a specific job
+act -j <job name>
+
+# Run with verbose output
+act -v
 ```
+More advanced usage available [here]<https://github.com/nektos/act#commands>
 
-### Clang Format
-
-You can install clang-format and run it on the files themselves, but the recommended way is to install a clang-format
-plugin for whatever IDE you're using. They typically automatically find and use the `.clang-format` file in our repo.
-
-### Catkin Lint
-
-Catkin Lint ensures that the catkin-specific files are configured correctly. This includes the `package.xml`,
-`CMakeLists.txt` and more. To install the latest `catkin_lint`:
+Containers will stay open after you run `act` and you can attach to them to see their workspaces.
 ```
-sudo add-apt-repository ppa:roehling/ros
-sudo apt update
-sudo apt install python-catkin-lint
-```
+docker ps # Lists all active containers
 
-To run catkin lint:
-```
-cd <catkin_ws location>/src
-catkin_lint --strict -W2 uwrt_mars_rover --config uwrt_mars_rover/.catkin-lint
+docker exec -it <container name> bash # Open a bash prompt for that container
+
+docker kill $(docker ps -q) # Kills all containers
 ```

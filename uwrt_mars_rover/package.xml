@@ -11,6 +11,12 @@
 
   <build_depend>rclcpp</build_depend>
 
+  <build_depend>uwrt_mars_rover_description</build_depend>
+  <build_depend>uwrt_mars_rover_drivetrain</build_depend>
+
+  <exec_depend>uwrt_mars_rover_description</exec_depend>
+  <exec_depend>uwrt_mars_rover_drivetrain</exec_depend>
+
   <test_depend>ament_cmake_cppcheck</test_depend>
   <test_depend>ament_clang_tidy</test_depend>
   <test_depend>ament_cmake_clang_tidy</test_depend>

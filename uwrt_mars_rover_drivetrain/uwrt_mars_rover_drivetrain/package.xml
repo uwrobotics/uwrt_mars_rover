@@ -9,7 +9,6 @@
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
-  <build_depend>uwrt_mars_rover_drivetrain_hw</build_depend>
   <build_depend>uwrt_mars_rover_drivetrain_description</build_depend>
 
   

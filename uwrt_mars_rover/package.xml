@@ -3,25 +3,15 @@
 <package format="3">
   <name>uwrt_mars_rover</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
-  <maintainer email="omarmon@uwaterloo.ca">niiquaye</maintainer>
+  <description>Package grouping all the packages written for the UWRT(University of Waterloo Robotics Team)'s Mars Rover</description>
+  <maintainer email="omarmon@uwaterloo.ca">niiquaye</maintainer>\
+  <maintainer email="melvin.mc.wang@gmail.ca">Melvin Wang</maintainer>
   <license>MIT</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
-  <build_depend>rclcpp</build_depend>
-
-  <build_depend>uwrt_mars_rover_description</build_depend>
-  <build_depend>uwrt_mars_rover_drivetrain</build_depend>
-
   <exec_depend>uwrt_mars_rover_description</exec_depend>
   <exec_depend>uwrt_mars_rover_drivetrain</exec_depend>
-
-  <test_depend>ament_cmake_cppcheck</test_depend>
-  <test_depend>ament_cmake_clang_format</test_depend>
-  <test_depend>ament_cmake_clang_tidy</test_depend>
-  <test_depend>ament_cmake_flake8</test_depend>
-  <test_depend>ament_cmake_xmllint</test_depend>
 
   <export>
     <build_type>ament_cmake</build_type>

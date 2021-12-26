@@ -3,13 +3,21 @@
 <package format="3">
   <name>uwrt_mars_rover_drivetrain_description</name>
   <version>0.0.0</version>
-  <description>Package with URDF and description files of the UWRT differential drive robot.</description>
+  <description>Package with URDF and description files of the UWRT rover's differential drivetrain.</description>
 
   <maintainer email="omarmon@uwaterloo.ca">Orson Marmon</maintainer>
+  <author email="omarmon@uwaterloo.ca">Orson Marmon</author>
+  <author email="melvin.mc.wang@gmail.com">Melvin Wang</author>
 
   <license>Apache-2.0</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <exec_depend>joint_state_publisher</exec_depend>
+  <exec_depend>robot_state_publisher</exec_depend>
+  <exec_depend>ros2launch</exec_depend>
+  <exec_depend>rviz2</exec_depend>
+  <exec_depend>xacro</exec_depend>
 
   <export>
     <build_type>ament_cmake</build_type>

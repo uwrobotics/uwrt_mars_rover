@@ -1,0 +1,23 @@
+<library path="uwrt_mars_rover_drivetrain_hw">
+  <class name="uwrt_mars_rover_drivetrain_hw/UWRTMarsRoverDrivetrainHardware"
+	 type="uwrt_mars_rover_drivetrain_hw::UWRTMarsRoverDrivetrainHardware"
+	 base_class_type="hardware_interface::ActuatorInterface">
+    <description>
+      ROS2 Control hardware implementation of the UWRT drivetrain. We use the ActuatorInterface 
+      because the drivetrain can be thought of as just six different actuators.
+      This is the simulation version
+    </description>
+  </class>
+  <class name="uwrt_mars_rover_drivetrain_hw/UWRTMarsRoverDrivetrainHardwareReal"
+	 type="uwrt_mars_rover_drivetrain_hw::UWRTMarsRoverDrivetrainHardwareReal"
+	 base_class_type="hardware_interface::ActuatorInterface">
+    <description>
+      ROS2 Control hardware implementation of the UWRT drivetrain. We use the ActuatorInterface 
+      because the drivetrain can be thought of as just six different actuators
+      This is the real time version which actually sends CAN messages. Just an extension of the class above.
+    </description>
+  </class>
+</library>
+
+uwrt_mars_rover_drivetrain_hw::UWRTMarsRoverDrivetrainHardwareReal,
+  hardware_interface::ActuatorInterface

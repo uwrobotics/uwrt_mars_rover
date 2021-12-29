@@ -5,8 +5,8 @@ find_package(ament_cmake REQUIRED)
 
 install(
     DIRECTORY
+      config
       launch
-      ros2_control
       rviz
       urdf
     DESTINATION

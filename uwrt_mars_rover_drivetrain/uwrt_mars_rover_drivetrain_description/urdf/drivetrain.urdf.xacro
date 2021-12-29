@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<robot name="drivetrain" xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <!-- import macros file -->
+  <xacro:include filename="$(find uwrt_mars_rover_drivetrain_description)/urdf/common.xacro"/>
+
+  <!-- load model data from yamls -->
+  <xacro:load_model_data
+      physical_parameters_file="$(find uwrt_mars_rover_drivetrain_description)/config/physical_parameters.yaml"/>
+
+  <!-- calculate parameters based on model data -->
+  <xacro:property name="wheelbase_length" value="${chassis_width + wheel_width}"/>
+
+
+  <link name="base_link"/>
+
+  <joint name="base_link_to_chassis" type="fixed">
+    <parent link="base_link"/>
+    <child link="chassis"/>
+    <origin xyz="0 0 ${wheel_diameter/2}" rpy="0 0 0"/>
+  </joint>
+
+  <link name="chassis">
+    <xacro:identical_visual_collision>
+      <identical_blocks>
+        <geometry>
+          <box size="${chassis_length} ${chassis_width} ${chassis_height}"/>
+        </geometry>
+      </identical_blocks>
+    </xacro:identical_visual_collision>
+    <xacro:default_inertial/>
+  </link>
+
+  <!-- wheels -->
+  <xacro:wheel prefix="right" suffix="front" parent_link="chassis" reflect="-1" x_position="${chassis_length/2}"/>
+  <xacro:wheel prefix="right" suffix="middle" parent_link="chassis" reflect="-1" x_position="0"/>
+  <xacro:wheel prefix="right" suffix="back" parent_link="chassis" reflect="-1" x_position="${-chassis_length/2}"/>
+  <xacro:wheel prefix="left" suffix="front" parent_link="chassis" reflect="1" x_position="${chassis_length/2}"/>
+  <xacro:wheel prefix="left" suffix="middle" parent_link="chassis" reflect="1" x_position="0"/>
+  <xacro:wheel prefix="left" suffix="back" parent_link="chassis" reflect="1" x_position="${-chassis_length/2}"/>
+
+</robot>

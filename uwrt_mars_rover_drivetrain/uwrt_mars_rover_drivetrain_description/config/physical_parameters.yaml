@@ -1,0 +1,9 @@
+chassis:
+  length: 1.5
+  width: 1.0
+  height: 0.15
+
+wheels:
+  diameter: 0.3
+  width: 0.2
+  mass: 0.5

@@ -1,5 +1,3 @@
-from pathlib import Path
-
 from ament_index_python.packages import get_package_prefix, get_package_share_path
 
 from launch import LaunchDescription
@@ -13,7 +11,7 @@ from launch_ros.parameter_descriptions import ParameterValue
 
 def generate_launch_description():
     package_path = get_package_share_path('uwrt_mars_rover_drivetrain_description')
-    default_model_path = package_path / 'urdf' / 'drivetrain.urdf'
+    default_model_path = package_path / 'urdf' / 'drivetrain.urdf.xacro'
     default_rviz_config_path = package_path / 'rviz' / 'urdf.rviz'
 
     gui_arg = DeclareLaunchArgument(name='gui', default_value='true', choices=['true', 'false'],
@@ -23,9 +21,7 @@ def generate_launch_description():
     rviz_arg = DeclareLaunchArgument(name='rvizconfig', default_value=str(default_rviz_config_path),
                                      description='Absolute path to rviz config file')
 
-    # TODO(wmmc88): does py work on ubuntu?
-    xacro_path = (Path(get_package_prefix('xacro')) / 'bin' / 'xacro').resolve(strict=True)
-    robot_description = ParameterValue(Command([f'py {xacro_path} ', LaunchConfiguration('model')]),
+    robot_description = ParameterValue(Command([f'ros2 run xacro xacro ', LaunchConfiguration('model')]),
                                        value_type=str)
 
     robot_state_publisher_node = Node(

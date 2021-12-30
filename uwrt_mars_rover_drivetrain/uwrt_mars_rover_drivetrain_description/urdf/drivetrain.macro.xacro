@@ -1,20 +1,27 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://wiki.ros.org/xacro">
   <xacro:macro name="load_model_data" params="physical_parameters_file">
-    <!-- Read .yaml files and load contents into xacro properties -->
+    <!-- read .yaml files and load contents into xacro properties -->
     <xacro:property name="physical_parameters" value="${load_yaml(physical_parameters_file)}"/>
 
-    <!--  Extract data from yaml dictionaries  -->
+    <!--  extract data from yaml dictionaries  -->
     <xacro:property name="chassis_parameters" value="${physical_parameters['chassis']}"/>
     <xacro:property name="wheel_parameters" value="${physical_parameters['wheels']}"/>
+    <xacro:property name="control_parameters" value="${physical_parameters['control']}"/>
 
+    <!-- chassis parameters -->
     <xacro:property name="chassis_length" value="${chassis_parameters['length']}" scope="parent"/>
     <xacro:property name="chassis_width" value="${chassis_parameters['width']}" scope="parent"/>
     <xacro:property name="chassis_height" value="${chassis_parameters['height']}" scope="parent"/>
 
+    <!-- wheel parameters -->
     <xacro:property name="wheel_diameter" value="${wheel_parameters['diameter']}" scope="parent"/>
     <xacro:property name="wheel_width" value="${wheel_parameters['width']}" scope="parent"/>
     <xacro:property name="wheel_mass" value="${wheel_parameters['mass']}" scope="parent"/>
+
+    <!-- control parameters -->
+    <xacro:property name="mechanical_reduction" value="${control_parameters['mechanical_reduction']}" scope="parent"/>
+    <xacro:property name="max_speed" value="${control_parameters['max_speed']}" scope="parent"/>
   </xacro:macro>
 
   <xacro:macro name="default_inertial" params="mass:=5">
@@ -55,6 +62,29 @@
       </xacro:identical_visual_collision>
       <xacro:default_inertial mass="${wheel_mass}"/>
     </link>
+  </xacro:macro>
+
+  <xacro:macro name="drivetrain_actuator" params="prefix suffix">
+    <ros2_control name="{prefix}_${suffix}_wheel_actuator" type="actuator">
+      <hardware>
+        <plugin>uwrt_mars_rover_drivetrain_hw/UWRTMarsRoverDrivetrainHardwareReal</plugin>
+        <!-- TODO: Can interface and Odrive id?-->
+      </hardware>
+      <joint name="${prefix}_${suffix}_wheel_joint">
+        <command_interface name="velocity">
+          <param name="min">"${-max_speed}"</param>
+          <param name="max">"${max_speed}"</param>
+        </command_interface>
+        <state_interface name="velocity"/>
+      </joint>
+      <transmission name="transmission1">
+        <!--  TODO: These are not actually parsed by ros2control yet: https://github.com/ros-controls/ros2_control/issues/32, https://github.com/ros-controls/ros2_control/issues/599 -->
+        <plugin>transmission_interface/SimpleTansmission</plugin>
+        <joint name="${prefix}_${suffix}_wheel_joint" role="joint1">
+          <mechanical_reduction>"${mechanical_reduction}"</mechanical_reduction>
+        </joint>
+      </transmission>
+    </ros2_control>
   </xacro:macro>
 
 </robot>

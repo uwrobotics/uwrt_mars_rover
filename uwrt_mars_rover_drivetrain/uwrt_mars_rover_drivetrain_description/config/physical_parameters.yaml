@@ -7,3 +7,7 @@ wheels:
   diameter: 0.3
   width: 0.2
   mass: 0.5
+
+control:
+  mechanical_reduction: 0.43
+  max_speed: 10

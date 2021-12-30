@@ -3,9 +3,11 @@
 <package format="3">
   <name>uwrt_mars_rover</name>
   <version>0.0.0</version>
-  <description>Package grouping all the packages written for the UWRT(University of Waterloo Robotics Team)'s Mars Rover</description>
+  <description>Package grouping all the packages written for the UWRT rover's differential drivetrain.</description>
+
   <maintainer email="omarmon@uwaterloo.ca">niiquaye</maintainer>\
   <maintainer email="melvin.mc.wang@gmail.ca">Melvin Wang</maintainer>
+
   <license>MIT</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>

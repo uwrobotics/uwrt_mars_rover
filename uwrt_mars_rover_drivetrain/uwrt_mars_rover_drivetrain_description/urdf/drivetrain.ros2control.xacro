@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- import macros file -->
+  <xacro:include filename="$(find uwrt_mars_rover_drivetrain_description)/urdf/drivetrain.macro.xacro"/>
+
+  <xacro:drivetrain_actuator prefix="right" suffix="front"/>
+  <xacro:drivetrain_actuator prefix="right" suffix="middle"/>
+  <xacro:drivetrain_actuator prefix="right" suffix="back"/>
+  <xacro:drivetrain_actuator prefix="left" suffix="front"/>
+  <xacro:drivetrain_actuator prefix="left" suffix="middle"/>
+  <xacro:drivetrain_actuator prefix="left" suffix="back"/>
+
+</robot>
+

@@ -1,36 +1,73 @@
+from ament_index_python.packages import get_package_prefix, get_package_share_path
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument
-from launch.conditions import IfCondition
+from launch.actions import RegisterEventHandler
+from launch.event_handlers import OnProcessExit
 from launch.substitutions import Command, FindExecutable, LaunchConfiguration, PathJoinSubstitution
 from launch_ros.actions import Node
-from launch_ros.substitutions import FindPackageShare
-
-from pathlib import Path
+from launch_ros.parameter_descriptions import ParameterValue
 
 
 def generate_launch_description():
-  
-    robo = Path(r'/home/niiquaye/robotics/install/uwrt_mars_rover_drivetrain_description/share/uwrt_mars_rover_drivetrain_description/urdf/robot.urdf').resolve(strict=True).read_text()
+    drivetrain_description_package_path = get_package_share_path('uwrt_mars_rover_drivetrain_description')
+    model_path = drivetrain_description_package_path / 'urdf' / 'drivetrain.urdf.xacro'
+    rviz_config_path = drivetrain_description_package_path / 'rviz' / 'urdf.rviz'
+    controllers_config_path = get_package_share_path(
+        'uwrt_mars_rover_drivetrain_hw') / 'config' / 'drivetrain_controllers.yaml'
 
-    robot_description = {"robot_description": robo}
+    robot_description_content = ParameterValue(Command([f'ros2 run xacro xacro ', str(model_path)]), value_type=str)
+    robot_description = {"robot_description": robot_description_content}
 
-    drivetrain_differential_drive_controller = PathJoinSubstitution(
-        [FindPackageShare("uwrt_mars_rover_drivetrain_hw"), "config", "drivetrain_controller.yaml"]
-    )
-
-    controller_manager_node = Node(
+    # Nodes
+    nodes = []
+    nodes += [Node(
         package="controller_manager",
         executable="ros2_control_node",
-        parameters=[robot_description, drivetrain_differential_drive_controller],
-        output={"stdout": "screen", "stderr": "screen"},
-    )
+        parameters=[robot_description, controllers_config_path],
+        output={
+            "stdout": "screen",
+            "stderr": "screen",
+        },
+    )]  # TODO: use custom control node w/ RT scheduling(port from ros1 uwrt_mars_rover branch)
 
-    spawn_diff_drive_controller = Node(
+    nodes += [Node(
+        package="robot_state_publisher",
+        executable="robot_state_publisher",
+        output="both",
+        parameters=[robot_description],
+    )]
+
+    nodes += [joint_state_broadcaster_spawner := Node(
         package="controller_manager",
-        executable="spawner.py",
-        arguments=["drivetrain_differential_controller"],
-        output="screen",
+        executable="spawner",
+        arguments=["joint_state_broadcaster", "--controller-manager", "/controller_manager"],
+    )]
+
+    # Delay rviz2 start after joint_state_broadcaster_spawner
+    rviz_node = Node(
+        package="rviz2",
+        executable="rviz2",
+        name="rviz2",
+        output="log",
+        arguments=["-d", str(rviz_config_path)],
     )
+    nodes += [RegisterEventHandler(
+        event_handler=OnProcessExit(
+            target_action=joint_state_broadcaster_spawner,
+            on_exit=[rviz_node],
+        )
+    )]
 
-    return LaunchDescription([controller_manager_node, spawn_diff_drive_controller])
+    # Delay start of drivetrain_controller_spawner after joint_state_broadcaster_spawner
+    drivetrain_controller_spawner = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["differential_drivetrain_controller", "-c", "/controller_manager"],
+    )
+    nodes += [RegisterEventHandler(
+        event_handler=OnProcessExit(
+            target_action=joint_state_broadcaster_spawner,
+            on_exit=[drivetrain_controller_spawner],
+        )
+    )]
 
+    return LaunchDescription(nodes)

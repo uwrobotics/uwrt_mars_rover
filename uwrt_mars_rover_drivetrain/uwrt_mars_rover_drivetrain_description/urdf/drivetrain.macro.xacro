@@ -65,23 +65,26 @@
   </xacro:macro>
 
   <xacro:macro name="drivetrain_actuator" params="prefix suffix">
-    <ros2_control name="{prefix}_${suffix}_wheel_actuator" type="actuator">
+    <ros2_control name="${prefix}_${suffix}_wheel_actuator" type="actuator">
       <hardware>
-        <plugin>uwrt_mars_rover_drivetrain_hw/UWRTMarsRoverDrivetrainHardwareReal</plugin>
-        <!-- TODO: Can interface and Odrive id?-->
+        <plugin>uwrt_mars_rover_drivetrain_hw/UWRTMarsRoverDrivetrainHWActuatorInterface</plugin>
+        <!-- TODO: CAN interface and Odrive id?-->
       </hardware>
       <joint name="${prefix}_${suffix}_wheel_joint">
         <command_interface name="velocity">
-          <param name="min">"${-max_speed}"</param>
-          <param name="max">"${max_speed}"</param>
+          <param name="min">${-max_speed}</param>
+          <param name="max">${max_speed}</param>
         </command_interface>
+        <state_interface name="position"/>
         <state_interface name="velocity"/>
+        <state_interface name="iq_current"/>
+        <!-- TODO: acceleration, torque? -->
       </joint>
       <transmission name="transmission1">
         <!--  TODO: These are not actually parsed by ros2control yet: https://github.com/ros-controls/ros2_control/issues/32, https://github.com/ros-controls/ros2_control/issues/599 -->
-        <plugin>transmission_interface/SimpleTansmission</plugin>
+        <plugin>transmission_interface/SimpleTransmission</plugin>
         <joint name="${prefix}_${suffix}_wheel_joint" role="joint1">
-          <mechanical_reduction>"${mechanical_reduction}"</mechanical_reduction>
+          <mechanical_reduction>${mechanical_reduction}</mechanical_reduction>
         </joint>
       </transmission>
     </ros2_control>

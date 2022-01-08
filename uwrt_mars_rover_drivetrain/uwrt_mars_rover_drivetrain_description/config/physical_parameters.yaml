@@ -4,6 +4,7 @@ chassis:
   height: 0.15
 
 wheels:
+  # Should match values defined in uwrt_mars_rover_drivetrain_hw/config/drivetrain_controllers.yaml
   diameter: 0.3
   width: 0.2
   mass: 0.5

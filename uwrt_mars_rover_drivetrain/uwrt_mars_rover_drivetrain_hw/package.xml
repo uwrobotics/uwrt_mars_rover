@@ -14,9 +14,12 @@
   <buildtool_depend>ament_cmake</buildtool_depend>
 
   <depend>hardware_interface</depend>
-  <depend>transmission_interface</depend>
   <depend>pluginlib</depend>
   <depend>rclcpp</depend>
+  <depend>rclcpp_lifecycle</depend>
+  <depend>transmission_interface</depend>
+
+  <exec_depend>uwrt_mars_rover_drivetrain_description</exec_depend>
 
   <test_depend>ament_cmake_cppcheck</test_depend>
   <test_depend>ament_clang_tidy</test_depend>

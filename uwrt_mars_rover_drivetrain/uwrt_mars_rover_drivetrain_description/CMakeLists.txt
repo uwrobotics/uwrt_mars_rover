@@ -13,4 +13,14 @@ install(
       share/${PROJECT_NAME}
 )
 
+if (BUILD_TESTING)
+  # flake8
+  find_package(ament_cmake_flake8 REQUIRED)
+  ament_flake8()
+
+  # xmllint
+  find_package(ament_cmake_xmllint REQUIRED)
+  ament_xmllint()
+endif ()
+
 ament_package()

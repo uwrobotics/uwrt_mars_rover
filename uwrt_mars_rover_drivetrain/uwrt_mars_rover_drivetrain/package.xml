@@ -3,7 +3,7 @@
 <package format="3">
   <name>uwrt_mars_rover_drivetrain</name>
   <version>0.0.0</version>
-  <description>Package grouping all the packages written for the UWRT's di</description>
+  <description>Package grouping all the packages written for the UWRT's drivetrain</description>
 
   <maintainer email="omarmon@uwaterloo.ca">niiquaye</maintainer>
   <author email="omarmon@uwaterloo.ca">Orson Marmon</author>

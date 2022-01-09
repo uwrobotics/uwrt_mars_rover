@@ -5,7 +5,7 @@
   <version>0.0.0</version>
   <description>Package grouping all the packages written for the UWRT rover's differential drivetrain.</description>
 
-  <maintainer email="omarmon@uwaterloo.ca">niiquaye</maintainer>\
+  <maintainer email="omarmon@uwaterloo.ca">niiquaye</maintainer>
   <maintainer email="melvin.mc.wang@gmail.ca">Melvin Wang</maintainer>
 
   <license>MIT</license>
@@ -14,6 +14,7 @@
 
   <exec_depend>uwrt_mars_rover_description</exec_depend>
   <exec_depend>uwrt_mars_rover_drivetrain</exec_depend>
+  <exec_depend>uwrt_mars_rover_drivetrain_hw</exec_depend>
 
   <export>
     <build_type>ament_cmake</build_type>

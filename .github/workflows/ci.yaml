@@ -9,8 +9,8 @@ on:
   schedule: # Trigger a job on master at midnight UTC every day
     - cron: '0 0 * * *'
 
-env: 
-  ROS_DISTRO: foxy
+env:
+  ROS_DISTRO: galactic
   PACKAGES_TO_TEST: "uwrt_mars_rover"
 
 jobs:
@@ -18,7 +18,7 @@ jobs:
     name: ament-${{ matrix.linter }}
     runs-on: ubuntu-latest
     container:
-      image: rostooling/setup-ros-docker:ubuntu-focal-ros-foxy-desktop-latest
+      image: rostooling/setup-ros-docker:ubuntu-focal-ros-${{ env.ROS_DISTRO }}-desktop-latest
       options: -u root
     strategy:
       fail-fast: false # We want all the linters to run even if one fails
@@ -40,7 +40,7 @@ jobs:
   linux-amd64-build-and-test:
     runs-on: ubuntu-latest
     container:
-      image: rostooling/setup-ros-docker:ubuntu-focal-ros-foxy-desktop-latest
+      image: rostooling/setup-ros-docker:ubuntu-focal-ros-${{ env.ROS_DISTRO }}-desktop-latest
       options: -u root
 
     steps:
@@ -62,7 +62,7 @@ jobs:
     runs-on: ubuntu-latest
 
     # Cannot use action-ros-ci since cant trigger action steps from within the docker container. Must use `docker exec`
-    # to run actions within docker container since we cannot directly use arm64v8/ros:foxy container because there
+    # to run actions within docker container since we cannot directly use arm64v8/ros:${{ env.ROS_DISTRO }} container because there
     # exists no way of setting up Docker to work with Qemu before loading a docker image onto the Github Action runner.
     # Possibly resolveable with https://github.com/actions/runner/issues/320
     steps:

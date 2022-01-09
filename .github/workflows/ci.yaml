@@ -23,7 +23,7 @@ jobs:
     strategy:
       fail-fast: false # We want all the linters to run even if one fails
       matrix:
-        linter: [cppcheck, clang-format, flake8, xmllint]
+        linter: [ cppcheck, clang-format, flake8, xmllint ]
 
     steps:
       - name: Checkout Repository
@@ -109,6 +109,13 @@ jobs:
         uses: ros-tooling/setup-ros@master # v0.2 doesn't have commit 45f6b7f which is required for Windows builds
         with:
           required-ros-distributions: ${{ env.ROS_DISTRO }}
+
+      - name: Windows Build Workaround
+        run: >
+          New-Item -Path C:/ci/ws/install/include -ItemType Directory
+        # This is required because the windows binary builds used by setup-ros have the following issue:
+        # `Imported target "rclcpp::rclcpp" includes non-existent path`
+        # This can be removed once https://github.com/ros2/ros2/issues/1068 and https://github.com/ros2/rclcpp/issues/1688 are resolved.
 
       - name: Build ROS2 Packages and Run Tests
         uses: wmmc88/action-ros-ci@wmmc88/fix-windows-builds # Revert to upstream action-ros-ci once https://github.com/ros-tooling/action-ros-ci/pull/712 merges

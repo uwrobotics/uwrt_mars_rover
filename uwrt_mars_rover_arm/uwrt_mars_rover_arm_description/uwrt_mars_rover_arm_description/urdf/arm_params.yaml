@@ -1,0 +1,45 @@
+dimensions:
+  box_size: 1
+
+  turntable_radius: 0.6
+  turntable_length: 0.1
+  
+  upper_arm_radius: 0.1
+  upper_arm_length: 1
+
+  forearm_radius: 0.1
+  forearm_length: 0.5
+
+  forearm_roll_radius: 0.1
+  forearm_roll_length: 0.5
+
+  wrist_radius: 0.1
+  wrist_length: 0.5
+
+  claw_width: 0.05
+  claw_length: 0.25
+
+inertia:
+  default_mass: 1
+
+joints: 
+  default_limit_effort: 10
+  default_limit_vel: 0.5
+
+  shoulder_lower: !degrees  -90.0
+  shoulder_upper: !degrees  90.0
+
+  elbow_lower: !degrees  -180.0
+  elbow_upper: !degrees  0
+
+  roll_lower: !degrees  -90.0
+  roll_upper: !degrees  90.0
+
+  wrist_lower: !degrees  -90.0
+  wrist_upper: !degrees  90.0
+
+  claw_left_lower: !degrees  -90.0
+  claw_left_upper: !degrees  0
+
+  claw_right_lower: !degrees  0
+  claw_right_upper: !degrees  90.0

@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.8)
 project(uwrt_mars_rover_drivetrain_hw)
 
 if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-  add_compile_options(-Wall -Wextra -Wpedantic)
+  add_compile_options(-Wall -Wextra -Wpedantic -Wshadow -Werror)
 endif ()
 
 # find dependencies
@@ -46,23 +46,27 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE "UWRT_MARS_ROVER_DRIVETRAIN_H
 pluginlib_export_plugin_description_file(hardware_interface ${PROJECT_NAME}.xml)
 
 install(
+        DIRECTORY
+          include
+        DESTINATION
+          include
+)
+
+install(
     TARGETS ${PROJECT_NAME}
-    DESTINATION lib
+    EXPORT ${PROJECT_NAME}Targets
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
+    RUNTIME DESTINATION bin
+    INCLUDES DESTINATION include
 )
 
 install(
     DIRECTORY
-    include
+      config
+      launch
     DESTINATION
-    include
-)
-
-install(
-    DIRECTORY
-    config
-    launch
-    DESTINATION
-    share/${PROJECT_NAME}
+      share/${PROJECT_NAME}
 )
 
 if (BUILD_TESTING)
@@ -73,7 +77,7 @@ if (BUILD_TESTING)
   find_package(ament_cmake_cppcheck REQUIRED)
   ament_cppcheck()
 
-  # clang-format 
+  # clang-format
   find_package(ament_cmake_clang_format REQUIRED)
   ament_clang_format()
 
@@ -85,16 +89,14 @@ if (BUILD_TESTING)
   find_package(ament_cmake_xmllint REQUIRED)
   ament_xmllint()
 
-  # clang-tidy 
+  # clang-tidy
   find_package(ament_cmake_clang_tidy REQUIRED)
   ament_clang_tidy(${CMAKE_BINARY_DIR})
 endif ()
 
-ament_export_include_directories(
-    include
-)
-ament_export_libraries(
-    ${PROJECT_NAME}
+ament_export_targets(
+    ${PROJECT_NAME}Targets
+    HAS_LIBRARY_TARGET
 )
 ament_export_dependencies(
     hardware_interface

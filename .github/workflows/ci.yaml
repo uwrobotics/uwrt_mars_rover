@@ -11,11 +11,11 @@ on:
 
 env:
   ROS_DISTRO: galactic
+  IMAGE: "rostooling/setup-ros-docker:ubuntu-focal-ros-galactic-desktop-latest"
+
   PACKAGES_TO_TEST: > # This limits the packages that are checked in CI. This is to avoid testing upstream packages passed in via .repos files.
     uwrt_mars_rover_drivetrain_description
     uwrt_mars_rover_drivetrain_hw
-
-  IMAGE: "rostooling/setup-ros-docker:ubuntu-focal-ros-${{ env.ROS_DISTRO }}-desktop-latest"
 
 jobs:
   prepare-actions-environment:

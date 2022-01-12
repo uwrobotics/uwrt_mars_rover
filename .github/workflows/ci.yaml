@@ -13,12 +13,24 @@ env:
   ROS_DISTRO: galactic
   PACKAGES_TO_TEST: "uwrt_mars_rover"
 
+  IMAGE: "rostooling/setup-ros-docker:ubuntu-focal-ros-galactic-desktop-latest"
+
 jobs:
+  prepare-actions-environment:
+    # workaround to use variable for IMAGE. Based off of: https://github.community/t/how-to-use-env-with-container-image/17252/25
+    runs-on: ubuntu-latest
+    outputs:
+      image: ${{ steps.export_variable.outputs.image }}
+    steps:
+      - id: export_variable
+        run: echo "::set-output name=image::${{ env.IMAGE }}"
+
   linters:
     name: ament-${{ matrix.linter }}
+    needs: prepare-actions-environment
     runs-on: ubuntu-latest
     container:
-      image: rostooling/setup-ros-docker:ubuntu-focal-ros-galactic-desktop-latest
+      image: ${{ needs.prepare-actions-environment.outputs.image }}
       options: -u root
     strategy:
       fail-fast: false # We want all the linters to run even if one fails
@@ -38,9 +50,10 @@ jobs:
 
 
   linux-amd64-build-and-test:
+    needs: prepare-actions-environment
     runs-on: ubuntu-latest
     container:
-      image: rostooling/setup-ros-docker:ubuntu-focal-ros-galactic-desktop-latest
+      image: ${{ needs.prepare-actions-environment.outputs.image }}
       options: -u root
 
     steps:

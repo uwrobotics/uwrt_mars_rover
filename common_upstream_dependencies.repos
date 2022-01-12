@@ -1,11 +1,6 @@
-# These are upstream source dependencies used by all builds. Update to a new pinned commit on branch of choice gets updates you want.
+# These are upstream source dependencies used by all builds.
 
 repositories:
-  ament_lint:
-    type: git
-    url: https://github.com/ament/ament_lint.git
-    version: 1f5c6bb # Latest known working on master branch
-
 #  vectornav:
 #    type: git
 #    url: https://github.com/dawonn/vectornav

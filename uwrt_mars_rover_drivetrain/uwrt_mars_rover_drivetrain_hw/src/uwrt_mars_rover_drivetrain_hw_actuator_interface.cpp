@@ -62,7 +62,7 @@ LifecyleNodeCallbackReturn UWRTMarsRoverDrivetrainHWActuatorInterface::on_init(
 }
 
 LifecyleNodeCallbackReturn UWRTMarsRoverDrivetrainHWActuatorInterface::on_cleanup(
-    const rclcpp_lifecycle::State& previous_state) {
+    const rclcpp_lifecycle::State& /*previous_state*/) {
   RCLCPP_INFO(rclcpp::get_logger("UWRTMarsRoverDrivetrainHWActuatorInterface"), "Drivetrain Actuator Cleaning Up...");
 
   // Reset state and command data to nan
@@ -78,7 +78,7 @@ LifecyleNodeCallbackReturn UWRTMarsRoverDrivetrainHWActuatorInterface::on_cleanu
 }
 
 LifecyleNodeCallbackReturn UWRTMarsRoverDrivetrainHWActuatorInterface::on_configure(
-    const rclcpp_lifecycle::State& previous_state) {
+    const rclcpp_lifecycle::State& /*previous_state*/) {
   RCLCPP_INFO(rclcpp::get_logger("UWRTMarsRoverDrivetrainHWActuatorInterface"), "Drivetrain Actuator Configuring ...");
 
   joint_velocity_command_ = 0.0;
@@ -103,7 +103,7 @@ LifecyleNodeCallbackReturn UWRTMarsRoverDrivetrainHWActuatorInterface::on_config
 }
 
 LifecyleNodeCallbackReturn UWRTMarsRoverDrivetrainHWActuatorInterface::on_deactivate(
-    const rclcpp_lifecycle::State& previous_state) {
+    const rclcpp_lifecycle::State& /*previous_state*/) {
   RCLCPP_INFO(rclcpp::get_logger("UWRTMarsRoverDrivetrainHWActuatorInterface"), "Drivetrain Actuator Deactivating...");
 
   joint_velocity_command_ = 0.0;
@@ -117,7 +117,7 @@ LifecyleNodeCallbackReturn UWRTMarsRoverDrivetrainHWActuatorInterface::on_deacti
 }
 
 LifecyleNodeCallbackReturn UWRTMarsRoverDrivetrainHWActuatorInterface::on_shutdown(
-    const rclcpp_lifecycle::State& previous_state) {
+    const rclcpp_lifecycle::State& /*previous_state*/) {
   RCLCPP_INFO(rclcpp::get_logger("UWRTMarsRoverDrivetrainHWActuatorInterface"), "Drivetrain Actuator Shutting Down...");
 
   // TODO: Null out CAN lib object?
@@ -128,7 +128,7 @@ LifecyleNodeCallbackReturn UWRTMarsRoverDrivetrainHWActuatorInterface::on_shutdo
 }
 
 LifecyleNodeCallbackReturn UWRTMarsRoverDrivetrainHWActuatorInterface::on_activate(
-    const rclcpp_lifecycle::State& previous_state) {
+    const rclcpp_lifecycle::State& /*previous_state*/) {
   RCLCPP_INFO(rclcpp::get_logger("UWRTMarsRoverDrivetrainHWActuatorInterface"), "Drivetrain Actuator Activating...");
 
   RCLCPP_INFO(rclcpp::get_logger("UWRTMarsRoverDrivetrainHWActuatorInterface"),

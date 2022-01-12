@@ -11,7 +11,7 @@ on:
 
 env:
   ROS_DISTRO: galactic
-  PACKAGES_TO_TEST: >
+  PACKAGES_TO_TEST: > # This limits the packages that are checked in CI. This is to avoid testing upstream packages passed in via .repos files.
     uwrt_mars_rover_drivetrain_description
     uwrt_mars_rover_drivetrain_hw
 
@@ -70,7 +70,8 @@ jobs:
             }
           colcon-mixin-repository: https://raw.githubusercontent.com/colcon/colcon-mixin-repository/3e627e0fa30db85aea05a50e2c61a9832664d236/index.yaml
           target-ros2-distro: ${{ env.ROS_DISTRO }}
-          vcs-repo-file-url: https://raw.githubusercontent.com/${{ github.repository }}/${{ github.sha }}/common_upstream_dependencies.repos
+          vcs-repo-file-url: |
+            https://raw.githubusercontent.com/${{ github.repository }}/${{ github.sha }}/common_upstream_dependencies.repos
           package-name: ${{ env.PACKAGES_TO_TEST }}
 
   linux-arm64-build-and-test:
@@ -102,6 +103,7 @@ jobs:
       - name: Install ROS Source Dependencies
         run: |
           docker exec --workdir /rosws/src arm64-ros vcs import --input uwrt_mars_rover/common_upstream_dependencies.repos
+      #         # TODO: add linux_arm64_upstream_dependencies.repos
       - name: Install ROS Binary Package Dependencies
         run: |
           docker exec arm64-ros sudo apt update
@@ -137,5 +139,6 @@ jobs:
         with:
           target-ros2-distro: ${{ env.ROS_DISTRO }}
           vcs-repo-file-url: |
+            https://raw.githubusercontent.com/${{ github.repository }}/${{ github.sha }}/common_upstream_dependencies.repos
             https://raw.githubusercontent.com/${{ github.repository }}/${{ github.sha }}/windows_amd64_upstream_dependencies.repos
           package-name: ${{ env.PACKAGES_TO_TEST }}

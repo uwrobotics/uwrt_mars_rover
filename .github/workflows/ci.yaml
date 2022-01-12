@@ -12,8 +12,8 @@ on:
 env:
   ROS_DISTRO: galactic
   PACKAGES_TO_TEST: >
-  "uwrt_mars_rover_drivetrain_description "
-  "uwrt_mars_rover_drivetrain_hw"
+    uwrt_mars_rover_drivetrain_description
+    uwrt_mars_rover_drivetrain_hw
 
   IMAGE: "rostooling/setup-ros-docker:ubuntu-focal-ros-galactic-desktop-latest"
 

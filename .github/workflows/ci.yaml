@@ -9,22 +9,33 @@ on:
   schedule: # Trigger a job on master at midnight UTC every day
     - cron: '0 0 * * *'
 
+env:
+  ROS_DISTRO: galactic
+  PACKAGES_TO_TEST: "uwrt_mars_rover"
+
+  IMAGE: "rostooling/setup-ros-docker:ubuntu-focal-ros-galactic-desktop-latest"
+
 jobs:
+  prepare-actions-environment:
+    # workaround to use variable for IMAGE. Based off of: https://github.community/t/how-to-use-env-with-container-image/17252/25
+    runs-on: ubuntu-latest
+    outputs:
+      image: ${{ steps.export_variable.outputs.image }}
+    steps:
+      - id: export_variable
+        run: echo "::set-output name=image::${{ env.IMAGE }}"
+
   linters:
     name: ament-${{ matrix.linter }}
+    needs: prepare-actions-environment
     runs-on: ubuntu-latest
     container:
-      image: rostooling/setup-ros-docker:ubuntu-focal-ros-foxy-ros-base-latest
+      image: ${{ needs.prepare-actions-environment.outputs.image }}
       options: -u root
     strategy:
       fail-fast: false # We want all the linters to run even if one fails
       matrix:
-        linter: [flake8, clang-format, xmllint]
-        # , clang-format, xmllint, cppcheck
-        #   - flake8       (python linter)
-        #   - clang-format (code format checking)
-        #   - xmllint      (xml linter)
-        #   - cppcheck     (static c/c++ analysis tool)
+        linter: [ cppcheck, clang-format, flake8, xmllint ]
 
     steps:
       - name: Checkout Repository
@@ -35,22 +46,17 @@ jobs:
         with:
           distribution: rolling
           linter: ${{ matrix.linter }}
-          package-name: uwrt_mars_rover
+          package-name: ${{ env.PACKAGES_TO_TEST }}
 
 
-  amd64-build:
+  linux-amd64-build-and-test:
+    needs: prepare-actions-environment
     runs-on: ubuntu-latest
     container:
-      image: rostooling/setup-ros-docker:ubuntu-focal-ros-foxy-ros-base-latest
+      image: ${{ needs.prepare-actions-environment.outputs.image }}
       options: -u root
+
     steps:
-
-      - name: Install clang-tidy-6
-        run: |
-          sudo apt-get update -y
-          sudo apt-get install -y clang-tidy-6.0
-
-      
       - name: Build ROS2 Packages and Run Tests
         uses: ros-tooling/action-ros-ci@v0.2
         with:
@@ -61,19 +67,18 @@ jobs:
               }
             }
           colcon-mixin-repository: https://raw.githubusercontent.com/colcon/colcon-mixin-repository/3e627e0fa30db85aea05a50e2c61a9832664d236/index.yaml
-          target-ros2-distro: foxy
-          package-name: uwrt_mars_rover
+          target-ros2-distro: ${{ env.ROS_DISTRO }}
+          vcs-repo-file-url: https://raw.githubusercontent.com/${{ github.repository }}/${{ github.sha }}/common_upstream_dependencies.repos
+          package-name: ${{ env.PACKAGES_TO_TEST }}
 
-
-  arm64-build:
+  linux-arm64-build-and-test:
     runs-on: ubuntu-latest
 
     # Cannot use action-ros-ci since cant trigger action steps from within the docker container. Must use `docker exec`
-    # to run actions within docker container since we cannot directly use arm64v8/ros:foxy container because there
-    # exists no way of setting up Docker to work with Qemu before loading a docker image onto the runner.
+    # to run actions within docker container since we cannot directly use arm64v8/ros:${{ env.ROS_DISTRO }} container because there
+    # exists no way of setting up Docker to work with Qemu before loading a docker image onto the Github Action runner.
     # Possibly resolveable with https://github.com/actions/runner/issues/320
     steps:
-
       - name: Checkout Repository
         uses: actions/checkout@v2
 
@@ -90,17 +95,45 @@ jobs:
 
       - name: Start ARM64 ROS2 Container
         run: |
-          docker run --name arm64-ros --mount type=bind,source=$(pwd),target=/rosws/src/$(basename $(pwd)) --workdir /rosws --detach -i --rm arm64v8/ros:foxy
+          docker run --name arm64-ros --mount type=bind,source=$(pwd),target=/rosws/src/$(basename $(pwd)) --workdir /rosws --detach -i --rm arm64v8/ros:${{ env.ROS_DISTRO }}
 
-      - name: Install ROS Package Dependencies
+      - name: Install ROS Source Dependencies
+        run: |
+          docker exec --workdir /rosws/src arm64-ros vcs import --input uwrt_mars_rover/common_upstream_dependencies.repos
+      - name: Install ROS Binary Package Dependencies
         run: |
           docker exec arm64-ros sudo apt update
-          docker exec arm64-ros rosdep install -r --from-paths . --ignore-src --rosdistro foxy -y
+          docker exec arm64-ros rosdep install -r --from-paths . --ignore-src --rosdistro ${{ env.ROS_DISTRO }} -y
 
       - name: Build ROS2 Packages and Run Tests
         run: >
-          docker exec arm64-ros bash -c "source /opt/ros/foxy/setup.bash;
-          colcon build --event-handlers console_cohesion+;
-          colcon test --event-handlers console_cohesion+"
+          docker exec arm64-ros bash -c "source /opt/ros/${{ env.ROS_DISTRO }}/setup.bash &&
+            colcon build --event-handlers console_cohesion+ && 
+            colcon test --packages-select ${{ env.PACKAGES_TO_TEST }} --return-code-on-test-failure --event-handlers console_cohesion+"
 
-# TODO(melvin): distro matrix, windows build, global packages list
+  windows-amd64-build-and-test: # No rostooling/setup-ros-docker docker images available for Windows.
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Setup ROS
+        uses: ros-tooling/setup-ros@master # v0.2 doesn't have commit 45f6b7f which is required for Windows builds
+        with:
+          required-ros-distributions: ${{ env.ROS_DISTRO }}
+
+      - name: Windows Build Workaround
+        run: >
+          New-Item -Path C:/ci/ws/install/include -ItemType Directory
+        # This is required because the windows binary builds used by setup-ros have the following issue:
+        # `Imported target "rclcpp::rclcpp" includes non-existent path`
+        # This can be removed once https://github.com/ros2/ros2/issues/1068 and https://github.com/ros2/rclcpp/issues/1688 are resolved.
+
+      - name: Build ROS2 Packages and Run Tests
+        uses: wmmc88/action-ros-ci@wmmc88/fix-windows-builds # Revert to upstream action-ros-ci once https://github.com/ros-tooling/action-ros-ci/pull/712 merges
+        with:
+          target-ros2-distro: ${{ env.ROS_DISTRO }}
+          vcs-repo-file-url: |
+            https://raw.githubusercontent.com/${{ github.repository }}/${{ github.sha }}/windows_amd64_upstream_dependencies.repos
+          package-name: ${{ env.PACKAGES_TO_TEST }}

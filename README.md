@@ -130,6 +130,51 @@ branch.
 If you have code that's not ready to merge, but you'd still like people thoughts on it, open a
 [draft pull request](https://github.blog/2019-02-14-introducing-draft-pull-requests/).
 
+## Adding New Ros Packages
+
+When you add new ROS packages:
+
+1. Add the package name to `PACAKGES_TO_TEST` string in the [Github Actions Config](./.github/workflows/ci.yaml)
+
+2. In the package `CMakeLists.txt`, ensure you have all the linters enabled for tests:
+
+   ```CMake
+   if (BUILD_TESTING)
+   # generate compile_commands.json for clang-tidy
+   set(CMAKE_EXPORT_COMPILE_COMMANDS ON CACHE INTERNAL "")
+
+   # cppcheck
+   find_package(ament_cmake_cppcheck REQUIRED)
+   ament_cppcheck()
+
+   # clang-format
+   find_package(ament_cmake_clang_format REQUIRED)
+   ament_clang_format()
+
+   # clang-tidy
+   find_package(ament_cmake_clang_tidy REQUIRED)
+   ament_clang_tidy(${CMAKE_BINARY_DIR})
+
+   # flake8
+   find_package(ament_cmake_flake8 REQUIRED)
+   ament_flake8()
+
+   # xmllint
+   find_package(ament_cmake_xmllint REQUIRED)
+   ament_xmllint()
+   endif ()
+   ```
+
+3. In the `package.xml`, ensure you have all all the linter dependencies declared alongside any package dependencies:
+
+   ```XML
+   <test_depend>ament_cmake_cppcheck</test_depend>
+   <test_depend>ament_cmake_clang_format</test_depend>
+   <test_depend>ament_cmake_clang_tidy</test_depend>
+   <test_depend>ament_cmake_flake8</test_depend>
+   <test_depend>ament_cmake_xmllint</test_depend>
+   ```
+
 ## Running CI Pipeline Locally
 
 The entire Github Actions Workflow can be run locally using [act](https://github.com/nektos/act). This is particularly
@@ -167,7 +212,7 @@ may be some bugs etc. Be sure to check the active issues on their repo if you ru
    ```
    touch $HOME/.actrc
    echo "-P ubuntu-latest=catthehacker/ubuntu:full-20.04" >> $HOME/.actrc
-   echo "-S GITHUB_TOKEN=<A NEWLY GENERATED GITHUB PERSONAL ACCESS TOKEN>" >> $HOME/.actrc
+   echo "-s GITHUB_TOKEN=<A NEWLY GENERATED GITHUB PERSONAL ACCESS TOKEN>" >> $HOME/.actrc
    ```
    More info on generating Github Personal Access Tokens [available here](https://docs.github.com/en/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token)
    

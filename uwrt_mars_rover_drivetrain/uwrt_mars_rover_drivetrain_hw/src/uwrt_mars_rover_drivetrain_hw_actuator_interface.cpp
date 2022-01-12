@@ -11,15 +11,16 @@ LifecyleNodeCallbackReturn UWRTMarsRoverDrivetrainHWActuatorInterface::on_init(
 
   // Validate that parsed urdf information matches expected structure
   if (info_.joints.size() != NUM_JOINTS) {
-    RCLCPP_FATAL_STREAM(rclcpp::get_logger("UWRTMarsRoverDrivetrainHWActuatorInterface"),
-                        "'" << info_.name.c_str() << "' has " << info_.joints.size() << " joints. 1 expected.");
+    RCLCPP_FATAL_STREAM(
+        rclcpp::get_logger("UWRTMarsRoverDrivetrainHWActuatorInterface"),
+        "'" << info_.name.c_str() << "' has " << info_.joints.size() << " joints. " << NUM_JOINTS << " expected.");
     return LifecyleNodeCallbackReturn::ERROR;
   }
   const hardware_interface::ComponentInfo& joint = info_.joints[0];
   if (joint.state_interfaces.size() != NUM_STATE_INTERFACES) {
     RCLCPP_FATAL_STREAM(rclcpp::get_logger("UWRTMarsRoverDrivetrainHWActuatorInterface"),
-                        "Joint '" << joint.name.c_str() << "' has " << joint.command_interfaces.size()
-                                  << " command interfaces. 3 expected.");
+                        "Joint '" << joint.name.c_str() << "' has " << joint.state_interfaces.size()
+                                  << " state interfaces. " << NUM_STATE_INTERFACES << " expected.");
     return LifecyleNodeCallbackReturn::ERROR;
   }
   for (const hardware_interface::InterfaceInfo& state_interface : joint.state_interfaces) {
@@ -36,7 +37,7 @@ LifecyleNodeCallbackReturn UWRTMarsRoverDrivetrainHWActuatorInterface::on_init(
   if (joint.command_interfaces.size() != NUM_COMMAND_INTERFACES) {
     RCLCPP_FATAL_STREAM(rclcpp::get_logger("UWRTMarsRoverDrivetrainHWActuatorInterface"),
                         "Joint '" << joint.name.c_str() << "' has " << joint.command_interfaces.size()
-                                  << " command interfaces. 1 expected.");
+                                  << " command interfaces. " << NUM_COMMAND_INTERFACES << " expected.");
     return LifecyleNodeCallbackReturn::ERROR;
   }
   if (joint.command_interfaces[0].name != hardware_interface::HW_IF_VELOCITY) {

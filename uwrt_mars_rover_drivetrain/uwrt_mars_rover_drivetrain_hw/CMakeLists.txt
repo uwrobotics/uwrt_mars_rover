@@ -75,7 +75,7 @@ if (BUILD_TESTING)
 
   # clang-format 
   find_package(ament_cmake_clang_format REQUIRED)
-  ament_clang_format(CONFIG_FILE ../../../.clang-format)
+  ament_clang_format(CONFIG_FILE ${CMAKE_SOURCE_DIR}/../../.clang-format)
 
   # flake8
   find_package(ament_cmake_flake8 REQUIRED)

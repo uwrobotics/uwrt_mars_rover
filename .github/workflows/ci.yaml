@@ -15,7 +15,7 @@ env:
     uwrt_mars_rover_drivetrain_description
     uwrt_mars_rover_drivetrain_hw
 
-  IMAGE: "rostooling/setup-ros-docker:ubuntu-focal-ros-galactic-desktop-latest"
+  IMAGE: "rostooling/setup-ros-docker:ubuntu-focal-ros-${{ env.ROS_DISTRO }}-desktop-latest"
 
 jobs:
   prepare-actions-environment:
@@ -46,7 +46,7 @@ jobs:
       - name: ROS2 Linter - [ament-${{ matrix.linter }}]
         uses: ros-tooling/action-ros-lint@master
         with:
-          distribution: rolling
+          distribution: ${{ env.ROS_DISTRO }}
           linter: ${{ matrix.linter }}
           package-name: ${{ env.PACKAGES_TO_TEST }}
 

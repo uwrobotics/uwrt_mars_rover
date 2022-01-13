@@ -71,6 +71,7 @@ jobs:
           package-name: ${{ env.PACKAGES_TO_TEST }}
 
   linux-amd64-build-and-test:
+    needs: prepare-actions-environment
     runs-on: ubuntu-latest
     container:
       image: ${{ needs.prepare-actions-environment.outputs.image }}

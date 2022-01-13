@@ -1,0 +1,173 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro">
+    <!-- file with common value -->
+    <xacro:include filename="$(find uwrt_mars_rover_arm_description)/urdf/values.xacro" />
+
+    <xacro:macro name="robot" params="param_file">
+        <xacro:read_model_data param_file="${param_file}"/>
+
+        <!-- all links and joints -->
+        <link name = "base_link">
+            <visual>
+                <xacro:rectangle_visual x="${box_size}" y="${box_size}" z="${box_size}"/>
+            </visual>
+            <collision>
+                <xacro:rectangle_visual x="${box_size}" y="${box_size}" z="${box_size}"/>
+            </collision>
+        </link>
+
+        <joint name = "turntable_joint" type = "continuous">
+            <parent link = "base_link"/>
+            <child link = "turntable"/>
+            <origin xyz = "0 0 ${box_size/2 + turntable_length/2}"/>
+            <axis xyz = "0 0 1"/>
+        </joint>
+
+        <link name = "turntable">
+            <visual>
+                <xacro:cylinder_visual radius="${turntable_radius}" length="${turntable_length}"/>
+            </visual>
+            <collision>
+                <xacro:cylinder_visual radius="${turntable_radius}" length="${turntable_length}"/>
+            </collision>
+            <inertial>
+                <mass value ="${default_mass}"/>
+                <xacro:default_inertia/>
+            </inertial>
+        </link>
+
+        <joint name = "shoulder_joint" type = "revolute">
+            <parent link = "turntable"/>
+            <child link = "upper_arm"/>
+            <limit effort="${default_limit_effort}" lower="${shoulder_lower}" upper="${shoulder_upper}" velocity="${default_limit_vel}"/>
+        </joint>
+
+        <link name = "upper_arm">
+            <visual>
+                <origin xyz = "0 0 ${upper_arm_length/2}" rpy= "0 0 0"/>
+                <xacro:cylinder_visual radius="${upper_arm_radius}" length="${upper_arm_length}"/>
+            </visual>
+            <collision>
+                <origin xyz = "0 0 ${upper_arm_length/2}" rpy= "0 0 0"/>
+                <xacro:cylinder_visual radius="${upper_arm_radius}" length="${upper_arm_length}"/>
+            </collision>
+            <inertial>
+                <mass value ="${default_mass}"/>
+                <xacro:default_inertia/>
+            </inertial>
+        </link>
+
+        <joint name = "elbow_joint" type = "revolute">
+            <parent link = "upper_arm"/>
+            <child link = "forearm"/>
+            <limit effort="${default_limit_effort}" lower="${elbow_lower}" upper="${elbow_upper}" velocity="${default_limit_vel}"/>
+            <origin xyz = "0 0 ${upper_arm_length}" rpy= "0 0 0"/>
+        </joint>
+
+        <link name = "forearm">
+            <visual>
+                <origin xyz = "0 0 ${forearm_length/2}" rpy= "0 0 0"/>
+                <xacro:cylinder_visual radius="${forearm_radius}" length="${forearm_length}"/>
+            </visual>
+            <collision>
+                <origin xyz = "0 0 ${forearm_length/2}" rpy= "0 0 0"/>
+                <xacro:cylinder_visual radius="${forearm_radius}" length="${forearm_length}"/>
+            </collision>
+            <inertial>
+                <mass value ="${default_mass}"/>
+                <xacro:default_inertia/>
+            </inertial>
+        </link>
+
+        <joint name = "roll_joint" type = "revolute">
+            <parent link = "forearm"/>
+            <child link = "forearm_roll"/>
+            <limit effort="${default_limit_effort}" lower="${roll_lower}" upper="${roll_upper}" velocity="${default_limit_vel}"/>
+            <origin xyz = "0 0 ${forearm_length}" rpy= "0 0 0"/>
+            <axis xyz = "0 0 1"/>
+        </joint>
+
+        <link name = "forearm_roll">
+            <visual>
+                <origin xyz = "0 0 ${forearm_roll_length/2}" rpy= "0 0 0"/>
+                <xacro:cylinder_visual radius="${forearm_roll_radius}" length="${forearm_roll_length}"/>
+            </visual>
+            <collision>
+                <origin xyz = "0 0 ${forearm_roll_length/2}" rpy= "0 0 0"/>
+                <xacro:cylinder_visual radius="${forearm_roll_radius}" length="${forearm_roll_length}"/>
+            </collision>
+            <inertial>
+                <mass value ="${default_mass}"/>
+                <xacro:default_inertia/>
+            </inertial>
+        </link>
+
+        <joint name = "wrist_joint" type = "revolute">
+            <parent link = "forearm_roll"/>
+            <child link = "wrist"/>
+            <limit effort="${default_limit_effort}" lower="${wrist_lower}" upper="${wrist_upper}" velocity="${default_limit_vel}"/>
+            <origin xyz = "0 0 ${forearm_roll_length}" rpy= "0 0 0"/>
+            <axis xyz = "0 1 0"/>
+        </joint> 
+
+        <link name = "wrist">
+            <visual>
+                <origin xyz = "0 0 ${wrist_length/2}" rpy= "0 0 0"/>
+                <xacro:cylinder_visual radius="${forearm_roll_radius}" length="${forearm_roll_length}"/>
+            </visual>
+            <collision>
+                <origin xyz = "0 0 ${wrist_length/2}" rpy= "0 0 0"/>
+                <xacro:cylinder_visual radius="${forearm_roll_radius}" length="${forearm_roll_length}"/>
+            </collision>
+            <inertial>
+                <mass value ="${default_mass}"/>
+                <xacro:default_inertia/>
+            </inertial>
+        </link>
+
+        <joint name = "claw_left_joint" type = "revolute">
+            <parent link = "wrist"/>
+            <child link = "claw_left"/>
+            <limit effort="${default_limit_effort}" lower="${claw_left_lower}" upper="${claw_left_upper}" velocity="${default_limit_vel}"/>
+            <origin xyz = "0 0 ${wrist_length}" rpy= "0 0 0"/>
+        </joint> 
+
+        <link name = "claw_left">
+            <visual>
+                <origin xyz = "0 ${claw_width * 3/4} ${claw_length/4}" rpy= "0 0 0"/>
+                <xacro:rectangle_visual x="${claw_width}" y="${claw_width}" z="${claw_length}"/>
+            </visual>
+            <collision>
+                <origin xyz = "0 ${claw_width * 3/4} ${claw_length/4}" rpy= "0 0 0"/>
+                <xacro:rectangle_visual x="${claw_width}" y="${claw_width}" z="${claw_length}"/>
+            </collision>
+            <inertial>
+                <mass value ="${default_mass}"/>
+                <xacro:default_inertia/>
+            </inertial>
+        </link>
+
+        <joint name = "claw_right_joint" type = "revolute">
+            <parent link = "wrist"/>
+            <child link = "claw_right"/>
+            <limit effort="${default_limit_effort}" lower="${claw_right_lower}" upper="${claw_right_upper}" velocity="${default_limit_vel}"/>
+            <origin xyz = "0 0 ${wrist_length}" rpy= "0 0 0"/>
+        </joint> 
+
+        <link name = "claw_right">
+            <visual>
+                <origin xyz = "0 ${-claw_width * 3/4} ${claw_length/4}" rpy= "0 0 0"/>
+                <xacro:rectangle_visual x="${claw_width}" y="${claw_width}" z="${claw_length}"/>
+            </visual>
+            <collision>
+                <origin xyz = "0 ${claw_width * 3/4} ${claw_length/4}" rpy= "0 0 0"/>
+                <xacro:rectangle_visual x="${claw_width}" y="${claw_width}" z="${claw_length}"/>
+            </collision>
+            <inertial>
+                <mass value ="${default_mass}"/>
+                <xacro:default_inertia/>
+            </inertial>
+        </link>
+
+    </xacro:macro>
+</robot>

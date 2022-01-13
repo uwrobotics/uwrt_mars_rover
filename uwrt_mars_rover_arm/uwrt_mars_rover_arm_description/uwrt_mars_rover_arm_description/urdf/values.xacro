@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro">
+    <xacro:macro name="read_model_data" params="param_file">
+    
+        <xacro:property name="config_params" value="${load_yaml(param_file)}"/>
+
+        <!-- dimensions -->
+        <xacro:property name="dim" value="${config_params['dimensions']}"/>
+        <xacro:property name="box_size" value="${dim['box_size']}" scope="parent"/>
+
+        <xacro:property name="turntable_radius" value="${dim['turntable_radius']}" scope="parent"/>
+        <xacro:property name="turntable_length" value="${dim['turntable_length']}" scope="parent"/>
+
+        <xacro:property name="upper_arm_radius" value="${dim['upper_arm_radius']}" scope="parent"/>
+        <xacro:property name="upper_arm_length" value="${dim['upper_arm_length']}" scope="parent"/>
+
+        <xacro:property name="forearm_radius" value="${dim['forearm_radius']}" scope="parent"/>
+        <xacro:property name="forearm_length" value="${dim['forearm_length']}" scope="parent"/>
+
+        <xacro:property name="forearm_roll_radius" value="${dim['forearm_roll_radius']}" scope="parent"/>
+        <xacro:property name="forearm_roll_length" value="${dim['forearm_roll_length']}" scope="parent"/>
+
+        <xacro:property name="wrist_radius" value="${dim['wrist_radius']}" scope="parent"/>
+        <xacro:property name="wrist_length" value="${dim['wrist_length']}" scope="parent"/>
+
+        <xacro:property name="claw_width" value="${dim['claw_width']}" scope="parent"/>
+        <xacro:property name="claw_length" value="${dim['claw_length']}" scope="parent"/>
+
+        <!-- mass -->
+        <xacro:property name="default_mass" value="${config_params['inertia']['default_mass']}" scope="parent"/>
+
+        <!-- joints -->
+        <xacro:property name="joints" value="${config_params['joints']}"/>
+        <xacro:property name="default_limit_effort" value="${joints['default_limit_effort']}" scope="parent"/>
+        <xacro:property name="default_limit_vel" value="${joints['default_limit_vel']}" scope="parent"/>
+
+        <xacro:property name="shoulder_lower" value="${joints['shoulder_lower']}" scope="parent"/>
+        <xacro:property name="shoulder_upper" value="${joints['shoulder_upper']}" scope="parent"/>
+
+        <xacro:property name="elbow_lower" value="${joints['elbow_lower']}" scope="parent"/>
+        <xacro:property name="elbow_upper" value="${joints['elbow_upper']}" scope="parent"/>
+
+        <xacro:property name="roll_lower" value="${joints['roll_lower']}" scope="parent"/>
+        <xacro:property name="roll_upper" value="${joints['roll_upper']}" scope="parent"/>
+
+        <xacro:property name="wrist_lower" value="${joints['wrist_lower']}" scope="parent"/>
+        <xacro:property name="wrist_upper" value="${joints['wrist_upper']}" scope="parent"/>
+
+        <xacro:property name="claw_left_lower" value="${joints['claw_left_lower']}" scope="parent"/>
+        <xacro:property name="claw_left_upper" value="${joints['claw_left_upper']}" scope="parent"/>
+
+        <xacro:property name="claw_right_lower" value="${joints['claw_right_lower']}" scope="parent"/>
+        <xacro:property name="claw_right_upper" value="${joints['claw_right_upper']}" scope="parent"/>
+        
+    </xacro:macro>
+
+    <!-- default inertia -->
+    <xacro:macro name="default_inertia">
+        <inertia ixx="0.4" ixy="0.0" ixz="0.0" iyy="0.4" iyz="0.0" izz="0.2"/>
+    </xacro:macro>
+    
+    <!-- common geometry -->
+    <xacro:macro name="cylinder_visual" params= "radius length">
+        <geometry>
+            <cylinder radius = "${radius}" length = "${length}"/>
+        </geometry>
+    </xacro:macro>
+
+    <xacro:macro name="rectangle_visual" params= "x y z">
+        <geometry>
+            <box size="${x} ${y} ${z}"/>
+        </geometry>
+    </xacro:macro>
+</robot>

@@ -33,12 +33,10 @@ using StateData = struct StateData
 {
   double velocity{};
   double position{};
-  double
-    iq_current{};  // actuator also provide iq_current - this is not needed for transmission however
+  double iq_current{};  // not used for differential transmission
 };
 
 }  // namespace ActuatorData
-
 namespace JointData
 {
 using CommandData = struct CommandData
@@ -136,9 +134,9 @@ protected: /*idk we might extend for some reason*/
   double joint_to_actuator_reduction{};
 
   // create a logger that will be unique with any joint name
-  std::function<rclcpp::Logger(void)> actuator_logger{};  //use logger
-
-  //std::shared_ptr<rclcpp::Logger> actuator_logger {nullptr};
+  std::function<rclcpp::Logger(void)> actuator_logger = [this]() -> rclcpp::Logger {
+    return rclcpp::get_logger(this->info_.name);
+  };
 
   // iq_current interface
   static constexpr char HW_IF_IQ_CURRENT[] = "iq_current";

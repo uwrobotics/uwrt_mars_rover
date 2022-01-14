@@ -179,9 +179,9 @@ CallbackReturn ArmActuatorInterface::on_init(const HardwareInfo & hardware_info)
   }
 
   // setup logger that will be unique to each joint name
-  actuator_logger = [this]() -> rclcpp::Logger {
-    return rclcpp::get_logger(this->info_.joints.at(0).name);
-  };
+  //actuator_logger = [this]() -> rclcpp::Logger {
+  //  return rclcpp::get_logger(this->info_.joints.at(0).name);
+  //};
 
   // validate ARM URDF
   // check there are the correct number of joints, interfaces, and that they exist

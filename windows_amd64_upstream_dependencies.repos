@@ -1,6 +1,10 @@
 # These are upstream source dependencies used by windows amd64 builds.
 
 repositories:
+  ament_cmake: # TODO: remove to revert back to ament_cmake in ros_base once https://github.com/ament/ament_cmake/issues/373 is resolved and a new windows galactic binary is released (Patch 2?)
+    type: git
+    url: https://github.com/ament/ament_cmake.git
+    version: galactic
   ament_lint:
     type: git
     url: https://github.com/ament/ament_lint.git

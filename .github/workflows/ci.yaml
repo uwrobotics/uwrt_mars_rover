@@ -65,7 +65,7 @@ jobs:
         uses: ros-tooling/action-ros-lint@master
         with:
           distribution: ${{ env.ROS_DISTRO }}
-          linter: ament-clang-format
+          linter: clang-format
           arguments: "--clang-format-version 11, --config ${{ env.GITHUB_WORKSPACE }}/.clang-format"
           package-name: ${{ env.PACKAGES_TO_TEST }}
 

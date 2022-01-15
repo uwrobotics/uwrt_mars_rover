@@ -1,4 +1,4 @@
-from ament_index_python.packages import get_package_prefix, get_package_share_path
+from ament_index_python.packages import get_package_share_path
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.conditions import IfCondition, UnlessCondition

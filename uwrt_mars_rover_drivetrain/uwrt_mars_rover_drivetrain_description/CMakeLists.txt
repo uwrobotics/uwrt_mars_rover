@@ -16,7 +16,9 @@ install(
 if (BUILD_TESTING)
   # flake8
   find_package(ament_cmake_flake8 REQUIRED)
-  ament_flake8()
+  ament_flake8(
+      CONFIG_FILE ${CMAKE_SOURCE_DIR}/../../.flake8
+  )
 
   # xmllint
   find_package(ament_cmake_xmllint REQUIRED)

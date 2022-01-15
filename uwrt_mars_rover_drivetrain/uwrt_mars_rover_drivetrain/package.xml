@@ -16,6 +16,8 @@
   <exec_depend>uwrt_mars_rover_drivetrain_hw</exec_depend>
   <exec_depend>uwrt_mars_rover_drivetrain_description</exec_depend>
 
+  <test_depend>ament_cmake_xmllint</test_depend>
+
   <export>
     <build_type>ament_cmake</build_type>
   </export>

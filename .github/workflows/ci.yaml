@@ -51,6 +51,26 @@ jobs:
           linter: ${{ matrix.linter }}
           package-name: ${{ env.PACKAGES_TO_TEST }}
 
+  linters-clang-format:
+    name: ament-clang-format
+    needs: prepare-actions-environment
+    runs-on: ubuntu-latest
+    container:
+      image: ${{ needs.prepare-actions-environment.outputs.image }}
+      options: -u root
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: ROS2 Linter - [ament-clang-format]
+        uses: ros-tooling/action-ros-lint@master
+        with:
+          distribution: ${{ env.ROS_DISTRO }}
+          linter: clang-format
+          arguments: "--config .clang-format"
+          package-name: ${{ env.PACKAGES_TO_TEST }}
+
   linters-flake8:
     name: ament-flake8
     needs: prepare-actions-environment
@@ -75,31 +95,7 @@ jobs:
         with:
           distribution: ${{ env.ROS_DISTRO }}
           linter: flake8
-          package-name: ${{ env.PACKAGES_TO_TEST }}
-
-  linters-clang-format:
-    name: ament-clang-format
-    needs: prepare-actions-environment
-    runs-on: ubuntu-latest
-    container:
-      image: ${{ needs.prepare-actions-environment.outputs.image }}
-      options: -u root
-
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
-
-      - name: Install LLVM(for clang-format)
-        uses: KyleMayes/install-llvm-action@v1.5.0
-        with:
-          version: "11"
-
-      - name: ROS2 Linter - [ament-clang-format]
-        uses: ros-tooling/action-ros-lint@master
-        with:
-          distribution: ${{ env.ROS_DISTRO }}
-          linter: clang-format
-          arguments: "--clang-format-version 11, --config .clang-format"
+          arguments: "--config .flake8"
           package-name: ${{ env.PACKAGES_TO_TEST }}
 
   linux-amd64-build-and-test:

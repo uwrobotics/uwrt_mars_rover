@@ -106,6 +106,13 @@ jobs:
       options: -u root
 
     steps:
+      - name: Force latest version of flake8
+        # Latest flake8 available in ubuntu-focal apt (and the ros-tooling-image) is not up to date with python3.8.
+        # Avoids following error:
+        # "pyflakes" failed during execution due to "'FlakesChecker' object has no attribute 'NAMEDEXPR'"
+        run: |
+          pip install --upgrade flake8
+
       - name: Build ROS2 Packages and Run Tests
         uses: ros-tooling/action-ros-ci@v0.2
         with:
@@ -151,6 +158,14 @@ jobs:
         run: |
           docker exec --workdir /rosws/src arm64-ros vcs import --input uwrt_mars_rover/common_upstream_dependencies.repos
         # TODO: add linux_arm64_upstream_dependencies.repos
+
+      - name: Force latest version of flake8
+        # Latest flake8 available in ubuntu-focal apt (and the ros-tooling-image) is not up to date with python3.8.
+        # Avoids following error:
+        # "pyflakes" failed during execution due to "'FlakesChecker' object has no attribute 'NAMEDEXPR'"
+        run: |
+          docker exec arm64-ros pip install --upgrade flake8
+
       - name: Install ROS Binary Package Dependencies
         run: |
           docker exec arm64-ros sudo apt update

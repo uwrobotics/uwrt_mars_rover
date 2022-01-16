@@ -89,6 +89,9 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
+      - name: TEST REMOVE THIS BEFORE MERGE
+        run: ls
+
       - name: ROS2 Linter - [ament-clang-format]
         uses: ros-tooling/action-ros-lint@master
         with:

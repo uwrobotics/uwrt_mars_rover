@@ -1,18 +1,31 @@
+"""
+Launch Module for visualizing drivetrain in rviz.
+
+Allows for manipulation of joints via joint_state_publisher_gui if gui arg is set.
+"""
 from ament_index_python.packages import get_package_share_path
+
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.conditions import IfCondition, UnlessCondition
 from launch.substitutions import Command, LaunchConfiguration
+
 from launch_ros.actions import Node
 from launch_ros.parameter_descriptions import ParameterValue
 
 
 def generate_launch_description():
+    """
+    Generate launch description from launch arguments and list of nodes to launch.
+
+    :return:
+        LaunchDescription object
+    """
     package_path = get_package_share_path('uwrt_mars_rover_drivetrain_description')
     default_model_path = package_path / 'urdf' / 'drivetrain.urdf.xacro'
     default_rviz_config_path = package_path / 'rviz' / 'urdf.rviz'
 
-    robot_description_content = ParameterValue(Command([f'ros2 run xacro xacro ', LaunchConfiguration('model')]),
+    robot_description_content = ParameterValue(Command(['ros2 run xacro xacro ', LaunchConfiguration('model')]),
                                                value_type=str)
 
     # Declared Arguments

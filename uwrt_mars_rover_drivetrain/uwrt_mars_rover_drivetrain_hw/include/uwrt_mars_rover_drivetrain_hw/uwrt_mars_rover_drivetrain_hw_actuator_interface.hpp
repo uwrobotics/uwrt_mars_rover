@@ -22,6 +22,9 @@ class UWRTMarsRoverDrivetrainHWActuatorInterface : public hardware_interface::Ac
   RCLCPP_SHARED_PTR_DEFINITIONS(UWRTMarsRoverDrivetrainHWActuatorInterface)
 
   UWRT_MARS_ROVER_DRIVETRAIN_HW_PUBLIC
+  UWRTMarsRoverDrivetrainHWActuatorInterface();
+
+  UWRT_MARS_ROVER_DRIVETRAIN_HW_PUBLIC
   LifecyleNodeCallbackReturn on_init(const hardware_interface::HardwareInfo& actuator_info) override;
 
   UWRT_MARS_ROVER_DRIVETRAIN_HW_PUBLIC
@@ -56,6 +59,7 @@ class UWRTMarsRoverDrivetrainHWActuatorInterface : public hardware_interface::Ac
   double actuator_state_velocity_;
   double actuator_state_iq_current_;
   double joint_velocity_command_;
+  rclcpp::Logger logger_;
 
   // UWRTMarsRoverDrivetrainHWActuatorInterface defines the following structure in URDF
   static constexpr unsigned int NUM_JOINTS{1};

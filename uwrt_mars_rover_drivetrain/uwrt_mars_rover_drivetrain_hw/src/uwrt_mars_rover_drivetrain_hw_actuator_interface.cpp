@@ -1,9 +1,14 @@
 #include "uwrt_mars_rover_drivetrain_hw/uwrt_mars_rover_drivetrain_hw_actuator_interface.hpp"
 
 namespace uwrt_mars_rover_drivetrain_hw {
+UWRTMarsRoverDrivetrainHWActuatorInterface::UWRTMarsRoverDrivetrainHWActuatorInterface()
+    : logger_(rclcpp::get_logger("UWRTMarsRoverDrivetrainHWActuatorInterface")) {}
+
 LifecyleNodeCallbackReturn UWRTMarsRoverDrivetrainHWActuatorInterface::on_init(
     const hardware_interface::HardwareInfo& actuator_info) {
-  RCLCPP_DEBUG(rclcpp::get_logger("UWRTMarsRoverDrivetrainHWActuatorInterface"), "Drivetrain Actuator Initializing...");
+  logger_ = rclcpp::get_logger(actuator_info.name);
+
+  RCLCPP_DEBUG(logger_, "Drivetrain Actuator Initializing...");
 
   if (hardware_interface::ActuatorInterface::on_init(actuator_info) != LifecyleNodeCallbackReturn::SUCCESS) {
     return LifecyleNodeCallbackReturn::ERROR;
@@ -11,39 +16,35 @@ LifecyleNodeCallbackReturn UWRTMarsRoverDrivetrainHWActuatorInterface::on_init(
 
   // Validate that parsed urdf information matches expected structure
   if (info_.joints.size() != NUM_JOINTS) {
-    RCLCPP_FATAL_STREAM(
-        rclcpp::get_logger("UWRTMarsRoverDrivetrainHWActuatorInterface"),
-        "'" << info_.name.c_str() << "' has " << info_.joints.size() << " joints. " << NUM_JOINTS << " expected.");
+    RCLCPP_FATAL_STREAM(logger_, "'" << info_.name.c_str() << "' has " << info_.joints.size() << " joints. "
+                                     << NUM_JOINTS << " expected.");
     return LifecyleNodeCallbackReturn::ERROR;
   }
   const hardware_interface::ComponentInfo& joint = info_.joints[0];
   if (joint.state_interfaces.size() != NUM_STATE_INTERFACES) {
-    RCLCPP_FATAL_STREAM(rclcpp::get_logger("UWRTMarsRoverDrivetrainHWActuatorInterface"),
-                        "Joint '" << joint.name.c_str() << "' has " << joint.state_interfaces.size()
-                                  << " state interfaces. " << NUM_STATE_INTERFACES << " expected.");
+    RCLCPP_FATAL_STREAM(logger_, "Joint '" << joint.name.c_str() << "' has " << joint.state_interfaces.size()
+                                           << " state interfaces. " << NUM_STATE_INTERFACES << " expected.");
     return LifecyleNodeCallbackReturn::ERROR;
   }
   for (const hardware_interface::InterfaceInfo& state_interface : joint.state_interfaces) {
     if (!(state_interface.name == hardware_interface::HW_IF_POSITION ||
           state_interface.name == hardware_interface::HW_IF_VELOCITY ||
           state_interface.name == "iq_current")) {  // TODO: add shared HW_IF_IQ_CURRENT in some shared package
-      RCLCPP_FATAL_STREAM(rclcpp::get_logger("UWRTMarsRoverDrivetrainHWActuatorInterface"),
-                          "Joint '" << joint.name.c_str() << "' has " << state_interface.name.c_str()
-                                    << " state interfaces. '" << hardware_interface::HW_IF_POSITION << "' or '"
-                                    << hardware_interface::HW_IF_VELOCITY << "' or 'iq_current' expected.");
+      RCLCPP_FATAL_STREAM(logger_, "Joint '" << joint.name.c_str() << "' has " << state_interface.name.c_str()
+                                             << " state interfaces. '" << hardware_interface::HW_IF_POSITION << "' or '"
+                                             << hardware_interface::HW_IF_VELOCITY << "' or 'iq_current' expected.");
       return LifecyleNodeCallbackReturn::ERROR;
     }
   }
   if (joint.command_interfaces.size() != NUM_COMMAND_INTERFACES) {
-    RCLCPP_FATAL_STREAM(rclcpp::get_logger("UWRTMarsRoverDrivetrainHWActuatorInterface"),
-                        "Joint '" << joint.name.c_str() << "' has " << joint.command_interfaces.size()
-                                  << " command interfaces. " << NUM_COMMAND_INTERFACES << " expected.");
+    RCLCPP_FATAL_STREAM(logger_, "Joint '" << joint.name.c_str() << "' has " << joint.command_interfaces.size()
+                                           << " command interfaces. " << NUM_COMMAND_INTERFACES << " expected.");
     return LifecyleNodeCallbackReturn::ERROR;
   }
   if (joint.command_interfaces[0].name != hardware_interface::HW_IF_VELOCITY) {
-    RCLCPP_FATAL_STREAM(rclcpp::get_logger("UWRTMarsRoverDrivetrainHWActuatorInterface"),
-                        "Joint '" << joint.name.c_str() << "' has " << joint.command_interfaces[0].name.c_str()
-                                  << " command interface. '" << hardware_interface::HW_IF_VELOCITY << "' expected.");
+    RCLCPP_FATAL_STREAM(logger_, "Joint '" << joint.name.c_str() << "' has " << joint.command_interfaces[0].name.c_str()
+                                           << " command interface. '" << hardware_interface::HW_IF_VELOCITY
+                                           << "' expected.");
     return LifecyleNodeCallbackReturn::ERROR;
   }
 
@@ -56,14 +57,13 @@ LifecyleNodeCallbackReturn UWRTMarsRoverDrivetrainHWActuatorInterface::on_init(
   // TODO: init transmissions
   // TODO: init can library
 
-  RCLCPP_DEBUG(rclcpp::get_logger("UWRTMarsRoverDrivetrainHWActuatorInterface"),
-               "Drivetrain Actuator Initialized Successfully");
+  RCLCPP_DEBUG(logger_, "Drivetrain Actuator Initialized Successfully");
   return LifecyleNodeCallbackReturn::SUCCESS;
 }
 
 LifecyleNodeCallbackReturn UWRTMarsRoverDrivetrainHWActuatorInterface::on_cleanup(
     const rclcpp_lifecycle::State& /*previous_state*/) {
-  RCLCPP_INFO(rclcpp::get_logger("UWRTMarsRoverDrivetrainHWActuatorInterface"), "Drivetrain Actuator Cleaning Up...");
+  RCLCPP_INFO(logger_, "Drivetrain Actuator Cleaning Up...");
 
   // Reset state and command data to nan
   actuator_state_position_ = std::numeric_limits<double>::quiet_NaN();
@@ -72,14 +72,13 @@ LifecyleNodeCallbackReturn UWRTMarsRoverDrivetrainHWActuatorInterface::on_cleanu
   joint_velocity_command_ = std::numeric_limits<double>::quiet_NaN();
 
   // TODO: re-init or reset can library to init state
-  RCLCPP_INFO(rclcpp::get_logger("UWRTMarsRoverDrivetrainHWActuatorInterface"),
-              "Drivetrain Actuator Cleaned Up Successfully");
+  RCLCPP_INFO(logger_, "Drivetrain Actuator Cleaned Up Successfully");
   return LifecyleNodeCallbackReturn::SUCCESS;
 }
 
 LifecyleNodeCallbackReturn UWRTMarsRoverDrivetrainHWActuatorInterface::on_configure(
     const rclcpp_lifecycle::State& /*previous_state*/) {
-  RCLCPP_INFO(rclcpp::get_logger("UWRTMarsRoverDrivetrainHWActuatorInterface"), "Drivetrain Actuator Configuring ...");
+  RCLCPP_INFO(logger_, "Drivetrain Actuator Configuring ...");
 
   joint_velocity_command_ = 0.0;
 
@@ -97,68 +96,60 @@ LifecyleNodeCallbackReturn UWRTMarsRoverDrivetrainHWActuatorInterface::on_config
   // TODO: enable can library to start receiving data for state interfaces and non-movement command interfaces. consider
   // existing state data and non-movement command data as stale
 
-  RCLCPP_INFO(rclcpp::get_logger("UWRTMarsRoverDrivetrainHWActuatorInterface"),
-              "Drivetrain Actuator Configured Successfully");
+  RCLCPP_INFO(logger_, "Drivetrain Actuator Configured Successfully");
   return LifecyleNodeCallbackReturn::SUCCESS;
 }
 
 LifecyleNodeCallbackReturn UWRTMarsRoverDrivetrainHWActuatorInterface::on_deactivate(
     const rclcpp_lifecycle::State& /*previous_state*/) {
-  RCLCPP_INFO(rclcpp::get_logger("UWRTMarsRoverDrivetrainHWActuatorInterface"), "Drivetrain Actuator Deactivating...");
+  RCLCPP_INFO(logger_, "Drivetrain Actuator Deactivating...");
 
   joint_velocity_command_ = 0.0;
 
   // TODO: enable can library to start receiving data for state interfaces and non-movement command interfaces. consider
   // existing state data and non-movement command data as stale
 
-  RCLCPP_INFO(rclcpp::get_logger("UWRTMarsRoverDrivetrainHWActuatorInterface"),
-              "Drivetrain Actuator Deactivated Successfully");
+  RCLCPP_INFO(logger_, "Drivetrain Actuator Deactivated Successfully");
   return LifecyleNodeCallbackReturn::SUCCESS;
 }
 
 LifecyleNodeCallbackReturn UWRTMarsRoverDrivetrainHWActuatorInterface::on_shutdown(
     const rclcpp_lifecycle::State& /*previous_state*/) {
-  RCLCPP_INFO(rclcpp::get_logger("UWRTMarsRoverDrivetrainHWActuatorInterface"), "Drivetrain Actuator Shutting Down...");
+  RCLCPP_INFO(logger_, "Drivetrain Actuator Shutting Down...");
 
   // TODO: Null out CAN lib object?
 
-  RCLCPP_INFO(rclcpp::get_logger("UWRTMarsRoverDrivetrainHWActuatorInterface"),
-              "Drivetrain Actuator Shut Down Successfully");
+  RCLCPP_INFO(logger_, "Drivetrain Actuator Shut Down Successfully");
   return LifecyleNodeCallbackReturn::SUCCESS;
 }
 
 LifecyleNodeCallbackReturn UWRTMarsRoverDrivetrainHWActuatorInterface::on_activate(
     const rclcpp_lifecycle::State& /*previous_state*/) {
-  RCLCPP_INFO(rclcpp::get_logger("UWRTMarsRoverDrivetrainHWActuatorInterface"), "Drivetrain Actuator Activating...");
+  RCLCPP_INFO(logger_, "Drivetrain Actuator Activating...");
 
-  RCLCPP_INFO(rclcpp::get_logger("UWRTMarsRoverDrivetrainHWActuatorInterface"),
-              "Drivetrain Actuator Activated Successfully");
+  RCLCPP_INFO(logger_, "Drivetrain Actuator Activated Successfully");
   return LifecyleNodeCallbackReturn::SUCCESS;
 }
 
 hardware_interface::return_type UWRTMarsRoverDrivetrainHWActuatorInterface::read() {
-  RCLCPP_DEBUG(rclcpp::get_logger("UWRTMarsRoverDrivetrainHWActuatorInterface"), "Drivetrain Actuator Reading...");
+  RCLCPP_DEBUG(logger_, "Drivetrain Actuator Reading...");
 
-  RCLCPP_DEBUG_STREAM(rclcpp::get_logger("UWRTMarsRoverDrivetrainHWActuatorInterface"),
-                      "Actuator Position: " << actuator_state_position_
-                                            << " Actuator Velocity: " << actuator_state_velocity_
-                                            << " Actuator IQ Current: " << actuator_state_iq_current_);
+  RCLCPP_DEBUG_STREAM(logger_, "Actuator Position: " << actuator_state_position_
+                                                     << " Actuator Velocity: " << actuator_state_velocity_
+                                                     << " Actuator IQ Current: " << actuator_state_iq_current_);
   // TODO: read from CAN
 
-  RCLCPP_DEBUG(rclcpp::get_logger("UWRTMarsRoverDrivetrainHWActuatorInterface"),
-               "Drivetrain Actuator Read Successfully...");
+  RCLCPP_DEBUG(logger_, "Drivetrain Actuator Read Successfully...");
   return hardware_interface::return_type::OK;
 }
 
 hardware_interface::return_type UWRTMarsRoverDrivetrainHWActuatorInterface::write() {
-  RCLCPP_DEBUG(rclcpp::get_logger("UWRTMarsRoverDrivetrainHWActuatorInterface"), "Drivetrain Actuator Writing...");
+  RCLCPP_DEBUG(logger_, "Drivetrain Actuator Writing...");
 
-  RCLCPP_DEBUG_STREAM(rclcpp::get_logger("UWRTMarsRoverDrivetrainHWActuatorInterface"),
-                      "Joint Velocity: " << joint_velocity_command_);
+  RCLCPP_DEBUG_STREAM(logger_, "Joint Velocity: " << joint_velocity_command_);
   // TODO: write to CAN
 
-  RCLCPP_DEBUG(rclcpp::get_logger("UWRTMarsRoverDrivetrainHWActuatorInterface"),
-               "Drivetrain Actuator Written Successfully...");
+  RCLCPP_DEBUG(logger_, "Drivetrain Actuator Written Successfully...");
   return hardware_interface::return_type::OK;
 }
 

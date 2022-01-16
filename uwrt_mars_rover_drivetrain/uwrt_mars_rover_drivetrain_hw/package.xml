@@ -5,11 +5,12 @@
   <version>0.0.0</version>
   <description>Package containing ros2control interface of the UWRT rover's differential drivetrain.</description>
 
-  <maintainer email="omarmon@uwaterloo.ca">niiquaye</maintainer>
-  <author email="omarmon@uwaterloo.ca">Orson Marmon</author>
-  <author email="melvin.mc.wang@gmail.com">Melvin Wang</author>
+  <maintainer email="omarmon@uwaterloo.ca">Orson Marmon</maintainer>
 
   <license>MIT</license>
+
+  <author email="omarmon@uwaterloo.ca">Orson Marmon</author>
+  <author email="melvin.mc.wang@gmail.com">Melvin Wang</author>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 

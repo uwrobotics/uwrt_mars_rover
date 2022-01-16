@@ -3,10 +3,10 @@ project(uwrt_mars_rover)
 
 find_package(ament_cmake REQUIRED)
 
-if (BUILD_TESTING)
+if(BUILD_TESTING)
   # xmllint
   find_package(ament_cmake_xmllint REQUIRED)
   ament_xmllint()
-endif ()
+endif()
 
 ament_package()

@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.8)
 project(uwrt_mars_rover_drivetrain_hw)
 
-if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
-endif ()
+endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
@@ -65,7 +65,7 @@ install(
     share/${PROJECT_NAME}
 )
 
-if (BUILD_TESTING)
+if(BUILD_TESTING)
   # Force generation of compile_commands.json for clang-tidy
   set(CMAKE_EXPORT_COMPILE_COMMANDS ON CACHE INTERNAL "")
 
@@ -95,7 +95,7 @@ if (BUILD_TESTING)
   # xmllint
   find_package(ament_cmake_xmllint REQUIRED)
   ament_xmllint()
-endif ()
+endif()
 
 ament_export_include_directories(
     include

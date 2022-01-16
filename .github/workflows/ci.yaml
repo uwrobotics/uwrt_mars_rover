@@ -89,15 +89,12 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: TEST REMOVE THIS BEFORE MERGE
-        run: ls
-
       - name: ROS2 Linter - [ament-clang-format]
         uses: ros-tooling/action-ros-lint@master
         with:
           distribution: ${{ env.ROS_DISTRO }}
           linter: clang-format
-          arguments: "--clang-format-version 11, --config ${{ env.GITHUB_WORKSPACE }}/${{ github.event.repository.name }}/.clang-format"
+          arguments: "--clang-format-version 11, --config .clang-format"
           package-name: ${{ env.PACKAGES_TO_TEST }}
 
   linux-amd64-build-and-test:

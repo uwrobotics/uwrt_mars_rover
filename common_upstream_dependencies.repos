@@ -1,6 +1,13 @@
-# These are upstream source dependencies used by all builds.
+# These are upstream source dependencies used by all builds. If the dependency has a released binary, please leave a
+# justification for using a different source version, instead of the released binary version.
 
 repositories:
+  ament_lint:
+    # package is in very active development and has many critical features and bugfixes being released constantly
+    type: git
+    url: https://github.com/ament/ament_lint.git
+    version: master
+
 #  vectornav:
 #    type: git
 #    url: https://github.com/dawonn/vectornav

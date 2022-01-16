@@ -5,10 +5,6 @@ repositories:
     type: git
     url: https://github.com/ament/ament_cmake.git
     version: galactic
-  ament_lint:
-    type: git
-    url: https://github.com/ament/ament_lint.git
-    version: galactic
   joint_state_publisher:
     type: git
     url: https://github.com/ros/joint_state_publisher.git

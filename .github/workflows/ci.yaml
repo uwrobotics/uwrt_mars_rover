@@ -154,22 +154,23 @@ jobs:
         run: |
           docker run --name arm64-ros --mount type=bind,source=$(pwd),target=/rosws/src/$(basename $(pwd)) --workdir /rosws --detach -i --rm arm64v8/ros:${{ env.ROS_DISTRO }}
 
-      - name: Install ROS Source Dependencies
+      - name: Download ROS Source Dependencies
         run: |
           docker exec --workdir /rosws/src arm64-ros vcs import --input uwrt_mars_rover/common_upstream_dependencies.repos
         # TODO: add linux_arm64_upstream_dependencies.repos
+
+      - name: Install ROS Binary Package Dependencies
+        run: |
+          docker exec arm64-ros sudo apt update
+          docker exec arm64-ros rosdep install -r --from-paths . --ignore-src --rosdistro ${{ env.ROS_DISTRO }} -y
 
       - name: Force latest version of flake8
         # Latest flake8 available in ubuntu-focal apt (and the ros-tooling-image) is not up to date with python3.8.
         # Avoids following error:
         # "pyflakes" failed during execution due to "'FlakesChecker' object has no attribute 'NAMEDEXPR'"
         run: |
-          docker exec arm64-ros pip install --upgrade flake8
-
-      - name: Install ROS Binary Package Dependencies
-        run: |
-          docker exec arm64-ros sudo apt update
-          docker exec arm64-ros rosdep install -r --from-paths . --ignore-src --rosdistro ${{ env.ROS_DISTRO }} -y
+          docker exec arm64-ros sudo apt install python3-pip -y
+          docker exec arm64-ros python3 -m pip install --upgrade flake8
 
       - name: Build ROS2 Packages and Run Tests
         run: >

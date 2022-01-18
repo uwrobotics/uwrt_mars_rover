@@ -170,7 +170,8 @@ jobs:
         # "pyflakes" failed during execution due to "'FlakesChecker' object has no attribute 'NAMEDEXPR'"
         run: |
           docker exec arm64-ros sudo apt install python3-pip -y
-          docker exec arm64-ros python3 -m pip install --upgrade flake8
+          docker exec arm64-ros pip install --upgrade flake8
+          docker exec arm64-ros pip freeze | grep flake8
 
       - name: Build ROS2 Packages and Run Tests
         run: >

@@ -27,7 +27,7 @@ differential_drivetrain_controller:
     pose_covariance_diagonal: [ 0.001, 0.001, 0.001, 0.001, 0.001, 0.01 ]
     twist_covariance_diagonal: [ 0.001, 0.001, 0.001, 0.001, 0.001, 0.01 ]
 
-#    publish_rate: 50.0  # Available once https://github.com/ros-controls/ros2_controllers/pull/278 merges
+    publish_rate: 50.0
     enable_odom_tf: true
     open_loop: false # If true, integrates vel_cmd to estimate odom, else uses wheel feedback to compute odom
     position_feedback: false # If true, uses position state_interface for odom calculations, else use velocity state interface

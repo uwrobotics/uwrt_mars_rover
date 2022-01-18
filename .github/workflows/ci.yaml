@@ -173,7 +173,7 @@ jobs:
         run: |
           docker exec arm64-ros sudo apt install python3-pip -y
           docker exec arm64-ros pip install -U --upgrade flake8
-          docker exec arm64-ros rm /opt/ros/galactic/bin/ament_*
+          docker exec arm64-ros rm /opt/ros/${{ env.ROS_DISTRO }}/bin/ament_*
 
       - name: Build ROS2 Packages and Run Tests
         run: >
@@ -208,3 +208,10 @@ jobs:
             https://raw.githubusercontent.com/${{ github.repository }}/${{ github.sha }}/common_upstream_dependencies.repos
             https://raw.githubusercontent.com/${{ github.repository }}/${{ github.sha }}/windows_amd64_upstream_dependencies.repos
           package-name: ${{ env.PACKAGES_TO_TEST }}
+          colcon-defaults: | # Disable test building on Windows due to upstream build failure(ros2control) due to possible bug in ament_cmake: https://github.com/ament/ament_cmake/issues/374 
+            {
+              "build": {
+                "mixin": ["build-testing-off"]
+              }
+            }
+          colcon-mixin-repository: https://raw.githubusercontent.com/colcon/colcon-mixin-repository/master/index.yaml

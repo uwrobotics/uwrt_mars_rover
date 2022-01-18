@@ -83,6 +83,11 @@ bool ArmActuatorInterface::configure_transmission()
   return true;
 }
 
+ArmActuatorInterface::ArmActuatorInterface()
+: actuator_logger(rclcpp::get_logger("ArmActuatorInterface"))
+{
+}
+
 std::vector<StateInterface> ArmActuatorInterface::export_state_interfaces()
 {
   std::vector<StateInterface> state_interfaces_list{};
@@ -121,7 +126,7 @@ return_type ArmActuatorInterface::prepare_command_mode_switch(
 
 return_type ArmActuatorInterface::read()
 {
-  RCLCPP_DEBUG(actuator_logger(), "Arm Actuator Reading ...");
+  RCLCPP_DEBUG(actuator_logger, "Arm Actuator Reading ...");
 
   // call actuator to joint space transmission API function here
   // aka state_transmission->actuator_to_joint();
@@ -135,7 +140,7 @@ return_type ArmActuatorInterface::read()
   actuator_states.iq_current = (double)(std::rand() % RANDOM);
 
   RCLCPP_INFO_STREAM(
-    actuator_logger(),
+    actuator_logger,
     "Actuator Position State: " << actuator_states.position
                                 << "Actuator Velocity State: " << actuator_states.velocity
                                 << "Actuator IQ Current State: " << actuator_states.iq_current);
@@ -144,14 +149,14 @@ return_type ArmActuatorInterface::read()
     *
     */
 
-  RCLCPP_DEBUG(actuator_logger(), "Arm Actuator Read Successfull ...");
+  RCLCPP_DEBUG(actuator_logger, "Arm Actuator Read Successfull ...");
 
   return return_type::OK;
 }
 
 return_type ArmActuatorInterface::write()
 {
-  RCLCPP_DEBUG(actuator_logger(), "Arm Actuator Writing ...");
+  RCLCPP_DEBUG(actuator_logger, "Arm Actuator Writing ...");
 
   // call joint space to actuator space transmission API function here
   // aka 'command_transmission->joint_to_actuator()' then actually write actuator_commands.velocity to CAN
@@ -159,13 +164,13 @@ return_type ArmActuatorInterface::write()
   actuator_commands.velocity =
     joint_to_actuator_reduction * joint_commands.velocity;  //transmission
 
-  RCLCPP_INFO_STREAM(actuator_logger(), "Joint Velocity Command: " << actuator_commands.velocity);
+  RCLCPP_INFO_STREAM(actuator_logger, "Joint Velocity Command: " << actuator_commands.velocity);
   /*
     * Melvin CAN API Stuff
     *
     */
 
-  RCLCPP_DEBUG(actuator_logger(), "Arm Actuator Write Successfull ...");
+  RCLCPP_DEBUG(actuator_logger, "Arm Actuator Write Successfull ...");
 
   return return_type::OK;
 }
@@ -178,6 +183,8 @@ CallbackReturn ArmActuatorInterface::on_init(const HardwareInfo & hardware_info)
     return CallbackReturn::ERROR;
   }
 
+  actuator_logger = rclcpp::get_logger(this->info_.name);
+
   // setup logger that will be unique to each joint name
   //actuator_logger = [this]() -> rclcpp::Logger {
   //  return rclcpp::get_logger(this->info_.joints.at(0).name);
@@ -188,8 +195,8 @@ CallbackReturn ArmActuatorInterface::on_init(const HardwareInfo & hardware_info)
 
   if (info_.joints.size() != NUM_JOINTS) {
     RCLCPP_FATAL_STREAM(
-      actuator_logger(), "'" << info_.name.c_str() << "' has " << info_.joints.size()
-                             << " joints. Expected: " << NUM_JOINTS << "'");
+      actuator_logger, "'" << info_.name.c_str() << "' has " << info_.joints.size()
+                           << " joints. Expected: " << NUM_JOINTS << "'");
     return CallbackReturn::ERROR;
   }
 
@@ -198,18 +205,17 @@ CallbackReturn ArmActuatorInterface::on_init(const HardwareInfo & hardware_info)
 
   if (joint.state_interfaces.size() != NUM_STATE_INTERFACES) {
     RCLCPP_FATAL_STREAM(
-      actuator_logger(), "Joint '"
-                           << joint.name.c_str() << "' has " << joint.state_interfaces.size()
-                           << " state interface. Expected: " << NUM_STATE_INTERFACES << "'");
+      actuator_logger, "Joint '" << joint.name.c_str() << "' has " << joint.state_interfaces.size()
+                                 << " state interface. Expected: " << NUM_STATE_INTERFACES << "'");
 
     return CallbackReturn::ERROR;
   }
 
   if (joint.command_interfaces.size() != NUM_COMMAND_INTERFACES) {
     RCLCPP_FATAL_STREAM(
-      actuator_logger(), "Joint '"
-                           << joint.name.c_str() << "' has " << joint.command_interfaces.size()
-                           << " command interface. Expected: " << NUM_COMMAND_INTERFACES << "'");
+      actuator_logger,
+      "Joint '" << joint.name.c_str() << "' has " << joint.command_interfaces.size()
+                << " command interface. Expected: " << NUM_COMMAND_INTERFACES << "'");
 
     return CallbackReturn::ERROR;
   }
@@ -220,11 +226,10 @@ CallbackReturn ArmActuatorInterface::on_init(const HardwareInfo & hardware_info)
           state_interfaces.name == hardware_interface::HW_IF_VELOCITY ||
           state_interfaces.name == ArmActuatorInterface::HW_IF_IQ_CURRENT)) {
       RCLCPP_FATAL_STREAM(
-        actuator_logger(), "Joint '" << joint.name.c_str() << "'has "
-                                     << state_interfaces.name.c_str() << "state interfaces. '"
-                                     << hardware_interface::HW_IF_POSITION << "' or '"
-                                     << hardware_interface::HW_IF_VELOCITY << "' or '"
-                                     << ArmActuatorInterface::HW_IF_IQ_CURRENT << "' expected.");
+        actuator_logger, "Joint '" << joint.name.c_str() << "'has " << state_interfaces.name.c_str()
+                                   << "state interfaces. '" << hardware_interface::HW_IF_POSITION
+                                   << "' or '" << hardware_interface::HW_IF_VELOCITY << "' or '"
+                                   << ArmActuatorInterface::HW_IF_IQ_CURRENT << "' expected.");
 
       return CallbackReturn::ERROR;
     }
@@ -234,9 +239,9 @@ CallbackReturn ArmActuatorInterface::on_init(const HardwareInfo & hardware_info)
   for (const hardware_interface::InterfaceInfo & command_interface : joint.command_interfaces) {
     if (!(command_interface.name == hardware_interface::HW_IF_VELOCITY)) {
       RCLCPP_FATAL_STREAM(
-        actuator_logger(), "Joint '" << joint.name.c_str() << "'has "
-                                     << command_interface.name.c_str() << "command interfaces. '"
-                                     << hardware_interface::HW_IF_VELOCITY << "' expected.");
+        actuator_logger, "Joint '" << joint.name.c_str() << "'has "
+                                   << command_interface.name.c_str() << "command interfaces. '"
+                                   << hardware_interface::HW_IF_VELOCITY << "' expected.");
     }
 
     return CallbackReturn::ERROR;
@@ -259,7 +264,7 @@ CallbackReturn ArmActuatorInterface::on_init(const HardwareInfo & hardware_info)
   // TODO: intialize transmission
   /**** Tranmission stuff
     if(configure_transmission()){
-       RCLCPP_ERROR_STREAM(actuator_logger(), 
+       RCLCPP_ERROR_STREAM(actuator_logger, 
           "Transmission linked with: '" << info_.name << "' failed to be configured from URDF"
                );
 
@@ -273,7 +278,7 @@ CallbackReturn ArmActuatorInterface::on_configure(const rclcpp_lifecycle::State 
 {
   (void)previous_state;
 
-  RCLCPP_INFO(actuator_logger(), "Arm Actuator Configuring");
+  RCLCPP_INFO(actuator_logger, "Arm Actuator Configuring");
 
   /*
      * Set this to 0 every time configure is called regardless of its value
@@ -298,7 +303,7 @@ CallbackReturn ArmActuatorInterface::on_configure(const rclcpp_lifecycle::State 
     actuator_states.iq_current = 0;
   }
 
-  RCLCPP_INFO(actuator_logger(), "Arm Actuator Configured Successfully");
+  RCLCPP_INFO(actuator_logger, "Arm Actuator Configured Successfully");
 
   return CallbackReturn::SUCCESS;
 }
@@ -307,7 +312,7 @@ CallbackReturn ArmActuatorInterface::on_cleanup(const rclcpp_lifecycle::State & 
 {
   (void)previous_state;
 
-  RCLCPP_INFO(actuator_logger(), "Arm Actuator Cleaning Up");
+  RCLCPP_INFO(actuator_logger, "Arm Actuator Cleaning Up");
 
   // reset values in the command & state interfaces location to NaN
   joint_commands.velocity = std::numeric_limits<double>::quiet_NaN();
@@ -320,7 +325,7 @@ CallbackReturn ArmActuatorInterface::on_cleanup(const rclcpp_lifecycle::State & 
      * Melvin CAN API reset
      */
 
-  RCLCPP_INFO(actuator_logger(), "Arm Actuator Clean Up Successfull");
+  RCLCPP_INFO(actuator_logger, "Arm Actuator Clean Up Successfull");
 
   return CallbackReturn::SUCCESS;
 }
@@ -329,8 +334,8 @@ CallbackReturn ArmActuatorInterface::on_activate(const State & previous_state)
 {
   (void)previous_state;
 
-  RCLCPP_INFO(actuator_logger(), "Arm Actuator Activating");
-  RCLCPP_INFO(actuator_logger(), "Arm Actuator Activated Successfully");
+  RCLCPP_INFO(actuator_logger, "Arm Actuator Activating");
+  RCLCPP_INFO(actuator_logger, "Arm Actuator Activated Successfully");
 
   return CallbackReturn::SUCCESS;
 }
@@ -344,11 +349,11 @@ CallbackReturn ArmActuatorInterface::on_deactivate(const State & previous_state)
 {
   (void)previous_state;
 
-  RCLCPP_INFO(actuator_logger(), "Arm Actuator Deactivating");
+  RCLCPP_INFO(actuator_logger, "Arm Actuator Deactivating");
 
   joint_commands.velocity = 0;
 
-  RCLCPP_INFO(actuator_logger(), "Arm Actuator Deactivating Successfully");
+  RCLCPP_INFO(actuator_logger, "Arm Actuator Deactivating Successfully");
 
   return CallbackReturn::SUCCESS;
 }
@@ -357,13 +362,13 @@ CallbackReturn ArmActuatorInterface::on_shutdown(const State & previous_state)
 {
   (void)previous_state;
 
-  RCLCPP_INFO(actuator_logger(), "Arm Actuator Shutting Down");
+  RCLCPP_INFO(actuator_logger, "Arm Actuator Shutting Down");
 
   /*
      * Melvin CAN API Clean up
      */
 
-  RCLCPP_INFO(actuator_logger(), "Arm Actuator Shut Down Successfull");
+  RCLCPP_INFO(actuator_logger, "Arm Actuator Shut Down Successfull");
 
   return CallbackReturn::SUCCESS;
 }

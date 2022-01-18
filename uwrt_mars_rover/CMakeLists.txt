@@ -23,7 +23,7 @@ add_executable(test_node src/main.cpp)
 ament_target_dependencies(test_node
     "rclcpp")
 
-
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 if (BUILD_TESTING)
   # generate compile_commands.json for clang-tidy
   set(CMAKE_EXPORT_COMPILE_COMMANDS ON CACHE INTERNAL "")

@@ -169,11 +169,11 @@ jobs:
         # Avoids following error:
         # "pyflakes" failed during execution due to "'FlakesChecker' object has no attribute 'NAMEDEXPR'"
         #
-        # rm /opt/ros/galactic/bin/ament_* required for ament_cmake_test to find the ament_lint installed from common_upstream_dependencies.repos
+        # rm /opt/ros/${{ env.ROS_DISTRO }}/bin/ament_* required for ament_cmake_test to find the ament_lint installed from common_upstream_dependencies.repos
         run: |
           docker exec arm64-ros sudo apt install python3-pip -y
-          docker exec arm64-ros pip install -U --upgrade flake8
-          docker exec arm64-ros rm /opt/ros/${{ env.ROS_DISTRO }}/bin/ament_*
+          docker exec arm64-ros pip install --upgrade flake8
+          docker exec arm64-ros bash -c "rm /opt/ros/${{ env.ROS_DISTRO }}/bin/ament_*"
 
       - name: Build ROS2 Packages and Run Tests
         run: >

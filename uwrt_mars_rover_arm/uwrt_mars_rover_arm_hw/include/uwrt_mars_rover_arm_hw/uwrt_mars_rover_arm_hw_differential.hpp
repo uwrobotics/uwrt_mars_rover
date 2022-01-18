@@ -29,7 +29,8 @@ namespace ActuatorData
 {
 using CommandData = struct CommandData
 {
-  double velocity{};
+  double
+    velocity{};  //TODO: change this so that it can work with any interface type... add enum class that will hold the different command types
 };
 
 using StateData = struct StateData
@@ -61,6 +62,9 @@ class ArmDifferentialSystemInterface : public hardware_interface::SystemInterfac
 {
 public:
   RCLCPP_SHARED_PTR_DEFINITIONS(ArmDifferentialSystemInterface)
+
+  UWRT_MARS_ROVER_ARM_HW_PUBLIC
+  ArmDifferentialSystemInterface();
 
   UWRT_MARS_ROVER_ARM_HW_PUBLIC
   std::vector<hardware_interface::StateInterface> export_state_interfaces() override;
@@ -124,7 +128,8 @@ private:
 
 protected:
   // ARM Actuator URDF defines these numbers
-  inline static constexpr std::size_t NUM_JOINTS{2};
+  inline static constexpr std::size_t NUM_JOINTS{
+    2};  // 2 joints & 2 actuators since it is a differential transmission
   inline static constexpr std::size_t NUM_ACTUATORS{2};
   inline static constexpr std::size_t NUM_STATE_INTERFACES{3};
   inline static constexpr std::size_t NUM_COMMAND_INTERFACES{1};
@@ -164,10 +169,8 @@ protected:
   std::vector<transmission_interface::JointHandle> command_joint_handle_vector{};
   std::vector<transmission_interface::ActuatorHandle> command_actuator_handle_vector{};
 
-  // logger for system interface
-  std::function<rclcpp::Logger(void)> system_logger = [this]() {
-    return rclcpp::get_logger(this->info_.name);
-  };
+  // differential system logger
+  rclcpp::Logger system_logger;
 
   // iq_current interface
   static constexpr char HW_IF_IQ_CURRENT[] = "iq_current";

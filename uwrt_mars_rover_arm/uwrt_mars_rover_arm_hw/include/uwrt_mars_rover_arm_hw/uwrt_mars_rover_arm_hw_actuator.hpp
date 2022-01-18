@@ -60,6 +60,9 @@ public:
   RCLCPP_SHARED_PTR_DEFINITIONS(ArmActuatorInterface)
 
   UWRT_MARS_ROVER_ARM_HW_PUBLIC
+  ArmActuatorInterface();
+
+  UWRT_MARS_ROVER_ARM_HW_PUBLIC
   std::vector<hardware_interface::StateInterface> export_state_interfaces() override;
 
   UWRT_MARS_ROVER_ARM_HW_PUBLIC
@@ -131,12 +134,10 @@ protected: /*idk we might extend for some reason*/
   std::shared_ptr<transmission_interface::ActuatorHandle> actuator_velocity_command_handle{nullptr};
   std::shared_ptr<transmission_interface::JointHandle> joint_velocity_command_handle{nullptr};
 
+  // TODO: pull down this value from the transmission
   double joint_to_actuator_reduction{};
 
-  // create a logger that will be unique with any joint name
-  std::function<rclcpp::Logger(void)> actuator_logger = [this]() -> rclcpp::Logger {
-    return rclcpp::get_logger(this->info_.name);
-  };
+  rclcpp::Logger actuator_logger;
 
   // iq_current interface
   static constexpr char HW_IF_IQ_CURRENT[] = "iq_current";

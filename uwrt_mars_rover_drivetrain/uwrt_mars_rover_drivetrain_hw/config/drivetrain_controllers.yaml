@@ -30,10 +30,11 @@ differential_drivetrain_controller:
     publish_rate: 50.0
     enable_odom_tf: true
     open_loop: false # If true, integrates vel_cmd to estimate odom, else uses wheel feedback to compute odom
-    position_feedback: false # If true, uses position state_interface for odom calculations, else use velocity state interface
+    position_feedback: true # If true, uses position state_interface for odom calculations, else use velocity state interface
     # TODO: this setting doesnt really make sense to me to tie both odom pose and twist calculations to either use position or
     #       velocity. It makes most sense to optimally use position for the pose calculation and velocity for the twist calculation...
     #       as done in https://github.com/clearpathrobotics/ros_controllers/pull/18
+    #       Relevant Discussion: https://github.com/ros-controls/ros2_controllers/pull/260/files/a45fd434abe90c1a377d57a54da86c6d1650240d#r776837336
 
     cmd_vel_timeout: 0.2 # seconds. min cmd_vel publish rate is 5Hz
     publish_limited_velocity: true

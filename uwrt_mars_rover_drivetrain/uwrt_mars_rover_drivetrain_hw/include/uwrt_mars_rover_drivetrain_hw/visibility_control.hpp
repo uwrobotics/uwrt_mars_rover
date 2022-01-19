@@ -1,5 +1,4 @@
-#ifndef UWRT_MARS_ROVER_DRIVETRAIN_HW__VISIBILITY_CONTROL_H_
-#define UWRT_MARS_ROVER_DRIVETRAIN_HW__VISIBILITY_CONTROL_H_
+#pragma once
 
 // This logic was borrowed (then namespaced) from the examples on the gcc wiki:
 //     https://gcc.gnu.org/wiki/Visibility
@@ -31,5 +30,3 @@
 #endif
 #define UWRT_MARS_ROVER_DRIVETRAIN_HW_PUBLIC_TYPE
 #endif
-
-#endif  // UWRT_MARS_ROVER_DRIVETRAIN_HW__VISIBILITY_CONTROL_H_

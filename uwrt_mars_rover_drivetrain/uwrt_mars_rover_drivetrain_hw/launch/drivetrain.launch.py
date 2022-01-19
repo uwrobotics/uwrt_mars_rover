@@ -51,12 +51,12 @@ def generate_launch_description():
         arguments=['joint_state_broadcaster', '--controller-manager', '/controller_manager'],
     )]
 
-    # Delay rviz2 start after joint_state_broadcaster_spawner
+    # Delay rviz2 start after joint_state_broadcaster_spawner finishes
     rviz_node = Node(
         package='rviz2',
         executable='rviz2',
         name='rviz2',
-        output='log',
+        output='screen',
         arguments=['-d', str(rviz_config_path)],
     )
     nodes += [RegisterEventHandler(

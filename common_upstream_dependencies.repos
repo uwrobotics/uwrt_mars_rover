@@ -1,10 +1,12 @@
-# These are upstream source dependencies used by all builds. Update to a new pinned commit on branch of choice gets updates you want.
+# These are upstream source dependencies used by all builds. If the dependency has a released binary, please leave a
+# justification for using a different source version, instead of the released binary version.
 
 repositories:
   ament_lint:
+    # package is in very active development and has many critical features and bugfixes being released constantly
     type: git
     url: https://github.com/ament/ament_lint.git
-    version: 1f5c6bb # Latest known working on master branch
+    version: master
 
 #  vectornav:
 #    type: git

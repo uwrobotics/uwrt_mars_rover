@@ -1,0 +1,7 @@
+<library path="uwrt_arm_cartesian_controller">
+  <class name="uwrt_arm_cartesian_controller/UWRTCartesianController" type="uwrt_arm_cartesian_controller::UWRTCartesianController" base_class_type="controller_interface::ControllerInterface">
+  <description>
+    The uwrt arm cartesian controller consumes end-effector linear and angular velocities and produces corresponding joint velocities
+  </description>
+  </class>
+</library>

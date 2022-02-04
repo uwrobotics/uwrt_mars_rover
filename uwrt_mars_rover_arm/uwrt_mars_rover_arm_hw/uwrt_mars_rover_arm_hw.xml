@@ -1,0 +1,19 @@
+<library path="uwrt_mars_rover_arm_hw">
+    <class name="uwrt_mars_rover_arm_hw/ArmActuatorInterface"
+           type="uwrt_mars_rover_arm_hw::ArmActuatorInterface"
+           base_class_type="hardware_interface::ActuatorInterface">
+        <description>
+            ROS2 Control Hardware Implementation of the UWRT Arm - Joints A1 to A4.
+            Simple Joints to Actuators.
+        </description>
+    </class>
+    <class name="uwrt_mars_rover_arm_hw/ArmDifferentialSystemInterface"
+           type="uwrt_mars_rover_arm_hw::ArmDifferentialSystemInterface"
+           base_class_type="hardware_interface::SystemInterface">
+        <description>
+            ROS2 Control Hardware Implementation of the UWRT Arm - Joints A5 to A6.
+            Differential Transmission System.
+        </description>
+    </class>
+</library>
+

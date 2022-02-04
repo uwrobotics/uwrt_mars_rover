@@ -11,7 +11,8 @@ on:
 
 env:
   ROS_DISTRO: galactic
-  PACKAGES_TO_TEST: "uwrt_mars_rover"
+  PACKAGES_TO_TEST: "uwrt_mars_rover uwrt_mars_rover_arm_description"
+
 
   IMAGE: "rostooling/setup-ros-docker:ubuntu-focal-ros-galactic-desktop-latest"
 
@@ -46,11 +47,7 @@ jobs:
         with:
           distribution: rolling
           linter: ${{ matrix.linter }}
-<<<<<<< HEAD
-          package-name: uwrt_mars_rover_arm_description
-=======
           package-name: ${{ env.PACKAGES_TO_TEST }}
->>>>>>> Windows CI + misc ci improvements (#156)
 
 
   linux-amd64-build-and-test:
@@ -71,18 +68,11 @@ jobs:
               }
             }
           colcon-mixin-repository: https://raw.githubusercontent.com/colcon/colcon-mixin-repository/3e627e0fa30db85aea05a50e2c61a9832664d236/index.yaml
-<<<<<<< HEAD
-          target-ros2-distro: foxy
-          package-name: uwrt_mars_rover_arm_description
-
-  arm64-build:
-=======
           target-ros2-distro: ${{ env.ROS_DISTRO }}
           vcs-repo-file-url: https://raw.githubusercontent.com/${{ github.repository }}/${{ github.sha }}/common_upstream_dependencies.repos
           package-name: ${{ env.PACKAGES_TO_TEST }}
 
   linux-arm64-build-and-test:
->>>>>>> Windows CI + misc ci improvements (#156)
     runs-on: ubuntu-latest
 
     # Cannot use action-ros-ci since cant trigger action steps from within the docker container. Must use `docker exec`

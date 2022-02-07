@@ -17,8 +17,10 @@ find_package(hardware_interface REQUIRED)
 find_package(pluginlib REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclcpp_lifecycle REQUIRED)
-find_package(realtime_tools REQUIRED)
 find_package(geometry_msgs REQUIRED)
+find_package(orocos_kdl REQUIRED)
+find_package(realtime_tools REQUIRED)
+
 
 add_library(uwrt_arm_cartesian_controller
   SHARED
@@ -32,12 +34,13 @@ ament_target_dependencies(uwrt_arm_cartesian_controller
   pluginlib
   rclcpp_lifecycle
   rcutils
-  realtime_tools
   geometry_msgs
+  orocos_kdl
+  realtime_tools
 )
 # Causes the visibility macros to use dllexport rather than dllimport,
 # which is appropriate when building the dll but not consuming it.
-target_compile_definitions(uwrt_arm_cartesian_controller PRIVATE "UWRT_ARM_CARTESIAN_CONTROLLER_BUILDING_DLL")
+target_compile_definitions(uwrt_arm_cartesian_controller PRIVATE "UWRT_ARM_CARTESIAN_CONTROLLER_BUILDING_LIBRARY")
 pluginlib_export_plugin_description_file(controller_interface uwrt_arm_cartesian_controller_plugin.xml)
 
 install(
@@ -80,13 +83,46 @@ if(FALSE) # younes todo add unit testing like in the forwarding controller examp
   )
 endif()
 
+if (BUILD_TESTING)
+   # Force generation of compile_commands.json for clang-tidy
+   set(CMAKE_EXPORT_COMPILE_COMMANDS ON CACHE INTERNAL "")
+
+   # clang-format
+   find_package(ament_cmake_clang_format REQUIRED)
+   ament_clang_format(
+   CONFIG_FILE ${CMAKE_SOURCE_DIR}/../../.clang-format
+   )
+
+   # clang-tidy
+   find_package(ament_cmake_clang_tidy REQUIRED)
+   ament_clang_tidy(
+   ${CMAKE_BINARY_DIR}
+   CONFIG_FILE ${CMAKE_SOURCE_DIR}/../../.clang-tidy
+   )
+
+   # cppcheck
+   find_package(ament_cmake_cppcheck REQUIRED)
+   ament_cppcheck()
+
+   # flake8
+   find_package(ament_cmake_flake8 REQUIRED)
+   ament_flake8(
+   CONFIG_FILE ${CMAKE_SOURCE_DIR}/../../.flake8
+   )
+
+   # xmllint
+   find_package(ament_cmake_xmllint REQUIRED)
+   ament_xmllint()
+endif ()
+
 ament_export_dependencies(
   controller_interface
   hardware_interface
   rclcpp
   rclcpp_lifecycle
-  realtime_tools
   geometry_msgs
+  orocos_kdl
+  realtime_tools
 )
 ament_export_include_directories(
   include

@@ -35,3 +35,9 @@ repositories:
     type: git
     url: https://github.com/ros-controls/control_msgs.git
     version: galactic-devel
+
+  # KDL Library
+  orocos/orocos_kinematics_dynamics:
+    type: git
+    url: https://github.com/orocos/orocos_kinematics_dynamics.git
+    version: release-1.5

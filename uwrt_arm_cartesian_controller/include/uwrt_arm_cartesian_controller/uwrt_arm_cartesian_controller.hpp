@@ -13,12 +13,14 @@
 #include "realtime_tools/realtime_buffer.h"
 #include "uwrt_arm_cartesian_controller/visibility_control.hpp"
 
-namespace uwrt_arm_cartesian_controller {
+namespace uwrt_arm_cartesian_controller
+{
 using TwistStamped = geometry_msgs::msg::TwistStamped;
 using CallbackReturn = rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn;
 
-class UWRTCartesianController : public controller_interface::ControllerInterface {
- public:
+class UWRTCartesianController : public controller_interface::ControllerInterface
+{
+public:
   UWRTCartesianController();
 
   ~UWRTCartesianController();
@@ -33,27 +35,27 @@ class UWRTCartesianController : public controller_interface::ControllerInterface
   CallbackReturn on_init() override;
 
   UWRT_ARM_CARTESIAN_CONTROLLER_PUBLIC
-  CallbackReturn on_configure(const rclcpp_lifecycle::State &previous_state) override;
+  CallbackReturn on_configure(const rclcpp_lifecycle::State & previous_state) override;
 
   UWRT_ARM_CARTESIAN_CONTROLLER_PUBLIC
-  CallbackReturn on_activate(const rclcpp_lifecycle::State &previous_state) override;
+  CallbackReturn on_activate(const rclcpp_lifecycle::State & previous_state) override;
 
   UWRT_ARM_CARTESIAN_CONTROLLER_PUBLIC
-  CallbackReturn on_deactivate(const rclcpp_lifecycle::State &previous_state) override;
+  CallbackReturn on_deactivate(const rclcpp_lifecycle::State & previous_state) override;
 
   UWRT_ARM_CARTESIAN_CONTROLLER_PUBLIC
-  controller_interface::return_type update(const rclcpp::Time &time, const rclcpp::Duration &period) override;
+  controller_interface::return_type update(
+    const rclcpp::Time & time, const rclcpp::Duration & period) override;
 
- protected:
+protected:
   rclcpp::Subscription<TwistStamped>::SharedPtr m_cart_command_sub;
 
   std::vector<std::string> m_joint_names;
   std::string m_cart_command_topic, m_robot_description, m_root_name, m_tip_name;
 
- private:
+private:
   bool parse_params();
   TwistStamped get_null_twist() const;
-  // younes todo need realtime buffer bc subscirber runs in different thread and the copy isnt atomic
 
   KDL::Tree m_kdl_tree;
   KDL::Chain m_kdl_chain;

@@ -7,7 +7,7 @@
         <xacro:read_model_data param_file="${param_file}"/>
 
         <!-- all links and joints -->
-        <link name = "base_link">
+        <link name = "arm_link">
             <visual>
                 <xacro:rectangle_visual x="${box_size}" y="${box_size}" z="${box_size}"/>
             </visual>

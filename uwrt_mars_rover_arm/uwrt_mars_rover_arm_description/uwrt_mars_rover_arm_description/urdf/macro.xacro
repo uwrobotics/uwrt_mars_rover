@@ -17,7 +17,7 @@
         </link>
 
         <joint name = "turntable_joint" type = "continuous">
-            <parent link = "base_link"/>
+            <parent link = "arm_link"/>
             <child link = "turntable"/>
             <origin xyz = "0 0 ${box_size/2 + turntable_length/2}"/>
             <axis xyz = "0 0 1"/>

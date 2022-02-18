@@ -13,6 +13,14 @@ repositories:
     type: git
     url: https://github.com/ros/joint_state_publisher.git
     version: ros2
+  rcutils:
+    type: git
+    url: https://github.com/ros2/rcutils.git
+    version: galactic
+  rcpputils:
+    type: git
+    url: https://github.com/ros2/rcpputils.git
+    version: galactic
   xacro:
     type: git
     url: https://github.com/wmmc88/xacro.git # FORK. TODO: switch back to ros2 branch on upstream once https://github.com/ros/xacro/pull/304 merges and releases

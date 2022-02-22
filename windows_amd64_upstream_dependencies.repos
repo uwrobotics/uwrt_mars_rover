@@ -21,8 +21,8 @@ repositories:
   # From https://github.com/ros-controls/ros2_control/blob/galactic/ros2_control/ros2_control.repos
   ros-controls/ros2_control:
     type: git
-    url: https://github.com/wmmc88/ros2_control.git # FORK. TODO: switch back to galactic branch on upstream once https://github.com/ros-controls/ros2_control/pull/607 merges and releases
-    version: wmmc88/controller-manager-console-scripts # galactic
+    url: https://github.com/ros-controls/ros2_control.git
+    version: master
   ros-controls/ros2_controllers:
     type: git
     url: https://github.com/ros-controls/ros2_controllers.git
@@ -30,7 +30,7 @@ repositories:
   ros-controls/realtime_tools:
     type: git
     url: https://github.com/ros-controls/realtime_tools.git
-    version: foxy-devel # foxy, galactic and rolling all release from foxy-devel
+    version: foxy-devel
   ros-controls/control_msgs:
     type: git
     url: https://github.com/ros-controls/control_msgs.git

@@ -1,10 +1,6 @@
 # These are upstream source dependencies used by windows amd64 builds.
 
 repositories:
-  angles:
-    type: git
-    url: https://github.com/ros/angles.git
-    version: 1.12.4 # Latest release tag, no distro branch available
   joint_state_publisher:
     type: git
     url: https://github.com/ros/joint_state_publisher.git

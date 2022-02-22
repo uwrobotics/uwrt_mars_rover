@@ -1,6 +1,10 @@
 # These are upstream source dependencies used by windows amd64 builds.
 
 repositories:
+  ament_cmake: # TODO: remove to revert back to ament_cmake in ros_base once a new windows galactic binary is released (ROS 2 Galactic Geochelone - Patch Release 2) at https://github.com/ros2/ros2/releases
+    type: git
+    url: https://github.com/ament/ament_cmake.git
+    version: galactic
   joint_state_publisher:
     type: git
     url: https://github.com/ros/joint_state_publisher.git

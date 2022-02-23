@@ -31,6 +31,7 @@ find_package(transmission_interface REQUIRED)
 find_package(pluginlib REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclcpp_lifecycle REQUIRED)
+find_package(uwrt_mars_rover_utils REQUIRED)
 
 include_directories(include)
 
@@ -55,6 +56,7 @@ ament_target_dependencies(
 	pluginlib
 	rclcpp_lifecycle
 	rclcpp
+  uwrt_mars_rover_utils
 )
 target_compile_options(${PROJECT_NAME} PRIVATE -Wshadow -Werror) # add some extra flags for this target
 target_compile_definitions(${PROJECT_NAME} PRIVATE "UWRT_MARS_ROVER_ARM_HW_DLL") # visibility header stuff regarding .so files

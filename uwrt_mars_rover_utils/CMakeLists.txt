@@ -31,7 +31,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC
   "$<INSTALL_INTERFACE:include>")
 
 ament_export_include_directories(include)
-ament_export_libraries(export_${PROJECT_NAME})
+ament_export_libraries(${PROJECT_NAME})
 
 install(
   DIRECTORY include/
@@ -39,7 +39,7 @@ install(
 )
 install(
   TARGETS ${PROJECT_NAME}
-  EXPORT export_${PROJECT_NAME}
+  EXPORT ${PROJECT_NAME}
   LIBRARY DESTINATION lib
   ARCHIVE DESTINATION lib
   RUNTIME DESTINATION bin

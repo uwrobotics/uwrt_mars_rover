@@ -26,12 +26,14 @@ add_library(
   ${PROJECT_NAME} SHARED
   src/data_utils.cpp
 )
-target_include_directories(${PROJECT_NAME} PUBLIC
-  "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
-  "$<INSTALL_INTERFACE:include>")
+# target_include_directories(${PROJECT_NAME} PUBLIC
+#   "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
+#   "$<INSTALL_INTERFACE:include>")
 
-ament_export_include_directories(include)
-ament_export_libraries(${PROJECT_NAME})
+# ament_export_include_directories(include)
+# ament_export_libraries(${PROJECT_NAME})
+# ament_export_targets(${PROJECT_NAME} HAS_LIBRARY_TARGET)
+# ament_export_dependencies(some_dependency)
 
 install(
   DIRECTORY include/
@@ -43,7 +45,7 @@ install(
   LIBRARY DESTINATION lib
   ARCHIVE DESTINATION lib
   RUNTIME DESTINATION bin
-  INCLUDES DESTINATION include
+  # INCLUDES DESTINATION include
 )
 
 

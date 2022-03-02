@@ -42,7 +42,7 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: ROS2 Linter - [ament-${{ matrix.linter }}]
         uses: ros-tooling/action-ros-lint@master
@@ -61,7 +61,7 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: ROS2 Linter - [ament-clang-format]
         uses: ros-tooling/action-ros-lint@master
@@ -81,7 +81,7 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Force latest version of flake8
         # Latest flake8 available in ubuntu-focal apt (and the ros-tooling-image) is not up to date with python3.8.
@@ -137,7 +137,7 @@ jobs:
     # Possibly resolveable with https://github.com/actions/runner/issues/320
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Install Docker/QEMU dependencies
         id: qemu
@@ -186,7 +186,7 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Setup ROS
         uses: ros-tooling/setup-ros@master # v0.2 doesn't have commit 45f6b7f which is required for Windows builds

@@ -26,15 +26,15 @@ add_library(
   ${PROJECT_NAME} SHARED
   src/data_utils.cpp
 )
-target_include_directories(${PROJECT_NAME} PUBLIC
-  "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
-  "$<INSTALL_INTERFACE:include>")
 
-ament_export_targets(${PROJECT_NAME}Targets HAS_LIBRARY_TARGET)
-# ament_export_dependencies(some_dependency)
-ament_export_include_directories(include)
-ament_export_libraries(${PROJECT_NAME})
+target_include_directories(
+  ${PROJECT_NAME}
+  PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>
+)
   
+ament_export_targets(${PROJECT_NAME}Targets HAS_LIBRARY_TARGET)
 install(
   DIRECTORY include/
   DESTINATION include

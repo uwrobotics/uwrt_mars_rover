@@ -25,11 +25,11 @@ if(NOT CMAKE_CXX_STANDARD)
 endif()
 
 # add_library(uwrt_mars_rover_utils SHARED IMPORTED)
-target_link_libraries(
-    ${PROJECT_NAME}
-    PUBLIC
-      uwrt_mars_rover_utils::uwrt_mars_rover_utils
-)
+# target_link_libraries(
+#     ${PROJECT_NAME}
+#     PUBLIC
+#       uwrt_mars_rover_utils::uwrt_mars_rover_utils
+# )
 
 
 # find dependencies

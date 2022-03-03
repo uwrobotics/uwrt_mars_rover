@@ -15,6 +15,7 @@
 #include <rclcpp/macros.hpp>
 #include <rclcpp_lifecycle/state.hpp>
 #include <transmission_interface/differential_transmission.hpp>
+#include <uwrt_mars_rover_utils/data_utils.hpp>
 #include <vector>
 
 #include "transmission_interface/handle.hpp"
@@ -23,40 +24,6 @@
 
 namespace uwrt_mars_rover_arm_hw
 {
-namespace DifferentialTransmissionData
-{
-namespace ActuatorData
-{
-using CommandData = struct CommandData
-{
-  double
-    velocity{};  //TODO: change this so that it can work with any interface type... add enum class that will hold the different command types
-};
-
-using StateData = struct StateData
-{
-  double velocity{};
-  double position{};
-  double iq_current{};  // not used for differential transmission
-};
-
-}  // namespace ActuatorData
-namespace JointData
-{
-using CommandData = struct CommandData
-{
-  double velocity{};
-};
-
-using StateData = struct StateData
-{
-  double velocity{};
-  double position{};
-};
-
-}  // namespace JointData
-
-}  // namespace DifferentialTransmissionData
 
 class ArmDifferentialSystemInterface : public hardware_interface::SystemInterface
 {

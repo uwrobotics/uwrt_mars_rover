@@ -1,3 +1,6 @@
+#ifndef DIFFERENTIAL_TRANSMISSION_DATA_GUARD
+#define DIFFERENTIAL_TRANSMISSION_DATA_GUARD
+
 namespace DifferentialTransmissionData {
 
 
@@ -29,3 +32,4 @@ struct StateData {
 }  // namespace JointData
 
 }  // namespace DifferentialTransmissionData
+#endif

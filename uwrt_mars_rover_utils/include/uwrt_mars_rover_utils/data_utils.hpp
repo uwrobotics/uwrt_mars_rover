@@ -1,5 +1,4 @@
-#ifndef DIFFERENTIAL_TRANSMISSION_DATA_GUARD
-#define DIFFERENTIAL_TRANSMISSION_DATA_GUARD
+#pragma once
 
 namespace DifferentialTransmissionData {
 
@@ -32,4 +31,3 @@ struct StateData {
 }  // namespace JointData
 
 }  // namespace DifferentialTransmissionData
-#endif

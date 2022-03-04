@@ -24,6 +24,14 @@ if(NOT CMAKE_CXX_STANDARD)
   set(CMAKE_CXX_STANDARD 14)
 endif()
 
+# add_library(uwrt_mars_rover_utils SHARED IMPORTED)
+# target_link_libraries(
+#     ${PROJECT_NAME}
+#     PUBLIC
+#       uwrt_mars_rover_utils::uwrt_mars_rover_utils
+# )
+
+
 # find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(hardware_interface REQUIRED)
@@ -31,6 +39,7 @@ find_package(transmission_interface REQUIRED)
 find_package(pluginlib REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclcpp_lifecycle REQUIRED)
+find_package(uwrt_mars_rover_utils REQUIRED)
 
 include_directories(include)
 
@@ -41,6 +50,7 @@ include_directories(include)
 #	include
 #)
 
+
 # add dynamic library & it's dependecies
 add_library(
 	${PROJECT_NAME}
@@ -48,6 +58,7 @@ add_library(
 	src/${PROJECT_NAME}_actuator.cpp
     src/${PROJECT_NAME}_differential.cpp
 )
+
 ament_target_dependencies(
 	${PROJECT_NAME}
 	hardware_interface
@@ -55,7 +66,10 @@ ament_target_dependencies(
 	pluginlib
 	rclcpp_lifecycle
 	rclcpp
+  uwrt_mars_rover_utils
 )
+
+
 target_compile_options(${PROJECT_NAME} PRIVATE -Wshadow -Werror) # add some extra flags for this target
 target_compile_definitions(${PROJECT_NAME} PRIVATE "UWRT_MARS_ROVER_ARM_HW_DLL") # visibility header stuff regarding .so files
 #TODO: fill in the above correct compile definition above

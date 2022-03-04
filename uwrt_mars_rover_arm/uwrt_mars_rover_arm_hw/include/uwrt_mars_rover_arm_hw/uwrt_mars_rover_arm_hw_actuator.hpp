@@ -14,45 +14,11 @@
 #include <rclcpp_lifecycle/state.hpp>
 #include <transmission_interface/simple_transmission.hpp>
 #include <vector>
-
+#include <uwrt_mars_rover_utils/data_utils.hpp>
 #include "uwrt_mars_rover_arm_hw/visibility.hpp"
 
 namespace uwrt_mars_rover_arm_hw
 {
-// namespaced structs to hold transmission data - state & command
-namespace TransmissionData
-{
-namespace ActuatorData
-{
-using CommandData = struct CommandData
-{
-  double velocity{};
-};
-
-using StateData = struct StateData
-{
-  double velocity{};
-  double position{};
-  double iq_current{};  // not used for differential transmission
-};
-
-}  // namespace ActuatorData
-namespace JointData
-{
-using CommandData = struct CommandData
-{
-  double velocity{};
-};
-
-using StateData = struct StateData
-{
-  double velocity{};
-  double position{};
-};
-
-}  // namespace JointData
-
-}  // namespace TransmissionData
 
 class ArmActuatorInterface : public hardware_interface::ActuatorInterface
 {
@@ -115,10 +81,10 @@ protected: /*idk we might extend for some reason*/
   inline static constexpr std::size_t NUM_COMMAND_INTERFACES{1};
 
   // holds actuator reads/writes
-  TransmissionData::ActuatorData::CommandData actuator_commands{};
-  TransmissionData::ActuatorData::StateData actuator_states{};
-  TransmissionData::JointData::CommandData joint_commands{};
-  TransmissionData::JointData::StateData joint_states{};
+  DifferentialTransmissionData::ActuatorData::CommandData actuator_commands{};
+  DifferentialTransmissionData::ActuatorData::StateData actuator_states{};
+  DifferentialTransmissionData::JointData::CommandData joint_commands{};
+  DifferentialTransmissionData::JointData::StateData joint_states{};
 
   // transmission for state & command transmission
   std::shared_ptr<transmission_interface::SimpleTransmission> command_transmission{nullptr};

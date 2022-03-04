@@ -1,3 +1,4 @@
+
 devel/
 bin/
 msg_gen/
@@ -59,3 +60,6 @@ COLCON_IGNORE
 # uwrt_mars_rover_hw_bridge shouldnt be added as a git submodule
 uwrt_mars_rover_utils/lib/uwrt_mars_rover_hw_bridge/
 
+uwrt_mars_rover_arm/uwrt_mars_rover_arm_hw/compile_commands.json
+uwrt_mars_rover_arm/uwrt_mars_rover_arm_hw/compile_commands.json
+.gitignore

@@ -16,9 +16,6 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
-# uncomment the following section in order to fill in
-# further dependencies manually.
-# find_package(<dependency> REQUIRED)
 
 add_library(${PROJECT_NAME} INTERFACE)
 target_include_directories(
@@ -46,15 +43,37 @@ install(
 
 
 
+
 if(BUILD_TESTING)
-  find_package(ament_lint_auto REQUIRED)
-  # the following line skips the linter which checks for copyrights
-  # uncomment the line when a copyright and license is not present in all source files
-  #set(ament_cmake_copyright_FOUND TRUE)
-  # the following line skips cpplint (only works in a git repo)
-  # uncomment the line when this package is not in a git repo
-  #set(ament_cmake_cpplint_FOUND TRUE)
-  ament_lint_auto_find_test_dependencies()
+  # Force generation of compile_commands.json for clang-tidy
+  set(CMAKE_EXPORT_COMPILE_COMMANDS ON CACHE INTERNAL "")
+
+  # clang-format
+  find_package(ament_cmake_clang_format REQUIRED)
+  ament_clang_format(
+      CONFIG_FILE ${CMAKE_SOURCE_DIR}/../../.clang-format
+  )
+
+  # clang-tidy
+  find_package(ament_cmake_clang_tidy REQUIRED)
+  ament_clang_tidy(
+      ${CMAKE_BINARY_DIR}
+      CONFIG_FILE ${CMAKE_SOURCE_DIR}/../../.clang-tidy
+  )
+
+  # cppcheck
+  find_package(ament_cmake_cppcheck REQUIRED)
+  ament_cppcheck()
+
+  # flake8
+  find_package(ament_cmake_flake8 REQUIRED)
+  ament_flake8(
+      CONFIG_FILE ${CMAKE_SOURCE_DIR}/../../.flake8
+  )
+
+  # xmllint
+  find_package(ament_cmake_xmllint REQUIRED)
+  ament_xmllint()
 endif()
 
 ament_package()

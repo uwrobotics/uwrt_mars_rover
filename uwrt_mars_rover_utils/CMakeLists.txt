@@ -20,21 +20,17 @@ find_package(ament_cmake REQUIRED)
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
 
-include_directories(include)
-
-add_library(
-  ${PROJECT_NAME} SHARED
-  src/data_utils.cpp
-)
-
+add_library(${PROJECT_NAME} INTERFACE)
 target_include_directories(
   ${PROJECT_NAME}
-  PUBLIC
+  INTERFACE
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>
 )
-  
+
 ament_export_targets(${PROJECT_NAME}Targets HAS_LIBRARY_TARGET)
+
+
 install(
   DIRECTORY include/
   DESTINATION include

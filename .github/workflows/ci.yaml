@@ -208,10 +208,14 @@ jobs:
             https://raw.githubusercontent.com/${{ github.repository }}/${{ github.sha }}/common_upstream_dependencies.repos
             https://raw.githubusercontent.com/${{ github.repository }}/${{ github.sha }}/windows_amd64_upstream_dependencies.repos
           package-name: ${{ env.PACKAGES_TO_TEST }}
-          colcon-defaults: | # Disable test building on Windows due to upstream build failure(ros2control) due to possible bug in ament_cmake: https://github.com/ament/ament_cmake/issues/374 
+          
+          # Disable test building on Windows due to upstream build failure(ros2control) due to possible bug in ament_cmake: https://github.com/ament/ament_cmake/issues/374
+          # Pin Windows SDK Version to latest (as of 3/29/22): https://stackoverflow.com/questions/65402366/c5105-and-other-compiler-warnings-when-building-with-github-actions-winsdk-10
+          colcon-defaults: | 
             {
               "build": {
-                "mixin": ["build-testing-off"]
+                "mixin": ["build-testing-off"],
+                "cmake-args": ["-DCMAKE_SYSTEM_VERSION="10.0.22000.0"]  
               }
             }
           colcon-mixin-repository: https://raw.githubusercontent.com/colcon/colcon-mixin-repository/master/index.yaml

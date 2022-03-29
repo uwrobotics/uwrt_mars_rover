@@ -1,11 +1,7 @@
 # These are upstream source dependencies used by windows amd64 builds.
 
 repositories:
-  angles:
-    type: git
-    url: https://github.com/ros/angles.git
-    version: 1.12.4 # Latest release tag, no distro branch available
-  ament_cmake: # TODO: remove to revert back to ament_cmake in ros_base once https://github.com/ament/ament_cmake/issues/373 is resolved and a new windows galactic binary is released (Patch 2?)
+  ament_cmake: # TODO: remove to revert back to ament_cmake in ros_base once a new windows galactic binary is released (ROS 2 Galactic Geochelone - Patch Release 2) at https://github.com/ros2/ros2/releases
     type: git
     url: https://github.com/ament/ament_cmake.git
     version: galactic
@@ -13,6 +9,14 @@ repositories:
     type: git
     url: https://github.com/ros/joint_state_publisher.git
     version: ros2
+  rcutils:
+    type: git
+    url: https://github.com/ros2/rcutils.git
+    version: galactic
+  rcpputils:
+    type: git
+    url: https://github.com/ros2/rcpputils.git
+    version: galactic
   xacro:
     type: git
     url: https://github.com/wmmc88/xacro.git # FORK. TODO: switch back to ros2 branch on upstream once https://github.com/ros/xacro/pull/304 merges and releases
@@ -21,8 +25,8 @@ repositories:
   # From https://github.com/ros-controls/ros2_control/blob/galactic/ros2_control/ros2_control.repos
   ros-controls/ros2_control:
     type: git
-    url: https://github.com/wmmc88/ros2_control.git # FORK. TODO: switch back to galactic branch on upstream once https://github.com/ros-controls/ros2_control/pull/607 merges and releases
-    version: wmmc88/controller-manager-console-scripts # galactic
+    url: https://github.com/ros-controls/ros2_control.git
+    version: master
   ros-controls/ros2_controllers:
     type: git
     url: https://github.com/ros-controls/ros2_controllers.git
@@ -30,7 +34,7 @@ repositories:
   ros-controls/realtime_tools:
     type: git
     url: https://github.com/ros-controls/realtime_tools.git
-    version: foxy-devel # foxy, galactic and rolling all release from foxy-devel
+    version: foxy-devel
   ros-controls/control_msgs:
     type: git
     url: https://github.com/ros-controls/control_msgs.git

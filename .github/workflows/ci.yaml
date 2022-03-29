@@ -198,7 +198,7 @@ jobs:
           New-Item -Path C:/ci/ws/install/include -ItemType Directory
         # This is required because the windows binary builds used by setup-ros have the following issue:
         # `Imported target "rclcpp::rclcpp" includes non-existent path`
-        # This can be removed once https://github.com/ros2/ros2/issues/1068 and https://github.com/ros2/rclcpp/issues/1688 are resolved.
+        # This can be removed once https://github.com/ros2/ros2/issues/1068 and https://github.com/ros2/rclcpp/issues/1688 are resolved and released
 
       - name: Build ROS2 Packages and Run Tests
         uses: ros-tooling/action-ros-ci@v0.2

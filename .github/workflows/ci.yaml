@@ -215,7 +215,7 @@ jobs:
             {
               "build": {
                 "mixin": ["build-testing-off"],
-                "cmake-args": ["-DCMAKE_SYSTEM_VERSION="10.0.22000.0"]  
+                "cmake-args": ["-DCMAKE_SYSTEM_VERSION='10.0.22000.0'"]  
               }
             }
           colcon-mixin-repository: https://raw.githubusercontent.com/colcon/colcon-mixin-repository/master/index.yaml

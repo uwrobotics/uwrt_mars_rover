@@ -3,8 +3,7 @@
     <!-- file with common value -->
     <xacro:include filename="$(find uwrt_mars_rover_arm_description)/urdf/values.xacro" />
 
-    <xacro:macro name="robot" params="param_file">
-        <xacro:read_model_data param_file="${param_file}"/>
+    <xacro:macro name="robot">
 
         <!-- all links and joints -->
         <link name = "base_link">
@@ -170,33 +169,4 @@
         </link>
 
     </xacro:macro>
-
-
-    <xacro:macro name="arm_actuator" params="prefix num">
-    <ros2_control name="arm_${prefix}_joint_actuator" type="actuator">
-      <hardware>
-        <plugin>uwrt_mars_rover_arm_hw/ArmActuatorInterface</plugin>
-        <!-- TODO: CAN interface and Odrive id?-->
-      </hardware>
-      <joint name="arm_${prefix}_joint_actuator">
-        <command_interface name="velocity">
-          <param name="min">${-default_limit_vel}</param>
-          <param name="max">${default_limit_vel}</param>
-        </command_interface>
-        <state_interface name="position"/>
-        <state_interface name="velocity"/>
-        <state_interface name="iq_current"/>
-        <!-- TODO: acceleration, torque? -->
-      </joint>
-      <transmission name="transmission_{$num}">
-        <!--  TODO: These are not actually parsed by ros2control yet: https://github.com/ros-controls/ros2_control/issues/32, https://github.com/ros-controls/ros2_control/issues/599 -->
-        <plugin>transmission_interface/SimpleTransmission</plugin>
-        <joint name="$arm_{prefix}_joint_actuator" role="arm_joint_{$num}">
-          <mechanical_reduction>${mechanical_reduction}</mechanical_reduction>
-        </joint>
-      </transmission>
-    </ros2_control>
-  </xacro:macro>
-
-
 </robot>

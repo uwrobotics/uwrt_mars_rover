@@ -1,11 +1,14 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://wiki.ros.org/xacro" name="arm_robot">
-    
+
     <!-- Include values macro/read_model_data macro -->
     <xacro:include filename="$(find uwrt_mars_rover_arm_description)/urdf/values.xacro"/>
     <!-- Use read_model_data macro to parse the arm_params.yaml file for use in xacro -->
     <xacro:read_model_data param_file="$(find uwrt_mars_rover_arm_description)/urdf/arm_params.yaml"/>
-    <!-- Define ros2_control xacro file -->
-    <xacro:include filename="$(find uwrt_mars_rover_arm_description)/urdf/ros2control.xacro"/>   
-
+    <!-- Include ros2_control xacro file to define ros2_control arm actuators-->
+    <xacro:include filename="$(find uwrt_mars_rover_arm_description)/urdf/ros2control.xacro"/> 
+    <!-- Include macro.xacro file for xacro:robot use -->
+    <xacro:include filename="$(find uwrt_mars_rover_arm_description)/urdf/macro.xacro"/>
+    <!-- Define RViz urdf information using xacro:robot -->
+    <xacro:robot/>
 </robot>

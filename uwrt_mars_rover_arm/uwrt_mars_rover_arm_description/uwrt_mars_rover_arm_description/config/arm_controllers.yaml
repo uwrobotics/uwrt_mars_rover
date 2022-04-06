@@ -11,20 +11,26 @@ controller_manager:
     position_trajectory_controller:
       type: joint_trajectory_controller/JointTrajectoryController
 
-
+# matches to names from ros2control.xacro
 forward_position_controller:
   ros__parameters:
     joints:
-      - joint1
-      - joint2
+      - turntable_joint
+      - upper_arm_joint
+      - wrist_joint
+      - claw_left_joint
+      - claw_right_joint
     interface_name: position
 
 
 position_trajectory_controller:
   ros__parameters:
     joints:
-      - joint1
-      - joint2
+      - turntable_joint
+      - upper_arm_joint
+      - wrist_joint
+      - claw_left_joint
+      - claw_right_joint
 
     command_interfaces:
       - position

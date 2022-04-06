@@ -21,7 +21,7 @@
         <transmission name="transmission_{$num}">
         <!--  TODO: These are not actually parsed by ros2control yet: https://github.com/ros-controls/ros2_control/issues/32, https://github.com/ros-controls/ros2_control/issues/599 -->
         <plugin>transmission_interface/SimpleTransmission</plugin>
-        <joint name="$arm_{prefix}_joint_actuator" role="arm_joint_{$num}">
+        <joint name="arm_${prefix}_joint_actuator" role="arm_joint_{$num}">
             <!-- <mechanical_reduction>${mechanical_reduction}</mechanical_reduction> -->
         </joint>
         </transmission>

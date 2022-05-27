@@ -7,7 +7,10 @@ from launch.substitutions import Command, FindExecutable, LaunchConfiguration, P
 
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
-
+from ament_index_python.packages import get_package_share_directory
+from launch.actions import IncludeLaunchDescription
+from launch.launch_description_sources import PythonLaunchDescriptionSource
+import os
 
 def generate_launch_description():
     # Declare arguments
@@ -172,8 +175,16 @@ def generate_launch_description():
             on_exit=[robot_controller_spawner],
         )
     )
+    pkg_gazebo_ros = get_package_share_directory('gazebo_ros')
+
+    gazebo = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(pkg_gazebo_ros, 'launch', 'gazebo.launch.py')
+        )
+    )
 
     nodes = [
+        gazebo,
         control_node,
         robot_state_pub_node,
         joint_state_broadcaster_spawner,

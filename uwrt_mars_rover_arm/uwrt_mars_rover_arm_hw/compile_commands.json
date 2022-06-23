@@ -1,1 +1,12 @@
-/home/niiquaye/robotics/build/uwrt_mars_rover_arm_hw/compile_commands.json
+[
+{
+  "directory": "/home/keyon/excode/uwrt_rover/build/uwrt_mars_rover_arm_hw",
+  "command": "/usr/bin/c++  -DDEFAULT_RMW_IMPLEMENTATION=rmw_cyclonedds_cpp -DRCUTILS_ENABLE_FAULT_INJECTION -DUWRT_MARS_ROVER_ARM_HW_DLL -Duwrt_mars_rover_arm_hw_EXPORTS -I/home/keyon/excode/uwrt_rover/src/uwrt_mars_rover/uwrt_mars_rover_arm/uwrt_mars_rover_arm_hw/include -isystem /opt/ros/galactic/include  -fPIC   -Wall -Wextra -Wpedantic -Wshadow -Werror -std=gnu++17 -o CMakeFiles/uwrt_mars_rover_arm_hw.dir/src/uwrt_mars_rover_arm_hw_actuator.cpp.o -c /home/keyon/excode/uwrt_rover/src/uwrt_mars_rover/uwrt_mars_rover_arm/uwrt_mars_rover_arm_hw/src/uwrt_mars_rover_arm_hw_actuator.cpp",
+  "file": "/home/keyon/excode/uwrt_rover/src/uwrt_mars_rover/uwrt_mars_rover_arm/uwrt_mars_rover_arm_hw/src/uwrt_mars_rover_arm_hw_actuator.cpp"
+},
+{
+  "directory": "/home/keyon/excode/uwrt_rover/build/uwrt_mars_rover_arm_hw",
+  "command": "/usr/bin/c++  -DDEFAULT_RMW_IMPLEMENTATION=rmw_cyclonedds_cpp -DRCUTILS_ENABLE_FAULT_INJECTION -DUWRT_MARS_ROVER_ARM_HW_DLL -Duwrt_mars_rover_arm_hw_EXPORTS -I/home/keyon/excode/uwrt_rover/src/uwrt_mars_rover/uwrt_mars_rover_arm/uwrt_mars_rover_arm_hw/include -isystem /opt/ros/galactic/include  -fPIC   -Wall -Wextra -Wpedantic -Wshadow -Werror -std=gnu++17 -o CMakeFiles/uwrt_mars_rover_arm_hw.dir/src/uwrt_mars_rover_arm_hw_differential.cpp.o -c /home/keyon/excode/uwrt_rover/src/uwrt_mars_rover/uwrt_mars_rover_arm/uwrt_mars_rover_arm_hw/src/uwrt_mars_rover_arm_hw_differential.cpp",
+  "file": "/home/keyon/excode/uwrt_rover/src/uwrt_mars_rover/uwrt_mars_rover_arm/uwrt_mars_rover_arm_hw/src/uwrt_mars_rover_arm_hw_differential.cpp"
+}
+]

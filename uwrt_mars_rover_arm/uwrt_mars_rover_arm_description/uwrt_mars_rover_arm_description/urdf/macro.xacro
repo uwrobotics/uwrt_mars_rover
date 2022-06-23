@@ -3,9 +3,16 @@
     <!-- file with common value -->
     <xacro:include filename="$(find uwrt_mars_rover_arm_description)/urdf/values.xacro" />
 
-    <xacro:macro name="robot" params="param_file">
-        <xacro:read_model_data param_file="${param_file}"/>
+    <xacro:macro name="robot">
+        <!--
+            TODO: Use a dummy link to avoid the "base links can't have inertias" error when booting this into Gazebo.
 
+            <link name="dummy"/>
+            <joint name="dummy_to_base_link=" type="fixed">  
+                <parent link="dummy"/>  
+                <child link="base_link"/>  
+            </joint> 
+        -->
         <!-- all links and joints -->
         <link name = "base_link">
             <visual>
@@ -14,8 +21,12 @@
             <collision>
                 <xacro:rectangle_visual x="${box_size}" y="${box_size}" z="${box_size}"/>
             </collision>
+            <inertial>
+                <mass value ="${default_mass}"/>
+                <xacro:default_inertia/>
+            </inertial>
         </link>
-
+        
         <joint name = "turntable_joint" type = "continuous">
             <parent link = "base_link"/>
             <child link = "turntable"/>
@@ -37,6 +48,7 @@
         </link>
 
         <joint name = "shoulder_joint" type = "revolute">
+            <axis xyz="0 0 1"/>
             <parent link = "turntable"/>
             <child link = "upper_arm"/>
             <limit effort="${default_limit_effort}" lower="${shoulder_lower}" upper="${shoulder_upper}" velocity="${default_limit_vel}"/>
@@ -58,6 +70,7 @@
         </link>
 
         <joint name = "elbow_joint" type = "revolute">
+            <axis xyz="0 0 1.0"/>
             <parent link = "upper_arm"/>
             <child link = "forearm"/>
             <limit effort="${default_limit_effort}" lower="${elbow_lower}" upper="${elbow_upper}" velocity="${default_limit_vel}"/>

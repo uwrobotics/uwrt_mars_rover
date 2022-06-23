@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- import arm_actuator macros file -->
+  <xacro:include filename="$(find uwrt_mars_rover_arm_description)/urdf/arm_actuator.xacro"/>
+  
+  <xacro:arm_actuator prefix="turntable" num="0"/>
+  <xacro:arm_actuator prefix="shoulder" num="0"/>
+  <xacro:arm_actuator prefix="elbow" num="0"/>
+  <xacro:arm_actuator prefix="roll" num="0"/>
+  <xacro:arm_actuator prefix="wrist" num="0"/>
+  <xacro:arm_actuator prefix="claw_left" num="0"/>
+  <xacro:arm_actuator prefix="claw_right" num="0"/>
+
+
+  <gazebo>
+    <plugin filename="libgazebo_ros2_control.so" name="gazebo_ros2_control">
+      <robot_param>robot_description</robot_param>
+      <robot_param_node>robot_state_publisher</robot_param_node>
+      <robot_sim_type>gazebo_ros2_control/DefaultRobotHWSim</robot_sim_type>
+      <parameters>$(find uwrt_mars_rover_arm_description)/config/arm_controllers.yaml</parameters>
+    </plugin>
+  </gazebo>
+
+</robot>

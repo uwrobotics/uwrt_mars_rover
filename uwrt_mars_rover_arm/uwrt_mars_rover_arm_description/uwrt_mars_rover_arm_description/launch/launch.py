@@ -40,6 +40,11 @@ def generate_launch_description():
         [FindPackageShare(description_package), "rviz", "rviz.rviz"]
     )
 
+    joint_state_broadcaster_spawner = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["joint_state_broadcaster", "--controller-manager", "/controller_manager"],
+    )
     joint_state_publisher_node = Node(
         package="joint_state_publisher_gui",
         executable="joint_state_publisher_gui",
@@ -61,6 +66,7 @@ def generate_launch_description():
     nodes_to_start = [
         joint_state_publisher_node,
         robot_state_publisher_node,
+        joint_state_broadcaster_spawner,
         rviz_node,
     ]
 

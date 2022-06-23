@@ -1,6 +1,6 @@
 controller_manager:
   ros__parameters:
-    update_rate: 10  # Hz
+    update_rate: 100  # Hz
 
     joint_state_broadcaster:
       type: joint_state_broadcaster/JointStateBroadcaster
@@ -18,10 +18,10 @@ velocity_controller:
   ros__parameters:
     joints:
       - turntable_joint
-      # - upper_arm_joint
-      # - wrist_joint
-      # - claw_left_joint
-      # - claw_right_joint
+      - upper_arm_joint
+      - wrist_joint
+      - claw_left_joint
+      - claw_right_joint
     command_interfaces:
       - velocity
     state_interfaces:

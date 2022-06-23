@@ -3,13 +3,13 @@
     <!-- file with common value -->
     <xacro:include filename="$(find uwrt_mars_rover_arm_description)/urdf/values.xacro" />
     <xacro:macro name="arm_actuator" params="prefix num">
-        <ros2_control name="GazeboSystem" type="system">
+        <ros2_control name="arm_robot" type="system">
             <hardware>
                 <plugin>gazebo_ros2_control/GazeboSystem</plugin>
                 <!-- <plugin>uwrt_mars_rover_arm_hw/ArmActuatorInterface</plugin> -->
                 <!-- CAN interface and Odrive id-->
             </hardware>
-            <joint name="turntable_joint">
+            <joint name="${prefix}_joint">
             <command_interface name="velocity">
                 <param name="min">${-default_limit_vel}</param>
                 <param name="max">${default_limit_vel}</param>

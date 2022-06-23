@@ -16,9 +16,9 @@ import os
 
 from ament_index_python.packages import get_package_share_directory
 
-
+from launch.substitutions import LaunchConfiguration
 from launch import LaunchDescription
-from launch.actions import ExecuteProcess, IncludeLaunchDescription, RegisterEventHandler
+from launch.actions import ExecuteProcess, IncludeLaunchDescription, RegisterEventHandler, DeclareLaunchArgument
 from launch.event_handlers import OnProcessExit
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 
@@ -28,6 +28,7 @@ import xacro
 
 
 def generate_launch_description():
+    use_sim_time = LaunchConfiguration('use_sim_time', default='true')
     gazebo = IncludeLaunchDescription(
                 PythonLaunchDescriptionSource([os.path.join(
                     get_package_share_directory('gazebo_ros'), 'launch'), '/gazebo.launch.py']),
@@ -43,11 +44,16 @@ def generate_launch_description():
     xacro.process_doc(doc)
     params = {'robot_description': doc.toxml()}
 
+    DeclareLaunchArgument(
+            'use_sim_time',
+            default_value='false',
+            description='Use simulation (Gazebo) clock if true')
+
     node_robot_state_publisher = Node(
         package='robot_state_publisher',
         executable='robot_state_publisher',
         output='screen',
-        parameters=[params]
+        parameters=[params,{'use_sim_time': use_sim_time}]
     )
 
     spawn_entity = Node(package='gazebo_ros', executable='spawn_entity.py',
@@ -65,14 +71,14 @@ def generate_launch_description():
         cmd=['ros2', 'control', 'load_controller', '--set-state', 'start', 'velocity_controller'],
         output='screen'
     )
-
-    return LaunchDescription([
-        RegisterEventHandler(
+    loadjointstate =  RegisterEventHandler(
             event_handler=OnProcessExit(
                 target_action=spawn_entity,
                 on_exit=[load_joint_state_controller],
             )
-        ),
+        )
+    return LaunchDescription([
+        loadjointstate,
         RegisterEventHandler(
             event_handler=OnProcessExit(
                 target_action=load_joint_state_controller,

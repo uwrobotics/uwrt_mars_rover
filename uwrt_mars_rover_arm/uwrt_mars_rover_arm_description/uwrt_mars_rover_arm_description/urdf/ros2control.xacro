@@ -5,8 +5,10 @@
   <xacro:include filename="$(find uwrt_mars_rover_arm_description)/urdf/arm_actuator.xacro"/>
   
   <xacro:arm_actuator prefix="turntable" num="0"/>
-  <xacro:arm_actuator prefix="upper_arm" num="0"/>
+  <xacro:arm_actuator prefix="shoulder" num="0"/>
   <xacro:arm_actuator prefix="wrist" num="0"/>
+  <xacro:arm_actuator prefix="roll" num="0"/>
+  <xacro:arm_actuator prefix="elbow" num="0"/>
   <xacro:arm_actuator prefix="claw_left" num="0"/>
   <xacro:arm_actuator prefix="claw_right" num="0"/>
 

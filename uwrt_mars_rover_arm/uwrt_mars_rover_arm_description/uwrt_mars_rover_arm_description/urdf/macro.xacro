@@ -4,7 +4,15 @@
     <xacro:include filename="$(find uwrt_mars_rover_arm_description)/urdf/values.xacro" />
 
     <xacro:macro name="robot">
+        <!--
+            TODO: Use a dummy link to avoid the "base links can't have inertias" error when booting this into Gazebo.
 
+            <link name="dummy"/>
+            <joint name="dummy_to_base_link=" type="fixed">  
+                <parent link="dummy"/>  
+                <child link="base_link"/>  
+            </joint> 
+        -->
         <!-- all links and joints -->
         <link name = "base_link">
             <visual>

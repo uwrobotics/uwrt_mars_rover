@@ -18,7 +18,9 @@ velocity_controller:
   ros__parameters:
     joints:
       - turntable_joint
-      - upper_arm_joint
+      - shoulder_joint
+      - elbow_joint
+      - roll_joint
       - wrist_joint
       - claw_left_joint
       - claw_right_joint

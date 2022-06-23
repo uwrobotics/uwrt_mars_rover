@@ -37,22 +37,26 @@ velocity_controller:
 # forward_position_controller:
 #   ros__parameters:
 #     joints:
-#       - turntable_joint
-#       - upper_arm_joint
-#       - wrist_joint
-#       - claw_left_joint
-#       - claw_right_joint
+      # - turntable_joint
+      # - shoulder_joint
+      # - elbow_joint
+      # - roll_joint
+      # - wrist_joint
+      # - claw_left_joint
+      # - claw_right_joint
 #     interface_name: position
 
 
 # position_trajectory_controller:
 #   ros__parameters:
 #     joints:
-#       - turntable_joint
-#       - upper_arm_joint
-#       - wrist_joint
-#       - claw_left_joint
-#       - claw_right_joint
+      # - turntable_joint
+      # - shoulder_joint
+      # - elbow_joint
+      # - roll_joint
+      # - wrist_joint
+      # - claw_left_joint
+      # - claw_right_joint
 
 #     command_interfaces:
 #       - position

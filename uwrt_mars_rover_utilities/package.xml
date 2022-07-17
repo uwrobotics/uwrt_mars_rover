@@ -4,13 +4,15 @@
   <name>uwrt_mars_rover_utilities</name>
   <version>0.0.0</version>
   <description>Package including common utilities for uwrt_mars_rover (CAN library, etc.)</description>
-  <maintainer email="cwt1078@gmail.com">Colin Toft</maintainer>
+  <maintainer email="ctoft@uwaterloo.ca">Colin Toft</maintainer>
   <license>MIT</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
+
+  <depend>rclcpp</depend>
 
   <export>
     <build_type>ament_cmake</build_type>

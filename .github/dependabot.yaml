@@ -9,7 +9,8 @@ updates:
     pull-request-branch-name:
       separator: "/"
     assignees:
-      - "wmmc88"
-    reviewers:
-      - "wmmc88"
       - "niiquaye"
+      - "keyonjerome"
+    reviewers:
+      - "niiquaye"
+      - "keyonjerome"

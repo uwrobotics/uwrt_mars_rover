@@ -15,11 +15,12 @@
 // #include "uwrt_params.h"
 #include "rclcpp/logger.hpp"
 
-namespace uwrt_mars_rover_utils {
+namespace uwrt_mars_rover_utilities {
 
 class UWRTCANWrapper {
  public:
-  explicit UWRTCANWrapper() = default;
+  explicit UWRTCANWrapper(): UWRTCANWrapper("uwrt_can", "can0", false, 1) {}
+
   explicit UWRTCANWrapper(
       std::string name, std::string interface_name, bool rcv_big_endian,
       int thread_sleep_millis = 10);  // NOLINT(cppcoreguidelines-avoid-magic-numbers,readability-magic-numbers)

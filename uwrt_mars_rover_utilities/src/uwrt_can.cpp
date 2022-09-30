@@ -4,7 +4,7 @@
 #include <uwrt_mars_rover_utilities/uwrt_can.h>
 // #include <uwrt_mars_rover>
 
-namespace uwrt_mars_rover_utils {
+namespace uwrt_mars_rover_utilities {
 
     // static constexpr need to be declared again in cpp file (fixed in c++17)
     constexpr std::chrono::milliseconds UWRTCANWrapper::MUTEX_LOCK_TIMEOUT;
@@ -153,4 +153,4 @@ namespace uwrt_mars_rover_utils {
         }
     }
 
-}  // namespace uwrt_mars_rover_utils
+}  // namespace uwrt_mars_rover_utilities

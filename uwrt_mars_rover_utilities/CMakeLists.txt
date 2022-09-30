@@ -29,7 +29,20 @@ ament_target_dependencies(${PROJECT_NAME}
     rclcpp_components
 )
 
-install(TARGETS ${PROJECT_NAME}
+add_executable(uwrt_can_test_node src/uwrt_can_test_node.cpp)
+ament_target_dependencies(uwrt_can_test_node
+    rclcpp
+    std_msgs
+    rclcpp_components
+)
+
+target_link_libraries(uwrt_can_test_node
+    ${PROJECT_NAME}
+)
+
+install(TARGETS
+    ${PROJECT_NAME}
+    uwrt_can_test_node
     RUNTIME DESTINATION lib/${PROJECT_NAME}
     ARCHIVE DESTINATION lib/${PROJECT_NAME}
     LIBRARY DESTINATION lib/${PROJECT_NAME}

@@ -20,9 +20,14 @@ find_package(rosidl_default_generators REQUIRED)
 # add ros joy package
 find_package(sensor_msgs REQUIRED)
 
-# rosidl_generate_interfaces(${PROJECT_NAME}
-# 	DEPENDENCIES std_msgs
-# )
+set(msg_files
+	"msg/XboxController.msg"	
+)
+
+rosidl_generate_interfaces(${PROJECT_NAME}
+	${msg_files}
+	DEPENDENCIES std_msgs
+)
 
 ament_export_dependencies(rosidl_default_runtime)
 
@@ -42,7 +47,7 @@ ament_target_dependencies(xbox_controller
 	"rclcpp_components"
 	"sensor_msgs")
 # build ROS custom messages
-# rosidl_target_interfaces( ${PROJECT_NAME} "rosidl_typesupport_cpp")
+rosidl_target_interfaces(xbox_controller ${PROJECT_NAME} "rosidl_typesupport_cpp")
 rclcpp_components_register_nodes(xbox_controller "uwrt_xbox::UWRTXboxController")
 set(node_plugins "${node_plugins}uwrt_xbox::UWRTXboxController;$<TARGET_FILE:xbox_controller>\n")
 

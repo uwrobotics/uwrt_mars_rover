@@ -1,0 +1,4 @@
+float32 drivetrain_joy_x
+float32 drivetrain_joy_y
+float32 gimble_joy_x
+float32 gimble_joy_y

@@ -87,6 +87,13 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
+      - name: Force latest version of flake8
+        # Latest flake8 available in ubuntu-focal apt (and the ros-tooling-image) is not up to date with python3.8.
+        # Avoids following error:
+        # "pyflakes" failed during execution due to "'FlakesChecker' object has no attribute 'NAMEDEXPR'"
+        run: |
+          pip install --upgrade flake8
+
       - name: ROS2 Linter - [ament-flake8]
         uses: ros-tooling/action-ros-lint@master
         with:
@@ -103,6 +110,12 @@ jobs:
       
 
     steps:
+      - name: Force latest version of flake8
+        # Latest flake8 available in ubuntu-focal apt (and the ros-tooling-image) is not up to date with python3.8.
+        # Avoids following error:
+        # "pyflakes" failed during execution due to "'FlakesChecker' object has no attribute 'NAMEDEXPR'"
+        run: |
+          pip install --upgrade flake8
 
       - name: Build ROS2 Packages and Run Tests
         uses: ros-tooling/action-ros-ci@v0.2

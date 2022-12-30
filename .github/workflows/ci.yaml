@@ -38,6 +38,7 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: ${{ needs.prepare-actions-environment.outputs.image }}
+      options: -u root
     strategy:
       fail-fast: false # We want all the linters to run even if one fails
       matrix:

@@ -19,6 +19,8 @@
   <depend>rclcpp</depend>
   <depend>rclcpp_lifecycle</depend>
   <depend>transmission_interface</depend>
+  
+  <depend>uwrt_mars_rover_utilities</depend>
 
   <exec_depend>controller_manager</exec_depend>
   <exec_depend>diff_drive_controller</exec_depend>

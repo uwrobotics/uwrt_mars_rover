@@ -12,7 +12,9 @@
 #include "rclcpp/macros.hpp"
 #include "rclcpp/rclcpp.hpp"
 #include "transmission_interface/simple_transmission.hpp"
+#include "uwrt_mars_rover_utilities/uwrt_can.h"
 #include "uwrt_mars_rover_drivetrain_hw/visibility_control.hpp"
+
 
 using LifecyleNodeCallbackReturn = rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn;
 

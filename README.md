@@ -10,7 +10,11 @@ To get started with development:
 2. Create an `src` directory inside of your workspace (e.g: `uwrt_ws/src`).
 3. Clone this repository into the `src` directory of your workspace. `git clone github.com/uwrobotics/uwrt_mars_rover.git` via Git Bash
 4. **Navigate inside the folder from the command line** and use Docker to build the `Dockerfile.devcontainer` Dockerfile from your current directory, using the `-t` flag to name your image: `sudo docker build -f Dockerfile.devcontainer -t uwrt-dev .`
-5. Start the development container, sharing your local repository to the Docker container via `sudo docker run --name=uwrt-galactic -it -v ~/uwrt_ws/:/uwrt_ws uwrt-dev`. Remember to change the `-v` flag to the correct directory.
+5. Start the development container interactive. Before we do this, let's go through what each of the Docker flags we'll be using for `docker run` means:
+   - `-v ~/folder1:/folder` shares `~/folder1` to your docker container at `/folder`.
+   -  `-it` runs the Docker container interactively, meaning that as soon as the 
+   - sharing your UWRT workspace folder to the Docker container via `sudo docker run --name=uwrt-galactic -it -v ~/uwrt_ws/:/uwrt_ws uwrt-dev`. Remember to change the `-v` argument to the correct mapping; it should be an absolute path to your UWRT workspace on your local machine, then a colon, then `/uwrt_ws` on the right side of the colon; this tells Docker which folder to read from for the shared folder, and where to put the shared folder in the container.
+7. Now, we need to set up the workspace inside the Docker container
    
 ### Developing From a Native Ubuntu 20.04 Installation
 4.

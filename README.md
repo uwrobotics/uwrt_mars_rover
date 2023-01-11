@@ -2,12 +2,18 @@
 
 ![CI](https://github.com/uwrobotics/uwrt_mars_rover/workflows/CI/badge.svg)
 
-**NOTE: Some of the info in this README is out of date and WIP because of our transition to ROS2. Feel free to submit PRs to update.**
 ## Repository Setup
 
-To get started with development, clone this repo into the `src` directory of your `catkin` workspace. Use `rosinstall`
-and `rosdep` to fetch any source or binary dependencies.
-
+### Using Containerized Development (Windows, non-Ubuntu 20.04)
+To get started with development:
+1. Create a separate workspace (an empty folder) for your UWRT development: we recommend calling this `uwrt_ws`.
+2. Create an `src` directory inside of your workspace (e.g: `uwrt_ws/src`).
+3. Clone this repository into the `src` directory of your workspace. `git clone github.com/uwrobotics/uwrt_mars_rover.git` via Git Bash
+4. **Navigate inside the folder from the command line** and use Docker to build the `Dockerfile.devcontainer` Dockerfile from your current directory, using the `-t` flag to name your image: `sudo docker build -f Dockerfile.devcontainer -t uwrt-dev .`
+5. Start the development container, sharing your local repository to the Docker container via `sudo docker run --name=uwrt-galactic -it -v ~/uwrt_ws/:/uwrt_ws uwrt-dev`. Remember to change the `-v` flag to the correct directory.
+   
+### Developing From a Native Ubuntu 20.04 Installation
+4.
 ```bash
 # Ensure rosinstall and rosdep are installed and up to date
 sudo apt install python-rosinstall python-rosdep

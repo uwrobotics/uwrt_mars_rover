@@ -1,0 +1,23 @@
+# Start with the basic ROS Galactic 20.04 image
+FROM ros:galactic
+
+# Copy over the current repository to our image
+COPY . $HOME/dev_ws/src/uwrt_mars_rover
+WORKDIR $HOME/dev_ws/src/
+
+# update everything
+RUN sudo apt update -y --no-install-recommends && sudo apt dist-upgrade -y 
+# Ensure rosinstall and rosdep are installed and up to date
+RUN sudo apt install -y python3-rosinstall python3-rosdep
+
+# Install upstream source dependencies
+RUN vcs import --input uwrt_mars_rover/common_upstream_dependencies.repos
+
+# Download metapackage dependencies (unused; used in earlier years for HW bridge)
+# RUN vcs import --input uwrt_mars_rover/metapackage_dependencies.repos
+
+# Change directories to run rosdep
+WORKDIR $HOME/dev_ws/
+# Get all ROS dependencies for the ROS packages we use via rosdep
+RUN rosdep install --from-paths src -y --ignore-src
+

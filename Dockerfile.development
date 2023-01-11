@@ -10,7 +10,7 @@ RUN sudo apt install -y python3-rosinstall python3-rosdep
 # Install upstream source dependencies
 RUN vcs import --input uwrt_mars_rover/common_upstream_dependencies.repos
 
-# Download metapacakage dependencies
-RUN vcs import --input uwrt_mars_rover/metapackage_dependencies.repos
+# Download metapackage dependencies (unused; used in earlier years for HW bridge)
+# RUN vcs import --input uwrt_mars_rover/metapackage_dependencies.repos
 
 

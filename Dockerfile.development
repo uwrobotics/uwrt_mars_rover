@@ -1,16 +1,16 @@
 FROM ros:galactic
 
-COPY . $HOME/dev_ws/src/
+COPY . $HOME/dev_ws/src/uwrt_mars_rover
 WORKDIR $HOME/dev_ws/src/
 
-RUN sudo apt update && sudo apt dist-upgrade
+RUN sudo apt update -y --no-install-recommends && sudo apt dist-upgrade -y 
 # Ensure rosinstall and rosdep are installed and up to date
-RUN sudo apt install python-rosinstall python-rosdep
-RUN rosdep init && rosdep update
-RUN git clone https://github.com/uwrobotics/uwrt_mars_rover.git
+RUN sudo apt install -y python3-rosinstall python3-rosdep
 
 # Install upstream source dependencies
-RUN rosinstall . uwrt_mars_rover/common_upstream_dependencies.rosinstall
-# Install metapackage source dependencies and install all binary dependencies
-RUN rosinstall . uwrt_mars_rover/metapackage_dependencies.rosinstall && rosdep install --from-paths . --ignore-src -r -y
+RUN vcs import --input uwrt_mars_rover/common_upstream_dependencies.repos
+
+# Download metapacakage dependencies
+RUN vcs import --input uwrt_mars_rover/metapackage_dependencies.repos
+
 

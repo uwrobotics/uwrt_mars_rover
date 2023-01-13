@@ -8,7 +8,7 @@ WORKDIR $HOME/dev_ws/src/
 # update everything
 RUN sudo apt update -y --no-install-recommends && sudo apt dist-upgrade -y 
 # Ensure rosinstall and rosdep are installed and up to date
-RUN sudo apt install -y python3-rosinstall python3-rosdep
+RUN sudo apt install -y python3-rosdep
 
 # Install upstream source dependencies
 RUN vcs import --input uwrt_mars_rover/common_upstream_dependencies.repos

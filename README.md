@@ -16,45 +16,18 @@ To get started with development:
    - sharing your UWRT workspace folder to the Docker container via `sudo docker run --name=uwrt-galactic -it -v ~/uwrt_ws/:/uwrt_ws uwrt-dev`. Remember to change the `-v` argument to the correct mapping; it should be an absolute path to your UWRT workspace on your local machine, then a colon, then `/uwrt_ws` on the right side of the colon; this tells Docker which folder to read from for the shared folder, and where to put the shared folder in the container.
 7. Now, we need to set up the workspace inside the Docker container
    
-### Developing From a Native Ubuntu 20.04 Installation
-4.
-```bash
-# Ensure rosinstall and rosdep are installed and up to date
-sudo apt install python-rosinstall python-rosdep
-sudo rosdep init
-rosdep update
+### Downloading the Repository and Getting Dependencies
+1. Navigate to your ROS2 workspace in the terminal (e.g: `dev_ws` or `uwrt_ws`)
+2. Create a `src` directory if you haven't already: `mkdir -p dev_ws/src`.
+3. Navigate inside of your `src` directory: `cd src`
+4. Clone the repository into your `src` directory: `git clone git@github.com:uwrobotics/uwrt_mars_rover.git`
+5. Update your system before continuing: `sudo apt update -y --no-install-recommends && sudo apt dist-upgrade -y`
+6. Install `rosdep`, the ROS dependency manager: `sudo apt install -y python3-rosdep`
+7. Download the repository's upstream dependencies: `vcs import --input uwrt_mars_rover/common_upstream_dependencies.repos`
+8. Navigate back to the root of your workspace, and install all dependencies for your ROS packages: `RUN rosdep install --from-paths src -y --ignore-src`
 
-# Clone repo
-cd <catkin workspace location>/src
-git clone https://github.com/uwrobotics/uwrt_mars_rover.git
+You can re-navigate to the root of your workspace at any time and rerun #8 to update your ROS packages' dependencies.
 
-# Install upstream source dependencies
-rosinstall --catkin . uwrt_mars_rover/upstream_dependencies.rosinstall
-
-# Install metapackage source dependencies
-rosinstall --catkin . uwrt_mars_rover/metapackage_dependencies.rosinstall
-
-# Install all binary dependencies
-rosdep install --from-paths . --ignore-src -r -y
-```
-
-If you're setting up the repository on the Nvidia Jetson, you also need to install the arm64 upstream dependencies:
-```bash
-# Install upstream source dependencies for arm64
-rosinstall --catkin . uwrt_mars_rover/arm64_upstream_dependencies.rosinstall
-```
-
-## Updating Dependencies
-Commands to update dependencies:
-```bash
-cd <catkin workspace location>/src
-rosinstall --catkin . uwrt_mars_rover/upstream_dependencies.rosinstall uwrt_mars_rover/metapackage_dependencies.rosinstall
-rosdep install --from-paths . --ignore-src -r -y
-```
-
-**Note:** If there have been certain changes to the workspace (ex. if a refactor moved one of the metapackage deps to a
-different folder), you may need to delete the existing `.rosinstall` that's found in `<catkin workspace location>/src`
-before you run the above commands.
 
 ## Adding Dependencies
 

@@ -54,8 +54,11 @@ LifecyleNodeCallbackReturn UWRTMarsRoverDrivetrainHWActuatorInterface::on_init(
   actuator_state_iq_current_ = std::numeric_limits<double>::quiet_NaN();
   joint_velocity_command_ = std::numeric_limits<double>::quiet_NaN();
 
-  // TODO: init transmissions
-  // TODO: init can library
+
+  
+  drivetrain_can_wrapper_ = uwrt_mars_rover_utilities::UWRTCANWrapper("drivetrain_can","vcan0", false); 
+  std::vector<uint32_t> addresses {actuator_state_position_address_, actuator_state_velocity_address_, actuator_state_iq_current_address_};
+  drivetrain_can_wrapper_.init(addresses);
 
   RCLCPP_DEBUG(logger_, "Drivetrain Actuator Initialized Successfully");
   return LifecyleNodeCallbackReturn::SUCCESS;
@@ -71,7 +74,10 @@ LifecyleNodeCallbackReturn UWRTMarsRoverDrivetrainHWActuatorInterface::on_cleanu
   actuator_state_iq_current_ = std::numeric_limits<double>::quiet_NaN();
   joint_velocity_command_ = std::numeric_limits<double>::quiet_NaN();
 
-  // TODO: re-init or reset can library to init state
+  
+  std::vector<uint32_t> addresses {actuator_state_position_address_, actuator_state_velocity_address_, actuator_state_iq_current_address_};
+  drivetrain_can_wrapper_.init(addresses);
+
   RCLCPP_INFO(logger_, "Drivetrain Actuator Cleaned Up Successfully");
   return LifecyleNodeCallbackReturn::SUCCESS;
 }
@@ -95,6 +101,7 @@ LifecyleNodeCallbackReturn UWRTMarsRoverDrivetrainHWActuatorInterface::on_config
 
   // TODO: enable can library to start receiving data for state interfaces and non-movement command interfaces. consider
   // existing state data and non-movement command data as stale
+
 
   RCLCPP_INFO(logger_, "Drivetrain Actuator Configured Successfully");
   return LifecyleNodeCallbackReturn::SUCCESS;
@@ -137,7 +144,10 @@ hardware_interface::return_type UWRTMarsRoverDrivetrainHWActuatorInterface::read
   RCLCPP_DEBUG_STREAM(logger_, "Actuator Position: " << actuator_state_position_
                                                      << " Actuator Velocity: " << actuator_state_velocity_
                                                      << " Actuator IQ Current: " << actuator_state_iq_current_);
-  // TODO: read from CAN
+  
+  drivetrain_can_wrapper_.getLatestFromID<double>(actuator_state_position_, actuator_state_position_address_);
+  drivetrain_can_wrapper_.getLatestFromID<double>(actuator_state_velocity_, actuator_state_velocity_address_);
+  drivetrain_can_wrapper_.getLatestFromID<double>(actuator_state_iq_current_, actuator_state_iq_current_address_);
 
   RCLCPP_DEBUG(logger_, "Drivetrain Actuator Read Successfully...");
   return hardware_interface::return_type::OK;
@@ -147,7 +157,9 @@ hardware_interface::return_type UWRTMarsRoverDrivetrainHWActuatorInterface::writ
   RCLCPP_DEBUG(logger_, "Drivetrain Actuator Writing...");
 
   RCLCPP_DEBUG_STREAM(logger_, "Joint Velocity: " << joint_velocity_command_);
-  // TODO: write to CAN
+
+  drivetrain_can_wrapper_.writeToID<double>(joint_velocity_command_, write_address_);
+  
 
   RCLCPP_DEBUG(logger_, "Drivetrain Actuator Written Successfully...");
   return hardware_interface::return_type::OK;

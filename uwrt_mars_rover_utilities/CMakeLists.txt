@@ -22,6 +22,15 @@ add_library(${PROJECT_NAME} # was SHARED
     #src/uwrt_params.cpp
 )
 
+target_include_directories(
+    ${PROJECT_NAME}
+    PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>
+)
+
+add_subdirectory(lib/uwrt_mars_rover_hw_bridge)
+
 ament_target_dependencies(${PROJECT_NAME}
     rclcpp
     std_msgs
@@ -40,6 +49,7 @@ ament_target_dependencies(uwrt_can_test_node
 target_link_libraries(uwrt_can_test_node
     ${PROJECT_NAME}
 )
+
 
 install(TARGETS
     ${PROJECT_NAME}

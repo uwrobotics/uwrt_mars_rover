@@ -3,18 +3,6 @@
 ![CI](https://github.com/uwrobotics/uwrt_mars_rover/workflows/CI/badge.svg)
 
 ## Repository Setup
-
-### Using Containerized Development (Windows, non-Ubuntu 20.04)
-To get started with development:
-1. Create a separate workspace (an empty folder) for your UWRT development: we recommend calling this `uwrt_ws`.
-2. Create an `src` directory inside of your workspace (e.g: `uwrt_ws/src`).
-3. Clone this repository into the `src` directory of your workspace. `git clone github.com/uwrobotics/uwrt_mars_rover.git` via Git Bash
-4. **Navigate inside the folder from the command line** and use Docker to build the `Dockerfile.devcontainer` Dockerfile from your current directory, using the `-t` flag to name your image: `sudo docker build -f Dockerfile.devcontainer -t uwrt-dev .`
-5. Start the development container interactive. Before we do this, let's go through what each of the Docker flags we'll be using for `docker run` means:
-   - `-v ~/folder1:/folder` shares `~/folder1` to your docker container at `/folder`.
-   -  `-it` runs the Docker container interactively, meaning that as soon as the 
-   - sharing your UWRT workspace folder to the Docker container via `sudo docker run --name=uwrt-galactic -it -v ~/uwrt_ws/:/uwrt_ws uwrt-dev`. Remember to change the `-v` argument to the correct mapping; it should be an absolute path to your UWRT workspace on your local machine, then a colon, then `/uwrt_ws` on the right side of the colon; this tells Docker which folder to read from for the shared folder, and where to put the shared folder in the container.
-7. Now, we need to set up the workspace inside the Docker container
    
 ### Downloading the Repository and Getting Dependencies
 1. Navigate to your ROS2 workspace in the terminal (e.g: `dev_ws` or `uwrt_ws`)
@@ -38,32 +26,16 @@ dependencies.
 
 In the event that you cannot use the binaries (ex. we rely on a feature that has not been released), the package source
 code should be cloned outside of our metapackage, so that our CI doesn't run linting/formatting checks on it. To do
-this, declare the source dependency in `upstream_dependencies.rosinstall`. If using unreleased features(ie. cloning 3rd
-party master branch), please pin the rosinstall entry to a commit hash, rather than the branch. `rosinstall` will take
-care of cloning the source dependencies declared in `upstream_dependencies.rosinstall`.
+this, declare the source dependency in `upstream_dependencies.repos`. If using unreleased features(ie. cloning 3rd
+party master branch), please pin the rosinstall entry to a commit hash, rather than the branch.
 
 If you need to declare dependencies that are not ROS packages, typically you can declare them as system dependencies in
 a `package.xml`. If it is an unreleased source dependency, (ex. the roboteq c++ driver we wrote), declare it in the
-`metapackage_dependencies.rosinstall`. Source code modules are still subject to the clangformat and clangtidy checks
+`metapackage_dependencies.repos`. Source code modules are still subject to the clangformat and clangtidy checks
 because they should only consist of code the team has written.
 
-## Launching the Rover!
 
-The main entry point of the rover is `rover.launch` in the `uwrt_mars_rover_bringup` package.
-
-To list the required and optional arguements of `rover.launch`:
-
-```
-roslaunch uwrt_mars_rover_bringup rover.launch --ros-args
-```
-
-Ex. To launch the rover ros stack in drivetrain only mode:
-
-```
-roslaunch uwrt_mars_rover_bringup rover.launch control_mode:=drivetrain_only 
-```
-
-### Hard Realtime Loop
+### Hard Realtime Loop (OLD)
 
 `rover.launch` makes the assumption that you are running a linux kernel will realtime capabilities (like our NVIDIA
 Jetsons where we have enabled the PREEMPT_RT kernel patch). If this assumption is not true(ex. you are running nodes on
@@ -113,7 +85,7 @@ branch.
 If you have code that's not ready to merge, but you'd still like people thoughts on it, open a
 [draft pull request](https://github.blog/2019-02-14-introducing-draft-pull-requests/).
 
-## Adding New Ros Packages
+## Adding New ROS Packages
 
 When you add new ROS packages:
 

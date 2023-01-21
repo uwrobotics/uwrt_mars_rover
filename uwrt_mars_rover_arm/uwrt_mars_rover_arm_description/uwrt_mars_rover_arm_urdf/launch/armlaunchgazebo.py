@@ -30,12 +30,12 @@ import xacro
 def generate_launch_description():
     use_sim_time = LaunchConfiguration('use_sim_time', default='true')
     gazebo = IncludeLaunchDescription(
-                PythonLaunchDescriptionSource([os.path.join(
-                    get_package_share_directory('gazebo_ros'), 'launch'), '/gazebo.launch.py']),
-             )
+        PythonLaunchDescriptionSource([os.path.join(
+            get_package_share_directory('gazebo_ros'), 'launch'), '/gazebo.launch.py']),
+    )
 
     arm_description_path = os.path.join(
-        get_package_share_directory('uwrt_mars_rover_arm_description'))
+        get_package_share_directory('uwrt_mars_rover_arm_urdf'))
 
     xacro_file = os.path.join(arm_description_path,
                               'urdf',
@@ -45,15 +45,15 @@ def generate_launch_description():
     params = {'robot_description': doc.toxml()}
 
     DeclareLaunchArgument(
-            'use_sim_time',
-            default_value='false',
-            description='Use simulation (Gazebo) clock if true')
+        'use_sim_time',
+        default_value='false',
+        description='Use simulation (Gazebo) clock if true')
 
     node_robot_state_publisher = Node(
         package='robot_state_publisher',
         executable='robot_state_publisher',
         output='screen',
-        parameters=[params,{'use_sim_time': use_sim_time}]
+        parameters=[params, {'use_sim_time': use_sim_time}]
     )
 
     spawn_entity = Node(package='gazebo_ros', executable='spawn_entity.py',
@@ -68,15 +68,16 @@ def generate_launch_description():
     )
 
     load_joint_trajectory_controller = ExecuteProcess(
-        cmd=['ros2', 'control', 'load_controller', '--set-state', 'start', 'velocity_controller'],
+        cmd=['ros2', 'control', 'load_controller',
+             '--set-state', 'start', 'velocity_controller'],
         output='screen'
     )
-    loadjointstate =  RegisterEventHandler(
-            event_handler=OnProcessExit(
-                target_action=spawn_entity,
-                on_exit=[load_joint_state_controller],
-            )
+    loadjointstate = RegisterEventHandler(
+        event_handler=OnProcessExit(
+            target_action=spawn_entity,
+            on_exit=[load_joint_state_controller],
         )
+    )
     return LaunchDescription([
         loadjointstate,
         RegisterEventHandler(

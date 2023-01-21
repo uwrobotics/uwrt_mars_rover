@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>uwrt_mars_rover_arm_description</name>
+  <name>uwrt_mars_rover_arm_urdf</name>
   <version>0.0.0</version>
   <description>TODO: Package description</description>
   <maintainer email="meshva03@gmail.com">meshva</maintainer>

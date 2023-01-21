@@ -11,7 +11,7 @@ on:
 
 env:
   ROS_DISTRO: galactic
-  PACKAGES_TO_TEST: "uwrt_mars_rover uwrt_mars_rover_arm_description"
+  PACKAGES_TO_TEST: "uwrt_mars_rover uwrt_mars_rover_arm_urdf uwrt_mars_rover_arm_urdf_moveit"
 
 
   IMAGE: "rostooling/setup-ros-docker:ubuntu-focal-ros-galactic-desktop-latest"

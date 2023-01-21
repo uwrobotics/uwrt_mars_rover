@@ -1,0 +1,384 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-4-g7f85cfe  Build Version: 1.6.7995.38578
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="uwrt_mars_rover_arm_urdf">
+  
+  <!-- <link
+    name="dummy_link">
+  </link> -->
+
+  <link
+    name="Link_1">
+    <inertial>
+      <origin
+        xyz="3.45284815353392E-18 5.9169086273473E-18 0.0311310323619364"
+        rpy="0 0 0" />
+      <mass
+        value="0.9908768618455" />
+      <inertia
+        ixx="0.00193224199273723"
+        ixy="-1.26558633720613E-19"
+        ixz="1.0274980838522E-19"
+        iyy="0.00193224199273723"
+        iyz="-1.78493428935872E-21"
+        izz="0.00277181976516411" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://uwrt_mars_rover_arm_urdf/meshes/Link_1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 0.168627450980392 0.168627450980392 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://uwrt_mars_rover_arm_urdf/meshes/Link_1.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="Link_2">
+    <inertial>
+      <origin
+        xyz="-4.33680868994202E-19 -0.0218746338869585 0.0584002783909983"
+        rpy="0 0 0" />
+      <mass
+        value="0.595046244174356" />
+      <inertia
+        ixx="0.00111228081620128"
+        ixy="6.09863722023096E-20"
+        ixz="4.40457132572236E-20"
+        iyy="0.00088455656527034"
+        iyz="5.94084456703445E-05"
+        izz="0.000786586541078942" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://uwrt_mars_rover_arm_urdf/meshes/Link_2.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 0.549019607843137 0 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://uwrt_mars_rover_arm_urdf/meshes/Link_2.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+
+  <!-- <joint
+    name="dummy_link"
+    type="continuous">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="dummy_link" />
+    <child
+      link="Link_1" />
+  </joint> -->
+
+  <joint
+    name="Joint_1"
+    type="continuous">
+    <origin
+      xyz="0 0 0.080875"
+      rpy="0 0 0.099642" />
+    <parent
+      link="Link_1" />
+    <child
+      link="Link_2" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+  <link
+    name="Link_3">
+    <inertial>
+      <origin
+        xyz="-0.0500963270913242 -0.0463282465480843 0.181541810274639"
+        rpy="0 0 0" />
+      <mass
+        value="0.917184046508576" />
+      <inertia
+        ixx="0.0138200547681186"
+        ixy="-0.000355406342064532"
+        ixz="0.00331422153353445"
+        iyy="0.0137432272963453"
+        iyz="0.00128794094233421"
+        izz="0.00272435445345874" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://uwrt_mars_rover_arm_urdf/meshes/Link_3.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 0 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://uwrt_mars_rover_arm_urdf/meshes/Link_3.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="Joint_2"
+    type="continuous">
+    <origin
+      xyz="0 0 0.0729"
+      rpy="0 0 0" />
+    <parent
+      link="Link_2" />
+    <child
+      link="Link_3" />
+    <axis
+      xyz="0 -1 0" />
+  </joint>
+  <link
+    name="Link_4">
+    <inertial>
+      <origin
+        xyz="-0.0262805457025431 -0.00581840309059909 0.089983338733109"
+        rpy="0 0 0" />
+      <mass
+        value="0.627049529568899" />
+      <inertia
+        ixx="0.000770744672626453"
+        ixy="4.64450389757546E-05"
+        ixz="0.00016982255346519"
+        iyy="0.00215655937628312"
+        iyz="-0.000130568285779622"
+        izz="0.00191645497186894" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://uwrt_mars_rover_arm_urdf/meshes/Link_4.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.341176470588235 0.83921568627451 0.411764705882353 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://uwrt_mars_rover_arm_urdf/meshes/Link_4.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="Joint_3"
+    type="continuous">
+    <origin
+      xyz="-0.1064 0 0.38559"
+      rpy="0 0.60304 0" />
+    <parent
+      link="Link_3" />
+    <child
+      link="Link_4" />
+    <axis
+      xyz="0 1 0" />
+  </joint>
+  <link
+    name="Link_5">
+    <inertial>
+      <origin
+        xyz="-0.0235787688200574 3.46944695195361E-16 -4.44089209850063E-16"
+        rpy="0 0 0" />
+      <mass
+        value="1.7525834915569" />
+      <inertia
+        ixx="0.00241236974458071"
+        ixy="-2.48011246956059E-18"
+        ixz="3.03576608295941E-18"
+        iyy="0.0178130242879475"
+        iyz="1.51788304147971E-18"
+        izz="0.0180488889834462" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://uwrt_mars_rover_arm_urdf/meshes/Link_5.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 0 0.501960784313725 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://uwrt_mars_rover_arm_urdf/meshes/Link_5.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="Joint_4"
+    type="continuous">
+    <origin
+      xyz="0.18399 -0.003 0.1"
+      rpy="0.23732 0 0" />
+    <parent
+      link="Link_4" />
+    <child
+      link="Link_5" />
+    <axis
+      xyz="1 0 0" />
+  </joint>
+  <link
+    name="Link_6">
+    <inertial>
+      <origin
+        xyz="0.00389072410438487 -1.52655665885959E-16 0.00388651691525255"
+        rpy="0 0 0" />
+      <mass
+        value="0.19600796507661" />
+      <inertia
+        ixx="0.000192825843805829"
+        ixy="7.79270311473956E-20"
+        ixz="-4.83685916802688E-05"
+        iyy="0.000123065110112774"
+        iyz="-4.06575814682064E-20"
+        izz="0.000192930506049025" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://uwrt_mars_rover_arm_urdf/meshes/Link_6.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.0392156862745098 0.490196078431373 0.709803921568627 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://uwrt_mars_rover_arm_urdf/meshes/Link_6.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="Joint_5"
+    type="continuous">
+    <origin
+      xyz="0.24141 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="Link_5" />
+    <child
+      link="Link_6" />
+    <axis
+      xyz="0 1 0" />
+  </joint>
+  <link
+    name="Gripper">
+    <inertial>
+      <origin
+        xyz="0.0752759854032844 2.77555756156289E-17 5.55111512312578E-17"
+        rpy="0 0 0" />
+      <mass
+        value="0.178504764370265" />
+      <inertia
+        ixx="0.000372353878585998"
+        ixy="1.38913403349705E-19"
+        ixz="-2.58345048912562E-19"
+        iyy="0.000297871186553816"
+        iyz="0.000147810410105188"
+        izz="0.000457931478879934" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://uwrt_mars_rover_arm_urdf/meshes/Gripper.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://uwrt_mars_rover_arm_urdf/meshes/Gripper.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="Joint_6"
+    type="continuous">
+    <origin
+      xyz="0.02049 0 0.020468"
+      rpy="0 -0.78486 0" />
+    <parent
+      link="Link_6" />
+    <child
+      link="Gripper" />
+    <axis
+      xyz="1 0 0" />
+  </joint>
+</robot>

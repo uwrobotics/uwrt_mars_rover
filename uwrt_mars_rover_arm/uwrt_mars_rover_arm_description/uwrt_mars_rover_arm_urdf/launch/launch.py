@@ -4,7 +4,8 @@ from launch.substitutions import Command, FindExecutable, LaunchConfiguration, P
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
-import os 
+import os
+
 
 def generate_launch_description():
     declared_arguments = []
@@ -12,7 +13,7 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             "description_package",
-            default_value="uwrt_mars_rover_arm_description",
+            default_value="uwrt_mars_rover_arm_urdf",
             description="package",
         )
     )
@@ -23,7 +24,7 @@ def generate_launch_description():
             description="urdf file",
         )
     )
-    
+
     description_package = LaunchConfiguration("description_package")
     description_file = LaunchConfiguration("description_file")
 
@@ -31,7 +32,8 @@ def generate_launch_description():
         [
             PathJoinSubstitution([FindExecutable(name="xacro")]),
             " ",
-            PathJoinSubstitution([FindPackageShare(description_package), "urdf", description_file]),
+            PathJoinSubstitution(
+                [FindPackageShare(description_package), "urdf", description_file]),
         ]
     )
     robot_description = {"robot_description": robot_description_content}
@@ -43,7 +45,8 @@ def generate_launch_description():
     joint_state_broadcaster_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["joint_state_broadcaster", "--controller-manager", "/controller_manager"],
+        arguments=["joint_state_broadcaster",
+                   "--controller-manager", "/controller_manager"],
     )
     joint_state_publisher_node = Node(
         package="joint_state_publisher_gui",

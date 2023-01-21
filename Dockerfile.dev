@@ -1,0 +1,16 @@
+# Start with the desktop ROS Galactic 20.04 image
+FROM osrf/ros:galactic-desktop
+
+# This dockerfile assumes you'll share your development folder from your computer over to the container,
+# so we don't do `rosdep install` for you, or clone the repository.
+
+# update everything
+RUN sudo apt update -y --no-install-recommends && sudo apt dist-upgrade -y 
+# Ensure rosinstall and rosdep are installed and up to date
+RUN sudo apt install -y python3-rosdep
+
+# build via  docker build -f .\Dockerfile.dev -t uwrt_dev_image .
+# run via docker run --name uwrt_dev_container -e DISPLAY=host.docker.internal:0.0 -it -v uwrt_dev_image
+
+
+

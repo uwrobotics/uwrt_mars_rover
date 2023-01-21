@@ -17,12 +17,10 @@ MotionPlanClient::MotionPlanClient(const rclcpp::NodeOptions & options)
 {
   client_ = create_client<uwrt_mars_rover_arm_urdf_moveit::srv::MotionPlan>("motion_plan");
 
-  //create timer just for testing purposes
-  // timer_ = create_wall_timer(2s, std::bind(&MotionPlanClient::on_timer, this));
-  on_timer();
+  execute();
 }
 
-void MotionPlanClient::on_timer()
+void MotionPlanClient::execute()
 {
   if (!client_->wait_for_service(1s)) {
     if (!rclcpp::ok()) {

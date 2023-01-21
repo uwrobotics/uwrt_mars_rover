@@ -39,13 +39,12 @@ public:
   explicit MotionPlanClient(const rclcpp::NodeOptions & options);
 
 protected:
-  void on_timer();
+  void execute();
 
 private:
   rclcpp::Client<uwrt_mars_rover_arm_urdf_moveit::srv::MotionPlan>::SharedPtr client_;
-  rclcpp::TimerBase::SharedPtr timer_;
 };
 
-}  // namespace uwrt_motion_planning
+}
 
-#endif  // COMPOSITION__CLIENT_COMPONENT_HPP_
+#endif

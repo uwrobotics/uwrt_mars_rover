@@ -25,7 +25,7 @@ private:
             std::shared_ptr<uwrt_mars_rover_arm_urdf_moveit::srv::MotionPlan::Response> response);
 };
 
-}  // namespace uwrt_motion_planning
+}
 
 #endif
 

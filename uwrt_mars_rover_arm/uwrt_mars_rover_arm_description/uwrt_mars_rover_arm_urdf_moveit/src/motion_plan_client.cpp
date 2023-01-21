@@ -4,29 +4,23 @@
 #include <iostream>
 #include <memory>
 
-#include "rclcpp/rclcpp.hpp"
 #include "geometry_msgs/msg/pose.hpp"
+#include "rclcpp/rclcpp.hpp"
 
 using namespace std::chrono_literals;
 
-namespace uwrt_motion_planning
-{
+namespace uwrt_motion_planning {
 
-MotionPlanClient::MotionPlanClient(const rclcpp::NodeOptions & options)
-: Node("Client", options)
-{
+MotionPlanClient::MotionPlanClient(const rclcpp::NodeOptions& options) : Node("Client", options) {
   client_ = create_client<uwrt_mars_rover_arm_urdf_moveit::srv::MotionPlan>("motion_plan");
 
   execute();
 }
 
-void MotionPlanClient::execute()
-{
+void MotionPlanClient::execute() {
   if (!client_->wait_for_service(1s)) {
     if (!rclcpp::ok()) {
-      RCLCPP_ERROR(
-        this->get_logger(),
-        "Interrupted while waiting for the service. Exiting.");
+      RCLCPP_ERROR(this->get_logger(), "Interrupted while waiting for the service. Exiting.");
       return;
     }
     RCLCPP_INFO(this->get_logger(), "Service not available after waiting");
@@ -42,15 +36,14 @@ void MotionPlanClient::execute()
   auto request = std::make_shared<uwrt_mars_rover_arm_urdf_moveit::srv::MotionPlan::Request>();
   request->pose = target;
 
-  using ServiceResponseFuture =
-    rclcpp::Client<uwrt_mars_rover_arm_urdf_moveit::srv::MotionPlan>::SharedFuture;
+  using ServiceResponseFuture = rclcpp::Client<uwrt_mars_rover_arm_urdf_moveit::srv::MotionPlan>::SharedFuture;
   auto response_received_callback = [this](ServiceResponseFuture future) {
-      RCLCPP_INFO(this->get_logger(), "Got result: [%d]", future.get()->success);
-    };
+    RCLCPP_INFO(this->get_logger(), "Got result: [%d]", future.get()->success);
+  };
   auto future_result = client_->async_send_request(request, response_received_callback);
 }
 
-}
+}  // namespace uwrt_motion_planning
 
 #include "rclcpp_components/register_node_macro.hpp"
 

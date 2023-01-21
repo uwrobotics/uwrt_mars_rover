@@ -3,15 +3,19 @@ Launch Module for visualizing drivetrain in rviz.
 
 Allows for manipulation of joints via joint_state_publisher_gui if gui arg is set.
 """
-from ament_index_python.packages import get_package_share_path
+from ament_index_python.packages import get_package_share_path, get_package_share_directory
 
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument
+from launch.actions import DeclareLaunchArgument, ExecuteProcess, IncludeLaunchDescription, RegisterEventHandler
 from launch.conditions import IfCondition, UnlessCondition
 from launch.substitutions import Command, LaunchConfiguration
-
+from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch.event_handlers import OnProcessExit
 from launch_ros.actions import Node
 from launch_ros.parameter_descriptions import ParameterValue
+import os
+from launch_ros.substitutions import FindPackageShare
+import xacro
 
 
 def generate_launch_description():
@@ -36,11 +40,8 @@ def generate_launch_description():
                                                  description='Absolute path to robot urdf file')]
     declared_arguments += [DeclareLaunchArgument(name='rvizconfig', default_value=str(default_rviz_config_path),
                                                  description='Absolute path to rviz config file')]
-
-    declared_arguments+=[    DeclareLaunchArgument(
-            'use_sim_time',
-            default_value='false',
-            description='Use simulation (Gazebo) clock if true')]
+    declared_arguments+=[DeclareLaunchArgument(name='use_sim_time', default_value='false',
+                                                 description='Use simulation (Gazebo) clock if true')]
     use_sim_time = LaunchConfiguration('use_sim_time', default='true')
 
     # Nodes
@@ -72,17 +73,42 @@ def generate_launch_description():
         output='screen',
         arguments=['-d', LaunchConfiguration('rvizconfig')],
     )]
-    gazebo = IncludeLaunchDescription(
-                PythonLaunchDescriptionSource([os.path.join(
-                    get_package_share_directory('gazebo_ros'), 'launch'), '/gazebo.launch.py']),
+    gazebo_starter = [ExecuteProcess(
+            cmd=['gazebo', '--verbose', '-s', 'libgazebo_ros_factory.so'],
+            output='screen')]
+    # gazebo = IncludeLaunchDescription(
+    #             PythonLaunchDescriptionSource([os.path.join(
+    #                 get_package_share_directory('gazebo_ros'), 'launch'), '/gazebo.launch.py']),
+    #     )
+    spawn_entity = Node(package='gazebo_ros', executable='spawn_entity.py', name='urdf_spawner',
+                        arguments=['-topic', 'robot_description', '-entity', 'drivetrain'], output='screen'
+    )
+
+    load_joint_state_controller = ExecuteProcess(
+        cmd=['ros2', 'control', 'load_controller', '--set-state', 'start',
+             'joint_state_broadcaster'],
+        output='screen'
+    )
+
+    load_joint_trajectory_controller = ExecuteProcess(
+        cmd=['ros2', 'control', 'load_controller', '--set-state', 'start', 'velocity_controller'],
+        output='screen'
+    )
+    loadjointstate =  RegisterEventHandler(
+            event_handler=OnProcessExit(
+                target_action=spawn_entity,
+                on_exit=[load_joint_state_controller],
+            )
         )
-    spawn_entity = Node(package='gazebo_ros', executable='spawn_entity.py',
-                        arguments=['-topic', 'robot_description',
-                                   '-entity', 'drivetrain'],
-    output='screen')
+    loadtrajectorycontroller =  RegisterEventHandler(
+            event_handler=OnProcessExit(
+                target_action=load_joint_state_controller,
+                on_exit=[load_joint_trajectory_controller],
+            )
+        )
+    ros2_control_nodes = [loadjointstate,loadtrajectorycontroller]
+
+    nodes+=gazebo_starter + [spawn_entity]
 
 
-    nodes+=gazebo
-
-
-    return LaunchDescription(declared_arguments + nodes)
+    return LaunchDescription(declared_arguments + nodes + ros2_control_nodes)

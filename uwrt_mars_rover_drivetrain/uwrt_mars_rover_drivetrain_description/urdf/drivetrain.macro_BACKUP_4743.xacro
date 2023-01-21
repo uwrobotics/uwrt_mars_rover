@@ -91,6 +91,7 @@
     </link>
   </xacro:macro>
 
+<<<<<<< HEAD
 
   <!-- drivetrain macro only for the simulation stuff -->
   <xacro:macro name="drivetrain_actuator_gazebo" params="prefix suffix">
@@ -108,6 +109,9 @@
   <xacro:macro name="drivetrain_actuator" params="prefix suffix can_id">
     <!-- convert the can_id argument to an xacro property -->
     <xacro:property name="can_id_prop" value="${can_id}"/>
+=======
+  <xacro:macro name="drivetrain_actuator" params="prefix suffix sim_gazebo_classic:=^|false">
+>>>>>>> a49a103... add gazebo launch
     <ros2_control name="${prefix}_${suffix}_wheel_actuator" type="actuator">
       <hardware>
         <xacro:if value="${sim_gazebo_classic}">
@@ -115,8 +119,13 @@
         </xacro:if>
         <xacro:unless value="${sim_gazebo_classic}">
         <plugin>uwrt_mars_rover_drivetrain_hw/UWRTMarsRoverDrivetrainHWActuatorInterface</plugin>
+<<<<<<< HEAD
         <param name="can_id">${can_id_prop}</param>
         <!-- TODO: CAN interface?-->
+=======
+        <!-- TODO: CAN interface and Odrive id?-->
+        </xacro:unless>
+>>>>>>> a49a103... add gazebo launch
       </hardware>
       <joint name="${prefix}_${suffix}_wheel_joint">
         <command_interface name="velocity">

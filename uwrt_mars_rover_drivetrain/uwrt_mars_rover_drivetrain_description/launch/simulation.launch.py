@@ -81,7 +81,7 @@ def generate_launch_description():
     #                 get_package_share_directory('gazebo_ros'), 'launch'), '/gazebo.launch.py']),
     #     )
     spawn_entity = Node(package='gazebo_ros', executable='spawn_entity.py', name='urdf_spawner',
-                        arguments=['-topic', 'robot_description', '-entity', 'drivetrain'], output='screen'
+                        arguments=['-topic', 'robot_description', '-entity', 'drivetrain', '-x', '0', '-y', '0', '-z', '0'], output='screen'
     )
 
     load_joint_state_controller = ExecuteProcess(
@@ -91,7 +91,7 @@ def generate_launch_description():
     )
 
     load_joint_trajectory_controller = ExecuteProcess(
-        cmd=['ros2', 'control', 'load_controller', '--set-state', 'start', 'velocity_controller'],
+        cmd=['ros2', 'control', 'load_controller', '--set-state', 'start', 'differential_drivetrain_controller'],
         output='screen'
     )
     loadjointstate =  RegisterEventHandler(

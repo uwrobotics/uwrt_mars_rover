@@ -71,7 +71,7 @@ def generate_launch_description():
     drivetrain_controller_spawner = Node(
         package='controller_manager',
         executable='spawner',
-        arguments=['differential_drivetrain_controller', '-c', '/controller_manager'],
+        arguments=['diff_drive_controller', '-c', '/controller_manager'],
     )
     nodes += [RegisterEventHandler(
         event_handler=OnProcessExit(

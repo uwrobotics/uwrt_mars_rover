@@ -3,8 +3,9 @@
 
 #include <rclcpp/rclcpp.hpp>
 #include <uwrt_mars_rover_vision/visibility.h>
-#include <geometry_msgs/msg/Pose.h>
-#include <sensor_msgs/msg/Image.h>
+#include <geometry_msgs/msg/pose.hpp>
+#include <sensor_msgs/msg/image.hpp>
+#include <sensor_msgs/msg/camera_info.hpp>
 #include "image_transport/image_transport.hpp"
 #include "opencv2/highgui/highgui.hpp"
 
@@ -17,42 +18,48 @@
 
 namespace uwrt_autonomy {
 
-class TargetTracker {
+class TargetTracker: public rclcpp::Node {
 
 public:
     TargetTracker(const rclcpp::NodeOptions &options);
 
 private:
+    // create the node for image transfer to use
+    // rclcpp::Node::SharedPtr node_;
     // use image transport for camera subscriber
-    image_transport::ImageTransport it_;
+    // image_transport::ImageTransport it_;
     // zed2 image topic subscriber
     image_transport::Subscriber camera_sub_;
     // camera subsciber image callback
     void imageCallback(const sensor_msgs::msg::Image::ConstSharedPtr& msg);
     
     // pose publisher for aruco tags
-    rclcpp::Publisher<geometry_msgs::Pose>::SharedPtr aruco_pose_pub_;
+    rclcpp::Publisher<geometry_msgs::msg::Pose>::SharedPtr aruco_pose_pub_;
+
+    // make subscriber to get the camera info
+    rclcpp::Subscription<sensor_msgs::msg::CameraInfo>::SharedPtr camera_info_sub_;
+    void camInfoCallback(const sensor_msgs::msg::CameraInfo::ConstSharedPtr& info);
 
     // zed calibration stuff
     cv::Mat dist_coefficients_;
     cv::Mat intrinsic_calib_matrix_;
 
     // vectors for ARUCO tag poses (max of 4 aruco codes identified at a time)
-    std::vector<cv::Vec3d> rvecs_(4, 0.0), t_vecs_(4, 0.0);
+    std::vector<cv::Vec3d> rvecs_{std::vector<cv::Vec3d>(4, 0.0)}, tvecs_{std::vector<cv::Vec3d>(4, 0.0)};
 
     // aruco detector things
     cv::Ptr<cv::aruco::DetectorParameters> params_;
     cv::Ptr<cv::aruco::Dictionary> dictionary_;
     // location of corners in object's reference frame 
     // NOTE: below assumes fixed size for aruco tags
-    cv::Mat obj_points_(4, 1, CV_32FC3);
+    cv::Mat obj_points_{cv::Mat(4, 1, CV_32FC3)};
 
     // marker length in meters for ARUCO code. Be sure to change it if the marker length changes
     // TODO: change this into a configurable parameter
     float ARUCO_MARKER_LEN = 18.4 / 100;
 
 
-}
+};
  
 }
 

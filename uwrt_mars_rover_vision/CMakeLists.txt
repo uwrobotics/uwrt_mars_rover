@@ -10,6 +10,43 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
+
+# find_package(ZED 3 REQUIRED)
+# find_package(CUDA ${ZED_CUDA_VERSION} EXACT REQUIRED)
+
+
+# # ZED 3 reqs ----------------------------
+# # IF(NOT WIN32)
+# #     add_definitions(-Wno-format-extra-args)
+# #     SET(SPECIAL_OS_LIBS "pthread" "X11")
+# # ENDIF()
+
+# include_directories(${CUDA_INCLUDE_DIRS})
+# include_directories(${ZED_INCLUDE_DIRS})
+# # include_directories(${OpenCV_INCLUDE_DIRS})
+# include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+
+# link_directories(${ZED_LIBRARY_DIR})
+# # link_directories(${OpenCV_LIBRARY_DIRS})
+# link_directories(${CUDA_LIBRARY_DIRS})
+
+# FILE(GLOB_RECURSE SRC_FILES src/*.cpp)
+# FILE(GLOB_RECURSE HDR_FILES include/*.hpp)
+
+# ADD_EXECUTABLE(${PROJECT_NAME} ${HDR_FILES} ${SRC_FILES})
+# add_definitions(-std=c++14 -O3)
+
+# # if (LINK_SHARED_ZED)
+# #     SET(ZED_LIBS ${ZED_LIBRARIES} ${CUDA_CUDA_LIBRARY} ${CUDA_CUDART_LIBRARY})
+# # else()
+# #     SET(ZED_LIBS ${ZED_STATIC_LIBRARIES} ${CUDA_CUDA_LIBRARY} ${CUDA_LIBRARY})
+# # endif()
+
+# TARGET_LINK_LIBRARIES(${PROJECT_NAME} ${ZED_LIBS} )
+# # ${OpenCV_LIBRARIES})
+# # end zed 3 reqs
+
+
 # find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
@@ -18,10 +55,10 @@ find_package(rclcpp_components REQUIRED)
 find_package(cv_bridge REQUIRED)
 find_package(image_transport REQUIRED)
 find_package(OpenCV REQUIRED COMPONENTS highgui imgcodecs imgproc videoio)
+find_package(geometry_msgs REQUIRED)
+find_package(sensor_msgs REQUIRED)
 # add custom messages and services
 find_package(rosidl_default_generators REQUIRED)
-# add ros joy package
-find_package(sensor_msgs REQUIRED)
 
 # set(msg_files
 # 	"msg/XboxController.msg"	
@@ -41,35 +78,27 @@ include_directories(include)
 set(node_plugins "")
 
 # add the aruco target tracker component
-# add_library(xbox_controller SHARED 
-# 	src/uwrt_mars_rover_xbox_controller.cpp)
-# target_compile_definitions(xbox_controller
-# 	PRIVATE "UWRT_MARS_ROVER_XBOX_CONTROLLER_DLL")
-# ament_target_dependencies(xbox_controller
-# 	"rclcpp"
-# 	"rclcpp_components"
-# 	"sensor_msgs")
-# # build ROS custom messages
-# rosidl_target_interfaces(xbox_controller ${PROJECT_NAME} "rosidl_typesupport_cpp")
-# rclcpp_components_register_nodes(xbox_controller "uwrt_xbox::UWRTXboxController")
-# set(node_plugins "${node_plugins}uwrt_xbox::UWRTXboxController;$<TARGET_FILE:xbox_controller>\n")
-
-
-
-# if(BUILD_TESTING)
-#   find_package(ament_lint_auto REQUIRED)
-#   # the following line skips the linter which checks for copyrights
-#   # uncomment the line when a copyright and license is not present in all source files
-#   #set(ament_cmake_copyright_FOUND TRUE)
-#   # the following line skips cpplint (only works in a git repo)
-#   # uncomment the line when this package is not in a git repo
-#   #set(ament_cmake_cpplint_FOUND TRUE)
-#   ament_lint_auto_find_test_dependencies()
-# endif()
+add_library(aruco_tracker SHARED 
+	src/aruco_target_tracker.cpp)
+target_compile_definitions(aruco_tracker
+	PRIVATE "UWRT_MARS_ROVER_VISION_DLL")
+ament_target_dependencies(aruco_tracker
+	"rclcpp"
+	"rclcpp_components"
+	"sensor_msgs"
+	"cv_bridge"
+	"image_transport"
+	"geometry_msgs"
+	# "opencv_"
+	)
+# build ROS custom messages -> uncomment later
+# rosidl_target_interfaces(aruco_tracker ${PROJECT_NAME} "rosidl_typesupport_cpp")
+# rclcpp_components_register_nodes(aruco_tracker "uwrt_autonomy::TargetTracker")
+# set(node_plugins "${node_plugins}uwrt_autonomy::TargetTracker;$<TARGET_FILE:aruco_tracker>\n")
 
 # tell where to put binaries
 install(TARGETS
-#   xbox_controller
+  aruco_tracker
 	ARCHIVE DESTINATION lib
 	LIBRARY DESTINATION lib 
 	RUNTIME DESTINATION bin)

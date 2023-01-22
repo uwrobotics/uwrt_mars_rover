@@ -80,8 +80,9 @@ def generate_launch_description():
     #             PythonLaunchDescriptionSource([os.path.join(
     #                 get_package_share_directory('gazebo_ros'), 'launch'), '/gazebo.launch.py']),
     #     )
+    # https://github.com/ros-simulation/gazebo_ros_pkgs/wiki/ROS-2-Migration:-Spawn-and-delete
     spawn_entity = Node(package='gazebo_ros', executable='spawn_entity.py', name='urdf_spawner',
-                        arguments=['-topic', 'robot_description', '-entity', 'drivetrain', '-x', '0', '-y', '0', '-z', '0'], output='screen'
+                        arguments=['-topic', 'robot_description', '-entity', 'drivetrain', '-x', '0.5', '-y', '0.5', '-z', '0.5', '-R','0', '-Y', '0', '-P','0'], output='screen'
     )
 
     load_joint_state_controller = ExecuteProcess(

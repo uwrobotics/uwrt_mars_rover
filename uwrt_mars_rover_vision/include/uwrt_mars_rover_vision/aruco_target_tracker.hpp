@@ -38,7 +38,8 @@ private:
 
     // make subscriber to get the camera info
     rclcpp::Subscription<sensor_msgs::msg::CameraInfo>::SharedPtr camera_info_sub_;
-    void camInfoCallback(const sensor_msgs::msg::CameraInfo::ConstSharedPtr& info);
+    UWRT_MARS_ROVER_VISION_LOCAL
+    void camInfoCallback(const sensor_msgs::msg::CameraInfo::SharedPtr info);
 
     // zed calibration stuff
     cv::Mat dist_coefficients_;

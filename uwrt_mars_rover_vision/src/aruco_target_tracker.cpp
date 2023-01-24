@@ -17,36 +17,22 @@ TargetTracker::TargetTracker(const rclcpp::NodeOptions& options) : Node("target_
   // std::bind(&TargetTracker::imageCallback, this , std::placeholders::_1)); 
   
   aruco_pose_pub_ = create_publisher<geometry_msgs::msg::Pose>("/aruco_pose", 10);
+  // todo: figure out how to only call subscription once to not constantly read these messages
   camera_info_sub_ = create_subscription<sensor_msgs::msg::CameraInfo>(
       "/zed2/zed_node/left/camera_info", 10, std::bind(&TargetTracker::camInfoCallback, this, std::placeholders::_1));
+  
 
-  // get zed camera params
-  // sl::Camera zed;
-  // sl::CalibrationParameters calibration_params =
-  // zed.getCameraInformation().camera_configuration.calibration_parameters; int param_num = 0; for (const double
-  // &disto_param: calibration_params.left_cam.disto)
-  // {
-  //     dist_coefficients_.at<double>(0, param_num) = disto_param;
-  //     param_num++;
-  // }
-  // intrinsic_calib_matrix_ = (cv::Mat_<float>(3,3) <<
-  //     calibration_params.left_cam.fx, 0, calibration_params.left_cam.cx,
-  //     0, calibration_params.left_cam.fy, calibration_params.left_cam.cy,
-  //     0, 0, 1);
+  // do aruco setup stuff
+  obj_points_.ptr<cv::Vec3f>(0)[0] = cv::Vec3f(-ARUCO_MARKER_LEN/2.f, ARUCO_MARKER_LEN/2.f, 0);
+  obj_points_.ptr<cv::Vec3f>(0)[1] = cv::Vec3f(ARUCO_MARKER_LEN/2.f, ARUCO_MARKER_LEN/2.f, 0);
+  obj_points_.ptr<cv::Vec3f>(0)[2] = cv::Vec3f(ARUCO_MARKER_LEN/2.f, -ARUCO_MARKER_LEN/2.f, 0);
+  obj_points_.ptr<cv::Vec3f>(0)[3] = cv::Vec3f(-ARUCO_MARKER_LEN/2.f, -ARUCO_MARKER_LEN/2.f, 0);
 
-  // // do aruco setup stuff
-  // obj_points_.ptr<cv::Vec3f>(0)[0] = cv::Vec3f(-ARUCO_MARKER_LEN/2.f, ARUCO_MARKER_LEN/2.f, 0);
-  // obj_points_.ptr<cv::Vec3f>(0)[1] = cv::Vec3f(ARUCO_MARKER_LEN/2.f, ARUCO_MARKER_LEN/2.f, 0);
-  // obj_points_.ptr<cv::Vec3f>(0)[2] = cv::Vec3f(ARUCO_MARKER_LEN/2.f, -ARUCO_MARKER_LEN/2.f, 0);
-  // obj_points_.ptr<cv::Vec3f>(0)[3] = cv::Vec3f(-ARUCO_MARKER_LEN/2.f, -ARUCO_MARKER_LEN/2.f, 0);
+  // TODO: potentially play with detector params
+  params_ = cv::aruco::DetectorParameters::create();
+  // TODO: ensure the below predefined dictionary is the correct one
+  dictionary_ = cv::aruco::getPredefinedDictionary(cv::aruco::DICT_4X4_50);
 
-  // // TODO: potentially play with detector params
-  // params_ = cv::aruco::DetectorParameters::create();
-  // // TODO: ensure the below predefined dictionary is the correct one
-  // dictionary_ = cv::aruco::getPredefinedDictionary(cv::aruco::DICT_4X4_50);
-
-  // // make sure this line doesnt mess stuff up
-  // zed.close();
 }
 
 void TargetTracker::imageCallback(const sensor_msgs::msg::Image::ConstSharedPtr& msg) {
@@ -94,12 +80,23 @@ void TargetTracker::imageCallback(const sensor_msgs::msg::Image::ConstSharedPtr&
   // investigate translation and rotation vector to point (translation vector) and quaternion
 }
 
-void TargetTracker::camInfoCallback(const sensor_msgs::msg::CameraInfo::ConstSharedPtr& info) {
-  (void)info;
-  // RCLCPP_INFO_STREAM(this->get_logger(), "Cam Info: " << info->D << " | " << info->K);
+void TargetTracker::camInfoCallback(const sensor_msgs::msg::CameraInfo::SharedPtr info) 
+{
+  // (void)info;
+  int param_num = 0; 
+  for (const double &disto_param: info->d)
+  {
+      dist_coefficients_.at<double>(0, param_num) = disto_param;
+      param_num++;
+  }
+  intrinsic_calib_matrix_ = (cv::Mat_<float>(3,3) <<
+      info->k[0], 0, info->k[2],
+      0, info->k[4], info->k[5],
+      0, 0, 1);
+  RCLCPP_DEBUG_STREAM(this->get_logger(), "fx: " << info->k[0] << " | cx: " << info->k[2] << " | fy: " << info->k[4] << " | cy: " << info->k[5]);
 }
 
 }  // namespace uwrt_autonomy
 
 #include <rclcpp_components/register_node_macro.hpp>
-// RCLCPP_COMPONENTS_REGISTER_NODE(uwrt_autonomy::)
+RCLCPP_COMPONENTS_REGISTER_NODE(uwrt_autonomy::TargetTracker)

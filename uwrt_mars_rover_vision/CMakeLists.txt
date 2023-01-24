@@ -69,7 +69,7 @@ find_package(rosidl_default_generators REQUIRED)
 # 	DEPENDENCIES std_msgs
 # )
 
-# ament_export_dependencies(rosidl_default_runtime)
+ament_export_dependencies(rosidl_default_runtime)
 
 #include the 'include' directory
 include_directories(include)
@@ -93,8 +93,8 @@ ament_target_dependencies(aruco_tracker
 	)
 # build ROS custom messages -> uncomment later
 # rosidl_target_interfaces(aruco_tracker ${PROJECT_NAME} "rosidl_typesupport_cpp")
-# rclcpp_components_register_nodes(aruco_tracker "uwrt_autonomy::TargetTracker")
-# set(node_plugins "${node_plugins}uwrt_autonomy::TargetTracker;$<TARGET_FILE:aruco_tracker>\n")
+rclcpp_components_register_nodes(aruco_tracker "uwrt_autonomy::TargetTracker")
+set(node_plugins "${node_plugins}uwrt_autonomy::TargetTracker;$<TARGET_FILE:aruco_tracker>\n")
 
 # tell where to put binaries
 install(TARGETS

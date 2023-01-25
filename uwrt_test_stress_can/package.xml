@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package format="2">
+    <name>uwrt_test_stress_can</name>
+    <version>0.0.0</version>
+    <description>Package for testing new mechanism of sending CAN messages</description>
+
+    <maintainer email="dmupadhyay12@gmail.com">Dhruv Upadhyay</maintainer>
+
+    <license>MIT</license>
+
+    <buildtool_depend>catkin</buildtool_depend>
+
+    <depend>std_msgs</depend>
+
+    <build_depend>message_generation</build_depend>
+
+    <exec_depend>message_runtime</exec_depend>
+
+</package>

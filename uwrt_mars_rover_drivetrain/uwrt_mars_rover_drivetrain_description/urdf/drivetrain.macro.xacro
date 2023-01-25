@@ -42,7 +42,15 @@
       <xacro:insert_block name="identical_blocks"/>
     </collision>
   </xacro:macro>
-
+  
+  <xacro:macro name="box_inertia" params="m w h d">
+    <inertial>
+      <origin xyz="0 0 0" rpy="${pi/2} 0 ${pi/2}"/>      
+      <mass value="${m}"/>
+      <inertia ixx="${(m/12) * (h*h + d*d)}" ixy="0.0" ixz="0.0" iyy="${(m/12) * (w*w + d*d)}" iyz="0.0" izz="${(m/12) * (w*w + h*h)}"/>
+    </inertial>
+  </xacro:macro>
+  
   <xacro:macro name="wheel" params="prefix suffix parent_link reflect wheel_diameter:=^ wheel_width:=^ wheel_mass:=^ wheelbase_length:=^ x_position" >
     <joint name="${prefix}_${suffix}_wheel_joint" type="continuous">
       <axis xyz="0 1 0" rpy="0 0 0" />

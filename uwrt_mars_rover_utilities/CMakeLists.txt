@@ -57,6 +57,16 @@ install(TARGETS
     RUNTIME DESTINATION lib/${PROJECT_NAME}
     ARCHIVE DESTINATION lib/${PROJECT_NAME}
     LIBRARY DESTINATION lib/${PROJECT_NAME}
+    INCLUDES DESTINATION include
+)
+
+install(
+    FILES 
+        include/uwrt_mars_rover_utilities/uwrt_can.h
+    DESTINATION
+        include/uwrt_mars_rover_utilities
+    COMPONENT
+        Devel
 )
 
 ament_export_include_directories(

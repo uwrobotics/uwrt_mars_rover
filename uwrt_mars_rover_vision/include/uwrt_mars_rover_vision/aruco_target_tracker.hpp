@@ -3,7 +3,7 @@
 
 #include <rclcpp/rclcpp.hpp>
 #include <uwrt_mars_rover_vision/visibility.h>
-#include <geometry_msgs/msg/pose.hpp>
+#include <geometry_msgs/msg/pose_stamped.hpp>
 #include <sensor_msgs/msg/image.hpp>
 #include <sensor_msgs/msg/camera_info.hpp>
 #include "image_transport/image_transport.hpp"
@@ -24,25 +24,23 @@ public:
     TargetTracker(const rclcpp::NodeOptions &options);
 
 private:
-    // create the node for image transfer to use
-    // rclcpp::Node::SharedPtr node_;
-    // use image transport for camera subscriber
-    // image_transport::ImageTransport it_;
     // zed2 image topic subscriber
     image_transport::Subscriber camera_sub_;
     // camera subsciber image callback
     void imageCallback(const sensor_msgs::msg::Image::ConstSharedPtr& msg);
     
     // pose publisher for aruco tags
-    rclcpp::Publisher<geometry_msgs::msg::Pose>::SharedPtr aruco_pose_pub_;
+    rclcpp::Publisher<geometry_msgs::msg::PoseStamped>::SharedPtr aruco_pose_pub_;
 
     // make subscriber to get the camera info
     rclcpp::Subscription<sensor_msgs::msg::CameraInfo>::SharedPtr camera_info_sub_;
-    UWRT_MARS_ROVER_VISION_LOCAL
     void camInfoCallback(const sensor_msgs::msg::CameraInfo::SharedPtr info);
 
+    // convert translation and rotation vector to pose message
+    void toPoseMsg(cv::Vec3d rvec, cv::Vec3d tvec, geometry_msgs::msg::Pose& pose_msg);
+
     // zed calibration stuff
-    cv::Mat dist_coefficients_;
+    cv::Mat dist_coefficients_ = cv::Mat::zeros(1, 5, CV_32FC1);
     cv::Mat intrinsic_calib_matrix_;
 
     // vectors for ARUCO tag poses (max of 4 aruco codes identified at a time)
@@ -58,8 +56,6 @@ private:
     // marker length in meters for ARUCO code. Be sure to change it if the marker length changes
     // TODO: change this into a configurable parameter
     float ARUCO_MARKER_LEN = 18.4 / 100;
-
-
 };
  
 }

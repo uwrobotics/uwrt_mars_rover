@@ -2,49 +2,20 @@
 
 ![CI](https://github.com/uwrobotics/uwrt_mars_rover/workflows/CI/badge.svg)
 
-**NOTE: Some of the info in this README is out of date and WIP because of our transition to ROS2. Feel free to submit PRs to update.**
 ## Repository Setup
+   
+### Downloading the Repository and Getting Dependencies
+1. Navigate to your ROS2 workspace in the terminal (e.g: `dev_ws` or `uwrt_ws`)
+2. Create a `src` directory if you haven't already: `mkdir -p dev_ws/src`.
+3. Navigate inside of your `src` directory: `cd src`
+4. Clone the repository into your `src` directory: `git clone git@github.com:uwrobotics/uwrt_mars_rover.git`
+5. Update your system before continuing: `sudo apt update -y --no-install-recommends && sudo apt dist-upgrade -y`
+6. Install `rosdep`, the ROS dependency manager: `sudo apt install -y python3-rosdep`
+7. Download the repository's upstream dependencies: `vcs import --input uwrt_mars_rover/common_upstream_dependencies.repos`
+8. Navigate back to the root of your workspace, and install all dependencies for your ROS packages: `RUN rosdep install --from-paths src -y --ignore-src`
 
-To get started with development, clone this repo into the `src` directory of your `catkin` workspace. Use `rosinstall`
-and `rosdep` to fetch any source or binary dependencies.
+You can re-navigate to the root of your workspace at any time and rerun #8 to update your ROS packages' dependencies.
 
-```bash
-# Ensure rosinstall and rosdep are installed and up to date
-sudo apt install python-rosinstall python-rosdep
-sudo rosdep init
-rosdep update
-
-# Clone repo
-cd <catkin workspace location>/src
-git clone https://github.com/uwrobotics/uwrt_mars_rover.git
-
-# Install upstream source dependencies
-rosinstall --catkin . uwrt_mars_rover/upstream_dependencies.rosinstall
-
-# Install metapackage source dependencies
-rosinstall --catkin . uwrt_mars_rover/metapackage_dependencies.rosinstall
-
-# Install all binary dependencies
-rosdep install --from-paths . --ignore-src -r -y
-```
-
-If you're setting up the repository on the Nvidia Jetson, you also need to install the arm64 upstream dependencies:
-```bash
-# Install upstream source dependencies for arm64
-rosinstall --catkin . uwrt_mars_rover/arm64_upstream_dependencies.rosinstall
-```
-
-## Updating Dependencies
-Commands to update dependencies:
-```bash
-cd <catkin workspace location>/src
-rosinstall --catkin . uwrt_mars_rover/upstream_dependencies.rosinstall uwrt_mars_rover/metapackage_dependencies.rosinstall
-rosdep install --from-paths . --ignore-src -r -y
-```
-
-**Note:** If there have been certain changes to the workspace (ex. if a refactor moved one of the metapackage deps to a
-different folder), you may need to delete the existing `.rosinstall` that's found in `<catkin workspace location>/src`
-before you run the above commands.
 
 ## Adding Dependencies
 
@@ -55,32 +26,16 @@ dependencies.
 
 In the event that you cannot use the binaries (ex. we rely on a feature that has not been released), the package source
 code should be cloned outside of our metapackage, so that our CI doesn't run linting/formatting checks on it. To do
-this, declare the source dependency in `upstream_dependencies.rosinstall`. If using unreleased features(ie. cloning 3rd
-party master branch), please pin the rosinstall entry to a commit hash, rather than the branch. `rosinstall` will take
-care of cloning the source dependencies declared in `upstream_dependencies.rosinstall`.
+this, declare the source dependency in `upstream_dependencies.repos`. If using unreleased features(ie. cloning 3rd
+party master branch), please pin the rosinstall entry to a commit hash, rather than the branch.
 
 If you need to declare dependencies that are not ROS packages, typically you can declare them as system dependencies in
 a `package.xml`. If it is an unreleased source dependency, (ex. the roboteq c++ driver we wrote), declare it in the
-`metapackage_dependencies.rosinstall`. Source code modules are still subject to the clangformat and clangtidy checks
+`metapackage_dependencies.repos`. Source code modules are still subject to the clangformat and clangtidy checks
 because they should only consist of code the team has written.
 
-## Launching the Rover!
 
-The main entry point of the rover is `rover.launch` in the `uwrt_mars_rover_bringup` package.
-
-To list the required and optional arguements of `rover.launch`:
-
-```
-roslaunch uwrt_mars_rover_bringup rover.launch --ros-args
-```
-
-Ex. To launch the rover ros stack in drivetrain only mode:
-
-```
-roslaunch uwrt_mars_rover_bringup rover.launch control_mode:=drivetrain_only 
-```
-
-### Hard Realtime Loop
+### Hard Realtime Loop (OLD)
 
 `rover.launch` makes the assumption that you are running a linux kernel will realtime capabilities (like our NVIDIA
 Jetsons where we have enabled the PREEMPT_RT kernel patch). If this assumption is not true(ex. you are running nodes on
@@ -130,7 +85,7 @@ branch.
 If you have code that's not ready to merge, but you'd still like people thoughts on it, open a
 [draft pull request](https://github.blog/2019-02-14-introducing-draft-pull-requests/).
 
-## Adding New Ros Packages
+## Adding New ROS Packages
 
 When you add new ROS packages:
 

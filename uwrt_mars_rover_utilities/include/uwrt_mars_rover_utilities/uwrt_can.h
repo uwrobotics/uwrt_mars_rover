@@ -12,6 +12,8 @@
 #include <thread>
 #include <vector>
 
+#include "uwrt_mars_rover_hw_bridge/can/CANMsgMap.h"
+
 // #include "uwrt_params.h"
 #include "rclcpp/logger.hpp"
 
@@ -55,7 +57,7 @@ class UWRTCANWrapper {
   int rcv_endianness_{__BYTE_ORDER__};
   std::thread read_thread_;
   volatile bool read_thread_running_{};
-  std::map<canid_t, struct can_frame> recv_map_;
+  HWBRIDGE::CANMsgMap *recv_map_;
   std::timed_mutex recv_map_mtx_;
   std::chrono::milliseconds thread_sleep_millis_{};
   static constexpr std::chrono::milliseconds MUTEX_LOCK_TIMEOUT{1};

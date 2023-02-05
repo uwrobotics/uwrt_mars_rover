@@ -49,14 +49,14 @@ namespace dinolite {
         assert(!cxt_.camera_info_path_.empty()); // readCalibration will crash if file_name is ""
 
         std::string camera_name;
-        if (camera_calibration_parsers::readCalibration(cxt_.camera_info_path_, camera_name, camera_info_msg_)) {
+        // if (camera_calibration_parsers::readCalibration(cxt_.camera_info_path_, camera_name, camera_info_msg_)) {
             RCLCPP_INFO(get_logger(), "got camera info for '%s'", camera_name.c_str());
             camera_info_msg_.header.frame_id = cxt_.camera_frame_id_;
             camera_info_pub_ = create_publisher<sensor_msgs::msg::CameraInfo>("camera_info", 10);
-        } else {
-            RCLCPP_ERROR(get_logger(), "cannot get camera info, will not publish");
-            camera_info_pub_ = nullptr;
-        }
+        // } else {
+            // RCLCPP_ERROR(get_logger(), "cannot get camera info, will not publish");
+            // camera_info_pub_ = nullptr;
+        // }
 
         image_pub_ = create_publisher<sensor_msgs::msg::Image>("image_raw", 10);
 

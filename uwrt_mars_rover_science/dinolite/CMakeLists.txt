@@ -14,7 +14,6 @@ message(STATUS "Found OpenCV version ${OpenCV_VERSION}")
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
-find_package(camera_calibration_parsers REQUIRED)
 find_package(class_loader REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclcpp_components REQUIRED)
@@ -40,7 +39,6 @@ target_compile_definitions(
   PRIVATE "COMPOSITION_BUILDING_DLL"
 )
 ament_target_dependencies(cam_node
-  camera_calibration_parsers
   class_loader
   OpenCV
   rclcpp

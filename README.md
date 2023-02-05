@@ -12,7 +12,7 @@
 5. Update your system before continuing: `sudo apt update -y --no-install-recommends && sudo apt dist-upgrade -y`
 6. Install `rosdep`, the ROS dependency manager: `sudo apt install -y python3-rosdep`
 7. Download the repository's upstream dependencies: `vcs import --input uwrt_mars_rover/common_upstream_dependencies.repos`
-8. Navigate back to the root of your workspace, and install all dependencies for your ROS packages: `RUN rosdep install --from-paths src -y --ignore-src`
+8. Navigate back to the root of your workspace, and install all dependencies for your ROS packages: `rosdep install --from-paths src -y --ignore-src`
 
 You can re-navigate to the root of your workspace at any time and rerun #8 to update your ROS packages' dependencies.
 

@@ -19,7 +19,7 @@ include_directories(include)
 
 # add_subdirectory(lib/uwrt_mars_rover_hw_bridge)
 
-add_library(${PROJECT_NAME}
+add_library(${PROJECT_NAME} SHARED
     src/uwrt_can.cpp
     #src/uwrt_params.cpp
 )
@@ -41,6 +41,10 @@ ament_target_dependencies(uwrt_can_test_node
 
 target_link_libraries(uwrt_can_test_node
     ${PROJECT_NAME}
+)
+
+target_link_libraries(${PROJECT_NAME}
+    uwrt_mars_rover_hw_bridge::uwrt_mars_rover_hw_bridge_lib
 )
 
 install(TARGETS

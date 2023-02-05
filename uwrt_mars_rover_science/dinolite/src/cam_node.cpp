@@ -49,14 +49,8 @@ namespace dinolite {
         assert(!cxt_.camera_info_path_.empty()); // readCalibration will crash if file_name is ""
 
         std::string camera_name;
-        // if (camera_calibration_parsers::readCalibration(cxt_.camera_info_path_, camera_name, camera_info_msg_)) {
-            RCLCPP_INFO(get_logger(), "got camera info for '%s'", camera_name.c_str());
-            camera_info_msg_.header.frame_id = cxt_.camera_frame_id_;
-            camera_info_pub_ = create_publisher<sensor_msgs::msg::CameraInfo>("camera_info", 10);
-        // } else {
-            // RCLCPP_ERROR(get_logger(), "cannot get camera info, will not publish");
-            // camera_info_pub_ = nullptr;
-        // }
+        camera_info_msg_.header.frame_id = cxt_.camera_frame_id_;
+		camera_info_pub_ = create_publisher<sensor_msgs::msg::CameraInfo>("camera_info", 10);
 
         image_pub_ = create_publisher<sensor_msgs::msg::Image>("image_raw", 10);
 
@@ -71,14 +65,12 @@ namespace dinolite {
 
     void CamNode:: frame() {
         cv::Mat frame;
-        while(rclcpp::ok()) {
-            if (!capture_->read(frame)) {
-                RCLCPP_INFO(get_logger(), "EOF, stop publishing");
-                break;
-            }
-
+		// check ok before reading a frame
+        if (rclcpp::ok() && capture_->read(frame)) {
+			// timestamp
             auto stamp = now();
-
+	
+			// fill message
             sensor_msgs::msg::Image::UniquePtr image_msg(new sensor_msgs::msg::Image());
 
             image_msg->header.stamp = stamp;
@@ -96,7 +88,10 @@ namespace dinolite {
                 camera_info_msg_.header.stamp = stamp;
                 camera_info_pub_->publish(camera_info_msg_);
             }
-        }
+			RCLCPP_INFO(get_logger(), "successful publish");
+        } else {
+			RCLCPP_INFO(get_logger(), "EOF, stop publishing");
+		}
     }
 
 } // namespace dinolite

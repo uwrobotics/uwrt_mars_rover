@@ -40,7 +40,7 @@ repositories:
     type: git
     url: https://github.com/ros-controls/control_msgs.git
     version: galactic-devel
-  ros-perception/image_common:
+  ros-perception/vision_opencv:
     type: git
-    url: https://github.com/ros-perception/image_common.git
+    url: https://github.com/ros-perception/vision_opencv.git
     version: galactic

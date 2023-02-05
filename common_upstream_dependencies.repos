@@ -12,3 +12,9 @@ repositories:
     type: git
     url: https://github.com/dawonn/vectornav
     version: 1ecaea8966eb04507d7a80b86a21860e4941928f # Latest known working on ros2 branch
+
+  uwrt_mars_rover_hw_bridge:
+    type: git
+    url: https://github.com/uwrobotics/uwrt_mars_rover_hw_bridge.git
+    version: d3dbeda1fd80470501e38cf1295bb0c188fa912f
+

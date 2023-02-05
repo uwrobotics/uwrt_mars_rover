@@ -9,8 +9,6 @@
 #include "sensor_msgs/msg/camera_info.hpp"
 #include "sensor_msgs/msg/image.hpp"
 
-#include "camera_calibration_parsers/parse.hpp"
-
 namespace dinolite {
 
 class CamNode : public rclcpp::Node {

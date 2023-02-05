@@ -64,6 +64,10 @@ set(node_plugins "${node_plugins}uwrt_xbox::UWRTXboxController;$<TARGET_FILE:xbo
 #   ament_lint_auto_find_test_dependencies()
 # endif()
 
+install(DIRECTORY launch
+		DESTINATION share/${PROJECT_NAME}
+)
+
 # tell where to put binaries
 install(TARGETS
   xbox_controller

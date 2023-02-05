@@ -63,7 +63,7 @@ namespace dinolite {
         // send message
         timer_ = create_wall_timer(
             std::chrono::duration
-                <int, std::chrono::milliseconds::period>(1),
+                <int, std::chrono::milliseconds::period>(cxt_.delay_ms_),
                 std::bind(&CamNode::frame, this)
         );
 

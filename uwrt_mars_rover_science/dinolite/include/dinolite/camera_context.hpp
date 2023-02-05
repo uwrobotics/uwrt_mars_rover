@@ -9,6 +9,8 @@ namespace dinolite {
     struct CameraContext {
         const bool file_ = false;
         const int fps_ = 30;
+	const double delay_ms_double_ = 1 / fps_ * 1000;
+	const int delay_ms_ = (int) delay_ms_double_; // duration takes int
         const std::string filename_ = "";
         const int index_ = 0; // 0 is default index of webcam
         const int width_ = 640;

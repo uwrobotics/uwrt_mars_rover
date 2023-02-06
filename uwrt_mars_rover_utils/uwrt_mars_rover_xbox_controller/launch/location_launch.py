@@ -13,7 +13,7 @@ def generate_launch_description():
         composable_node_descriptions=[
             ComposableNode(
                 package="uwrt_mars_rover",
-                plugin="xboxcontrollerComposition::CoordinateNode"
+                plugin="drivetraincontrollerComposition::CoordinateNode"
             ),
         ]
     )

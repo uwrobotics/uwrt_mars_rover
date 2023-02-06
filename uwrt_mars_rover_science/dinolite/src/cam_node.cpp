@@ -1,9 +1,7 @@
 #include "dinolite/cam_node.hpp"
 
-namespace dinolite
-{
-std::string mat_type2encoding(int mat_type)
-{
+namespace dinolite {
+std::string mat_type2encoding(int mat_type) {
   switch (mat_type) {
     case CV_8UC1:
       return "mono8";
@@ -18,8 +16,7 @@ std::string mat_type2encoding(int mat_type)
   }
 }
 
-CamNode::CamNode(const rclcpp::NodeOptions & options) : Node("dinolite_cam", options)
-{
+CamNode::CamNode(const rclcpp::NodeOptions& options) : Node("dinolite_cam", options) {
   RCLCPP_INFO(get_logger(), "hello wordln");
   RCLCPP_INFO(get_logger(), "OpenCV version: %d", CV_VERSION_MAJOR);
 
@@ -43,9 +40,7 @@ CamNode::CamNode(const rclcpp::NodeOptions & options) : Node("dinolite_cam", opt
   double height = capture_->get(cv::CAP_PROP_FRAME_HEIGHT);
   double fps = capture_->get(cv::CAP_PROP_FPS);
 
-  RCLCPP_INFO(
-    get_logger(), "device %d open, width %g, height %g, device fps %g", cxt_.index_, width, height,
-    fps);
+  RCLCPP_INFO(get_logger(), "device %d open, width %g, height %g, device fps %g", cxt_.index_, width, height, fps);
 
   assert(!cxt_.camera_info_path_.empty());  // readCalibration will crash if file_name is ""
 
@@ -61,8 +56,7 @@ CamNode::CamNode(const rclcpp::NodeOptions & options) : Node("dinolite_cam", opt
     std::bind(&CamNode::frame, this));
 }
 
-void CamNode::frame()
-{
+void CamNode::frame() {
   cv::Mat frame;
   // check ok before reading a frame
   if (rclcpp::ok() && capture_->read(frame)) {

@@ -8,14 +8,12 @@
 #include "sensor_msgs/msg/camera_info.hpp"
 #include "sensor_msgs/msg/image.hpp"
 
-namespace dinolite
-{
-class CamNode : public rclcpp::Node
-{
-public:
-  explicit CamNode(const rclcpp::NodeOptions & options);
+namespace dinolite {
+class CamNode : public rclcpp::Node {
+ public:
+  explicit CamNode(const rclcpp::NodeOptions& options);
 
-private:
+ private:
   void validate_parameters();
   void frame();
 

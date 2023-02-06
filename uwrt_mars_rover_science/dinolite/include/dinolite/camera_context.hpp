@@ -3,10 +3,8 @@
 #include <cmath>
 #include <string>
 
-namespace dinolite
-{
-struct CameraContext
-{
+namespace dinolite {
+struct CameraContext {
   // note: fps is not exact, camera sends less frames when image are more different
   const bool file_ = false;
   const double fps_ = 60;                        // dinolite is capped at 30 fps

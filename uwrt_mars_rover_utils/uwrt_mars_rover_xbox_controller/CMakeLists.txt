@@ -51,6 +51,19 @@ rosidl_target_interfaces(xbox_controller ${PROJECT_NAME} "rosidl_typesupport_cpp
 rclcpp_components_register_nodes(xbox_controller "uwrt_xbox::UWRTXboxController")
 set(node_plugins "${node_plugins}uwrt_xbox::UWRTXboxController;$<TARGET_FILE:xbox_controller>\n")
 
+# add the node for coordinates
+add_library(coordinateNode SHARED 
+	src/coordinateNode.cpp)
+target_compile_definitions(coordinateNode
+	PRIVATE "COORDINATE_NODE_DLL")
+ament_target_dependencies(coordinateNode
+	"rclcpp"
+	"rclcpp_components"
+	"XboxController")
+# build ROS custom messages
+rosidl_target_interfaces(coordinateNode ${PROJECT_NAME} "rosidl_typesupport_cpp")
+rclcpp_components_register_nodes(coordinateNode "drivetraincontrollerComposition::coordinateNode")
+set(node_plugins "${node_plugins}drivetraincontrollerComposition::coordinateNode;$<TARGET_FILE:coordinateNode>\n")
 
 
 # if(BUILD_TESTING)

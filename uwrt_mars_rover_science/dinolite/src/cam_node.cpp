@@ -52,7 +52,7 @@ CamNode::CamNode(const rclcpp::NodeOptions& options) : Node("dinolite_cam", opti
 
   // send message
   timer_ = create_wall_timer(std::chrono::duration<int, std::chrono::milliseconds::period>(cxt_.delay_ms_),
-                                                      std::bind(&CamNode::frame, this));
+                             std::bind(&CamNode::frame, this));
 }
 
 void CamNode::frame() {

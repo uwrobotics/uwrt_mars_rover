@@ -12,33 +12,31 @@
 #include <sensor_msgs/msg/image.hpp>
 #include <vector>
 
-namespace uwrt_autonomy
-{
-class TargetTracker : public rclcpp::Node
-{
-public:
-  TargetTracker(const rclcpp::NodeOptions & options);
+namespace uwrt_autonomy {
+class TargetTracker : public rclcpp::Node {
+ public:
+  TargetTracker(const rclcpp::NodeOptions& options);
 
-private:
+ private:
   /**
-     * @brief Reads images from a zed camera subscriber topic and publishes poses for detected ARUCO tags
-     * @param image_msg Image data and metadata from the zed2 camera 
-    */
-  void imageCallback(const sensor_msgs::msg::Image::ConstSharedPtr & image_msg);
+   * @brief Reads images from a zed camera subscriber topic and publishes poses for detected ARUCO tags
+   * @param image_msg Image data and metadata from the zed2 camera
+   */
+  void imageCallback(const sensor_msgs::msg::Image::ConstSharedPtr& image_msg);
 
   /**
-     * @brief Reads intrinstic calibration data from the camera info topic
-     * @param info Camera info message
-    */
+   * @brief Reads intrinstic calibration data from the camera info topic
+   * @param info Camera info message
+   */
   void camInfoCallback(const sensor_msgs::msg::CameraInfo::SharedPtr info);
 
   /**
-     * @brief Converts a rotation vector and translation vector to pose message 
-     * @param rvec Compressed rodrigues rotation vector (angle-axis form) which represents a rotation
-     * @param tvec Translation vector in 3D
-     * @param pose_msg Reference to a pose message 
-    */
-  void toPoseMsg(cv::Vec3d rvec, cv::Vec3d tvec, geometry_msgs::msg::Pose & pose_msg);
+   * @brief Converts a rotation vector and translation vector to pose message
+   * @param rvec Compressed rodrigues rotation vector (angle-axis form) which represents a rotation
+   * @param tvec Translation vector in 3D
+   * @param pose_msg Reference to a pose message
+   */
+  void toPoseMsg(cv::Vec3d rvec, cv::Vec3d tvec, geometry_msgs::msg::Pose& pose_msg);
 
   // pose publisher for aruco tags
   rclcpp::Publisher<geometry_msgs::msg::PoseStamped>::SharedPtr aruco_pose_pub_;
@@ -52,8 +50,7 @@ private:
   cv::Mat intrinsic_calib_matrix_;
 
   // vectors for ARUCO tag rotations and translations (max of 4 aruco codes identified at a time)
-  std::vector<cv::Vec3d> rvecs_{std::vector<cv::Vec3d>(4, 0.0)},
-    tvecs_{std::vector<cv::Vec3d>(4, 0.0)};
+  std::vector<cv::Vec3d> rvecs_{std::vector<cv::Vec3d>(4, 0.0)}, tvecs_{std::vector<cv::Vec3d>(4, 0.0)};
   // opencv aruco detector variables
   cv::Ptr<cv::aruco::DetectorParameters> params_;
   cv::Ptr<cv::aruco::Dictionary> dictionary_;

@@ -62,4 +62,4 @@ extern "C" {
 }
 #endif
 
-#endif // UWRT_MARS_ROVER_VISION__VISIBILITY_H_
+#endif  // UWRT_MARS_ROVER_VISION__VISIBILITY_H_

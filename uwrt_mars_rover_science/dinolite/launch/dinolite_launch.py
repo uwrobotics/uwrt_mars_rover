@@ -24,6 +24,8 @@ from launch_ros.descriptions import ComposableNode
 """
 generates a launch description for dinolite pub node
 """
+
+
 def generate_launch_description():
     cam_node_container = ComposableNodeContainer(
         name='cam_node_container',

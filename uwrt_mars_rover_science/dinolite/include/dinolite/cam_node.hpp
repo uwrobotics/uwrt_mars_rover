@@ -14,18 +14,12 @@ class CamNode : public rclcpp::Node {
   explicit CamNode(const rclcpp::NodeOptions& options);
 
  private:
-  void validate_parameters();
   void frame();
-
-  void printer();
 
   CameraContext cxt_;
   std::shared_ptr<cv::VideoCapture> capture_;
 
   sensor_msgs::msg::CameraInfo camera_info_msg_;
-
-  int publish_fps_;
-  rclcpp::Time next_stamp_;
 
   rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr image_pub_;
   rclcpp::Publisher<sensor_msgs::msg::CameraInfo>::SharedPtr camera_info_pub_;

@@ -14,7 +14,7 @@ struct CameraContext {
   const int width_ = 640;
   const int height_ = 480;
   const std::string camera_info_path_ = "install/dinolite/share/dinolite/config/info.ini";
-  const std::string camera_frame_id_ = "camera_frame";
+  const std::string camera_frame_id_ = "DINOLITE";
 };
 
 }  // namespace dinolite

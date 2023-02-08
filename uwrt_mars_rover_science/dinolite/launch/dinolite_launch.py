@@ -1,6 +1,4 @@
-"""
-python launch file for running dinolite publisher node
-"""
+"""python launch file for running dinolite publisher node."""
 
 import launch
 from launch.actions import (
@@ -21,12 +19,8 @@ from launch.substitutions import (
 from launch_ros.actions import ComposableNodeContainer
 from launch_ros.descriptions import ComposableNode
 
-"""
-generates a launch description for dinolite pub node
-"""
-
-
 def generate_launch_description():
+    """generates a launch description for dinolite pub node"""
     cam_node_container = ComposableNodeContainer(
         name='cam_node_container',
         namespace='cam',

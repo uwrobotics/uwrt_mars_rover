@@ -3,9 +3,9 @@
 <package format="3">
   <name>dinolite</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
-  <maintainer email="edw@todo.todo">edw</maintainer>
-  <license>TODO: License declaration</license>
+  <description>Opencv Package for reading from dinolite usb microscope</description>
+  <maintainer email="edwardfeiwang@gmail.com">Edward Wang</maintainer>
+  <license>MIT</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 

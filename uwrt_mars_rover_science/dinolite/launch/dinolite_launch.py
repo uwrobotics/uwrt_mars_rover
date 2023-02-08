@@ -1,45 +1,41 @@
-import launch
+"""
+python launch file for running dinolite publisher node
+"""
 
-from launch_ros.actions import ComposableNodeContainer
-from launch_ros.descriptions import ComposableNode
+import launch
 from launch.actions import (
-    DeclareLaunchArgument,
     EmitEvent,
-    ExecuteProcess,
     LogInfo,
     RegisterEventHandler,
-    TimerAction,
 )
-from launch.conditions import IfCondition
 from launch.event_handlers import (
-    OnExecutionComplete,
     OnProcessExit,
-    OnProcessIO,
-    OnProcessStart,
     OnShutdown,
 )
 from launch.events import Shutdown
 from launch.substitutions import (
     EnvironmentVariable,
-    FindExecutable,
-    LaunchConfiguration,
     LocalSubstitution,
-    PythonExpression,
 )
 
+from launch_ros.actions import ComposableNodeContainer
+from launch_ros.descriptions import ComposableNode
 
+"""
+generates a launch description for dinolite pub node
+"""
 def generate_launch_description():
     cam_node_container = ComposableNodeContainer(
-        name="cam_node_container",
-        namespace="cam",
-        package="rclcpp_components",
-        executable="component_container",
+        name='cam_node_container',
+        namespace='cam',
+        package='rclcpp_components',
+        executable='component_container',
         composable_node_descriptions=[
             ComposableNode(
-                package="dinolite", plugin="dinolite::CamNode", name="cam_node"
+                package='dinolite', plugin='dinolite::CamNode', name='cam_node'
             )
         ],
-        output="screen",
+        output='screen',
     )
     process_exit = RegisterEventHandler(
         OnProcessExit(
@@ -47,11 +43,11 @@ def generate_launch_description():
             on_exit=[
                 LogInfo(
                     msg=(
-                        EnvironmentVariable(name="USER"),
-                        " closed the turtlesim window",
+                        EnvironmentVariable(name='USER'),
+                        ' closed the turtlesim window',
                     )
                 ),
-                EmitEvent(event=Shutdown(reason="Window closed")),
+                EmitEvent(event=Shutdown(reason='Window closed')),
             ],
         )
     )
@@ -60,8 +56,8 @@ def generate_launch_description():
             on_shutdown=[
                 LogInfo(
                     msg=[
-                        "Launch was asked to shutdown: ",
-                        LocalSubstitution("event.reason"),
+                        'Launch was asked to shutdown: ',
+                        LocalSubstitution('event.reason'),
                     ]
                 )
             ]

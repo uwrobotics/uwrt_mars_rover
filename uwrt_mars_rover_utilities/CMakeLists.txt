@@ -17,6 +17,7 @@ find_package(std_msgs REQUIRED)
 # include_directories(include)
 
 add_library(${PROJECT_NAME}
+    SHARED
     src/uwrt_can.cpp
     #src/uwrt_params.cpp
 )
@@ -48,14 +49,22 @@ target_link_libraries(uwrt_can_test_node
 )
 
 
-install(TARGETS
-    ${PROJECT_NAME}
+install(TARGETS ${PROJECT_NAME} 
     uwrt_can_test_node
-    RUNTIME DESTINATION lib/${PROJECT_NAME}
-    ARCHIVE DESTINATION lib/${PROJECT_NAME}
-    LIBRARY DESTINATION lib/${PROJECT_NAME}
+    EXPORT ${PROJECT_NAME}Config
+    
+    RUNTIME DESTINATION bin
+    ARCHIVE DESTINATION lib
+    LIBRARY DESTINATION lib
     INCLUDES DESTINATION include
 )
+
+export(TARGETS
+    ${PROJECT_NAME}
+    NAMESPACE uwrt_mars_rover_utilities::
+    FILE "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
+)
+
 
 install(
     FILES 
@@ -65,7 +74,12 @@ install(
     COMPONENT
         Devel
 )
-
+install(
+    EXPORT
+    ${PROJECT_NAME}Config
+    DESTINATION "${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/cmake"
+    NAMESPACE uwrt_mars_rover_utilities::
+)
 ament_export_include_directories(
     lib/uwrt_mars_rover_hw_bridge/include
     include

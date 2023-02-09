@@ -5,6 +5,7 @@ on: [ push, pull_request ]
 
 jobs:
   cancel-superceded-jobs:
+    if: ${{ !github.event.act }}
     runs-on: ubuntu-latest
     steps:
       - name: Cancel Superceded Jobs

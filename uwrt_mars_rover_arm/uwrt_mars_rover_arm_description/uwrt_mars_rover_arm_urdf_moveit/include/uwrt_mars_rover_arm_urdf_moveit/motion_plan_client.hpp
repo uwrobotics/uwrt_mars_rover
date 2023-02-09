@@ -5,15 +5,17 @@
 #include "uwrt_mars_rover_arm_urdf_moveit/srv/motion_plan.hpp"
 #include "uwrt_mars_rover_arm_urdf_moveit/visibility_control.hpp"
 
-namespace uwrt_motion_planning {
-class MotionPlanClient : public rclcpp::Node {
- public:
-  explicit MotionPlanClient(const rclcpp::NodeOptions& options);
+namespace uwrt_motion_planning
+{
+class MotionPlanClient : public rclcpp::Node
+{
+public:
+  explicit MotionPlanClient(const rclcpp::NodeOptions & options);
 
- protected:
+protected:
   void execute();
 
- private:
+private:
   rclcpp::Client<uwrt_mars_rover_arm_urdf_moveit::srv::MotionPlan>::SharedPtr client_;
 };
 

@@ -9,15 +9,17 @@
 
 using namespace std::chrono_literals;
 
-namespace uwrt_motion_planning {
-
-MotionPlanClient::MotionPlanClient(const rclcpp::NodeOptions& options) : Node("Client", options) {
+namespace uwrt_motion_planning
+{
+MotionPlanClient::MotionPlanClient(const rclcpp::NodeOptions & options) : Node("Client", options)
+{
   client_ = create_client<uwrt_mars_rover_arm_urdf_moveit::srv::MotionPlan>("motion_plan");
 
   execute();
 }
 
-void MotionPlanClient::execute() {
+void MotionPlanClient::execute()
+{
   if (!client_->wait_for_service(1s)) {
     if (!rclcpp::ok()) {
       RCLCPP_ERROR(this->get_logger(), "Interrupted while waiting for the service. Exiting.");
@@ -36,7 +38,8 @@ void MotionPlanClient::execute() {
   auto request = std::make_shared<uwrt_mars_rover_arm_urdf_moveit::srv::MotionPlan::Request>();
   request->pose = target;
 
-  using ServiceResponseFuture = rclcpp::Client<uwrt_mars_rover_arm_urdf_moveit::srv::MotionPlan>::SharedFuture;
+  using ServiceResponseFuture =
+    rclcpp::Client<uwrt_mars_rover_arm_urdf_moveit::srv::MotionPlan>::SharedFuture;
   auto response_received_callback = [this](ServiceResponseFuture future) {
     RCLCPP_INFO(this->get_logger(), "Got result: [%d]", future.get()->success);
   };

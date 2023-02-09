@@ -10,17 +10,19 @@
 #include "uwrt_mars_rover_arm_urdf_moveit/srv/motion_plan.hpp"
 #include "uwrt_mars_rover_arm_urdf_moveit/visibility_control.hpp"
 
-namespace uwrt_motion_planning {
-
-class MotionPlanServer : public rclcpp::Node {
- public:
+namespace uwrt_motion_planning
+{
+class MotionPlanServer : public rclcpp::Node
+{
+public:
   UWRT_MOTION_PLANNING_PUBLIC
-  explicit MotionPlanServer(const rclcpp::NodeOptions& options);
+  explicit MotionPlanServer(const rclcpp::NodeOptions & options);
 
- private:
+private:
   rclcpp::Service<uwrt_mars_rover_arm_urdf_moveit::srv::MotionPlan>::SharedPtr srv_;
-  void solve_ik(const std::shared_ptr<uwrt_mars_rover_arm_urdf_moveit::srv::MotionPlan::Request> request,
-                std::shared_ptr<uwrt_mars_rover_arm_urdf_moveit::srv::MotionPlan::Response> response);
+  void solve_ik(
+    const std::shared_ptr<uwrt_mars_rover_arm_urdf_moveit::srv::MotionPlan::Request> request,
+    std::shared_ptr<uwrt_mars_rover_arm_urdf_moveit::srv::MotionPlan::Response> response);
 };
 
 }  // namespace uwrt_motion_planning

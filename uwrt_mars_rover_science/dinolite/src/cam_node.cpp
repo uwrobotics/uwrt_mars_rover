@@ -42,13 +42,13 @@ CamNode::CamNode(const rclcpp::NodeOptions& options) : Node("dinolite_cam", opti
 
   RCLCPP_INFO(get_logger(), "device %d open, width %g, height %g, device fps %g", cxt_.index_, width, height, fps);
 
-  assert(!cxt_.camera_info_path_.empty());  // readCalibration will crash if file_name is ""
+  rcpputils::assert_true(!cxt_.camera_info_path_.empty());  // readCalibration will crash if file_name is ""
 
   std::string camera_name;
   camera_info_msg_.header.frame_id = cxt_.camera_frame_id_;
-  camera_info_pub_ = create_publisher<sensor_msgs::msg::CameraInfo>("camera_info", 10);
+  camera_info_pub_ = create_publisher<sensor_msgs::msg::CameraInfo>("/dinolite_camera/camera_info", 10);
 
-  image_pub_ = create_publisher<sensor_msgs::msg::Image>("image_raw", 10);
+  image_pub_ = create_publisher<sensor_msgs::msg::Image>("/dinolite_camera/image_raw", 10);
 
   // send message
   timer_ = create_wall_timer(std::chrono::duration<int, std::chrono::milliseconds::period>(cxt_.delay_ms_),
@@ -60,7 +60,7 @@ void CamNode::frame() {
   // check ok before reading a frame
   if (rclcpp::ok() && capture_->read(frame)) {
     // timestamp
-    auto stamp = now();
+    auto stamp = std::chrono::system_clock::now();    
 
     // fill message
     sensor_msgs::msg::Image::UniquePtr image_msg(new sensor_msgs::msg::Image());
@@ -78,9 +78,12 @@ void CamNode::frame() {
     image_pub_->publish(std::move(image_msg));
     if (camera_info_pub_) {
       camera_info_msg_.header.stamp = stamp;
+      camera_info_msg_.header.frame_id = cxt_.camera_frame_id_;
+      camera_info_msg_.height = frame.rows;
+      camera_info_msg_.width = frame.cols;
       camera_info_pub_->publish(camera_info_msg_);
     }
-    RCLCPP_INFO(get_logger(), "successful publish");
+    RCLCPP_INFO(get_logger(), "successful publish %lld", stamp.time_since_epoch());
   } else {
     RCLCPP_INFO(get_logger(), "EOF, stop publishing");
   }

@@ -83,7 +83,6 @@ void CamNode::frame() {
       camera_info_msg_.width = frame.cols;
       camera_info_pub_->publish(camera_info_msg_);
     }
-    RCLCPP_INFO(get_logger(), "successful publish %lld", stamp.time_since_epoch());
   } else {
     RCLCPP_INFO(get_logger(), "EOF, stop publishing");
   }

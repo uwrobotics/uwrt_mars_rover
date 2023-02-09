@@ -1,6 +1,7 @@
 #pragma once
 
 #include <rclcpp/rclcpp.hpp>
+#include <rcpputils/asserts.hpp>
 #include <string>
 
 #include "dinolite/camera_context.hpp"

@@ -1,4 +1,5 @@
 import launch
+import os
 import launch_ros.actions
 from launch_ros.actions import Node
 from launch_ros.descriptions import ComposableNode
@@ -35,6 +36,13 @@ def generate_launch_description():
 
             ]
     )
+
+    script = launch.actions.ExecuteProcess(
+            cmd=['/home/nmolla/uwrt_ws/src/uwrt_mars_rover/uwrt_mars_rover_utils/uwrt_mars_rover_estop/scripts/test.sh'],
+            name='keyboard_reader',
+    )
+
+
     
 
     

@@ -1,5 +1,7 @@
 #include <rclcpp/rclcpp.hpp>
 #include <geometry_msgs/msg/twist.hpp>
+#include <std_msgs/msg/bool.hpp>
+#include <std_msgs/msg/string.hpp>
 
 namespace composition{
 
@@ -15,7 +17,9 @@ namespace composition{
         //differential_drivetrain_controller/cmd_vel, which takes in geometry_msgs/Twist messages
 
         // subscriber - topic where the velocities are put
-        rclcpp::Subscription<geometry_msgs::msg::Twist>::SharedPtr stationary_turt_sub;
+        rclcpp::Subscription<geometry_msgs::msg::Twist>::SharedPtr cmd_subscriber_;
+        rclcpp::Subscription<std_msgs::msg::String>::SharedPtr estop_bool_subscriber;
+
 
 
         //publisher - this is the topic where i will be writting the velocities too so the arm can read it
@@ -26,13 +30,7 @@ namespace composition{
         rclcpp::TimerBase::SharedPtr timer;
 
         //store the current estop boolean value here
-        bool isEstop;
-    
-    
-    
-    
-    
-    
+        bool isEstop = false;
     
     
     };

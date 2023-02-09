@@ -10,11 +10,11 @@
   <buildtool_depend>ament_cmake</buildtool_depend>
 
   <build_depend>std_msgs</build_depend>
-  <build_depend>geomeety_msgs</build_depend>
+  <build_depend>geometry_msgs</build_depend>
 
 
   <exec_depend>std_msgs</exec_depend>
-  <exec_depend>geomeety_msgs</exec_depend>
+  <exec_depend>geometry_msgs</exec_depend>
 
   
   

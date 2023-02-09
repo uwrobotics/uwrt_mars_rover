@@ -27,8 +27,8 @@ target_compile_definitions(estop_node
 ament_target_dependencies(estop_node
 	"rclcpp"
 	"rclcpp_components"
-  "std_msgs"
-  "geometry_msgs")
+  	"std_msgs"
+  	"geometry_msgs")
 rclcpp_components_register_nodes(estop_node "composition::estop")
 # this way we can execute the component with - ros2 component standalone software_training composition::turtle_service_request_node
 set(node_plugins "${node_plugins}composition::estop;$<TARGET_FILE:estop_node>\n")

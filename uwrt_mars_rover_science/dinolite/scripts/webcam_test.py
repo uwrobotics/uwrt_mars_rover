@@ -1,7 +1,4 @@
-"""
-Script for testing webcam connection to opencv.
-Edit video index when working with multiple usb cameras.
-"""
+"""Script for testing webcam connection to opencv."""
 
 import cv2
 

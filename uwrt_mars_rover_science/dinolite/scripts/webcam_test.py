@@ -1,3 +1,8 @@
+"""
+Script for testing webcam connection to opencv.
+Edit video index when working with multiple usb cameras.
+"""
+
 import cv2
 
 # 0 is default index of webcam

@@ -65,7 +65,12 @@ def generate_launch_description():
     ompl_planning_pipeline_config = {
         "move_group": {
             "planning_plugin": "ompl_interface/OMPLPlanner",
-            "request_adapters": """default_planner_request_adapters/AddTimeOptimalParameterization default_planner_request_adapters/FixWorkspaceBounds default_planner_request_adapters/FixStartStateBounds default_planner_request_adapters/FixStartStateCollision default_planner_request_adapters/FixStartStatePathConstraints""",
+            "request_adapters": """default_planner_request_adapters/ \
+                AddTimeOptimalParameterization default_planner_request_adapters/ \
+                FixWorkspaceBounds default_planner_request_adapters/ \
+                FixStartStateBounds default_planner_request_adapters/ \
+                FixStartStateCollision default_planner_request_adapters/ \
+                FixStartStatePathConstraints""",
             "start_state_max_bounds_error": 0.1,
         }
     }
@@ -80,7 +85,8 @@ def generate_launch_description():
     )
     moveit_controllers = {
         "moveit_simple_controller_manager": moveit_simple_controllers_yaml,
-        "moveit_controller_manager": "moveit_simple_controller_manager/MoveItSimpleControllerManager",
+        "moveit_controller_manager": "moveit_simple_controller_manager/\
+            MoveItSimpleControllerManager",
     }
 
     trajectory_execution = {

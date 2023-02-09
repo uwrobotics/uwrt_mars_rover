@@ -18,12 +18,12 @@ from ament_index_python.packages import get_package_share_directory
 
 from launch.substitutions import LaunchConfiguration
 from launch import LaunchDescription
-from launch.actions import ExecuteProcess, IncludeLaunchDescription, RegisterEventHandler, DeclareLaunchArgument
+from launch.actions import ExecuteProcess, IncludeLaunchDescription,\
+    RegisterEventHandler, DeclareLaunchArgument
 from launch.event_handlers import OnProcessExit
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 
 from launch_ros.actions import Node
-from launch_ros.substitutions import FindPackageShare
 import xacro
 
 

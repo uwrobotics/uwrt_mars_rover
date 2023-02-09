@@ -1,11 +1,7 @@
 import os
 import yaml
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument
-from launch.substitutions import LaunchConfiguration
-from launch.conditions import IfCondition, UnlessCondition
 from launch_ros.actions import Node
-from launch.actions import ExecuteProcess
 from ament_index_python.packages import get_package_share_directory
 import xacro
 
@@ -54,16 +50,6 @@ def generate_launch_description():
     kinematics_yaml = load_yaml(
         "uwrt_mars_rover_arm_urdf_moveit", "config/kinematics.yaml"
     )
-    robot_description_kinematics = {
-        "robot_description_kinematics": kinematics_yaml}
-
-    move_group_node = Node(package='moveit_ros_move_group', executable='move_group',
-                           output='screen',
-                           parameters=[
-                               robot_description,
-                               robot_description_semantic,
-                           ],
-                           )
 
     robot_state_publisher = Node(package='robot_state_publisher',
                                  executable='robot_state_publisher',
@@ -95,6 +81,5 @@ def generate_launch_description():
         [
             rviz_node,
             robot_state_publisher,
-            # move_group_node,
         ]
     )

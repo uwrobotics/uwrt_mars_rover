@@ -25,17 +25,21 @@ def generate_launch_description():
     default_model_path = package_path / 'urdf' / 'drivetrain.urdf.xacro'
     default_rviz_config_path = package_path / 'rviz' / 'urdf.rviz'
 
-    robot_description_content = ParameterValue(Command(['ros2 run xacro xacro ', LaunchConfiguration('model')]),
-                                               value_type=str)
+    robot_description_content = ParameterValue(
+        Command(['ros2 run xacro xacro ', LaunchConfiguration('model')]),
+        value_type=str)
 
     # Declared Arguments
     declared_arguments = []
-    declared_arguments += [DeclareLaunchArgument(name='gui', default_value='true', choices=['true', 'false'],
-                                                 description='Flag to enable joint_state_publisher_gui')]
-    declared_arguments += [DeclareLaunchArgument(name='model', default_value=str(default_model_path),
-                                                 description='Absolute path to robot urdf file')]
-    declared_arguments += [DeclareLaunchArgument(name='rvizconfig', default_value=str(default_rviz_config_path),
-                                                 description='Absolute path to rviz config file')]
+    declared_arguments += [DeclareLaunchArgument(
+        name='gui', default_value='true', choices=['true', 'false'],
+        description='Flag to enable joint_state_publisher_gui')]
+    declared_arguments += [DeclareLaunchArgument(
+        name='model', default_value=str(default_model_path),
+        description='Absolute path to robot urdf file')]
+    declared_arguments += [DeclareLaunchArgument(
+        name='rvizconfig', default_value=str(default_rviz_config_path),
+        description='Absolute path to rviz config file')]
 
     # Nodes
     nodes = []

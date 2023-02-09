@@ -41,7 +41,7 @@ def generate_launch_description():
                 LogInfo(
                     msg=(
                         EnvironmentVariable(name='USER'),
-                        ' closed the turtlesim window',
+                        ' killed process',
                     )
                 ),
                 EmitEvent(event=Shutdown(reason='Window closed')),

@@ -13,9 +13,6 @@ add_custom_target(
         ${CMAKE_CURRENT_LIST_DIR}
 )
 
-
-
-
 # set C/C++ standard
 if(NOT CMAKE_C_STANDARD)
   set(CMAKE_C_STANDARD 99)

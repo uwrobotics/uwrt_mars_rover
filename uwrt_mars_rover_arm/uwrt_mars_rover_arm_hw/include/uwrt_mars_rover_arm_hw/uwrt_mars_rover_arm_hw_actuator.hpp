@@ -17,35 +17,23 @@
 
 #include "uwrt_mars_rover_arm_hw/visibility.hpp"
 
-namespace uwrt_mars_rover_arm_hw
-{
+namespace uwrt_mars_rover_arm_hw {
 // namespaced structs to hold transmission data - state & command
-namespace TransmissionData
-{
-namespace ActuatorData
-{
-using CommandData = struct CommandData
-{
-  double velocity{};
-};
+namespace TransmissionData {
+namespace ActuatorData {
+using CommandData = struct CommandData { double velocity{}; };
 
-using StateData = struct StateData
-{
+using StateData = struct StateData {
   double velocity{};
   double position{};
   double iq_current{};  // not used for differential transmission
 };
 
 }  // namespace ActuatorData
-namespace JointData
-{
-using CommandData = struct CommandData
-{
-  double velocity{};
-};
+namespace JointData {
+using CommandData = struct CommandData { double velocity{}; };
 
-using StateData = struct StateData
-{
+using StateData = struct StateData {
   double velocity{};
   double position{};
 };
@@ -54,9 +42,8 @@ using StateData = struct StateData
 
 }  // namespace TransmissionData
 
-class ArmActuatorInterface : public hardware_interface::ActuatorInterface
-{
-public:
+class ArmActuatorInterface : public hardware_interface::ActuatorInterface {
+ public:
   RCLCPP_SHARED_PTR_DEFINITIONS(ArmActuatorInterface)
 
   UWRT_MARS_ROVER_ARM_HW_PUBLIC
@@ -70,8 +57,8 @@ public:
 
   UWRT_MARS_ROVER_ARM_HW_PUBLIC
   hardware_interface::return_type prepare_command_mode_switch(
-    const std::vector<std::string> & /* start_interfaces */,
-    const std::vector<std::string> & /* stop interfaces */) override;
+      const std::vector<std::string>& /* start_interfaces */,
+      const std::vector<std::string>& /* stop interfaces */) override;
 
   UWRT_MARS_ROVER_ARM_HW_PUBLIC
   hardware_interface::return_type read() override;
@@ -80,32 +67,29 @@ public:
   hardware_interface::return_type write() override;
 
   /*
-         * Lifecycle node member functions
-         *
-         */
+   * Lifecycle node member functions
+   *
+   */
   UWRT_MARS_ROVER_ARM_HW_PUBLIC
-  CallbackReturn on_init(
-    const hardware_interface::HardwareInfo & hardware_info) override;  // intialize
+  CallbackReturn on_init(const hardware_interface::HardwareInfo& hardware_info) override;  // intialize
 
   UWRT_MARS_ROVER_ARM_HW_PUBLIC
-  CallbackReturn on_configure(
-    const rclcpp_lifecycle::State & previous_state) override;  // configuration
+  CallbackReturn on_configure(const rclcpp_lifecycle::State& previous_state) override;  // configuration
 
   UWRT_MARS_ROVER_ARM_HW_PUBLIC
-  CallbackReturn on_activate(const rclcpp_lifecycle::State & previous_state) override;  // start
+  CallbackReturn on_activate(const rclcpp_lifecycle::State& previous_state) override;  // start
 
   UWRT_MARS_ROVER_ARM_HW_PUBLIC
-  CallbackReturn on_deactivate(const rclcpp_lifecycle::State & previous_state) override;  // stop
+  CallbackReturn on_deactivate(const rclcpp_lifecycle::State& previous_state) override;  // stop
 
   UWRT_MARS_ROVER_ARM_HW_PUBLIC
-  CallbackReturn on_shutdown(const rclcpp_lifecycle::State & previous_state)
-    override;  // free up resources before destruction
+  CallbackReturn on_shutdown(
+      const rclcpp_lifecycle::State& previous_state) override;  // free up resources before destruction
 
   UWRT_MARS_ROVER_ARM_HW_PUBLIC
-  CallbackReturn on_cleanup(
-    const rclcpp_lifecycle::State & previous_state) override;  // set node unconfigured state
+  CallbackReturn on_cleanup(const rclcpp_lifecycle::State& previous_state) override;  // set node unconfigured state
 
-protected: /*idk we might extend for some reason*/
+ protected: /*idk we might extend for some reason*/
   UWRT_MARS_ROVER_ARM_HW_LOCAL
   bool configure_transmission();
 

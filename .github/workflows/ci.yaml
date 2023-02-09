@@ -15,6 +15,8 @@ env:
     uwrt_mars_rover_drivetrain
     uwrt_mars_rover_drivetrain_description
     uwrt_mars_rover_drivetrain_hw
+    uwrt_mars_rover_arm_urdf
+    uwrt_mars_rover_arm_urdf_moveit
   ROS_DISTRO: galactic
   IMAGE: "rostooling/setup-ros-docker:ubuntu-focal-ros-galactic-desktop-latest"
 

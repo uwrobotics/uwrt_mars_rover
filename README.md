@@ -1,5 +1,10 @@
 # uwrt_mars_rover_estop
 
+##  description
+    this node is will check if the enter key was pressed in a the script that is running in another terminal. If the enter key is pressed the node will         start publishing a velocity of 0 to the `stop_vel_interceptor` topic, this is the new topic that the drivetrain will subscribe to. If there was no stop 
+    requested the node will just keep publishing the values from `/differential_drivetrain_controller/cmd_vel` to the `stop_vel_interceptor` topic 
+
+
   
 ### how to Setup to test functionality 
 

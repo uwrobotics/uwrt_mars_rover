@@ -17,8 +17,6 @@ find_package(uwrt_mars_rover_hw_bridge REQUIRED)
 
 include_directories(include)
 
-# add_subdirectory(lib/uwrt_mars_rover_hw_bridge)
-
 add_library(${PROJECT_NAME} SHARED
     src/uwrt_can.cpp
     #src/uwrt_params.cpp
@@ -43,10 +41,6 @@ target_link_libraries(uwrt_can_test_node
     ${PROJECT_NAME}
 )
 
-target_link_libraries(${PROJECT_NAME}
-    uwrt_mars_rover_hw_bridge::uwrt_mars_rover_hw_bridge_lib
-)
-
 install(TARGETS
     ${PROJECT_NAME}
     uwrt_can_test_node
@@ -58,10 +52,6 @@ install(TARGETS
 ament_export_include_directories(
     include
 )
-
-# ament_export_libraries(
-#     uwrt_mars_rover_hw_bridge
-# )
 
 ament_export_dependencies(
     rclcpp

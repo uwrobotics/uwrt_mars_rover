@@ -12,7 +12,7 @@
 #include <thread>
 #include <vector>
 
-#include "uwrt_mars_rover_hw_bridge/CANMsgMap.h"
+#include "CANMsgMap.h"
 
 // #include "uwrt_params.h"
 #include "rclcpp/logger.hpp"

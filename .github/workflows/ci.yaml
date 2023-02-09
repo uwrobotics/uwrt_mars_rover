@@ -10,10 +10,12 @@ on:
     - cron: '0 0 * * *'
 
 env:
+  PACKAGES_TO_TEST: # This limits the packages that are checked in CI. This is to avoid testing upstream packages passed in via .repos files.
+    uwrt_mars_rover
+    uwrt_mars_rover_drivetrain
+    uwrt_mars_rover_drivetrain_description
+    uwrt_mars_rover_drivetrain_hw
   ROS_DISTRO: galactic
-  PACKAGES_TO_TEST: "uwrt_mars_rover uwrt_mars_rover_arm_urdf uwrt_mars_rover_arm_urdf_moveit"
-
-
   IMAGE: "rostooling/setup-ros-docker:ubuntu-focal-ros-galactic-desktop-latest"
 
 jobs:
@@ -36,19 +38,65 @@ jobs:
     strategy:
       fail-fast: false # We want all the linters to run even if one fails
       matrix:
-        linter: [ cppcheck, clang-format, flake8, xmllint ]
+        linter: [ cppcheck, xmllint ]
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: ROS2 Linter - [ament-${{ matrix.linter }}]
         uses: ros-tooling/action-ros-lint@master
         with:
-          distribution: rolling
+          distribution: ${{ env.ROS_DISTRO }}
           linter: ${{ matrix.linter }}
           package-name: ${{ env.PACKAGES_TO_TEST }}
 
+  linters-clang-format:
+    name: ament-clang-format
+    needs: prepare-actions-environment
+    runs-on: ubuntu-latest
+    container:
+      image: ${{ needs.prepare-actions-environment.outputs.image }}
+      options: -u root
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: ROS2 Linter - [ament-clang-format]
+        uses: ros-tooling/action-ros-lint@master
+        with:
+          distribution: ${{ env.ROS_DISTRO }}
+          linter: clang-format
+          arguments: "--config .clang-format"
+          package-name: ${{ env.PACKAGES_TO_TEST }}
+
+  linters-flake8:
+    name: ament-flake8
+    needs: prepare-actions-environment
+    runs-on: ubuntu-latest
+    container:
+      image: ${{ needs.prepare-actions-environment.outputs.image }}
+      options: -u root
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Force latest version of flake8
+        # Latest flake8 available in ubuntu-focal apt (and the ros-tooling-image) is not up to date with python3.8.
+        # Avoids following error:
+        # "pyflakes" failed during execution due to "'FlakesChecker' object has no attribute 'NAMEDEXPR'"
+        run: |
+          pip install --upgrade flake8
+
+      - name: ROS2 Linter - [ament-flake8]
+        uses: ros-tooling/action-ros-lint@master
+        with:
+          distribution: ${{ env.ROS_DISTRO }}
+          linter: flake8
+          arguments: "--config .flake8"
+          package-name: ${{ env.PACKAGES_TO_TEST }}
 
   linux-amd64-build-and-test:
     needs: prepare-actions-environment
@@ -58,6 +106,13 @@ jobs:
       options: -u root
 
     steps:
+      - name: Force latest version of flake8
+        # Latest flake8 available in ubuntu-focal apt (and the ros-tooling-image) is not up to date with python3.8.
+        # Avoids following error:
+        # "pyflakes" failed during execution due to "'FlakesChecker' object has no attribute 'NAMEDEXPR'"
+        run: |
+          pip install --upgrade flake8
+
       - name: Build ROS2 Packages and Run Tests
         uses: ros-tooling/action-ros-ci@v0.2
         with:
@@ -69,7 +124,8 @@ jobs:
             }
           colcon-mixin-repository: https://raw.githubusercontent.com/colcon/colcon-mixin-repository/3e627e0fa30db85aea05a50e2c61a9832664d236/index.yaml
           target-ros2-distro: ${{ env.ROS_DISTRO }}
-          vcs-repo-file-url: https://raw.githubusercontent.com/${{ github.repository }}/${{ github.sha }}/common_upstream_dependencies.repos
+          vcs-repo-file-url: |
+            https://raw.githubusercontent.com/${{ github.repository }}/${{ github.sha }}/common_upstream_dependencies.repos
           package-name: ${{ env.PACKAGES_TO_TEST }}
 
   linux-arm64-build-and-test:
@@ -81,11 +137,11 @@ jobs:
     # Possibly resolveable with https://github.com/actions/runner/issues/320
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Install Docker/QEMU dependencies
         id: qemu
-        uses: docker/setup-qemu-action@v1
+        uses: docker/setup-qemu-action@v2
         with:
           image: tonistiigi/binfmt:latest
           platforms: arm64
@@ -98,13 +154,26 @@ jobs:
         run: |
           docker run --name arm64-ros --mount type=bind,source=$(pwd),target=/rosws/src/$(basename $(pwd)) --workdir /rosws --detach -i --rm arm64v8/ros:${{ env.ROS_DISTRO }}
 
-      - name: Install ROS Source Dependencies
+      - name: Download ROS Source Dependencies
         run: |
           docker exec --workdir /rosws/src arm64-ros vcs import --input uwrt_mars_rover/common_upstream_dependencies.repos
+        # TODO: add linux_arm64_upstream_dependencies.repos
+
       - name: Install ROS Binary Package Dependencies
         run: |
           docker exec arm64-ros sudo apt update
           docker exec arm64-ros rosdep install -r --from-paths . --ignore-src --rosdistro ${{ env.ROS_DISTRO }} -y
+
+      - name: Force latest version of flake8
+        # Latest flake8 available in ubuntu-focal apt (and the ros-tooling-image) is not up to date with python3.8.
+        # Avoids following error:
+        # "pyflakes" failed during execution due to "'FlakesChecker' object has no attribute 'NAMEDEXPR'"
+        #
+        # rm /opt/ros/${{ env.ROS_DISTRO }}/bin/ament_* required for ament_cmake_test to find the ament_lint installed from common_upstream_dependencies.repos
+        run: |
+          docker exec arm64-ros sudo apt install python3-pip -y
+          docker exec arm64-ros pip install --upgrade flake8
+          docker exec arm64-ros bash -c "rm /opt/ros/${{ env.ROS_DISTRO }}/bin/ament_*"
 
       - name: Build ROS2 Packages and Run Tests
         run: >
@@ -113,14 +182,14 @@ jobs:
             colcon test --packages-select ${{ env.PACKAGES_TO_TEST }} --return-code-on-test-failure --event-handlers console_cohesion+"
 
   windows-amd64-build-and-test: # No rostooling/setup-ros-docker docker images available for Windows.
-    runs-on: windows-latest
+    runs-on: windows-2019
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Setup ROS
-        uses: ros-tooling/setup-ros@master # v0.2 doesn't have commit 45f6b7f which is required for Windows builds
+        uses: ros-tooling/setup-ros@v0.3
         with:
           required-ros-distributions: ${{ env.ROS_DISTRO }}
 
@@ -129,12 +198,20 @@ jobs:
           New-Item -Path C:/ci/ws/install/include -ItemType Directory
         # This is required because the windows binary builds used by setup-ros have the following issue:
         # `Imported target "rclcpp::rclcpp" includes non-existent path`
-        # This can be removed once https://github.com/ros2/ros2/issues/1068 and https://github.com/ros2/rclcpp/issues/1688 are resolved.
+        # This can be removed once https://github.com/ros2/ros2/issues/1068 and https://github.com/ros2/rclcpp/issues/1688 are resolved and released
 
       - name: Build ROS2 Packages and Run Tests
-        uses: wmmc88/action-ros-ci@wmmc88/fix-windows-builds # Revert to upstream action-ros-ci once https://github.com/ros-tooling/action-ros-ci/pull/712 merges
+        uses: ros-tooling/action-ros-ci@v0.2
         with:
           target-ros2-distro: ${{ env.ROS_DISTRO }}
           vcs-repo-file-url: |
+            https://raw.githubusercontent.com/${{ github.repository }}/${{ github.sha }}/common_upstream_dependencies.repos
             https://raw.githubusercontent.com/${{ github.repository }}/${{ github.sha }}/windows_amd64_upstream_dependencies.repos
           package-name: ${{ env.PACKAGES_TO_TEST }}
+          colcon-defaults: | # Disable test building on Windows due to upstream build failure(ros2control) due to possible bug in ament_cmake: https://github.com/ament/ament_cmake/issues/374 
+            {
+              "build": {
+                "mixin": ["build-testing-off"]
+              }
+            }
+          colcon-mixin-repository: https://raw.githubusercontent.com/colcon/colcon-mixin-repository/master/index.yaml

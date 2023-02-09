@@ -46,10 +46,11 @@ def generate_launch_description():
     )]
 
     nodes += [joint_state_broadcaster_spawner:= Node(
+        master
         package='controller_manager',
         executable='spawner',
         arguments=['joint_state_broadcaster', '--controller-manager', '/controller_manager'],
-    )]
+    )
 
     # Delay rviz2 start after joint_state_broadcaster_spawner finishes
     rviz_node = Node(

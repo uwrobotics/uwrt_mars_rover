@@ -8,7 +8,7 @@ repositories:
     url: https://github.com/ament/ament_lint.git
     version: master
 
-#  vectornav:
-#    type: git
-#    url: https://github.com/dawonn/vectornav
-#    version: b209acb # Lastest known working on ros2 branch
+  vectornav:
+    type: git
+    url: https://github.com/dawonn/vectornav
+    version: 1ecaea8966eb04507d7a80b86a21860e4941928f # Latest known working on ros2 branch

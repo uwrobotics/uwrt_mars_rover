@@ -60,7 +60,7 @@ void CamNode::frame() {
   // check ok before reading a frame
   if (rclcpp::ok() && capture_->read(frame)) {
     // timestamp
-    auto stamp = std::chrono::system_clock::now();
+    auto stamp = this->get_clock()->now();
 
     // fill message
     sensor_msgs::msg::Image::UniquePtr image_msg(new sensor_msgs::msg::Image());

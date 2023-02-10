@@ -1,8 +1,8 @@
 #include <uwrt_mars_rover_estop/estop.hpp>
 
-namespace composition{
+namespace uwrt_mars_rover_estop{
     estop::estop(const rclcpp::NodeOptions &options) : Node("estop_button", options){
-        RCLCPP_INFO(this->get_logger(),"HELLO");
+        RCLCPP_INFO(this->get_logger(),"ESTOP NODE HAS STARTED");
 
         //create publisher for middle man topic
         cmd_vel_publisher_ = this->create_publisher<geometry_msgs::msg::Twist>("estop_vel_interceptor",10);
@@ -12,11 +12,10 @@ namespace composition{
             
             //if enter is presed then the estop toggle will be enabled
             if(strlen(msg->data.c_str()) == 0){
-                RCLCPP_INFO(this->get_logger(),"ESTOP WORKS");
                 isEstop = true;
             }
 
-            
+        
                                 
         };
 
@@ -24,13 +23,11 @@ namespace composition{
         //callback for the subscriber will read the values for the drivetrain topic
         //we check the state of the estop boolean here
         auto cmd_subscriber_callback = [this](const geometry_msgs::msg::Twist::SharedPtr msg) -> void {
-            // RCLCPP_INFO(this->get_logger(),"in callback WORKS");
-            
+    
             auto twist_msg = geometry_msgs::msg::Twist();
             
             if(isEstop){
 
-                RCLCPP_INFO(this->get_logger(),"inside the stopper");
                 //populate all values of Twist to be 0
                 twist_msg.angular.x = 0;
                 twist_msg.angular.y = 0;
@@ -46,7 +43,7 @@ namespace composition{
             }
 
             else{
-                RCLCPP_INFO(this->get_logger(),"FORWARDIN THE VALUES");
+    
                 twist_msg.angular.x = msg->angular.x;
                 twist_msg.angular.y = msg->angular.y;
                 twist_msg.angular.z = msg->angular.z;
@@ -73,4 +70,4 @@ namespace composition{
 }
 
 #include <rclcpp_components/register_node_macro.hpp>
-RCLCPP_COMPONENTS_REGISTER_NODE(composition::estop)
+RCLCPP_COMPONENTS_REGISTER_NODE(uwrt_mars_rover_estop::estop)

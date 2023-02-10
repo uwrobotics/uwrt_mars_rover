@@ -20,31 +20,23 @@ from launch.substitutions import (EnvironmentVariable, FindExecutable,
 def generate_launch_description():
 
 
-        #-------------------------------container for turtle_clear-----------------------------------
+        #-------------------------------container for estop-----------------------------------
         
     estop_container = ComposableNodeContainer(
-            name='node_container1',
+            name='estop_container',
             namespace='',
             package='rclcpp_components',
             executable='component_container',
             composable_node_descriptions=[
                     ComposableNode(
                             package='uwrt_mars_rover_estop',
-                            plugin='composition::estop',
+                            plugin='uwrt_mars_rover_estop::estop',
                             name='estop_node',
                     )                      
 
             ]
     )
 
-    script = launch.actions.ExecuteProcess(
-            cmd=['/home/nmolla/uwrt_ws/src/uwrt_mars_rover/uwrt_mars_rover_utils/uwrt_mars_rover_estop/scripts/test.sh'],
-            name='keyboard_reader',
-    )
-
-
-    
-
-    
+ 
     #-------------------------------------------------------------------------------
     return launch.LaunchDescription([estop_container])

@@ -29,9 +29,23 @@ ament_target_dependencies(estop_node
 	"rclcpp_components"
   	"std_msgs"
   	"geometry_msgs")
-rclcpp_components_register_nodes(estop_node "composition::estop")
+rclcpp_components_register_nodes(estop_node "uwrt_mars_rover_estop::estop")
 # this way we can execute the component with - ros2 component standalone software_training composition::turtle_service_request_node
-set(node_plugins "${node_plugins}composition::estop;$<TARGET_FILE:estop_node>\n")
+set(node_plugins "${node_plugins}uwrt_mars_rover_estop::estop;$<TARGET_FILE:estop_node>\n")
+
+
+
+
+if(BUILD_TESTING)
+  find_package(ament_lint_auto REQUIRED)
+  # the following line skips the linter which checks for copyrights
+  # uncomment the line when a copyright and license is not present in all source files
+  #set(ament_cmake_copyright_FOUND TRUE)
+  # the following line skips cpplint (only works in a git repo)
+  # uncomment the line when this package is not in a git repo
+  #set(ament_cmake_cpplint_FOUND TRUE)
+  ament_lint_auto_find_test_dependencies()
+endif()
 
 
 #tell where to put binaries

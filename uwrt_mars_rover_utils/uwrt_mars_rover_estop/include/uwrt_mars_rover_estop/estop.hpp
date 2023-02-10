@@ -3,7 +3,7 @@
 #include <std_msgs/msg/bool.hpp>
 #include <std_msgs/msg/string.hpp>
 
-namespace composition{
+namespace uwrt_mars_rover_estop{
 
     class estop : public rclcpp::Node{
         

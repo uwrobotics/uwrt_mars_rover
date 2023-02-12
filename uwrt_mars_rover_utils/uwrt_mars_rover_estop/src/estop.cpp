@@ -12,7 +12,6 @@ namespace uwrt_mars_rover_estop{
             
             //if enter is presed then the estop toggle will be enabled
             if(msg->data){
-                RCLCPP_INFO(this->get_logger(),"working");
                 isEstop = true;
             }
 

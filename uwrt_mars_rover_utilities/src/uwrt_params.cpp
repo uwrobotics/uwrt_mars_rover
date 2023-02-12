@@ -14,7 +14,6 @@ namespace uwrt_mars_rover_utils {
             ROS_ERROR_STREAM_NAMED("uwrt_params",
                     "Failed to construct a valid logger name from NodeHandle. Using fallback of \""
                     << fallback_logger_name << "\"");
-
             logger_name = fallback_logger_name;
             number_of_unnamed_loggers++;
         }

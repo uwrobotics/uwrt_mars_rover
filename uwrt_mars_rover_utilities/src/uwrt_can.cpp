@@ -152,5 +152,45 @@ namespace uwrt_mars_rover_utilities {
             std::this_thread::sleep_for(thread_sleep_millis_);
         }
     }
+    
+    bool UWRTCANWrapper::writeToID(CANID id, CANSIGNAL signal, CanSignalValue_t value) {
+        // Update the CANMsgMap with the new value
+        // If the CANMsgMap doesn't have the ID (or signal), return false
+        if (!msg_map_.setSignalValue(id, signal, value)) {
+            return false;
+        }
+
+        // Use the hardware bridge to get the raw bytes to send to the ID
+        HWBRIDGE::CANMsgData_t data;
+        size_t len; // length is unused for now, but packCANMsg() returns length of data
+        packCANMsg(data.raw, id, &msg_map_, len);
+        
+        // cast data.raw (uint8_t[8]) to uint64_t using memcpy
+        uint64_t raw_data;
+        std::memcpy(&raw_data, data.raw, sizeof(uint64_t));
+
+        // Write the raw data using the other writeToID() method
+        return writeToID(raw_data, static_cast<uint32_t>(id));
+    }
+    
+    bool UWRTCANWrapper::getLatestFromID(CANID id, CANSIGNAL signal, CanSignalValue_t& value) {
+        // Get the latest CAN frame using the other getLatestFromID() method
+        // If the CANMsgMap doesn't have the ID, return false
+        uint64_t raw_data; // 8 bytes
+        if (!getLatestFromID(raw_data, static_cast<uint32_t>(id))) {         
+            return false;
+        }
+        
+        // cast data (uint64_t) to uint8_t[8] using memcpy
+        HWBRIDGE::CANMsgData_t data;
+        std::memcpy(data.raw, &raw_data, sizeof(uint64_t));
+
+        // Add raw data to CANMsgMap
+        // This uses the hardware bridge to get the value from the raw bytes
+        unpackCANMsg(data.raw, id, &msg_map_);
+        
+        // Get the value from the CANMsgMap
+        return msg_map_.getSignalValue(id, signal, value);
+    }
 
 }  // namespace uwrt_mars_rover_utilities

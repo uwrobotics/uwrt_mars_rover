@@ -12,7 +12,7 @@
 #include <thread>
 #include <vector>
 
-#include "CANMsgMap.h"
+#include "hw_bridge.h"
 
 // #include "uwrt_params.h"
 #include "rclcpp/logger.hpp"
@@ -20,6 +20,11 @@
 namespace uwrt_mars_rover_utilities {
 
 class UWRTCANWrapper {
+  using CANMsgMap = HWBRIDGE::CANMsgMap;
+  using CANID     = HWBRIDGE::CANID;
+  using CANSIGNAL = HWBRIDGE::CANSIGNAL;
+  using CanSignalValue_t = HWBRIDGE::CANSignalValue_t;
+
  public:
   explicit UWRTCANWrapper(): UWRTCANWrapper("uwrt_can", "can0", false, 1) {}
 
@@ -57,7 +62,32 @@ class UWRTCANWrapper {
   int rcv_endianness_{__BYTE_ORDER__};
   std::thread read_thread_;
   volatile bool read_thread_running_{};
+  
+  HWBRIDGE::CANMsgMap msg_map_ { // example of how it would be created,
+  // this map would be much larger so it might be better to create it in a separate file
+  // and include it here
+    // Msg 1
+    {CANID::COMMON_DEBUG_MESSAGE1,
+     {
+         {CANSIGNAL::COMMON_DEBUG_SIGNAL1, 0},
+     }},
+
+    // Msg 2
+    {CANID::COMMON_DEBUG_MESSAGE3,
+     {
+         {CANSIGNAL::COMMON_DEBUG_SIGNAL3, 0},
+     }},
+  };
+
+  // Can be changed if necessary, but right now in order to
+  // not break existing functionality I am keeping the old map
+  // as well
+  // This map is used to store the received can frames
+  // When a value is read from this map it is deleted from the map
+  // The actual CANMsgMap will still be storing the values
+  // Not sure which behaviour we want to keep
   std::map<canid_t, struct can_frame> recv_map_;
+  
   std::timed_mutex recv_map_mtx_;
   std::chrono::milliseconds thread_sleep_millis_{};
   static constexpr std::chrono::milliseconds MUTEX_LOCK_TIMEOUT{1};
@@ -92,6 +122,30 @@ class UWRTCANWrapper {
   }
 
  public:
+  
+  // New CAN methods to read/write to CAN bus using enums
+  /**
+   * @brief Writes a signal to the CAN bus.
+   * @param id The CAN ID to write to
+   * @param signal The signal to write to (part of the 8 byte message)
+   * @param value The value to write to the signal (CanSignalValue is an alias for double
+   * at the moment)
+   * 
+   * @return True if the write was successful, false otherwise
+   */
+  bool writeToID(CANID id, CANSIGNAL signal, CanSignalValue_t value);
+
+  /**
+   * @brief Reads a signal from the CAN bus.
+   * @param id The CAN ID to read from
+   * @param signal The signal to read from (part of the 8 byte message)
+   * @param value The value to read from the signal (CanSignalValue is an alias for double
+   * at the moment)
+   * 
+   * @return True if the read was successful, false otherwise
+   */
+  bool getLatestFromID(CANID id, CANSIGNAL signal, CanSignalValue_t &value);
+
   // these two function definitions need to be in header because they use
   // templates (good one c++ 11)
   template <class T>

@@ -21,7 +21,7 @@
       <robot_param>robot_description</robot_param>
       <robot_param_node>robot_state_publisher</robot_param_node>
       <robot_sim_type>gazebo_ros2_control/DefaultRobotHWSim</robot_sim_type>
-      <parameters>$(find uwrt_mars_rover_drivetrain_description)/config/drivetrain_controllers.yaml</parameters>
+      <parameters>$(find uwrt_mars_rover_drivetrain_hw)/config/drivetrain_controllers.yaml</parameters>
       </plugin>
     </gazebo>
   </xacro:if>

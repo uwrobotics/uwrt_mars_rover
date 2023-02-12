@@ -30,7 +30,7 @@ def generate_launch_description():
             composable_node_descriptions=[
                     ComposableNode(
                             package='uwrt_mars_rover_estop',
-                            plugin='uwrt_mars_rover_estop::estop',
+                            plugin='uwrt_mars_rover_estop::Estop',
                             name='estop_node',
                     )                      
 

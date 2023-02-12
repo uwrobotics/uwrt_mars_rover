@@ -29,9 +29,9 @@ ament_target_dependencies(estop_node
 	"rclcpp_components"
   	"std_msgs"
   	"geometry_msgs")
-rclcpp_components_register_nodes(estop_node "uwrt_mars_rover_estop::estop")
+rclcpp_components_register_nodes(estop_node "uwrt_mars_rover_estop::Estop")
 # this way we can execute the component with - ros2 component standalone software_training composition::turtle_service_request_node
-set(node_plugins "${node_plugins}uwrt_mars_rover_estop::estop;$<TARGET_FILE:estop_node>\n")
+set(node_plugins "${node_plugins}uwrt_mars_rover_estop::Estop;$<TARGET_FILE:estop_node>\n")
 
 
 

@@ -1,11 +1,12 @@
 #!/bin/bash
 while true; do
   #ITS RED!!!
-  echo -e "\033[31mPress ENTER to kill...\033[0m"
+  echo -e "\033[31mPress k to kill...\033[0m"
     #READS 1 CHARACTER FROM THE TERMINAL WHEN ENTER IS PRESSED AND STORES IT IN THE KEY VARAIBLE 
   read -n1 -r key
-  #STANDARD ROS2 PUBLISHER CALL FROM TERMINAL
-  ros2 topic pub /estop std_msgs/String "{data: '$key'}" -1
+  if [ "$key" == $'k' ]; then
+    ros2 topic pub /estop std_msgs/Bool "{data: true}" -1
+  fi
 done
 
 

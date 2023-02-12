@@ -5,10 +5,10 @@
 
 namespace uwrt_mars_rover_estop{
 
-    class estop : public rclcpp::Node{
+    class Estop : public rclcpp::Node{
         
     public:
-        explicit estop(const rclcpp::NodeOptions &options);
+        explicit Estop(const rclcpp::NodeOptions &options);
     
     
     
@@ -18,7 +18,7 @@ namespace uwrt_mars_rover_estop{
 
         // subscriber - topic where the velocities are put
         rclcpp::Subscription<geometry_msgs::msg::Twist>::SharedPtr cmd_subscriber_;
-        rclcpp::Subscription<std_msgs::msg::String>::SharedPtr estop_bool_subscriber;
+        rclcpp::Subscription<std_msgs::msg::Bool>::SharedPtr estop_bool_subscriber;
 
 
 

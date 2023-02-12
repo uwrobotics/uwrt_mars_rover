@@ -1,17 +1,18 @@
 #include <uwrt_mars_rover_estop/estop.hpp>
 
 namespace uwrt_mars_rover_estop{
-    estop::estop(const rclcpp::NodeOptions &options) : Node("estop_button", options){
+    Estop::Estop(const rclcpp::NodeOptions &options) : Node("estop_button", options){
         RCLCPP_INFO(this->get_logger(),"ESTOP NODE HAS STARTED");
 
         //create publisher for middle man topic
         cmd_vel_publisher_ = this->create_publisher<geometry_msgs::msg::Twist>("estop_vel_interceptor",10);
         
         //callback for checking if the enter key has been pressed
-        auto estop_callback = [this](const std_msgs::msg::String::SharedPtr msg) -> void {
+        auto estop_callback = [this](const std_msgs::msg::Bool::SharedPtr msg) -> void {
             
             //if enter is presed then the estop toggle will be enabled
-            if(strlen(msg->data.c_str()) == 0){
+            if(msg->data){
+                RCLCPP_INFO(this->get_logger(),"working");
                 isEstop = true;
             }
 
@@ -60,7 +61,7 @@ namespace uwrt_mars_rover_estop{
 
 
         //subscriber for bool value
-        estop_bool_subscriber = this->create_subscription<std_msgs::msg::String>("/estop", 10, estop_callback);
+        estop_bool_subscriber = this->create_subscription<std_msgs::msg::Bool>("/estop", 10, estop_callback);
 
         //subscirber to the drivetrain veclocity topic
         cmd_subscriber_ = this->create_subscription<geometry_msgs::msg::Twist>("/differential_drivetrain_controller/cmd_vel", 10, cmd_subscriber_callback);
@@ -70,4 +71,4 @@ namespace uwrt_mars_rover_estop{
 }
 
 #include <rclcpp_components/register_node_macro.hpp>
-RCLCPP_COMPONENTS_REGISTER_NODE(uwrt_mars_rover_estop::estop)
+RCLCPP_COMPONENTS_REGISTER_NODE(uwrt_mars_rover_estop::Estop)

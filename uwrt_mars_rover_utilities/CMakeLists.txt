@@ -17,7 +17,7 @@ find_package(uwrt_mars_rover_hw_bridge REQUIRED)
 
 include_directories(include)
 
-add_library(${PROJECT_NAME} SHARED
+add_library(${PROJECT_NAME} # was SHARED
     src/uwrt_can.cpp
     #src/uwrt_params.cpp
 )

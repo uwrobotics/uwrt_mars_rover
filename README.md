@@ -12,9 +12,17 @@
 5. Update your system before continuing: `sudo apt update -y --no-install-recommends && sudo apt dist-upgrade -y`
 6. Install `rosdep`, the ROS dependency manager: `sudo apt install -y python3-rosdep`
 7. Download the repository's upstream dependencies: `vcs import --input uwrt_mars_rover/common_upstream_dependencies.repos`
-8. Navigate back to the root of your workspace, and install all dependencies for your ROS packages: `RUN rosdep install --from-paths src -y --ignore-src`
+8. Update rosdep via `rosdep update --include-eol-distros`, including end-of-life ROS2 distros (we use Galactic).
+9. Navigate back to the root of your workspace, and install all dependencies for your ROS packages: `rosdep install --from-paths src -y --ignore-src`.
 
-You can re-navigate to the root of your workspace at any time and rerun #8 to update your ROS packages' dependencies.
+You can re-navigate to the root of your workspace at any time and rerun #8 and #9 to update your ROS packages' dependencies.
+For clarification, the repository should live in `~/ros2_ws/src/uwrt_mars_rover`.
+
+### Building and Installing the Repository
+1. Run `source /opt/ros/galactic/setup.bash`
+2. Navigate to the root of your ROS2 workspace (e.g: `cd ~/ros2_ws`)
+3. Build everything in the workspace: `colcon build`
+4. Install the built files: `. install/setup.bash`
 
 
 ## Adding Dependencies

@@ -166,6 +166,7 @@ namespace uwrt_mars_rover_utilities {
         packCANMsg(data.raw, id, &msg_map_, len);
         
         // cast data.raw (uint8_t[8]) to uint64_t using memcpy
+        // Unfortunately packing expects a uint8_t[8] but writing expects a uint64_t
         uint64_t raw_data;
         std::memcpy(&raw_data, data.raw, sizeof(uint64_t));
 
@@ -182,6 +183,7 @@ namespace uwrt_mars_rover_utilities {
         }
         
         // cast data (uint64_t) to uint8_t[8] using memcpy
+        // Unfortunately reading expects a uint64_t but unpacking expects a uint8_t[8]
         HWBRIDGE::CANMsgData_t data;
         std::memcpy(data.raw, &raw_data, sizeof(uint64_t));
 

@@ -8,7 +8,7 @@
 1. Navigate to your ROS2 workspace in the terminal (e.g: `dev_ws` or `uwrt_ws`)
 2. Create a `src` directory if you haven't already: `mkdir -p dev_ws/src`.
 3. Navigate inside of your `src` directory: `cd src`
-4. Clone the repository into your `src` directory: `git clone --recurse-submodules git@github.com:uwrobotics/uwrt_mars_rover.git`
+4. Clone the repository into your `src` directory: `git clone git@github.com:uwrobotics/uwrt_mars_rover.git`
 5. Update your system before continuing: `sudo apt update -y --no-install-recommends && sudo apt dist-upgrade -y`
 6. Install `rosdep`, the ROS dependency manager: `sudo apt install -y python3-rosdep`
 7. Download the repository's upstream dependencies: `vcs import --input uwrt_mars_rover/common_upstream_dependencies.repos`

@@ -12,3 +12,8 @@ repositories:
     type: git
     url: https://github.com/dawonn/vectornav
     version: 1ecaea8966eb04507d7a80b86a21860e4941928f # Latest known working on ros2 branch
+
+  zed2_ros_wrapper:
+    type: git
+    url: https://github.com/stereolabs/zed-ros2-wrapper.git
+    version: master

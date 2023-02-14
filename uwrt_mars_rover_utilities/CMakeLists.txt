@@ -22,11 +22,11 @@ add_library(${PROJECT_NAME} # was SHARED
     #src/uwrt_params.cpp
 )
 
-target_include_directories(
-    ${PROJECT_NAME}
-    PUBLIC
+target_include_directories(${PROJECT_NAME} PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/uwrt_mars_rover_utilities>
+    $<INSTALL_INTERFACE:include/uwrt_mars_rover_utilities>
 )
 
 add_subdirectory(lib/uwrt_mars_rover_hw_bridge)
@@ -50,44 +50,43 @@ target_link_libraries(uwrt_can_test_node
     ${PROJECT_NAME}
 )
 
-
-install(TARGETS ${PROJECT_NAME} 
-    uwrt_can_test_node
-    EXPORT ${PROJECT_NAME}Config
-    
-    RUNTIME DESTINATION bin
-    ARCHIVE DESTINATION lib
-    LIBRARY DESTINATION lib
-    INCLUDES DESTINATION include
-)
-
-export(TARGETS
+ament_export_libraries(
     ${PROJECT_NAME}
-    NAMESPACE uwrt_mars_rover_utilities::
-    FILE "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
+    # uwrt-mars-rover-hw-bridge
 )
 
 
-install(
-    FILES 
-        include/uwrt_mars_rover_utilities/uwrt_can.h
-    DESTINATION
-        include/uwrt_mars_rover_utilities
-    COMPONENT
-        Devel
-)
-install(
-    EXPORT
-    ${PROJECT_NAME}Config
-    DESTINATION "${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/cmake"
-    NAMESPACE uwrt_mars_rover_utilities::
-)
 ament_export_include_directories(
     include
+    include/uwrt_mars_rover_utilities
+    lib/uwrt_mars_rover_hw_bridge/include
 )
+
+
 
 ament_export_dependencies(
     rclcpp
 )
+
+
+
+install(
+    DIRECTORY include/
+    DESTINATION include
+)
+
+install(
+    DIRECTORY include/uwrt_mars_rover_utilities/
+    DESTINATION include
+)
+
+
+install(TARGETS ${PROJECT_NAME} 
+    uwrt_can_test_node
+    RUNTIME DESTINATION lib
+    ARCHIVE DESTINATION lib
+    LIBRARY DESTINATION lib
+)
+
 
 ament_package()

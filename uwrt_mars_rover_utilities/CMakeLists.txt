@@ -63,6 +63,7 @@ ament_export_include_directories(
 
 ament_export_dependencies(
     rclcpp
+    uwrt_mars_rover_hw_bridge
 )
 
 

@@ -58,8 +58,7 @@ target_compile_definitions(coordinateNode
 	PRIVATE "COORDINATE_NODE_DLL")
 ament_target_dependencies(coordinateNode
 	"rclcpp"
-	"rclcpp_components"
-	"XboxController")
+	"rclcpp_components")
 # build ROS custom messages
 rosidl_target_interfaces(coordinateNode ${PROJECT_NAME} "rosidl_typesupport_cpp")
 rclcpp_components_register_nodes(coordinateNode "drivetraincontrollerComposition::coordinateNode")

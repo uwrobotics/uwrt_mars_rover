@@ -45,8 +45,10 @@ def generate_launch_description():
     use_sim_time = LaunchConfiguration('use_sim_time', default='true')
 
     # Nodes
-    nodes = []
-    nodes += [Node(
+    sim_nodes = []
+    state_publishers = []
+
+    state_publishers += [Node(
         package='robot_state_publisher',
         executable='robot_state_publisher',
         parameters=[{'robot_description': robot_description_content}],
@@ -54,47 +56,37 @@ def generate_launch_description():
     )]
 
     # Depending on gui parameter, either launch joint_state_publisher or joint_state_publisher_gui
-    nodes += [Node(
+    state_publishers += [Node(
         package='joint_state_publisher',
         executable='joint_state_publisher',
         condition=UnlessCondition(LaunchConfiguration('gui'))
     )]
+    
+    # Gazebo simulator
+    gazebo = IncludeLaunchDescription(
+                PythonLaunchDescriptionSource([os.path.join(
+                    get_package_share_directory('gazebo_ros'), 'launch'), '/gazebo.launch.py']),
+        )
 
-    nodes += [Node(
-        package='joint_state_publisher_gui',
-        executable='joint_state_publisher_gui',
-        condition=IfCondition(LaunchConfiguration('gui'))
-    )]
-
-    nodes += [Node(
-        package='rviz2',
-        executable='rviz2',
-        name='rviz2',
-        output='screen',
-        arguments=['-d', LaunchConfiguration('rvizconfig')],
-    )]
-    gazebo_starter = [ExecuteProcess(
-            cmd=['gazebo', '--verbose', '-s', 'libgazebo_ros_factory.so'],
-            output='screen')]
-    # gazebo = IncludeLaunchDescription(
-    #             PythonLaunchDescriptionSource([os.path.join(
-    #                 get_package_share_directory('gazebo_ros'), 'launch'), '/gazebo.launch.py']),
-    #     )
+    # Spawn the URDF model
     # https://github.com/ros-simulation/gazebo_ros_pkgs/wiki/ROS-2-Migration:-Spawn-and-delete
     spawn_entity = Node(package='gazebo_ros', executable='spawn_entity.py', name='urdf_spawner',
                         arguments=['-topic', 'robot_description', '-entity', 'drivetrain', '-x', '0.5', '-y', '0.5', '-z', '0.5', '-R','0', '-Y', '0', '-P','0'], output='screen'
     )
 
+    ## processes w/o event handlers
     load_joint_state_controller = ExecuteProcess(
-        cmd=['ros2', 'control', 'load_controller', '--set-state', 'start',
+        cmd=['ros2', 'control', 'load_controller', '--set-state', 'active',
              'joint_state_broadcaster'],
         output='screen'
     )
 
     load_joint_trajectory_controller = ExecuteProcess(
-        cmd=['ros2', 'control', 'load_controller', '--set-state', 'start', 'differential_drivetrain_controller'],
+        cmd=['ros2', 'control', 'load_controller', '--set-state', 'active', 'differential_drivetrain_controller'],
         output='screen'
     )
+
+    ## Register event handlers
     loadjointstate =  RegisterEventHandler(
             event_handler=OnProcessExit(
                 target_action=spawn_entity,
@@ -107,9 +99,9 @@ def generate_launch_description():
                 on_exit=[load_joint_trajectory_controller],
             )
         )
+    
     ros2_control_nodes = [loadjointstate,loadtrajectorycontroller]
+    sim_nodes = [gazebo,spawn_entity]
 
-    nodes+=gazebo_starter + [spawn_entity]
 
-
-    return LaunchDescription(declared_arguments + nodes + ros2_control_nodes)
+    return LaunchDescription(declared_arguments + sim_nodes + ros2_control_nodes)

@@ -14,6 +14,9 @@ find_package(rclcpp REQUIRED)
 find_package(rclcpp_components REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(uwrt_mars_rover_hw_bridge REQUIRED)
+find_package(uwrt_msgs REQUIRED)
+
+
 
 include_directories(include)
 
@@ -35,6 +38,7 @@ ament_target_dependencies(uwrt_can_test_node
     std_msgs
     rclcpp_components
     uwrt_mars_rover_hw_bridge
+    uwrt_msgs
 )
 
 target_link_libraries(uwrt_can_test_node

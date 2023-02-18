@@ -108,6 +108,7 @@ class UWRTCANWrapper {
       return data;
     }
 
+    RCLCPP_INFO(logger_, "pre end data %ld",  data);
     // if not, we need to swap endianess
     T swapped_data;
     auto swapped_ptr =
@@ -118,6 +119,7 @@ class UWRTCANWrapper {
       // NOLINTNEXTLINE(cppcoreguidelines-pro-bounds-pointer-arithmetic)
       std::memcpy(&swapped_ptr[i], &original_ptr[sizeof(T) - 1 - i], 1);
     }
+    RCLCPP_INFO(logger_, "post end data %ld",  swapped_data);
     return swapped_data;
   }
 
@@ -195,10 +197,21 @@ class UWRTCANWrapper {
     struct can_frame frame {};
     frame.can_id = (canid_t)id;
     frame.can_dlc = sizeof(T);
-    data = correctEndianness<T>(data);
+    // data = correctEndianness<T>(data);
     std::memcpy(frame.data, &data, sizeof(T));
 
+    // unsigned char* data_ptr = frame.data;
+    std::string str_data = (char*)frame.data;
+    RCLCPP_INFO(logger_, "%x |  %s",  frame.can_id, frame.data);
+
+    // auto t1 = std::chrono::high_resolution_clock::now();
     int bytes_sent = send(socket_handle_, &frame, sizeof(struct can_frame), 0);
+    // auto t2 = std::chrono::high_resolution_clock::now();
+    // auto ms_int = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1);
+
+    // RCLCPP_INFO(logger_, "CAN send time %d", ms_int);
+
+
 
     return bytes_sent == sizeof(struct can_frame);
   }

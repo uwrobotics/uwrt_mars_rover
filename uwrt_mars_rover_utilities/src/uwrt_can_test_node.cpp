@@ -2,6 +2,7 @@
 #include <std_msgs/msg/float32.hpp>
 #include <std_msgs/msg/u_int64.hpp>
 #include <uwrt_mars_rover_utilities/uwrt_can.h>
+#include <uwrt_msgs/msg/set_vel.hpp>
 
 /**
  * Tests the uwrt_can class.
@@ -16,6 +17,14 @@ static constexpr uint32_t UINT_READ_ID1 = 0x003;
 static constexpr uint32_t UINT_READ_ID2 = 0x004;
 static constexpr uint32_t FLOAT_WRITE_ID = 0x02d;
 static constexpr uint32_t UINT_WRITE_ID = 0x02d;
+static constexpr uint32_t ODRV_VEL_CMD = 0xd;
+
+enum ODRV_IDS
+{
+    ZERO,
+    ONE,
+    TWO
+};
 
 // ros constants
 static constexpr int TOPIC_BUFFER_SIZE = 10;
@@ -31,7 +40,8 @@ class CanTestNode : public rclcpp::Node {
 
     // Subscriptions
     rclcpp::Subscription<std_msgs::msg::UInt64>::SharedPtr subscription_uint;
-    rclcpp::Subscription<std_msgs::msg::Float32>::SharedPtr subscription_float;
+    rclcpp::Subscription<uwrt_msgs::msg::SetVel>::SharedPtr vel_sub;
+
 
     // Vectors that hold the float ids and uint ids for reading
     std::vector<uint32_t> float_ids {FLOAT_READ_ID1, FLOAT_READ_ID2};
@@ -41,9 +51,12 @@ class CanTestNode : public rclcpp::Node {
     rclcpp::TimerBase::SharedPtr timer;
 
     // callback to get new float from topic, and send it over CAN
-    void sendCanFloatCallback(const std_msgs::msg::Float32::SharedPtr data) {
-        auto msg = (float)data->data;
-        if (can_wrapper_float.writeToID<float>(msg, FLOAT_WRITE_ID)) {
+    void sendCanVelCallback(const uwrt_msgs::msg::SetVel data) {
+        RCLCPP_INFO(this->get_logger(), "Changes");
+
+        auto msg = (float)data.vel;
+        auto can_msg_id = (int)data.can_id << 5 | ODRV_VEL_CMD;
+        if (can_wrapper_float.writeToID<float>(msg, can_msg_id)) {
             RCLCPP_INFO(this->get_logger(), "Successfully sent float msg '%f' to id %x", msg, FLOAT_WRITE_ID);
         } else {
             RCLCPP_INFO(this->get_logger(), "Failed to send float msg '%f' to id %x", msg, FLOAT_WRITE_ID);
@@ -102,8 +115,8 @@ public:
         // create subscribers
         subscription_uint = this->create_subscription<std_msgs::msg::UInt64>(
             "can_test_uint", TOPIC_BUFFER_SIZE, std::bind(&CanTestNode::sendCanUIntCallback, this, std::placeholders::_1));
-        subscription_float = this->create_subscription<std_msgs::msg::Float32>(
-            "can_test_float", TOPIC_BUFFER_SIZE, std::bind(&CanTestNode::sendCanFloatCallback, this, std::placeholders::_1));
+        vel_sub = this->create_subscription<uwrt_msgs::msg::SetVel>(
+            "can_send_vel", TOPIC_BUFFER_SIZE, std::bind(&CanTestNode::sendCanVelCallback, this, std::placeholders::_1));
 
         // Now, we need to create a timer to periodically read from the CAN bus
         // This timer will call the readCanMessages function

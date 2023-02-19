@@ -87,4 +87,36 @@ install(TARGETS
 	LIBRARY DESTINATION lib 
 	RUNTIME DESTINATION bin)
 
+if (BUILD_TESTING)
+   # Force generation of compile_commands.json for clang-tidy
+   set(CMAKE_EXPORT_COMPILE_COMMANDS ON CACHE INTERNAL "")
+
+   # clang-format
+   find_package(ament_cmake_clang_format REQUIRED)
+   ament_clang_format(
+   CONFIG_FILE ${CMAKE_SOURCE_DIR}/../../.clang-format
+   )
+
+   # clang-tidy
+   find_package(ament_cmake_clang_tidy REQUIRED)
+   ament_clang_tidy(
+   ${CMAKE_BINARY_DIR}
+   CONFIG_FILE ${CMAKE_SOURCE_DIR}/../../.clang-tidy
+   )
+
+   # cppcheck
+   find_package(ament_cmake_cppcheck REQUIRED)
+   ament_cppcheck()
+
+   # flake8
+   find_package(ament_cmake_flake8 REQUIRED)
+   ament_flake8(
+   CONFIG_FILE ${CMAKE_SOURCE_DIR}/../../.flake8
+   )
+
+   # xmllint
+   find_package(ament_cmake_xmllint REQUIRED)
+   ament_xmllint()
+endif ()
+
 ament_package()

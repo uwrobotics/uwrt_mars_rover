@@ -13,8 +13,10 @@ def generate_launch_description():
         composable_node_descriptions=[
             ComposableNode(
                 package="uwrt_mars_rover",
-                plugin="drivetraincontrollerComposition::CoordinateNode"
+                plugin="drivetraincontrollerComposition::CoordinateNode",
+                name='coordinateNode',
             ),
         ]
     )
-return launch.LaunchDescription([container])
+    return launch.LaunchDescription([container])
+

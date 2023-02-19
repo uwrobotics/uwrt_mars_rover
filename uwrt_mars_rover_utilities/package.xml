@@ -15,6 +15,7 @@
   <depend>rclcpp</depend>
   <depend>uwrt_mars_rover_hw_bridge</depend>
   <depend>std_msgs</depend>
+  <depend>geometry_msgs</depend>
   <depend>uwrt_msgs</depend>
 
   <export>

@@ -15,6 +15,7 @@ find_package(rclcpp_components REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(uwrt_mars_rover_hw_bridge REQUIRED)
 find_package(uwrt_msgs REQUIRED)
+find_package(geometry_msgs REQUIRED)
 
 
 
@@ -30,6 +31,7 @@ ament_target_dependencies(${PROJECT_NAME}
     std_msgs
     rclcpp_components
     uwrt_mars_rover_hw_bridge
+    geometry_msgs
 )
 
 add_executable(uwrt_can_test_node src/uwrt_can_test_node.cpp)
@@ -41,13 +43,28 @@ ament_target_dependencies(uwrt_can_test_node
     uwrt_msgs
 )
 
-target_link_libraries(uwrt_can_test_node
+add_executable(uwrt_can_twist_drive_node src/uwrt_can_twist_drive_node.cpp)
+ament_target_dependencies(uwrt_can_twist_drive_node
+    rclcpp
+    std_msgs
+    rclcpp_components
+    uwrt_mars_rover_hw_bridge
+    uwrt_msgs
+    geometry_msgs
+)
+
+target_link_libraries(uwrt_can_test_node 
+    ${PROJECT_NAME}
+)
+
+target_link_libraries(uwrt_can_twist_drive_node 
     ${PROJECT_NAME}
 )
 
 install(TARGETS
     ${PROJECT_NAME}
     uwrt_can_test_node
+    uwrt_can_twist_drive_node
     RUNTIME DESTINATION lib/${PROJECT_NAME}
     ARCHIVE DESTINATION lib/${PROJECT_NAME}
     LIBRARY DESTINATION lib/${PROJECT_NAME}

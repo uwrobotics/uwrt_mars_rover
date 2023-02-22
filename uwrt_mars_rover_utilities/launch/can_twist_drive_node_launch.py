@@ -20,6 +20,18 @@ def generate_launch_description():
     nodes = []
 
     nodes += [Node(
+        package='joy',
+        namespace="",
+        executable="joy_node"
+    )]
+
+    nodes += [Node(
+        package='uwrt_mars_rover_utilities',
+        namespace="",
+        executable="xbox_controller_node"
+    )]
+
+    nodes += [Node(
         package='uwrt_mars_rover_utilities',
         executable='uwrt_can_test_node',
         parameters=[

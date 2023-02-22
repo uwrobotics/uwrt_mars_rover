@@ -16,6 +16,7 @@ find_package(std_msgs REQUIRED)
 find_package(uwrt_mars_rover_hw_bridge REQUIRED)
 find_package(uwrt_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
+find_package(sensor_msgs REQUIRED)
 
 
 
@@ -53,6 +54,17 @@ ament_target_dependencies(uwrt_can_twist_drive_node
     geometry_msgs
 )
 
+
+add_executable(xbox_controller_node 
+	src/uwrt_mars_rover_xbox_controller.cpp)
+
+ament_target_dependencies(xbox_controller_node
+	rclcpp
+	rclcpp_components
+	sensor_msgs
+    geometry_msgs
+)
+
 target_link_libraries(uwrt_can_test_node 
     ${PROJECT_NAME}
 )
@@ -64,6 +76,7 @@ target_link_libraries(uwrt_can_twist_drive_node
 install(TARGETS
     ${PROJECT_NAME}
     uwrt_can_test_node
+    xbox_controller_node
     uwrt_can_twist_drive_node
     RUNTIME DESTINATION lib/${PROJECT_NAME}
     ARCHIVE DESTINATION lib/${PROJECT_NAME}

@@ -38,7 +38,7 @@ class CANTwistDriveNode : public rclcpp::Node {
         // Send message to right side motors
         for(int i = 3; i < 6; i++) {
             motor_msg.can_id = IDs[i];
-            motor_msg.vel = data.linear.x + data.linear.y;
+            motor_msg.vel = -data.linear.x + data.linear.y;
             this->vel_pub->publish(motor_msg);
         }
     }

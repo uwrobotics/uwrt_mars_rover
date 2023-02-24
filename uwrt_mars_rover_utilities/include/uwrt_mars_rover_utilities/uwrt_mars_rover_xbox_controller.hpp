@@ -5,6 +5,8 @@
 #include <uwrt_msgs/msg/xbox_controller.hpp>
 #include <geometry_msgs/msg/twist.hpp>
 
+const float XBOX_DEADZONE_X = 0.1;
+const float XBOX_DEADZONE_Y = 0.1;
 
 namespace uwrt_xbox {
     
@@ -34,6 +36,7 @@ private:
     JsData joystick_data;
 
     const int joystick_vel_scale_ = 5;
+
 
     void getXboxData(const joy_msg::SharedPtr msg);
     void publishStructuredXboxData();

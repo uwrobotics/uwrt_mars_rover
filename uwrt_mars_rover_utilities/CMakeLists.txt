@@ -32,6 +32,7 @@ ament_target_dependencies(${PROJECT_NAME}
     std_msgs
     rclcpp_components
     uwrt_mars_rover_hw_bridge
+    uwrt_msgs
     geometry_msgs
 )
 
@@ -63,6 +64,7 @@ ament_target_dependencies(xbox_controller_node
 	rclcpp_components
 	sensor_msgs
     geometry_msgs
+    uwrt_msgs
 )
 
 target_link_libraries(uwrt_can_test_node 

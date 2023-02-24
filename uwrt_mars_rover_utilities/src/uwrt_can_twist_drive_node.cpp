@@ -50,7 +50,7 @@ public:
 
         // create subscribers
         twist_sub = this->create_subscription<geometry_msgs::msg::Twist>(
-            "/differential_drivetrain_controller/cmd_vel", TOPIC_BUFFER_SIZE, std::bind(&CANTwistDriveNode::sendTwistToMotors, this, std::placeholders::_1));
+            "/tank_drivetrain_controller/cmd_vel", TOPIC_BUFFER_SIZE, std::bind(&CANTwistDriveNode::sendTwistToMotors, this, std::placeholders::_1));
         vel_pub = this->create_publisher<uwrt_msgs::msg::SetVel>(
             "can_send_vel", TOPIC_BUFFER_SIZE);
     }

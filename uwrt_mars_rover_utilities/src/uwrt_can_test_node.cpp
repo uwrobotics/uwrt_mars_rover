@@ -57,9 +57,9 @@ class CanTestNode : public rclcpp::Node {
         auto msg = (float)data.vel;
         auto can_msg_id = (int)data.can_id << 5 | ODRV_VEL_CMD;
         if (can_wrapper_float.writeToID<float>(msg, can_msg_id)) {
-            RCLCPP_INFO(this->get_logger(), "Successfully sent float msg '%f' to id %x", msg, FLOAT_WRITE_ID);
+            RCLCPP_INFO(this->get_logger(), "Successfully sent float msg '%f' to id %x", msg, can_msg_id);
         } else {
-            RCLCPP_INFO(this->get_logger(), "Failed to send float msg '%f' to id %x", msg, FLOAT_WRITE_ID);
+            RCLCPP_INFO(this->get_logger(), "Failed to send float msg '%f' to id %x", msg, can_msg_id);
         }
     }
 

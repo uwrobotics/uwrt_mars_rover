@@ -35,7 +35,7 @@ private:
 
     JsData joystick_data;
 
-    const int joystick_vel_scale_ = 5;
+    const int joystick_vel_scale_ = 7.5;
 
 
     void getXboxData(const joy_msg::SharedPtr msg);

@@ -202,7 +202,7 @@ class UWRTCANWrapper {
 
     // unsigned char* data_ptr = frame.data;
     std::string str_data = (char*)frame.data;
-    RCLCPP_INFO(logger_, "%x |  %s",  frame.can_id, frame.data);
+    // RCLCPP_INFO(logger_, "%x |  %s",  frame.can_id, frame.data);
 
     // auto t1 = std::chrono::high_resolution_clock::now();
     int bytes_sent = send(socket_handle_, &frame, sizeof(struct can_frame), 0);

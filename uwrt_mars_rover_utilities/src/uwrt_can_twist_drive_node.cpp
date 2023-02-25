@@ -29,9 +29,7 @@ class CANTwistDriveNode : public rclcpp::Node {
         
         // assuming CAN IDs 1-3 are the left side motors, and CAN IDs 4-6 are the right side motors;
         uwrt_msgs::msg::SetVel motor_msg = uwrt_msgs::msg::SetVel();
-        // Send message to left side motors except the third one
-        // ADD BACK THE THIRD ONE!!! i < 3
-        for(int i = 0; i < 2; i++) {
+        for(int i = 0; i < 3; i++) {
             motor_msg.can_id = IDs[i];
             motor_msg.vel = data.linear.x - data.linear.y;
             this->vel_pub->publish(motor_msg);

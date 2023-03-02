@@ -9,7 +9,9 @@ UWRTXboxController::UWRTXboxController(): Node("xbox_node") {
     // constantly get data from the sensor messages joy topic
     joy_node_sub_ = create_subscription<joy_msg>("joy", 10, std::bind(&UWRTXboxController::getXboxData, this , std::placeholders::_1));
     // xbox_node_pub_ = create_publisher<xbox_msg>("/xbox_info", 10);
-    joystick_vel_pub_ = create_publisher<twist_msg>("/tank_drivetrain_controller/cmd_vel", 10);
+    // joystick_vel_pub_ = create_publisher<twist_msg>("/tank_drivetrain_controller/cmd_vel", 10);
+    vel_pub_ = create_publisher<uwrt_msgs::msg::SetVel>("/can_send_vel", 10);
+
     // pub_timer = create_wall_timer(100ms, std::bind(&UWRTXboxController::publishStructuredXboxData, this));
     pub_timer = create_wall_timer(100ms, std::bind(&UWRTXboxController::publishJoyVelData, this));
 }
@@ -40,24 +42,31 @@ void UWRTXboxController::publishJoyVelData()
     auto motor_msg = uwrt_msgs::msg::SetVel();
     for(int i = 0; i < 3; i++) {
         motor_msg.can_id = IDs[i];
-        if (abs(joystick_data.drivetrain_js_y) >= XBOX_DEADZONE_Y) {
-            motor_msg.vel = joystick_data.drivetrain_js_y * joystick_vel_scale_;
+        // only publish to running motors
+        if (motor_msg.can_id % 2 == 0)
+        {
+            if (abs(joystick_data.drivetrain_js_y) >= XBOX_DEADZONE_Y) {
+                motor_msg.vel = joystick_data.drivetrain_js_y * joystick_vel_scale_;
+            }
+            else {
+                motor_msg.vel = 0;
+            }
+            vel_pub_->publish(motor_msg);
         }
-        else {
-            motor_msg.vel = 0;
-        }
-        vel_pub->publish(motor_msg);
     }
     // Send message to right side motors; make negative to account for motor direction
     for(int i = 3; i < 6; i++) {
         motor_msg.can_id = IDs[i];
-        if (abs(joystick_data.gimble_js_y) >= XBOX_DEADZONE_Y) {
-            motor_msg.vel = -joystick_data.gimble_js_y * joystick_vel_scale_;
+        if (motor_msg.can_id % 2 != 0)
+        {
+            if (abs(joystick_data.gimble_js_y) >= XBOX_DEADZONE_Y) {
+                motor_msg.vel = -joystick_data.gimble_js_y * joystick_vel_scale_;
+            }
+            else {
+                motor_msg.vel = 0;
+            }
+            vel_pub_->publish(motor_msg);
         }
-        else {
-            motor_msg.vel = 0;
-        }
-        vel_pub->publish(motor_msg);
     }
 }
 

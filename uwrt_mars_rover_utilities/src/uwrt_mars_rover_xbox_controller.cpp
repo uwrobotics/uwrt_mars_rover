@@ -12,7 +12,6 @@ UWRTXboxController::UWRTXboxController(): Node("xbox_node") {
     joystick_vel_pub_ = create_publisher<twist_msg>("/tank_drivetrain_controller/cmd_vel", 10);
     // pub_timer = create_wall_timer(100ms, std::bind(&UWRTXboxController::publishStructuredXboxData, this));
     pub_timer = create_wall_timer(100ms, std::bind(&UWRTXboxController::publishJoyVelData, this));
-
 }
 
 void UWRTXboxController::getXboxData(const joy_msg::SharedPtr msg) {
@@ -34,24 +33,32 @@ void UWRTXboxController::getXboxData(const joy_msg::SharedPtr msg) {
 void UWRTXboxController::publishJoyVelData()
 {      
     // store all joystick data 
-    auto vel_data = twist_msg();
+    uint8_t IDs[6] = {uwrt_msgs::msg::SetVel::MOTOR_1_ID,uwrt_msgs::msg::SetVel::MOTOR_2_ID,uwrt_msgs::msg::SetVel::MOTOR_3_ID,
+                    uwrt_msgs::msg::SetVel::MOTOR_4_ID,uwrt_msgs::msg::SetVel::MOTOR_5_ID,uwrt_msgs::msg::SetVel::MOTOR_6_ID};
 
-    if(abs(joystick_data.drivetrain_js_x) >= XBOX_DEADZONE_X) {
-        vel_data.linear.x = joystick_data.drivetrain_js_x * joystick_vel_scale_;
+    // assuming CAN IDs 0-2 are the left side motors, and CAN IDs 3-5 are the right side motors;
+    auto motor_msg = uwrt_msgs::msg::SetVel();
+    for(int i = 0; i < 3; i++) {
+        motor_msg.can_id = IDs[i];
+        if (abs(joystick_data.drivetrain_js_y) >= XBOX_DEADZONE_Y) {
+            motor_msg.vel = joystick_data.drivetrain_js_y * joystick_vel_scale_;
+        }
+        else {
+            motor_msg.vel = 0;
+        }
+        vel_pub->publish(motor_msg);
     }
-    else {
-        vel_data.linear.x = 0.0;
+    // Send message to right side motors; make negative to account for motor direction
+    for(int i = 3; i < 6; i++) {
+        motor_msg.can_id = IDs[i];
+        if (abs(joystick_data.gimble_js_y) >= XBOX_DEADZONE_Y) {
+            motor_msg.vel = -joystick_data.gimble_js_y * joystick_vel_scale_;
+        }
+        else {
+            motor_msg.vel = 0;
+        }
+        vel_pub->publish(motor_msg);
     }
-
-    if(abs(joystick_data.drivetrain_js_y) >= XBOX_DEADZONE_Y) {
-        vel_data.linear.y = joystick_data.drivetrain_js_y * joystick_vel_scale_;
-    }
-    else {
-        vel_data.linear.y = 0.0;
-    }
-
-
-    joystick_vel_pub_->publish(vel_data);
 }
 
 // TODO: might be able to remove or refactor this method to do something more useful (like what the above method is doing)

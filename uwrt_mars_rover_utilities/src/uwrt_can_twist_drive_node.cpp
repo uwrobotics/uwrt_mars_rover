@@ -27,18 +27,18 @@ class CANTwistDriveNode : public rclcpp::Node {
         uint8_t IDs[6] = {uwrt_msgs::msg::SetVel::MOTOR_1_ID,uwrt_msgs::msg::SetVel::MOTOR_2_ID,uwrt_msgs::msg::SetVel::MOTOR_3_ID,
                     uwrt_msgs::msg::SetVel::MOTOR_4_ID,uwrt_msgs::msg::SetVel::MOTOR_5_ID,uwrt_msgs::msg::SetVel::MOTOR_6_ID};
         
-        // assuming CAN IDs 1-3 are the left side motors, and CAN IDs 4-6 are the right side motors;
+        // assuming CAN IDs 0-2 are the left side motors, and CAN IDs 3-5 are the right side motors;
         uwrt_msgs::msg::SetVel motor_msg = uwrt_msgs::msg::SetVel();
         for(int i = 0; i < 3; i++) {
             motor_msg.can_id = IDs[i];
             motor_msg.vel = data.linear.x - data.linear.y;
-            this->vel_pub->publish(motor_msg);
+            vel_pub->publish(motor_msg);
         }
         // Send message to right side motors
         for(int i = 3; i < 6; i++) {
             motor_msg.can_id = IDs[i];
             motor_msg.vel = -data.linear.x + data.linear.y;
-            this->vel_pub->publish(motor_msg);
+            vel_pub->publish(motor_msg);
         }
     }
 

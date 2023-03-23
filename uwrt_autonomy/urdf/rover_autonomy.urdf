@@ -1,0 +1,120 @@
+<?xml version="1.0"?>
+<robot name="rover_base" xmlns:xacro="http://ros.org/wiki/xacro">
+ 
+  <!-- Define robot constants -->
+  <xacro:property name="base_width" value="0.76"/>
+  <xacro:property name="base_length" value="1.00"/>
+  <!-- base height is to the top of the current gimbal position; we expect it to be rasied a bit more in the future -->
+  <xacro:property name="base_height" value="0.50"/>
+
+  <xacro:property name="wheel_radius" value="0.14"/>
+  <xacro:property name="wheel_width" value="0.19"/>
+  <xacro:property name="wheel_ygap" value="0.12"/>
+  <!-- change z offset later if desired -->
+  <xacro:property name="wheel_zoff" value="0.30"/>
+  <!-- test these values to modify them -->
+  <xacro:property name="front_wheel_xoff" value="0.50"/>
+  <xacro:property name="middle_wheel_xoff" value="-0.05"/>
+  <xacro:property name="back_wheel_xoff" value="-0.40"/>
+
+  	
+  <!-- Define intertial property macros  -->
+  <xacro:macro name="box_inertia" params="m w h d">
+    <inertial>
+      <origin xyz="0 0 0" rpy="${pi/2} 0 ${pi/2}"/>
+      <mass value="${m}"/>
+      <inertia ixx="${(m/12) * (h*h + d*d)}" ixy="0.0" ixz="0.0" iyy="${(m/12) * (w*w + d*d)}" iyz="0.0" izz="${(m/12) * (w*w + h*h)}"/>
+    </inertial>
+  </xacro:macro>
+
+  <xacro:macro name="cylinder_inertia" params="m r h">
+    <inertial>
+      <origin xyz="0 0 0" rpy="${pi/2} 0 0" />
+      <mass value="${m}"/>
+      <inertia ixx="${(m/12) * (3*r*r + h*h)}" ixy = "0" ixz = "0" iyy="${(m/12) * (3*r*r + h*h)}" iyz = "0" izz="${(m/2) * (r*r)}"/>
+    </inertial>
+  </xacro:macro>
+
+  <xacro:macro name="sphere_inertia" params="m r">
+    <inertial>
+      <mass value="${m}"/>
+      <inertia ixx="${(2/5) * m * (r*r)}" ixy="0.0" ixz="0.0" iyy="${(2/5) * m * (r*r)}" iyz="0.0" izz="${(2/5) * m * (r*r)}"/>
+    </inertial>
+  </xacro:macro>
+
+  <!-- Robot Base -->
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <box size="${base_length} ${base_width} ${base_height}"/>
+      </geometry>
+      <material name="darkgray">
+        <color rgba="0.3 0.3 0.3 1.0"/>
+      </material>
+    </visual>
+
+    <!-- set the whole robot base box as a collision zone; this may not be desired -->
+    <!-- TODO change the base collision area -->
+    <collision>
+      <geometry>
+        <box size="${base_length} ${base_width} ${base_height}"/>
+      </geometry>
+    </collision>
+
+    <!-- also this is set arbitrarily, may not be desired -->
+    <!-- TODO change the base inertial properties -->
+    <xacro:box_inertia m="15" w="${base_width}" d="${base_length}" h="${base_height}"/>
+  </link>
+
+  <!-- Robot Footprint -->
+  <link name="base_footprint"/>
+
+  <joint name="base_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="base_footprint"/>
+    <origin xyz="0.0 0.0 ${-(wheel_radius+wheel_zoff)}" rpy="0 0 0"/>
+  </joint>
+
+  	
+
+  <!-- Wheels -->
+  <xacro:macro name="wheel" params="prefix x_offset y_reflect">
+    <link name="${prefix}_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
+        <geometry>
+            <cylinder radius="${wheel_radius}" length="${wheel_width}"/>
+        </geometry>
+        <material name="Gray">
+          <color rgba="0.5 0.5 0.5 1.0"/>
+        </material>
+      </visual>
+
+      <collision>
+        <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
+        <geometry>
+          <cylinder radius="${wheel_radius}" length="${wheel_width}"/>
+        </geometry>
+      </collision>
+
+      <!-- using arbitrary mass for wheels -->
+      <xacro:cylinder_inertia m="0.5" r="${wheel_radius}" h="${wheel_width}"/>
+    </link>
+
+    <joint name="${prefix}_joint" type="continuous">
+      <parent link="base_link"/>
+      <child link="${prefix}_link"/>
+      <origin xyz="${x_offset} ${y_reflect*(base_width/2+wheel_ygap)} ${-wheel_zoff}" rpy="0 0 0"/>
+      <axis xyz="0 1 0"/>
+    </joint>
+  </xacro:macro>
+
+  <!-- add all 6 wheels using the macro above -->
+  <xacro:wheel prefix="wheel_front_left" x_offset="${front_wheel_xoff}" y_reflect="1" />
+  <xacro:wheel prefix="wheel_front_right" x_offset="${front_wheel_xoff}" y_reflect="-1" />
+  <xacro:wheel prefix="wheel_middle_left" x_offset="${middle_wheel_xoff}" y_reflect="1" />
+  <xacro:wheel prefix="wheel_middle_right" x_offset="${middle_wheel_xoff}" y_reflect="-1" />
+  <xacro:wheel prefix="wheel_back_left" x_offset="${back_wheel_xoff}" y_reflect="1" />
+  <xacro:wheel prefix="wheel_back_right" x_offset="${back_wheel_xoff}" y_reflect="-1" /> 
+
+</robot>

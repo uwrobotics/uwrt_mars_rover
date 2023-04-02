@@ -72,8 +72,6 @@ LifecyleNodeCallbackReturn UWRTMarsRoverDrivetrainHWActuatorInterface::on_cleanu
   actuator_state_velocity_ = std::numeric_limits<double>::quiet_NaN();
   actuator_state_iq_current_ = std::numeric_limits<double>::quiet_NaN();
   joint_velocity_command_ = std::numeric_limits<double>::quiet_NaN();
-
-  
   
 
   RCLCPP_INFO(logger_, "Drivetrain Actuator Cleaned Up Successfully");
@@ -100,7 +98,7 @@ LifecyleNodeCallbackReturn UWRTMarsRoverDrivetrainHWActuatorInterface::on_config
   // TODO: enable can library to start receiving data for state interfaces and non-movement command interfaces. consider
   // existing state data and non-movement command data as stale
 
-  std::vector<uint32_t> addresses {actuator_state_position_address_, actuator_state_velocity_address_, actuator_state_iq_current_address_};
+  std::vector<uint32_t> addresses {actuator_encoder_address_, actuator_state_iq_current_address_};
   drivetrain_can_wrapper_.init(addresses);
 
 
@@ -117,7 +115,7 @@ LifecyleNodeCallbackReturn UWRTMarsRoverDrivetrainHWActuatorInterface::on_deacti
   // TODO: enable can library to start receiving data for state interfaces and non-movement command interfaces. consider
   // existing state data and non-movement command data as stale
 
-  std::vector<uint32_t> addresses {actuator_state_position_address_, actuator_state_velocity_address_, actuator_state_iq_current_address_};
+  std::vector<uint32_t> addresses {actuator_encoder_address_, actuator_state_iq_current_address_};
   drivetrain_can_wrapper_.init(addresses);
 
   RCLCPP_INFO(logger_, "Drivetrain Actuator Deactivated Successfully");
@@ -142,14 +140,27 @@ LifecyleNodeCallbackReturn UWRTMarsRoverDrivetrainHWActuatorInterface::on_activa
   return LifecyleNodeCallbackReturn::SUCCESS;
 }
 
+struct TwoFloats {
+  float a, b;
+};
+
 hardware_interface::return_type UWRTMarsRoverDrivetrainHWActuatorInterface::read() {
   RCLCPP_DEBUG(logger_, "Drivetrain Actuator Reading...");
 
- 
+  TwoFloats encoderEstimates;
+  drivetrain_can_wrapper_.getLatestFromID<TwoFloats>(encoderEstimates, actuator_encoder_address_);
   
-  drivetrain_can_wrapper_.getLatestFromID<double>(actuator_state_position_, actuator_state_position_address_);
-  drivetrain_can_wrapper_.getLatestFromID<double>(actuator_state_velocity_, actuator_state_velocity_address_);
-  drivetrain_can_wrapper_.getLatestFromID<double>(actuator_state_iq_current_, actuator_state_iq_current_address_);
+  // Sketchy, not tested yet, copy this into two floats
+  // std::memcpy(&actuator_state_position, &encoderEstimates, sizeof(actuator_state_position)); 
+  // std::memcpy(&actuator_state_velocity, &encoderEstimates[4], sizeof(actuator_state_velocity)); 
+  actuator_state_position_ = (double) encoderEstimates.a;
+  actuator_state_velocity_ = (double) encoderEstimates.b;
+  
+  TwoFloats iq_current;
+  drivetrain_can_wrapper_.getLatestFromID<TwoFloats>(iq_current, actuator_state_iq_current_address_);
+  // TODO (by Colin) I think we want the last 4 bytes (measured IQ) on the above line, that should be read into float
+  // std::memcpy(&actuator_state_iq_current, &iq_current[4], sizeof(actuator_state_iq_current));
+  actuator_state_iq_current_ = (double) iq_current.b;
   
   RCLCPP_DEBUG_STREAM(logger_, "Actuator Position: " << actuator_state_position_
                                                      << " Actuator Velocity: " << actuator_state_velocity_
@@ -165,7 +176,8 @@ hardware_interface::return_type UWRTMarsRoverDrivetrainHWActuatorInterface::writ
 
   RCLCPP_DEBUG_STREAM(logger_, "Joint Velocity: " << joint_velocity_command_);
 
-  drivetrain_can_wrapper_.writeToID<double>(joint_velocity_command_, write_address_);
+  // Write to float because velocity should be 4 bytes
+  drivetrain_can_wrapper_.writeToID<float>((float) joint_velocity_command_, write_address_);
   
 
   RCLCPP_DEBUG(logger_, "Drivetrain Actuator Written Successfully...");

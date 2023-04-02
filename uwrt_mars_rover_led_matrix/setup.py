@@ -13,13 +13,19 @@ setup(
     ],
     install_requires=['setuptools'],
     zip_safe=True,
-    maintainer='root',
-    maintainer_email='skhanna@versa-networks.com',
-    description='TODO: Package description',
-    license='TODO: License declaration',
+    maintainer='',
+    maintainer_email='',
+    description='',
+    license='',
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
+            'led_matrix = uwrt_mars_rover_led_matrix.rgb_pins::main'
         ],
     },
+
+    data_files=[
+        # Add launch file
+        (os.path.join('share', package_name), glob('launch/*launch.[pxy][yma]*'))
+    ]
 )

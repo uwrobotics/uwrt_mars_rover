@@ -72,9 +72,9 @@ class MinimalSubscriber(Node):
             green = msg.g
             blue = msg.b
 
-            red_pin.setDutyCycle(init(red))
-            green_pin.setDutyCycle(init(green))
-            blue_pin.setDutyCycle(init(blue))
+            red_pin.setDutyCycle(int(red))
+            green_pin.setDutyCycle(int(green))
+            blue_pin.setDutyCycle(int(blue))
 
 #define main
 def main(args=None):

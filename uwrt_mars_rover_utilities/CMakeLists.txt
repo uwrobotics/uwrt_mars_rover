@@ -28,8 +28,6 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     $<INSTALL_INTERFACE:include/uwrt_mars_rover_utilities>
 )
 
-add_subdirectory(lib/uwrt_mars_rover_hw_bridge)
-
 ament_target_dependencies(${PROJECT_NAME}
     rclcpp
     std_msgs
@@ -56,7 +54,6 @@ ament_export_libraries(
 ament_export_include_directories(
     include
     include/uwrt_mars_rover_utilities
-    lib/uwrt_mars_rover_hw_bridge/include
 )
 
 

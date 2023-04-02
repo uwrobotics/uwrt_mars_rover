@@ -68,10 +68,9 @@ class UWRTMarsRoverDrivetrainHWActuatorInterface : public hardware_interface::Ac
   static constexpr unsigned int NUM_COMMAND_INTERFACES{1};
   static constexpr unsigned int NUM_STATE_INTERFACES{3};
 
-  static constexpr uint32_t actuator_state_position_address_ {0x001};
-  static constexpr uint32_t actuator_state_velocity_address_ {0x002};
-  static constexpr uint32_t actuator_state_iq_current_address_ {0x003};
-  static constexpr uint32_t write_address_ {0x004};
+  static constexpr uint32_t actuator_encoder_address_ {0x009};
+  static constexpr uint32_t actuator_state_iq_current_address_ {0x014};
+  static constexpr uint32_t write_address_ {0x00d};
   uwrt_mars_rover_utilities::UWRTCANWrapper drivetrain_can_wrapper_;
 };
 

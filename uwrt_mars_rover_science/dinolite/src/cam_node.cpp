@@ -63,19 +63,19 @@ void CamNode::frame() {
     auto stamp = this->get_clock()->now();
 
     // fill message
-    sensor_msgs::msg::Image::UniquePtr image_msg(new sensor_msgs::msg::Image());
+    auto image_msg = sensor_msgs::msg::Image();
 
-    image_msg->header.stamp = stamp;
-    image_msg->header.frame_id = cxt_.camera_frame_id_;
-    image_msg->height = frame.rows;
-    image_msg->width = frame.cols;
-    image_msg->encoding = mat_type2encoding(frame.type());
-    image_msg->is_bigendian = false;
-    image_msg->step = static_cast<sensor_msgs::msg::Image::_step_type>(frame.step);
-    image_msg->data.assign(frame.datastart, frame.dataend);
+    image_msg.header.stamp = stamp;
+    image_msg.header.frame_id = cxt_.camera_frame_id_;
+    image_msg.height = frame.rows;
+    image_msg.width = frame.cols;
+    image_msg.encoding = mat_type2encoding(frame.type());
+    image_msg.is_bigendian = false;
+    image_msg.step = static_cast<sensor_msgs::msg::Image::_step_type>(frame.step);
+    image_msg.data.assign(frame.datastart, frame.dataend);
 
     // publish message
-    image_pub_->publish(std::move(image_msg));
+    image_pub_->publish(image_msg);
     if (camera_info_pub_) {
       camera_info_msg_.header.stamp = stamp;
       camera_info_msg_.header.frame_id = cxt_.camera_frame_id_;

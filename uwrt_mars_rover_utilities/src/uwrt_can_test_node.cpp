@@ -70,7 +70,7 @@ class CanTestNode : public rclcpp::Node {
         for (const auto& id : float_ids) {
             TwoFloats data;
             if (can_wrapper_float.getLatestFromID<TwoFloats>(data, id)) {
-                RCLCPP_INFO(this->get_logger(), "Successfully read HI NICO float msg '%f' from id '%d'", data.b, id);
+                RCLCPP_INFO(this->get_logger(), "Successfully read float msg '%f' from id '%d'", data.b, id);
             }
         }
 
@@ -96,8 +96,8 @@ public:
         
         // create the two CAN wrappers
         // "can_test_int" and "can_test_float" are the topic names
-        can_wrapper_int = uwrt_mars_rover_utilities::UWRTCANWrapper("can_test_int", can_interface, true);
-        can_wrapper_float = uwrt_mars_rover_utilities::UWRTCANWrapper("can_test_float", can_interface, true);
+        can_wrapper_int = uwrt_mars_rover_utilities::UWRTCANWrapper("can_test_int", can_interface, false);
+        can_wrapper_float = uwrt_mars_rover_utilities::UWRTCANWrapper("can_test_float", can_interface, false);
 
         // initialize the CAN wrappers with the proper IDs
         can_wrapper_int.init(uint_ids);

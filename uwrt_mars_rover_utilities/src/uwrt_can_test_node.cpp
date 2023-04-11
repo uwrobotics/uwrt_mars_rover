@@ -10,7 +10,7 @@
  */
 
 // ids
-static constexpr uint32_t FLOAT_READ_ID1 = 0x001;
+static constexpr uint32_t FLOAT_READ_ID1 = 0x029;
 static constexpr uint32_t FLOAT_READ_ID2 = 0x002;
 static constexpr uint32_t UINT_READ_ID1 = 0x003;
 static constexpr uint32_t UINT_READ_ID2 = 0x004;
@@ -22,6 +22,10 @@ static constexpr int TOPIC_BUFFER_SIZE = 10;
 static constexpr int LOOP_RATE = 10;
 
 using namespace std::chrono_literals;
+
+struct TwoFloats{
+    float a, b;
+};
 
 class CanTestNode : public rclcpp::Node {
 
@@ -64,9 +68,9 @@ class CanTestNode : public rclcpp::Node {
     void readCanMessages() {
         // try and read float ids
         for (const auto& id : float_ids) {
-            float data;
-            if (can_wrapper_float.getLatestFromID<float>(data, id)) {
-                RCLCPP_INFO(this->get_logger(), "Successfully read float msg '%f' from id '%d'", data, id);
+            TwoFloats data;
+            if (can_wrapper_float.getLatestFromID<TwoFloats>(data, id)) {
+                RCLCPP_INFO(this->get_logger(), "Successfully read HI NICO float msg '%f' from id '%d'", data.b, id);
             }
         }
 

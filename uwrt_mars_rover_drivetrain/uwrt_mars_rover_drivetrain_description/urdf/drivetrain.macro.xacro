@@ -68,7 +68,8 @@
     <ros2_control name="${prefix}_${suffix}_wheel_actuator" type="actuator">
       <hardware>
         <plugin>uwrt_mars_rover_drivetrain_hw/UWRTMarsRoverDrivetrainHWActuatorInterface</plugin>
-        <!-- TODO: CAN interface and Odrive id?-->
+        <!-- <param name="can_id" value="${can_id}"/> -->
+        <!-- TODO: CAN interface?-->
       </hardware>
       <joint name="${prefix}_${suffix}_wheel_joint">
         <command_interface name="velocity">

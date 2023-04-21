@@ -74,6 +74,12 @@ install(
     DESTINATION include
 )
 
+# note (npalmar)
+# colin changed the part below to this bc it wasn't updating for him (however this didn't build for me):
+# RUNTIME DESTINATION lib/${PROJECT_NAME}
+# ARCHIVE DESTINATION lib/${PROJECT_NAME}
+# LIBRARY DESTINATION lib/${PROJECT_NAME}
+
 
 install(TARGETS ${PROJECT_NAME} 
     uwrt_can_test_node

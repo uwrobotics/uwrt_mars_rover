@@ -169,6 +169,7 @@ hardware_interface::return_type UWRTMarsRoverDrivetrainHWActuatorInterface::read
   // TODO (npalmar): confirm the order of reading is correct (might be backwards)
   
   // ignore garbage if we get garbage (seems to work well)
+  // ignore garbage if we get garbage
   if (encoder_readings.a > 0.1)
   {
     actuator_state_position_ = (double) encoder_readings.a;
@@ -184,7 +185,7 @@ hardware_interface::return_type UWRTMarsRoverDrivetrainHWActuatorInterface::read
   // std::memcpy(&actuator_state_iq_current, &iq_current[4], sizeof(actuator_state_iq_current));
   // actuator_state_iq_current_ = (double) iq_current.b;
   
-  RCLCPP_DEBUG_STREAM(logger_, "Actuator Position: " << actuator_state_position_
+  RCLCPP_INFO_STREAM(logger_, "Actuator Position: " << actuator_state_position_
                                                      << " Actuator Velocity: " << actuator_state_velocity_);
                                                     //  << " Actuator IQ Current: " << actuator_state_iq_current_);
 
@@ -201,12 +202,12 @@ hardware_interface::return_type UWRTMarsRoverDrivetrainHWActuatorInterface::writ
   // Write to float because velocity should be 4 bytes
   if (drivetrain_can_wrapper_.writeToID<float>((float) motor_velocity_, set_input_vel_id_))
   {
-      RCLCPP_DEBUG_STREAM(logger_, "Successfully sent joint velocity of " << motor_velocity_ << " for CAN_id " << can_id_);
+    RCLCPP_INFO_STREAM(logger_, "Successfully sent joint velocity of " << motor_velocity_ << " for CAN_id " << can_id_);
   }
   else
   {
     // TODO (npalmar): do something else in case of sending an error
-    RCLCPP_ERROR_STREAM(logger_, "Failed to send joint velocity for CAN_id" << can_id_);
+    RCLCPP_INFO_STREAM(logger_, "Error: Failed to send joint velocity for CAN_id" << can_id_);
   }
   
 

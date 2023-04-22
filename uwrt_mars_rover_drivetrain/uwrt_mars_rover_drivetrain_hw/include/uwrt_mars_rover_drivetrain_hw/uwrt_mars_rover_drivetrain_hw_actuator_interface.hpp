@@ -70,6 +70,7 @@ class UWRTMarsRoverDrivetrainHWActuatorInterface : public hardware_interface::Ac
   static constexpr uint32_t set_input_vel_cmd_ {0x00d};
 
   uint32_t can_id_; // get the can ID as a parameter in the urdf hardware description
+  std::string can_interface_{ "can0" }; 
 
   // combine can Id and cmd in the variables below for easier access using get_arbitration_id
   uint32_t get_encoder_estimates_id_; 

@@ -54,7 +54,8 @@ LifecyleNodeCallbackReturn UWRTMarsRoverDrivetrainHWActuatorInterface::on_init(
   // actuator_state_iq_current_ = std::numeric_limits<double>::quiet_NaN();
   motor_velocity_ = std::numeric_limits<double>::quiet_NaN();
   
-  drivetrain_can_wrapper_ = uwrt_mars_rover_utilities::UWRTCANWrapper("drivetrain_can","can0", false); 
+  // TODO (npalmar): ensure there are no problems with 6 can wrappers that have the same name
+  drivetrain_can_wrapper_ = uwrt_mars_rover_utilities::UWRTCANWrapper("drivetrain_can", can_interface_, false); 
   
   RCLCPP_DEBUG(logger_, "Drivetrain Actuator Initialized Successfully");
   return LifecyleNodeCallbackReturn::SUCCESS;
@@ -96,9 +97,8 @@ LifecyleNodeCallbackReturn UWRTMarsRoverDrivetrainHWActuatorInterface::on_config
 
   // get the can_id parameter
   can_id_ = std::stoi(info_.hardware_parameters["can_id"]);
-  // can_id_ = info_.hardware_parameters["can_id"];
 
-  RCLCPP_INFO_STREAM(logger_, "Drivetrain Actuator got CAN ID " << can_id_);
+  RCLCPP_INFO_STREAM(logger_, "Drivetrain Actuator got CAN ID " << can_id_ << " with CAN interface " << can_interface_);
 
   get_encoder_estimates_id_ = get_arbitration_id(can_id_, get_encoder_estimates_cmd_);
   set_input_vel_id_ = get_arbitration_id(can_id_, set_input_vel_cmd_);
@@ -133,6 +133,18 @@ LifecyleNodeCallbackReturn UWRTMarsRoverDrivetrainHWActuatorInterface::on_shutdo
 
   // TODO: Null out CAN lib object?
 
+  // zero out the velocities to the wheels before shutting down
+  if (drivetrain_can_wrapper_.writeToID<float>(0.0, set_input_vel_id_))
+  {
+      RCLCPP_INFO_STREAM(logger_, "Successfully set 0 velocity for shutting down on can_id " << can_id_);
+  }
+  else
+  {
+    // TODO (npalmar): do something else in case of sending an error
+    RCLCPP_INFO_STREAM(logger_, "Error: Failed to set 0 velocity when exiting on can_id " << can_id_);
+  }
+  
+
   RCLCPP_INFO(logger_, "Drivetrain Actuator Shut Down Successfully");
   return LifecyleNodeCallbackReturn::SUCCESS;
 }
@@ -156,7 +168,7 @@ hardware_interface::return_type UWRTMarsRoverDrivetrainHWActuatorInterface::read
   // std::memcpy(&actuator_state_velocity, &encoderEstimates[4], sizeof(actuator_state_velocity)); 
   // TODO (npalmar): confirm the order of reading is correct (might be backwards)
   
-  // ignore garbage if we get garbage
+  // ignore garbage if we get garbage (seems to work well)
   if (encoder_readings.a > 0.1)
   {
     actuator_state_position_ = (double) encoder_readings.a;
@@ -172,7 +184,7 @@ hardware_interface::return_type UWRTMarsRoverDrivetrainHWActuatorInterface::read
   // std::memcpy(&actuator_state_iq_current, &iq_current[4], sizeof(actuator_state_iq_current));
   // actuator_state_iq_current_ = (double) iq_current.b;
   
-  RCLCPP_INFO_STREAM(logger_, "Actuator Position: " << actuator_state_position_
+  RCLCPP_DEBUG_STREAM(logger_, "Actuator Position: " << actuator_state_position_
                                                      << " Actuator Velocity: " << actuator_state_velocity_);
                                                     //  << " Actuator IQ Current: " << actuator_state_iq_current_);
 
@@ -189,12 +201,12 @@ hardware_interface::return_type UWRTMarsRoverDrivetrainHWActuatorInterface::writ
   // Write to float because velocity should be 4 bytes
   if (drivetrain_can_wrapper_.writeToID<float>((float) motor_velocity_, set_input_vel_id_))
   {
-    RCLCPP_INFO_STREAM(logger_, "Successfully sent joint velocity of " << motor_velocity_ << " for CAN_id " << can_id_);
+      RCLCPP_DEBUG_STREAM(logger_, "Successfully sent joint velocity of " << motor_velocity_ << " for CAN_id " << can_id_);
   }
   else
   {
     // TODO (npalmar): do something else in case of sending an error
-    RCLCPP_INFO_STREAM(logger_, "Error: Failed to send joint velocity for CAN_id" << can_id_);
+    RCLCPP_ERROR_STREAM(logger_, "Failed to send joint velocity for CAN_id" << can_id_);
   }
   
 

@@ -12,8 +12,6 @@ differential_drivetrain_controller:
   ros__parameters:
     left_wheel_names: [ "left_front_wheel_joint", "left_middle_wheel_joint", "left_back_wheel_joint" ]
     right_wheel_names: [ "right_front_wheel_joint", "right_middle_wheel_joint", "right_back_wheel_joint" ]
-    # left_wheel_names: [ "left_middle_wheel_joint"]
-    # right_wheel_names: []
 
     # Should match values defined in uwrt_mars_rover_drivetrain_description's generated urdf
     wheel_separation: 0.997 # wheelbase_length = chassis_width + wheel_width

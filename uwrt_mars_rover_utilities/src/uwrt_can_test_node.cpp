@@ -14,7 +14,7 @@ static constexpr uint32_t FLOAT_READ_ID1 = 0x029;
 static constexpr uint32_t FLOAT_READ_ID2 = 0x002;
 static constexpr uint32_t UINT_READ_ID1 = 0x003;
 static constexpr uint32_t UINT_READ_ID2 = 0x004;
-static constexpr uint32_t FLOAT_WRITE_ID = 0x005;
+static constexpr uint32_t FLOAT_WRITE_ID = 0x02d;
 static constexpr uint32_t UINT_WRITE_ID = 0x006;
 
 // ros constants
@@ -48,9 +48,9 @@ class CanTestNode : public rclcpp::Node {
     void sendCanFloatCallback(const std_msgs::msg::Float32::SharedPtr data) {
         auto msg = (float)data->data;
         if (can_wrapper_float.writeToID<float>(msg, FLOAT_WRITE_ID)) {
-            RCLCPP_INFO(this->get_logger(), "Successfully sent float msg '%f' to id 0x05", msg);
+            RCLCPP_INFO(this->get_logger(), "Successfully sent float msg '%f'", msg);
         } else {
-            RCLCPP_INFO(this->get_logger(), "Failed to send float msg '%f' to id 0x05", msg);
+            RCLCPP_INFO(this->get_logger(), "Failed to send float msg '%f'", msg);
         }
     }
 

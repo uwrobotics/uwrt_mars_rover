@@ -43,6 +43,9 @@ def generate_launch_description():
         executable='robot_state_publisher',
         output='both',
         parameters=[robot_description],
+        remappings=[
+            ("/differential_drivetrain_controller/cmd_vel_unstamped", "/cmd_vel"),
+        ],
     )]
 
     nodes += [joint_state_broadcaster_spawner := Node(
@@ -70,7 +73,7 @@ def generate_launch_description():
     drivetrain_controller_spawner = Node(
         package='controller_manager',
         executable='spawner',
-        arguments=['differential_drivetrain_controller', '-c', '/controller_manager'],
+        arguments=['differential_drivetrain_controller', "--controller-manager", '/controller_manager'],
     )
     nodes += [RegisterEventHandler(
         event_handler=OnProcessExit(

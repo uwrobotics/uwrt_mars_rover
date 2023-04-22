@@ -14,18 +14,11 @@ find_package(rclcpp REQUIRED)
 find_package(rclcpp_components REQUIRED)
 find_package(std_msgs REQUIRED)
 
-# include_directories(include)
+include_directories(include)
 
 add_library(${PROJECT_NAME} SHARED
     src/uwrt_can.cpp
     #src/uwrt_params.cpp
-)
-
-target_include_directories(${PROJECT_NAME} PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    $<INSTALL_INTERFACE:include>
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/uwrt_mars_rover_utilities>
-    $<INSTALL_INTERFACE:include/uwrt_mars_rover_utilities>
 )
 
 ament_target_dependencies(${PROJECT_NAME}
@@ -34,15 +27,39 @@ ament_target_dependencies(${PROJECT_NAME}
     rclcpp_components
 )
 
-add_executable(uwrt_can_test_node src/uwrt_can_test_node.cpp)
+
+add_executable(uwrt_can_test_node src/uwrt_can_test_node.cpp src/uwrt_can.cpp)
 ament_target_dependencies(uwrt_can_test_node
     rclcpp
     std_msgs
     rclcpp_components
 )
 
-target_link_libraries(uwrt_can_test_node
-    ${PROJECT_NAME}
+install(
+    DIRECTORY include/
+    DESTINATION include
+)
+
+# install(
+#     DIRECTORY include/uwrt_mars_rover_utilities/
+#     DESTINATION include
+# )
+
+# note (npalmar)
+# colin changed the part below to this bc it wasn't updating for him (however this didn't build for me):
+# RUNTIME DESTINATION lib/${PROJECT_NAME}
+# ARCHIVE DESTINATION lib/${PROJECT_NAME}
+# LIBRARY DESTINATION lib/${PROJECT_NAME}
+
+
+install(TARGETS ${PROJECT_NAME} 
+    RUNTIME DESTINATION bin
+    ARCHIVE DESTINATION lib
+    LIBRARY DESTINATION lib
+)
+
+install(TARGETS uwrt_can_test_node
+    RUNTIME DESTINATION lib/${PROJECT_NAME}
 )
 
 ament_export_libraries(
@@ -53,39 +70,15 @@ ament_export_libraries(
 
 ament_export_include_directories(
     include
-    include/uwrt_mars_rover_utilities
+    # include/uwrt_mars_rover_utilities
 )
 
 
 
 ament_export_dependencies(
     rclcpp
-)
-
-
-
-install(
-    DIRECTORY include/
-    DESTINATION include
-)
-
-install(
-    DIRECTORY include/uwrt_mars_rover_utilities/
-    DESTINATION include
-)
-
-# note (npalmar)
-# colin changed the part below to this bc it wasn't updating for him (however this didn't build for me):
-# RUNTIME DESTINATION lib/${PROJECT_NAME}
-# ARCHIVE DESTINATION lib/${PROJECT_NAME}
-# LIBRARY DESTINATION lib/${PROJECT_NAME}
-
-
-install(TARGETS ${PROJECT_NAME} 
-    uwrt_can_test_node
-    RUNTIME DESTINATION bin
-    ARCHIVE DESTINATION lib
-    LIBRARY DESTINATION lib
+    std_msgs
+    rclcpp_components
 )
 
 

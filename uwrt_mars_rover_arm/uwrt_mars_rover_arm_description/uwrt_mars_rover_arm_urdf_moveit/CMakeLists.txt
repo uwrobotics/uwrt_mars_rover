@@ -34,7 +34,7 @@ if (BUILD_TESTING)
 endif ()
 
 rosidl_generate_interfaces(${PROJECT_NAME}
-  "srv/MotionPlan.srv"
+  "action/MotionPlan.action"
   DEPENDENCIES geometry_msgs
 )
 ament_export_dependencies(rosidl_default_runtime)
@@ -71,5 +71,16 @@ install(TARGETS motion_plan_server motion_plan_client
 
 install(DIRECTORY launch config DESTINATION share/${PROJECT_NAME})
 
+add_custom_target(
+        copy-compile-commands ALL
+        ${CMAKE_COMMAND} -E copy_if_different
+        ${CMAKE_BINARY_DIR}/compile_commands.json
+        ${CMAKE_CURRENT_LIST_DIR}
+)
+execute_process(
+        COMMAND ${CMAKE_COMMAND} -E create_symlink
+                ${CMAKE_BINARY_DIR}/compile_commands.json
+                ${CMAKE_SOURCE_DIR}/compile_commands.json
+        )
 
 ament_package()

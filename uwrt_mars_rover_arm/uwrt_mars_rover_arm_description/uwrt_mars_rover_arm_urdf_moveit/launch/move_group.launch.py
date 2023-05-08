@@ -37,11 +37,6 @@ def load_yaml(package_name, file_path):
 
 def generate_launch_description():
 
-    # Command-line arguments
-    tutorial_arg = DeclareLaunchArgument(
-        'rviz_tutorial', default_value='False', description='Tutorial flag'
-    )
-
     # planning_context
     robot_description_config = xacro.process_file(
         os.path.join(
@@ -70,12 +65,11 @@ def generate_launch_description():
     ompl_planning_pipeline_config = {
         'move_group': {
             'planning_plugin': 'ompl_interface/OMPLPlanner',
-            'request_adapters': """default_planner_request_adapters/ \
-                AddTimeOptimalParameterization default_planner_request_adapters/ \
-                FixWorkspaceBounds default_planner_request_adapters/ \
-                FixStartStateBounds default_planner_request_adapters/ \
-                FixStartStateCollision default_planner_request_adapters/ \
-                FixStartStatePathConstraints""",
+            'request_adapters': """default_planner_request_adapters/AddTimeOptimalParameterization \
+                default_planner_request_adapters/FixWorkspaceBounds \
+                default_planner_request_adapters/FixStartStateBounds \
+                default_planner_request_adapters/FixStartStateCollision \
+                default_planner_request_adapters/FixStartStatePathConstraints""",
             'start_state_max_bounds_error': 0.1,
         }
     }
@@ -88,18 +82,18 @@ def generate_launch_description():
     moveit_simple_controllers_yaml = load_yaml(
         'uwrt_mars_rover_arm_urdf_moveit', 'config/moveit_controllers.yaml'
     )
-    moveit_controllers = {
-        'moveit_simple_controller_manager': moveit_simple_controllers_yaml,
-        'moveit_controller_manager': 'moveit_simple_controller_manager/\
-            MoveItSimpleControllerManager',
-    }
+    # moveit_controllers = {
+    #     'moveit_simple_controller_manager': moveit_simple_controllers_yaml,
+    #     'moveit_controller_manager': 'moveit_simple_controller_manager/\
+    #         MoveItSimpleControllerManager',
+    # }
 
-    trajectory_execution = {
-        'moveit_manage_controllers': True,
-        'trajectory_execution.allowed_execution_duration_scaling': 1.2,
-        'trajectory_execution.allowed_goal_duration_margin': 0.5,
-        'trajectory_execution.allowed_start_tolerance': 0.01,
-    }
+    # trajectory_execution = {
+    #     'moveit_manage_controllers': True,
+    #     'trajectory_execution.allowed_execution_duration_scaling': 1.2,
+    #     'trajectory_execution.allowed_goal_duration_margin': 0.5,
+    #     'trajectory_execution.allowed_start_tolerance': 0.01,
+    # }
 
     planning_scene_monitor_parameters = {
         'publish_planning_scene': True,
@@ -118,10 +112,9 @@ def generate_launch_description():
             robot_description_semantic,
             kinematics_yaml,
             ompl_planning_pipeline_config,
-            trajectory_execution,
-            moveit_controllers,
+            moveit_simple_controllers_yaml,
             planning_scene_monitor_parameters,
-        ],
+        ]
     )
 
     # RViz
@@ -185,11 +178,10 @@ def generate_launch_description():
         'joint_state_broadcaster',
     ]:
         load_controllers += [
-            ExecuteProcess(
-                cmd=['ros2 run controller_manager spawner {}'.format(
-                    controller)],
-                shell=True,
-                output='screen',
+            Node(
+                package="controller_manager",
+                executable="spawner",
+                arguments=[controller, "--controller-manager", "/controller_manager"],
             )
         ]
 
@@ -217,14 +209,12 @@ def generate_launch_description():
 
     return LaunchDescription(
         [
-            tutorial_arg,
             rviz_node,
             static_tf,
             robot_state_publisher,
-            run_move_group_node,
             ros2_control_node,
-
-            timed_container,
+            run_move_group_node,
+            timed_container
         ]
-        # + load_controllers
+        + load_controllers
     )

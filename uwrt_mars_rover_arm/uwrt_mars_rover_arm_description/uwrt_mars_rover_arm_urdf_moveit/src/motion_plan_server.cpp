@@ -3,39 +3,114 @@
 #include <cinttypes>
 #include <iostream>
 #include <memory>
+#include <functional>
+#include <thread>
 
 #include "rclcpp/rclcpp.hpp"
+#include <moveit/trajectory_processing/iterative_time_parameterization.h>
 
 namespace uwrt_motion_planning
 {
 MotionPlanServer::MotionPlanServer(const rclcpp::NodeOptions & options) : Node("Server", options)
 {
-  srv_ = create_service<uwrt_mars_rover_arm_urdf_moveit::srv::MotionPlan>(
-    "motion_plan",
-    std::bind(&MotionPlanServer::solve_ik, this, std::placeholders::_1, std::placeholders::_2));
+  using namespace std::placeholders;
+
+  // execTrajSubscriber = this->create_subscription<moveit_msgs::ExecuteTrajectoryActionResult::ConstPtr>(
+  //     "/execute_trajectory/result", 10, std::bind(&MotionPlanServer::trajectory_result, this, _1));
+
+  action_srv_ = rclcpp_action::create_server<MotionPlan>(
+      this,
+      "MotionPlan",
+      std::bind(&MotionPlanServer::handle_goal, this, _1, _2),
+      std::bind(&MotionPlanServer::handle_cancel, this, _1),
+      std::bind(&MotionPlanServer::handle_accepted, this, _1));
+
+  trajectory_sub_ = this->create_subscription<std_msgs::msg::String>(
+    "/trajectory_execution_event", 100, std::bind(&MotionPlanServer::trajectory_callback, this, _1));
+
+  RCLCPP_INFO(this->get_logger(), "CREATING SERVER");
 }
 
-void MotionPlanServer::solve_ik(
-  const std::shared_ptr<uwrt_mars_rover_arm_urdf_moveit::srv::MotionPlan::Request> request,
-  std::shared_ptr<uwrt_mars_rover_arm_urdf_moveit::srv::MotionPlan::Response> response)
+void MotionPlanServer::trajectory_callback(const std_msgs::msg::String::SharedPtr msg) 
 {
-  RCLCPP_INFO(this->get_logger(), "Incoming request");
-  // set move_group that we are planning for
-  static const std::string PLANNING_GROUP = "uwrt_arm";
-  moveit::planning_interface::MoveGroupInterface move_group(
-    this->shared_from_this(), PLANNING_GROUP);
+  RCLCPP_INFO(this->get_logger(), "I heard: '%s'", msg->data.c_str());
+}
 
-  move_group.setPoseTarget(request->pose);
+rclcpp_action::GoalResponse MotionPlanServer::handle_goal(const rclcpp_action::GoalUUID & uuid,
+  std::shared_ptr<const MotionPlan::Goal> goal)
+{
+  RCLCPP_INFO(this->get_logger(), "Received goal request");
+  (void)uuid;
+  return rclcpp_action::GoalResponse::ACCEPT_AND_EXECUTE;
+}
+
+rclcpp_action::CancelResponse MotionPlanServer::handle_cancel(const std::shared_ptr<GoalHandleMotionPlan> goal_handle)
+{
+  RCLCPP_INFO(this->get_logger(), "Received request to cancel goal");
+  (void)goal_handle;
+  return rclcpp_action::CancelResponse::ACCEPT;
+}
+
+void MotionPlanServer::handle_accepted(const std::shared_ptr<GoalHandleMotionPlan> goal_handle)
+{
+  using namespace std::placeholders;
+  // this needs to return quickly to avoid blocking the executor, so spin up a new thread
+  std::thread{std::bind(&MotionPlanServer::execute, this, _1), goal_handle}.detach();
+}
+
+void MotionPlanServer::execute(const std::shared_ptr<GoalHandleMotionPlan> goal_handle) 
+{
+  auto result = std::make_shared<uwrt_mars_rover_arm_urdf_moveit::action::MotionPlan::Result>();
+
+  static const std::string PLANNING_GROUP = "uwrt_arm";
+  std::shared_ptr<moveit::planning_interface::MoveGroupInterface> move_group =
+    std::make_shared<moveit::planning_interface::MoveGroupInterface>(this->shared_from_this(), PLANNING_GROUP);
+
+  move_group->setPoseTarget(goal_handle->get_goal()->pose);
+  move_group->setPlanningTime(1.0);
+  move_group->setMaxVelocityScalingFactor(1.0);
 
   moveit::planning_interface::MoveGroupInterface::Plan my_plan;
 
   // try planning to point and record success/failure
-  bool success = (move_group.plan(my_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
-  RCLCPP_INFO(this->get_logger(), "Visualizing plan 1 (pose goal) %s", success ? "" : "FAILED");
+  bool success = (move_group->plan(my_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
+  RCLCPP_INFO(this->get_logger(), "Visualizing plan (pose goal) %s", success ? "" : "FAILED");
 
-  // move to position if planning is successful
-  response->success = success;
-  if (success) move_group.move();
+  // if cannot plan to pose, then abort
+  result->success = success;
+  if (!success) {
+    goal_handle->succeed(result);
+    return;
+  }
+  move_group->asyncExecute(my_plan);
+
+  auto endJointPositions = my_plan.trajectory_.joint_trajectory.points[my_plan.trajectory_.joint_trajectory.points.size()-1].positions;
+  double jointTolerance = move_group->getGoalJointTolerance();
+  RCLCPP_INFO(this->get_logger(), "joint tolerance %f", jointTolerance);
+
+  while (true) {
+    std::vector<double> currentJointPos = move_group->getCurrentJointValues();
+    std::string str;
+    bool reached = true;
+
+    // check whether we are within an error threshold of our joint positions to check if trajectory finished
+    for (int i=0; i<currentJointPos.size(); ++i) {
+      if (abs(endJointPositions[i] - currentJointPos[i]) > jointTolerance) {
+        reached = false;
+        break;
+      }
+    } 
+    if (reached) break;
+
+    // if cancelled, stop trajectory execution
+    if (goal_handle->is_canceling()) {
+      move_group->stop();
+      result->success = false;
+      goal_handle->canceled(result);
+      break;
+    }
+  }
+  goal_handle->succeed(result);
 }
 
 }  // namespace uwrt_motion_planning

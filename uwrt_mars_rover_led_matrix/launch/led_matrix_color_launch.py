@@ -6,7 +6,7 @@ def generate_launch_description():
         Node(
             package='uwrt_mars_rover_led_matrix',
             namespace='rgb_pin_node',
-            executable='led_matrix',
+            executable='led_pins',
             name='rgb_pwm_pin_node'
         ),
     ])

@@ -3,9 +3,10 @@
 <package format="3">
   <name>uwrt_mars_rover_led_matrix</name>
   <version>0.0.0</version>
-  <description></description>
-  <maintainer email="">root</maintainer>
-  <license></license>
+  <description>TODO: Package description</description>
+  <maintainer email="keyonjerome@gmail.com">uwrt-agx-xavier</maintainer>
+  <license>TODO: License declaration</license>
+
 
   <test_depend>ament_copyright</test_depend>
   <test_depend>ament_flake8</test_depend>

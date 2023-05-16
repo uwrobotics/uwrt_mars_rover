@@ -27,17 +27,18 @@ class MinimalSubscriber(Node):
         # add error is pins are none (ROS2 error)
         raise Exception('PWM not supported on this board')
     
-    #add pins (check colour)
-    red_pin_channel = 13
-    green_pin_channel = 15
-    blue_pin_channel = 18
-
-    #Frequency to reresent the # of cycles
-    PWM_FREQUENCY = 50
 
     #Initialize node rgb_pin_controller
     def __init__(self):
         super().__init__('rgb_pin_controller')
+
+        #Frequency to reresent the # of cycles
+        PWM_FREQUENCY = 50
+
+         #add pins (check colour)
+        red_pin_channel = 13
+        green_pin_channel = 15
+        blue_pin_channel = 18
 
         # now we define the board and our pins
         GPIO.setmode(GPIO.BOARD)
@@ -47,34 +48,34 @@ class MinimalSubscriber(Node):
         GPIO.setup(blue_pin_channel, GPIO.OUT, initial = GPIO.LOW)
 
         #ensuring channels move at PWM frequency
-        red_pin = GPIO.PWM(red_pin_channel, PWM_FREQUENCY)
-        green_pin = GPIO.PWM(green_pin_channel, PWM_FREQUENCY)
-        blue_pin = GPIO.PWM(blue_pin_channel, PWM_FREQUENCY)
+        self.red_pin = GPIO.PWM(red_pin_channel, PWM_FREQUENCY)
+        self.green_pin = GPIO.PWM(green_pin_channel, PWM_FREQUENCY)
+        self.blue_pin = GPIO.PWM(blue_pin_channel, PWM_FREQUENCY)
 
         # Pins should be off (0) at the beginning
-        red_pin.start(0)
-        green_pin.start(0)
-        blue_pin.start(0)
+        self.red_pin.start(0)
+        self.green_pin.start(0)
+        self.blue_pin.start(0)
 
         #subscription part
         self.subscription = self.create_subscription(
             ColorRGBA,
             'led_matrix/color',
-            self.listner_callback,
+            self.listener_callback,
             10
         )
         self.subscription
 
 
-        #Callback and logging: extract and recieve RGBA and sauce them to PWM
-        def listener_callback(self, msg):
-            red = msg.r
-            green = msg.g
-            blue = msg.b
+    #Callback and logging: extract and recieve RGBA and sauce them to PWM
+    def listener_callback(self, msg):
+        red = msg.r
+        green = msg.g
+        blue = msg.b
 
-            red_pin.setDutyCycle(int(red))
-            green_pin.setDutyCycle(int(green))
-            blue_pin.setDutyCycle(int(blue))
+        self.red_pin.setDutyCycle(int(red))
+        self.green_pin.setDutyCycle(int(green))
+        self.blue_pin.setDutyCycle(int(blue))
 
 #define main
 def main(args=None):
@@ -82,6 +83,7 @@ def main(args=None):
 
     minimal_subscriber = MinimalSubscriber()
 
+    rclpy.spin(minimal_subscriber)
     GPIO.cleanup()
     minimal_subscriber.destroy_node()
     rclpy.shutdown()

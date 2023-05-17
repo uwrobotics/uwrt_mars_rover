@@ -91,7 +91,6 @@ void MotionPlanClient::result_callback(const GoalHandleMotionPlan::WrappedResult
       return;
   }
   RCLCPP_INFO(this->get_logger(), "DONE");
-  // rclcpp::shutdown();
 }
 
 }  // namespace uwrt_motion_planning

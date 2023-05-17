@@ -15,9 +15,6 @@ MotionPlanServer::MotionPlanServer(const rclcpp::NodeOptions & options) : Node("
 {
   using namespace std::placeholders;
 
-  // execTrajSubscriber = this->create_subscription<moveit_msgs::ExecuteTrajectoryActionResult::ConstPtr>(
-  //     "/execute_trajectory/result", 10, std::bind(&MotionPlanServer::trajectory_result, this, _1));
-
   action_srv_ = rclcpp_action::create_server<MotionPlan>(
       this,
       "MotionPlan",
@@ -25,15 +22,7 @@ MotionPlanServer::MotionPlanServer(const rclcpp::NodeOptions & options) : Node("
       std::bind(&MotionPlanServer::handle_cancel, this, _1),
       std::bind(&MotionPlanServer::handle_accepted, this, _1));
 
-  trajectory_sub_ = this->create_subscription<std_msgs::msg::String>(
-    "/trajectory_execution_event", 100, std::bind(&MotionPlanServer::trajectory_callback, this, _1));
-
   RCLCPP_INFO(this->get_logger(), "CREATING SERVER");
-}
-
-void MotionPlanServer::trajectory_callback(const std_msgs::msg::String::SharedPtr msg) 
-{
-  RCLCPP_INFO(this->get_logger(), "I heard: '%s'", msg->data.c_str());
 }
 
 rclcpp_action::GoalResponse MotionPlanServer::handle_goal(const rclcpp_action::GoalUUID & uuid,

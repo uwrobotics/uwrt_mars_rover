@@ -14,7 +14,10 @@ message(STATUS "Found OpenCV version ${OpenCV_VERSION}")
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
+<<<<<<< HEAD
 find_package(camera_calibration_parsers REQUIRED)
+=======
+>>>>>>> 0e70285ddc774793ed52a5dfde8d3adc55db4026
 find_package(class_loader REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclcpp_components REQUIRED)
@@ -40,7 +43,6 @@ target_compile_definitions(
   PRIVATE "COMPOSITION_BUILDING_DLL"
 )
 ament_target_dependencies(cam_node
-  camera_calibration_parsers
   class_loader
   OpenCV
   rclcpp
@@ -50,27 +52,6 @@ ament_target_dependencies(cam_node
 rclcpp_components_register_nodes(cam_node "dinolite::CamNode")
 set(node_plugins "${node_plugins}dinolite::CamNode;$<TARGET_FILE:cam_node>\n")
 
-#=============
-# Test subscriber node
-#=============
-
-# add_library(
-#   subscriber_node SHARED
-#   src/subscriber_node.cpp
-# )
-# target_compile_definitions(
-#   subscriber_node
-#   PRIVATE "COMPOSITION_BUILDING_DLL"
-# )
-# ament_target_dependencies( subscriber_node
-#   class_loader
-#   rclcpp
-#   rclcpp_components
-#   sensor_msgs
-# )
-# rclcpp_components_register_nodes(subscriber_node "dinolite::ImageSubscriberNode")
-# set(node_plugins "${node_plugins}dinolite::ImageSubscriberNode;$<TARGET_FILE:subscriber_node>\n")
-
 # Install nodes
 install(
   TARGETS cam_node
@@ -79,14 +60,6 @@ install(
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION bin
 )
-
-# install(
-#   TARGETS subscriber_node
-#   EXPORT export_subscriber_node
-#   ARCHIVE DESTINATION lib
-#   LIBRARY DESTINATION lib
-#   RUNTIME DESTINATION bin
-# )
 
 # Install various directories
 install(
@@ -139,5 +112,3 @@ ament_export_targets(export_cam_node)
 
 ament_export_libraries(gscam_node subscriber_node)
 ament_package()
-
-

@@ -17,7 +17,7 @@ namespace vectornav {
 
 class VectornavNode : public rclcpp::Node {
  public:
-  explicit VectornavNode(const rclcpp::NodeOptions& options);
+  VectornavNode(const rclcpp::NodeOptions& options);
   ~VectornavNode();
  private:
   void publish();
@@ -29,8 +29,8 @@ class VectornavNode : public rclcpp::Node {
   static geometry_msgs::msg::Quaternion toMsg(const vn::math::vec4f &rhs);
   static geometry_msgs::msg::Vector3 toMsg(const vn::math::vec3f & rhs);
 
-  rclcpp::Publisher<sensor_msgs::msg::Imu> publisher_imu_;
-  rclcpp::Publisher<sensor_msgs::msg::NavSatFix> publisher_gps_;
+  rclcpp::Publisher<sensor_msgs::msg::Imu>::SharedPtr publisher_imu_;
+  rclcpp::Publisher<sensor_msgs::msg::NavSatFix>::SharedPtr publisher_gps_;
 
   rclcpp::TimerBase::SharedPtr timer_publish_;
 

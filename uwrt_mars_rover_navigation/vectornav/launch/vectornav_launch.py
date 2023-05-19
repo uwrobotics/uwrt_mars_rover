@@ -21,7 +21,7 @@ from launch_ros.descriptions import ComposableNode
 
 def generate_launch_description():
     """Generate a launch description for vectornav node."""
-    cam_node_container = ComposableNodeContainer(
+    vectornav_node_container = ComposableNodeContainer(
         name='vectornav_node_container',
         namespace='vectornav',
         package='rclcpp_components',

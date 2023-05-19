@@ -12,26 +12,27 @@ find_package(sensor_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(tf2_geometry_msgs REQUIRED)
 
+# vncxx
+add_subdirectory(vnproglib-1.2.0.0/cpp)
+
 # simplify includes
 include_directories(
   include
 )
 
-# vncxx
-add_subdirectory(vnproglib-1.2.0.0/cpp)
-
 # vectornav_node
 add_library( ${PROJECT_NAME}
-    SHARED
-    src/vectornav_node.cpp
+  SHARED src/vectornav_node.cpp
 )
-target_compile_definitions(
-    ${PROJECT_NAME}
-    PRIVATE "COMPOSITION_BUILDING_DLL"
-)
+# target_compile_definitions(
+#     ${PROJECT_NAME}
+#     PRIVATE "COMPOSITION_BUILDING_DLL"
+# )
 ament_target_dependencies( ${PROJECT_NAME} 
     rclcpp 
     geometry_msgs 
+    sensor_msgs
+    tf2_geometry_msgs
 )
 # link vn library
 target_link_libraries( ${PROJECT_NAME} 

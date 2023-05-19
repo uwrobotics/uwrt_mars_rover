@@ -71,24 +71,42 @@ namespace vectornav {
     auto message = std::make_unique<sensor_msgs::msg::Imu>();
     message->header.stamp = this->getTimeStamp(data);
     message->header.frame_id = this->frame_id;
+    
+    // set async output to 8 - Quaternion, Magnetic, Acceleration, Angular Rate
+    try {
+      ez->sensor()->writeAsyncDataOutputType(vn::protocol::uart::VNQMR);
+    } catch (...) {
+      std::cout << "Error setting async data output type: (VNQMR)" << std::endl;
+    }
 
+    // QUATERNION
     if (data.hasQuaternion()) {
       message->orientation = this->toMsg(data.quaternion());
     }
 
+    // ANGULAR RATE
     if (data.hasAngularRate()) {
       message->angular_velocity = this->toMsg(data.angularRate());
     }
 
+    // ACCELERATION
     if (data.hasAcceleration()) {
       message->linear_acceleration = this->toMsg(data.acceleration());
     }
     this->publisher_imu_->publish(std::move(message));
   }
+
   void VectornavNode:: publishGps(vn::sensors::CompositeData &data) {
     auto message = std::make_unique<sensor_msgs::msg::NavSatFix>();
     message->header.stamp = this->getTimeStamp(data);
     message->header.frame_id = this->frame_id; 
+
+    // set async output to 29 0 gnss, lla format (also includes uncertainty)
+    try {
+      ez->sensor()->writeAsyncDataOutputType(vn::protocol::uart::VNGPS);
+    } catch (...) {
+      std::cout << "Error setting async data output type: (VNGPS)" << std::endl;
+    }
 
     vn::math::vec3d pos;
     bool flag = false;

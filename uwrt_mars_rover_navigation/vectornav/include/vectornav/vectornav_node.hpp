@@ -20,15 +20,17 @@ class VectornavNode : public rclcpp::Node {
   VectornavNode(const rclcpp::NodeOptions& options);
   ~VectornavNode();
  private:
+  // function
   void publish();
+
+  rclcpp::Time getTimeStamp(vn::sensors::CompositeData& data);
+  geometry_msgs::msg::Quaternion toMsg(const vn::math::vec4f &rhs);
+  geometry_msgs::msg::Vector3 toMsg(const vn::math::vec3f & rhs);
+
   void publishImu(vn::sensors::CompositeData &data);
   void publishGps(vn::sensors::CompositeData &data);
 
-  rclcpp::Time getTimeStamp(vn::sensors::CompositeData& data);
-
-  static geometry_msgs::msg::Quaternion toMsg(const vn::math::vec4f &rhs);
-  static geometry_msgs::msg::Vector3 toMsg(const vn::math::vec3f & rhs);
-
+  // variables
   rclcpp::Publisher<sensor_msgs::msg::Imu>::SharedPtr publisher_imu_;
   rclcpp::Publisher<sensor_msgs::msg::NavSatFix>::SharedPtr publisher_gps_;
 

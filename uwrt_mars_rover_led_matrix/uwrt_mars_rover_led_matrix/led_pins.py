@@ -32,8 +32,8 @@ class MinimalSubscriber(Node):
     def __init__(self):
         super().__init__('rgb_pin_controller')
 
-        #Frequency to reresent the # of cycles
-        PWM_FREQUENCY = 50
+        #Frequency to reresent the # of cycles/sec
+        PWM_FREQUENCY = 500
 
          #add pins (check colour)
         red_pin_channel = 13
@@ -53,9 +53,9 @@ class MinimalSubscriber(Node):
         self.blue_pin = GPIO.PWM(blue_pin_channel, PWM_FREQUENCY)
 
         # Pins should be off (0) at the beginning
-        self.red_pin.start(0)
-        self.green_pin.start(0)
-        self.blue_pin.start(0)
+        self.red_pin.start(99)
+        self.green_pin.start(99)
+        self.blue_pin.start(99)
 
         #subscription part
         self.subscription = self.create_subscription(
@@ -64,15 +64,15 @@ class MinimalSubscriber(Node):
             self.listener_callback,
             10
         )
-        self.subscription
+        #self.subscription
 
 
     #Callback and logging: extract and recieve RGBA and sauce them to PWM
     def listener_callback(self, msg):
-        red = msg.r
+        red = msg.r    
         green = msg.g
         blue = msg.b
-
+        self.get_logger().info('RED: %d BLUE: %d GREEN: %d' % (red, blue, green))
         self.red_pin.ChangeDutyCycle(int(red))
         self.green_pin.ChangeDutyCycle(int(green))
         self.blue_pin.ChangeDutyCycle(int(blue))

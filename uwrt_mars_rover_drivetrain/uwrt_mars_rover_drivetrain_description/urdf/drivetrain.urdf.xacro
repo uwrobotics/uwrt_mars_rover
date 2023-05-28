@@ -29,7 +29,7 @@
         </geometry>
       </identical_blocks>
     </xacro:identical_visual_collision>
-    <xacro:default_inertial/>
+    <xacro:chassis_inertia/>
   </link>
 
   <!-- wheels -->

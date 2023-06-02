@@ -11,7 +11,7 @@ namespace vectornav {
     this->publisher_gps_ = this->create_publisher<sensor_msgs::msg::NavSatFix>
         ("vectornav/navSatFix", 10);
     
-    this->timer_publish_ = this->create_wall_timer(std::chrono::duration<int, std::chrono::seconds::period>(1), 
+    this->timer_publish_ = this->create_wall_timer(std::chrono::duration<int, std::chrono::milliseconds::period>(3), 
                                                    std::bind(&VectornavNode::publish, this));
   }
 

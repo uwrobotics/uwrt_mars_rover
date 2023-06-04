@@ -117,6 +117,11 @@
           <mechanical_reduction>${mechanical_reduction}</mechanical_reduction>
         </joint>
       </transmission>
+      <gazebo>
+        <plugin filename="libgazebo_ros2_control.so" name="gazebo_ros2_control">
+          <parameters>$(find uwrt_mars_rover_drivetrain_hw)/config/drivetrain_controllers.yaml</parameters>
+        </plugin>
+      </gazebo>
     </ros2_control>
   </xacro:macro>
 

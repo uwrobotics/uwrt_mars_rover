@@ -24,28 +24,23 @@ namespace vectornav {
     vn::sensors::CompositeData current_data = ez->currentData();
     publishImu(current_data);
     publishGps(current_data);
+    
+    std::cout<<getTimeStamp(current_data)<<std::endl;
   }
 
   rclcpp::Time VectornavNode:: getTimeStamp(vn::sensors::CompositeData &data) {
     const rclcpp::Time t = now();
-    // if (!data.hasTimeStartup() || !adjustROSTimeStamp_) {
-    //   return (t);  // cannot or want not adjust time
-    // }
-    // const uint64_t sensorTime = data.timeStartup();
-    // const double dt = t.seconds() - sensorTime * 1e-9;
-    // if (averageTimeDifference_ == 0) {  // first call
-    //   averageTimeDifference_ = dt;
-    // }
-    //
-    // // compute exponential moving average
-    // const double alpha = 0.001;  // average over rougly 1000 samples
-    // averageTimeDifference_ = averageTimeDifference_ * (1.0 - alpha) + alpha * dt;
-    //
-    // // adjust sensor time by average difference to ROS time
-    // const rclcpp::Time adjustedTime = rclcpp::Time(sensorTime, RCL_SYSTEM_TIME) +
-    //                                   rclcpp::Duration::from_seconds(averageTimeDifference_);
-    // return (adjustedTime);
-    return t;
+    const uint64_t sensorTime = data.timeStartup();
+    const double dt = t.seconds() - sensorTime * 1e-9;
+
+    // compute exponential moving average
+    const double alpha = 0.001;  // average over rougly 1000 samples
+    averageTimeDifference_ = averageTimeDifference_ * (1.0 - alpha) + alpha * dt;
+
+    // adjust sensor time by average difference to ROS time
+    const rclcpp::Time adjustedTime = rclcpp::Time(sensorTime, RCL_SYSTEM_TIME) +
+                                      rclcpp::Duration::from_seconds(averageTimeDifference_);
+    return (adjustedTime);
   }
 
   // Convert from vn::math::vec4f to geometry_msgs::msgs::Quaternion

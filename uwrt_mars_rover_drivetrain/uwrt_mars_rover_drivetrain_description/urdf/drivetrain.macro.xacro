@@ -64,11 +64,14 @@
     </link>
   </xacro:macro>
 
-  <xacro:macro name="drivetrain_actuator" params="prefix suffix">
+  <xacro:macro name="drivetrain_actuator" params="prefix suffix can_id">
+    <!-- convert the can_id argument to an xacro property -->
+    <xacro:property name="can_id_prop" value="${can_id}"/>
     <ros2_control name="${prefix}_${suffix}_wheel_actuator" type="actuator">
       <hardware>
         <plugin>uwrt_mars_rover_drivetrain_hw/UWRTMarsRoverDrivetrainHWActuatorInterface</plugin>
-        <!-- TODO: CAN interface and Odrive id?-->
+        <param name="can_id">${can_id_prop}</param>
+        <!-- TODO: CAN interface?-->
       </hardware>
       <joint name="${prefix}_${suffix}_wheel_joint">
         <command_interface name="velocity">
@@ -77,7 +80,7 @@
         </command_interface>
         <state_interface name="position"/>
         <state_interface name="velocity"/>
-        <state_interface name="iq_current"/>
+        <!-- <state_interface name="iq_current"/> -->
         <!-- TODO: acceleration, torque? -->
       </joint>
       <transmission name="transmission1">

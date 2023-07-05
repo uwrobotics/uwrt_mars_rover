@@ -96,7 +96,7 @@
     <xacro:property name="can_id_prop" value="${can_id}"/>
     <ros2_control name="${prefix}_${suffix}_wheel_actuator" type="actuator">
       <hardware>
-        <plugin>uwrt_mars_rover_drivetrain_hw/UWRTMarsRoverDrivetrainHWActuatorInterface</plugin>
+        <plugin>gazebo_ros2_control/GazeboSystem</plugin>
         <param name="can_id">${can_id_prop}</param>
         <!-- TODO: CAN interface?-->
       </hardware>

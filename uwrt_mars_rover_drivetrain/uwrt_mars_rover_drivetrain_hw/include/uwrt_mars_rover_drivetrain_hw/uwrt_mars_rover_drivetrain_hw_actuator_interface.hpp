@@ -26,6 +26,8 @@ class UWRTMarsRoverDrivetrainHWActuatorInterface : public hardware_interface::Ac
   UWRT_MARS_ROVER_DRIVETRAIN_HW_PUBLIC
   UWRTMarsRoverDrivetrainHWActuatorInterface();
 
+  // TODO (npalmar): implement the on_error method to turn off wheel velocities when killing node
+
   UWRT_MARS_ROVER_DRIVETRAIN_HW_PUBLIC
   LifecyleNodeCallbackReturn on_init(const hardware_interface::HardwareInfo& actuator_info) override;
 

@@ -19,8 +19,9 @@ repositories:
     version: galactic
   xacro:
     type: git
-    url: https://github.com/wmmc88/xacro.git # FORK. TODO: switch back to ros2 branch on upstream once https://github.com/ros/xacro/pull/304 merges and releases
-    version: wmmc88/use-python-console_script-entrypoint # ros2
+    url: https://github.com/ros/xacro.git
+    version: ros2
+    # merged https://github.com/ros/xacro/pull/304, so ros/xacro works now. Monitor xacro for console_scripts endpoint in the future.
 
   # From https://github.com/ros-controls/ros2_control/blob/galactic/ros2_control/ros2_control.repos
   ros-controls/ros2_control:

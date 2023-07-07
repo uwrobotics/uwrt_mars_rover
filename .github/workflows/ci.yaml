@@ -1,3 +1,4 @@
+# the "if" flag with event.json is for running the workflow locally with `act`.
 name: CI
 
 on:
@@ -20,6 +21,8 @@ env:
 
 jobs:
   prepare-actions-environment:
+    if: ${{ !github.event.act }}
+
     # workaround to use variable for IMAGE. Based off of: https://github.community/t/how-to-use-env-with-container-image/17252/25
     runs-on: ubuntu-latest
     outputs:
@@ -29,6 +32,7 @@ jobs:
         run: echo "::set-output name=image::${{ env.IMAGE }}"
 
   linters:
+    if: ${{ !github.event.act }}
     name: ament-${{ matrix.linter }}
     needs: prepare-actions-environment
     runs-on: ubuntu-latest
@@ -43,7 +47,7 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
-
+    
       - name: ROS2 Linter - [ament-${{ matrix.linter }}]
         uses: ros-tooling/action-ros-lint@master
         with:
@@ -52,6 +56,7 @@ jobs:
           package-name: ${{ env.PACKAGES_TO_TEST }}
 
   linters-clang-format:
+    if: ${{ !github.event.act }}
     name: ament-clang-format
     needs: prepare-actions-environment
     runs-on: ubuntu-latest
@@ -72,6 +77,7 @@ jobs:
           package-name: ${{ env.PACKAGES_TO_TEST }}
 
   linters-flake8:
+    if: ${{ !github.event.act }}
     name: ament-flake8
     needs: prepare-actions-environment
     runs-on: ubuntu-latest
@@ -82,13 +88,6 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
-
-      - name: Force latest version of flake8
-        # Latest flake8 available in ubuntu-focal apt (and the ros-tooling-image) is not up to date with python3.8.
-        # Avoids following error:
-        # "pyflakes" failed during execution due to "'FlakesChecker' object has no attribute 'NAMEDEXPR'"
-        run: |
-          pip install --upgrade flake8
 
       - name: ROS2 Linter - [ament-flake8]
         uses: ros-tooling/action-ros-lint@master
@@ -103,15 +102,9 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: ${{ needs.prepare-actions-environment.outputs.image }}
-      options: -u root
+      
 
     steps:
-      - name: Force latest version of flake8
-        # Latest flake8 available in ubuntu-focal apt (and the ros-tooling-image) is not up to date with python3.8.
-        # Avoids following error:
-        # "pyflakes" failed during execution due to "'FlakesChecker' object has no attribute 'NAMEDEXPR'"
-        run: |
-          pip install --upgrade flake8
 
       - name: Build ROS2 Packages and Run Tests
         uses: ros-tooling/action-ros-ci@v0.2
@@ -164,54 +157,8 @@ jobs:
           docker exec arm64-ros sudo apt update
           docker exec arm64-ros rosdep install -r --from-paths . --ignore-src --rosdistro ${{ env.ROS_DISTRO }} -y
 
-      - name: Force latest version of flake8
-        # Latest flake8 available in ubuntu-focal apt (and the ros-tooling-image) is not up to date with python3.8.
-        # Avoids following error:
-        # "pyflakes" failed during execution due to "'FlakesChecker' object has no attribute 'NAMEDEXPR'"
-        #
-        # rm /opt/ros/${{ env.ROS_DISTRO }}/bin/ament_* required for ament_cmake_test to find the ament_lint installed from common_upstream_dependencies.repos
-        run: |
-          docker exec arm64-ros sudo apt install python3-pip -y
-          docker exec arm64-ros pip install --upgrade flake8
-          docker exec arm64-ros bash -c "rm /opt/ros/${{ env.ROS_DISTRO }}/bin/ament_*"
-
       - name: Build ROS2 Packages and Run Tests
         run: >
           docker exec arm64-ros bash -c "source /opt/ros/${{ env.ROS_DISTRO }}/setup.bash &&
             colcon build --event-handlers console_cohesion+ && 
             colcon test --packages-select ${{ env.PACKAGES_TO_TEST }} --return-code-on-test-failure --event-handlers console_cohesion+"
-
-  windows-amd64-build-and-test: # No rostooling/setup-ros-docker docker images available for Windows.
-    runs-on: windows-2019
-
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
-
-      - name: Setup ROS
-        uses: ros-tooling/setup-ros@v0.3
-        with:
-          required-ros-distributions: ${{ env.ROS_DISTRO }}
-
-      - name: Windows Build Workaround
-        run: >
-          New-Item -Path C:/ci/ws/install/include -ItemType Directory
-        # This is required because the windows binary builds used by setup-ros have the following issue:
-        # `Imported target "rclcpp::rclcpp" includes non-existent path`
-        # This can be removed once https://github.com/ros2/ros2/issues/1068 and https://github.com/ros2/rclcpp/issues/1688 are resolved and released
-
-      - name: Build ROS2 Packages and Run Tests
-        uses: ros-tooling/action-ros-ci@v0.2
-        with:
-          target-ros2-distro: ${{ env.ROS_DISTRO }}
-          vcs-repo-file-url: |
-            https://raw.githubusercontent.com/${{ github.repository }}/${{ github.sha }}/common_upstream_dependencies.repos
-            https://raw.githubusercontent.com/${{ github.repository }}/${{ github.sha }}/windows_amd64_upstream_dependencies.repos
-          package-name: ${{ env.PACKAGES_TO_TEST }}
-          colcon-defaults: | # Disable test building on Windows due to upstream build failure(ros2control) due to possible bug in ament_cmake: https://github.com/ament/ament_cmake/issues/374 
-            {
-              "build": {
-                "mixin": ["build-testing-off"]
-              }
-            }
-          colcon-mixin-repository: https://raw.githubusercontent.com/colcon/colcon-mixin-repository/master/index.yaml

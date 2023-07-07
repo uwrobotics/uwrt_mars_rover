@@ -74,6 +74,7 @@ def generate_launch_description():
 
     # Run the node
     return LaunchDescription([
+        controller_manager_launcher,
         RegisterEventHandler(
             event_handler=OnProcessExit(
                 target_action=spawn_entity,

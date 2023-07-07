@@ -1,4 +1,5 @@
 import os
+from ament_index_python import get_package_share_path
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription
@@ -7,6 +8,9 @@ from ament_index_python.packages import get_package_share_directory
 from launch.actions import TimerAction
 from launch_ros.actions import Node
 import xacro
+from launch.actions import RegisterEventHandler
+from launch.event_handlers import OnProcessExit
+from launch.substitutions import Command
 
 
 def generate_launch_description():
@@ -19,6 +23,8 @@ def generate_launch_description():
     # Use xacro to process the file
     xacro_file = os.path.join(get_package_share_directory(pkg_name),file_subpath)
     robot_description_raw = xacro.process_file(xacro_file).toxml()
+    controllers_config_path = get_package_share_path(
+        'uwrt_mars_rover_drivetrain_hw') / 'config' / 'drivetrain_controllers.yaml'
 
 
     # Configure the node
@@ -27,7 +33,10 @@ def generate_launch_description():
         executable='robot_state_publisher',
         output='screen',
         parameters=[{'robot_description': robot_description_raw,
-        'use_sim_time': True}] # add other parameters here if required
+        'use_sim_time': True}], # add other parameters here if required
+        remappings=[
+            ("/differential_drivetrain_controller/cmd_vel_unstamped", "/cmd_vel"),
+        ],
     )
 
 
@@ -43,47 +52,52 @@ def generate_launch_description():
                                 '-entity', 'my_bot'],
                     output='screen')
 
-    # load_joint_state_controller = ExecuteProcess(
-    #     cmd=['ros2', 'control', 'load_controller', '--set-state', 'active',
-    #          'joint_state_broadcaster'],
-    #     output='screen'
-    # )
 
-    # load_tricycle_controller = ExecuteProcess(
-    #     cmd=['ros2', 'control', 'load_controller', '--set-state', 'active',
-    #          'tricycle_controller'],
-    #     output='screen'
-    # )
-    # diff_drive_spawner = Node(
-    #     package="controller_manager",
-    #     executable="spawner",
-    #     arguments=['ros2', 'control', 'load_controller', '--set-state', 'active',"differential_drivetrain_controller"],
-    # )
+    nodes = []
+    nodes += [Node(
+        package='controller_manager',
+        executable='ros2_control_node',
+        parameters=[robot_description_raw, controllers_config_path],
+        output={
+            'stdout': 'screen',
+            'stderr': 'screen',
+        },
+    )] 
 
-    # joint_broad_spawner = Node(
-    #     package="controller_manager",
-    #     executable="spawner",
-    #     arguments=['ros2', 'control', 'load_controller', '--set-state', 'active',"joint_state_broadcaster"],
-    # )
-       # This helps to address race conditions on startup for the 
-    # controller managers. Note that we are exporting delayed_controller_manager_spawner
-    # instead of just diff_drive_spawner.
-    
-    # delayed_controller_manager_spawner = TimerAction(
-    #     period=10.0,
-    #     actions=[
-    #         Node(
-    #             package="controller_manager",
-    #             executable="spawner",
-    #             arguments=["differential_drivetrain_controller"],
-    #         ),
-    #         Node(
-    #             package="controller_manager",
-    #             executable="spawner",
-    #             arguments=["joint_state_broadcaster"],
-    #         )
-    #     ],
-    # )
+    rviz_node = Node(
+        package='rviz2',
+        executable='rviz2',
+        name='rviz2',
+        output='screen',
+        arguments=['-d', str(rviz_config_path)],
+    )
+
+
+    nodes += [joint_state_broadcaster_spawner := Node(
+        package='controller_manager',
+        executable='spawner',
+        arguments=['joint_state_broadcaster', '--controller-manager', '/controller_manager'],
+    )]
+
+    nodes += [RegisterEventHandler(
+        event_handler=OnProcessExit(
+            target_action=joint_state_broadcaster_spawner,
+            on_exit=[rviz_node],
+        )
+    )]
+
+    # Delay start of drivetrain_controller_spawner after joint_state_broadcaster_spawner
+    drivetrain_controller_spawner = Node(
+        package='controller_manager',
+        executable='spawner',
+        arguments=['differential_drivetrain_controller', "--controller-manager", '/controller_manager'],
+    )
+    nodes += [RegisterEventHandler(
+        event_handler=OnProcessExit(
+            target_action=joint_state_broadcaster_spawner,
+            on_exit=[drivetrain_controller_spawner],
+        )
+    )]
 
 
 

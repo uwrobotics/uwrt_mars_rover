@@ -163,11 +163,6 @@ hardware_interface::return_type UWRTMarsRoverDrivetrainHWActuatorInterface::read
   TwoFloats encoder_readings;
   drivetrain_can_wrapper_.getLatestFromID<TwoFloats>(encoder_readings, get_encoder_estimates_id_);
   
-  // Sketchy, not tested yet, copy this into two floats
-  // std::memcpy(&actuator_state_position, &encoderEstimates, sizeof(actuator_state_position)); 
-  // std::memcpy(&actuator_state_velocity, &encoderEstimates[4], sizeof(actuator_state_velocity)); 
-  // TODO (npalmar): confirm the order of reading is correct (might be backwards)
-  
   // ignore garbage if we get garbage (seems to work well)
   if (encoder_readings.a > 0.1)
   {
@@ -177,12 +172,6 @@ hardware_interface::return_type UWRTMarsRoverDrivetrainHWActuatorInterface::read
   {
     actuator_state_velocity_ = (double) encoder_readings.b;
   }
-  
-  // TwoFloats iq_current;
-  // drivetrain_can_wrapper_.getLatestFromID<TwoFloats>(iq_current, actuator_state_iq_current_address_);
-  // TODO (by Colin) I think we want the last 4 bytes (measured IQ) on the above line, that should be read into float
-  // std::memcpy(&actuator_state_iq_current, &iq_current[4], sizeof(actuator_state_iq_current));
-  // actuator_state_iq_current_ = (double) iq_current.b;
   
   RCLCPP_DEBUG_STREAM(logger_, "Actuator Position: " << actuator_state_position_
                                                      << " Actuator Velocity: " << actuator_state_velocity_);

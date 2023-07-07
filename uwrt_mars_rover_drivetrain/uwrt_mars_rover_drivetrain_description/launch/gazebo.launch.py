@@ -3,8 +3,8 @@ from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-
-
+from ament_index_python.packages import get_package_share_directory
+from launch.actions import TimerAction
 from launch_ros.actions import Node
 import xacro
 
@@ -38,33 +38,61 @@ def generate_launch_description():
         )
 
 
-    spawn_entity = Node(package='gazebo_ros', executable='spawn_entity.py',
+    spawn_entity = Node(package='gazebo_ros', executable='spawn_entity',
                     arguments=['-topic', 'robot_description',
                                 '-entity', 'my_bot'],
                     output='screen')
 
+    # load_joint_state_controller = ExecuteProcess(
+    #     cmd=['ros2', 'control', 'load_controller', '--set-state', 'active',
+    #          'joint_state_broadcaster'],
+    #     output='screen'
+    # )
 
-    diff_drive_spawner = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=["differential_drivetrain_controller"],
-    )
+    # load_tricycle_controller = ExecuteProcess(
+    #     cmd=['ros2', 'control', 'load_controller', '--set-state', 'active',
+    #          'tricycle_controller'],
+    #     output='screen'
+    # )
+    # diff_drive_spawner = Node(
+    #     package="controller_manager",
+    #     executable="spawner",
+    #     arguments=['ros2', 'control', 'load_controller', '--set-state', 'active',"differential_drivetrain_controller"],
+    # )
 
-    joint_broad_spawner = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=["joint_state_broadcaster"],
-    )
-
+    # joint_broad_spawner = Node(
+    #     package="controller_manager",
+    #     executable="spawner",
+    #     arguments=['ros2', 'control', 'load_controller', '--set-state', 'active',"joint_state_broadcaster"],
+    # )
+       # This helps to address race conditions on startup for the 
+    # controller managers. Note that we are exporting delayed_controller_manager_spawner
+    # instead of just diff_drive_spawner.
+    
+    # delayed_controller_manager_spawner = TimerAction(
+    #     period=10.0,
+    #     actions=[
+    #         Node(
+    #             package="controller_manager",
+    #             executable="spawner",
+    #             arguments=["differential_drivetrain_controller"],
+    #         ),
+    #         Node(
+    #             package="controller_manager",
+    #             executable="spawner",
+    #             arguments=["joint_state_broadcaster"],
+    #         )
+    #     ],
+    # )
 
 
 
 
     # Run the node
     return LaunchDescription([
-        gazebo,
         node_robot_state_publisher,
+        gazebo,
         spawn_entity,
-        diff_drive_spawner,
-        joint_broad_spawner
+        # diff_drive_spawner,
+        # joint_broad_spawner
     ])

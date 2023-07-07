@@ -1,18 +1,17 @@
 import os
-from ament_index_python import get_package_share_path
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from ament_index_python.packages import get_package_share_directory
-from launch.actions import TimerAction
 from launch_ros.actions import Node
-from launch_ros.parameter_descriptions import ParameterValue
-
 import xacro
+
+
+from ament_index_python.packages import get_package_share_path
 from launch.actions import RegisterEventHandler
 from launch.event_handlers import OnProcessExit
 from launch.substitutions import Command
+from launch_ros.parameter_descriptions import ParameterValue
 
 
 def generate_launch_description():
@@ -25,30 +24,31 @@ def generate_launch_description():
     # Use xacro to process the file
     xacro_file = os.path.join(get_package_share_directory(pkg_name),file_subpath)
     robot_description_raw = xacro.process_file(xacro_file).toxml()
-    controllers_config_path = get_package_share_path(
-        'uwrt_mars_rover_drivetrain_hw') / 'config' / 'drivetrain_controllers.yaml'
 
 
-    #This stores the information of the the robots joints etc
+    #robot state publisher publishes information
     node_robot_state_publisher = Node(
         package='robot_state_publisher',
         executable='robot_state_publisher',
         output='screen',
         parameters=[{'robot_description': robot_description_raw,
-        'use_sim_time': True}], # add other parameters here if required
-        remappings=[
-            ("/differential_drivetrain_controller/cmd_vel_unstamped", "/cmd_vel"),
-        ],
+        'use_sim_time': True}] # add other parameters here if required
     )
 
 
-    #launching gazebo
+    #this is launching gazebo
     gazebo = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([os.path.join(
             get_package_share_directory('gazebo_ros'), 'launch'), '/gazebo.launch.py']),
         )
-    
-    #----------------------------------------------------------------------------------
+
+
+    spawn_entity = Node(package='gazebo_ros', executable='spawn_entity.py',
+                    arguments=['-topic', 'robot_description',
+                                '-entity', 'my_bot'],
+                    output='screen')
+
+    #-------------------------------------------------------------------------------------
 
 
     drivetrain_description_package_path = get_package_share_path('uwrt_mars_rover_drivetrain_description')
@@ -59,6 +59,7 @@ def generate_launch_description():
 
     robot_description_content = ParameterValue(Command(['ros2 run xacro xacro ', str(model_path)]), value_type=str)
     robot_description = {'robot_description': robot_description_content}
+
 
     # Nodes
     nodes = []
@@ -83,11 +84,12 @@ def generate_launch_description():
         ],
     )]
 
-    nodes += [joint_state_broadcaster_spawner := Node(
+    joint_state_broadcaster_spawner = Node(
         package='controller_manager',
         executable='spawner',
         arguments=['joint_state_broadcaster', '--controller-manager', '/controller_manager'],
-    )]
+    )
+    nodes += [joint_state_broadcaster_spawner]
 
     # Delay rviz2 start after joint_state_broadcaster_spawner finishes
     rviz_node = Node(
@@ -117,11 +119,10 @@ def generate_launch_description():
         )
     )]
 
+
     nodes += [gazebo]
-    #----------------------------------------------------------------------------------
 
-
-
+    #-------------------------------------------------------------------------------------
 
 
 

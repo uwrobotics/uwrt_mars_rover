@@ -23,6 +23,8 @@ def generate_launch_description():
     # Use xacro to process the file
     xacro_file = os.path.join(get_package_share_directory(pkg_name),file_subpath)
     robot_description_raw = xacro.process_file(xacro_file).toxml()
+    doc = xacro.parse(open(xacro_file))
+    xacro.process_doc(doc)
 
 
     # Configure the node
@@ -30,7 +32,7 @@ def generate_launch_description():
         package='robot_state_publisher',
         executable='robot_state_publisher',
         output='screen',
-        parameters=[{'robot_description': robot_description_raw,
+        parameters=[{'robot_description': doc.toxml(),
         'use_sim_time': True}] # add other parameters here if required
     )
 
@@ -48,15 +50,15 @@ def generate_launch_description():
                     output='screen')
     
     #loading in the controller manager
-    controller_manager_launcher = Node(
-        package='controller_manager',
-        executable='ros2_control_node',
-        parameters=[robot_description_raw, controllers_config_path],
-        output={
-            'stdout': 'screen',
-            'stderr': 'screen',
-        },
-    )
+    # controller_manager_launcher = Node(
+    #     package='controller_manager',
+    #     executable='ros2_control_node',
+    #     parameters=[robot_description_raw, controllers_config_path],
+    #     output={
+    #         'stdout': 'screen',
+    #         'stderr': 'screen',
+    #     },
+    # )
 
 
     differential_drivetrain_controller = ExecuteProcess(
@@ -74,20 +76,19 @@ def generate_launch_description():
 
     # Run the node
     return LaunchDescription([
-        controller_manager_launcher,
         RegisterEventHandler(
-            event_handler=OnProcessExit(
-                target_action=spawn_entity,
-                on_exit=[joint_state_broadcaster_controller],
-            )
+        event_handler=OnProcessExit(
+        target_action=spawn_entity,
+        on_exit=[joint_state_broadcaster_controller],
+        )
         ),
         RegisterEventHandler(
-            event_handler=OnProcessExit(
-                target_action=joint_state_broadcaster_controller,
-                on_exit=[differential_drivetrain_controller],
-            )
+        event_handler=OnProcessExit(
+        target_action=joint_state_broadcaster_controller,
+        on_exit=[differential_drivetrain_controller],
+        )
         ),
         gazebo,
+        spawn_entity,
         node_robot_state_publisher,
-        spawn_entity
-    ])
+        ])

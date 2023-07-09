@@ -1,9 +1,6 @@
-#import python Node libraries
 import rclpy
 from rclpy.node import Node
-#import ColorRGBA
 from std_msgs.msg import ColorRGBA
-#imports for PWM
 import RPi.GPIO as GPIO
 import time
 
@@ -24,7 +21,7 @@ class MinimalSubscriber(Node):
 
     check_pwm = output_pins.get(GPIO.model, None)
     if check_pwm is None:
-        # add error is pins are none (ROS2 error)
+        # add error if pins are none (ROS2 error)
         raise Exception('PWM not supported on this board')
     
 
@@ -35,7 +32,7 @@ class MinimalSubscriber(Node):
         #Frequency to reresent the # of cycles/sec
         PWM_FREQUENCY = 500
 
-         #add pins (check colour)
+         #add pins (colour to channel)
         red_pin_channel = 13
         green_pin_channel = 15
         blue_pin_channel = 18
@@ -79,11 +76,13 @@ class MinimalSubscriber(Node):
 
 #define main
 def main(args=None):
+    #initialize
     rclpy.init(args=args)
-
+    #create subscriber
     minimal_subscriber = MinimalSubscriber()
-
+    #execution
     rclpy.spin(minimal_subscriber)
+    #finish
     GPIO.cleanup()
     minimal_subscriber.destroy_node()
     rclpy.shutdown()

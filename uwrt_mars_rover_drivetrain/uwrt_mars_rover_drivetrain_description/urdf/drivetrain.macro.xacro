@@ -13,11 +13,18 @@
     <xacro:property name="chassis_length" value="${chassis_parameters['length']}" scope="parent"/>
     <xacro:property name="chassis_width" value="${chassis_parameters['width']}" scope="parent"/>
     <xacro:property name="chassis_height" value="${chassis_parameters['height']}" scope="parent"/>
+    <xacro:property name="chassis_mass" value="${chassis_parameters['mass']}" scope="parent"/>
+
+
 
     <!-- wheel parameters -->
     <xacro:property name="wheel_diameter" value="${wheel_parameters['diameter']}" scope="parent"/>
     <xacro:property name="wheel_width" value="${wheel_parameters['width']}" scope="parent"/>
     <xacro:property name="wheel_mass" value="${wheel_parameters['mass']}" scope="parent"/>
+    <xacro:property name="wheel_radius" value="${(wheel_parameters['diameter'])/2}" scope="parent"/>
+
+    
+
 
     <!-- control parameters -->
     <xacro:property name="mechanical_reduction" value="${control_parameters['mechanical_reduction']}" scope="parent"/>
@@ -31,6 +38,26 @@
           ixx="1e-3" ixy="0.0" ixz="0.0"
           iyy="1e-3" iyz="0.0"
           izz="1e-3"/>
+    </inertial>
+  </xacro:macro>
+
+   <xacro:macro name="chassis_inertia" params="chassis_width:=^ chassis_height:=^ chassis_length:=^ chassis_mass:=^">
+    <inertial>
+      <mass value="${chassis_mass}" />
+      <inertia
+          ixx="${(1/12)*(((chassis_height)*(chassis_height))+((chassis_width)*(chassis_width)))}" ixy="0.0" ixz="0.0"
+          iyy="${(1/12)*(((chassis_height)*(chassis_height))+((chassis_length)*(chassis_length)))}" iyz="0.0"
+          izz="${(1/12)*(((chassis_width)*(chassis_width))+((chassis_length)*(chassis_length)))}"/>
+    </inertial>
+  </xacro:macro>
+
+  <xacro:macro name="wheel_intertia" params="wheel_radius:=^ wheel_width:=^ wheel_mass:=^">
+    <inertial>
+      <mass value="${wheel_mass}" />
+      <inertia
+          ixx="${(1/12)*(3*((wheel_radius)*(wheel_radius))+((wheel_width)*(wheel_width)))}" ixy="0.0" ixz="0.0"
+          iyy="${(1/12)*(3*((wheel_radius)*(wheel_radius))+((wheel_width)*(wheel_width)))}" iyz="0.0"
+          izz="${(1/2)*((wheel_radius)*(wheel_radius))}"/>
     </inertial>
   </xacro:macro>
 
@@ -60,7 +87,7 @@
           </geometry>
         </idential_blocks>
       </xacro:identical_visual_collision>
-      <xacro:default_inertial mass="${wheel_mass}"/>
+      <xacro:wheel_intertia />
     </link>
   </xacro:macro>
 

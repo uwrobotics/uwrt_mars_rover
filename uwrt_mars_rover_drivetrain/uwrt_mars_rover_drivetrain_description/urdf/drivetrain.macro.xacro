@@ -110,19 +110,19 @@
         <!-- <state_interface name="iq_current"/> -->
         <!-- TODO: acceleration, torque? -->
       </joint>
-      <transmission name="transmission1">
+      <!-- <transmission name="transmission1"> -->
         <!--  TODO: These are not actually parsed by ros2control yet: https://github.com/ros-controls/ros2_control/issues/32, https://github.com/ros-controls/ros2_control/issues/599 -->
-        <plugin>transmission_interface/SimpleTransmission</plugin>
+        <!-- <plugin>transmission_interface/SimpleTransmission</plugin>
         <joint name="${prefix}_${suffix}_wheel_joint" role="joint1">
           <mechanical_reduction>${mechanical_reduction}</mechanical_reduction>
         </joint>
-      </transmission>
+      </transmission> -->
+    </ros2_control>
       <gazebo>
         <plugin filename="libgazebo_ros2_control.so" name="gazebo_ros2_control">
           <parameters>$(find uwrt_mars_rover_drivetrain_hw)/config/drivetrain_controllers.yaml</parameters>
         </plugin>
       </gazebo>
-    </ros2_control>
   </xacro:macro>
 
 </robot>

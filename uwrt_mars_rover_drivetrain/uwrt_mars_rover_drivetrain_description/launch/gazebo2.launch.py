@@ -1,10 +1,11 @@
 import os
+from syslog import LOG_INFO
 from ament_index_python import get_package_share_path
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
-from launch.actions import ExecuteProcess, IncludeLaunchDescription, RegisterEventHandler
+from launch.actions import ExecuteProcess, IncludeLaunchDescription, RegisterEventHandler,TimerAction
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.event_handlers import OnProcessExit 
+from launch.event_handlers import OnProcessExit, OnExecutionComplete
 
 
 from launch_ros.actions import Node
@@ -12,7 +13,6 @@ import xacro
 
 
 def generate_launch_description():
-
     # Specify the name of the package and path to xacro file within the package
     pkg_name = 'uwrt_mars_rover_drivetrain_description'
     file_subpath = 'urdf/drivetrain.urdf.xacro'
@@ -76,12 +76,17 @@ def generate_launch_description():
 
     # Run the node
     return LaunchDescription([
-        RegisterEventHandler(
-        event_handler=OnProcessExit(
-        target_action=spawn_entity,
-        on_exit=[joint_state_broadcaster_controller],
+       RegisterEventHandler(
+        OnExecutionComplete(
+            target_action=spawn_entity,
+            on_completion=[
+                TimerAction(
+                    period=10.0,
+                    actions=[joint_state_broadcaster_controller],
+                )
+            ]
         )
-        ),
+    ),
         RegisterEventHandler(
         event_handler=OnProcessExit(
         target_action=joint_state_broadcaster_controller,
@@ -90,5 +95,5 @@ def generate_launch_description():
         ),
         gazebo,
         spawn_entity,
-        node_robot_state_publisher,
+        node_robot_state_publisher
         ])

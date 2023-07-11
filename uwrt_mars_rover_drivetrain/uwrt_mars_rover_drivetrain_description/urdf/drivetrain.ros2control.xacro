@@ -12,4 +12,3 @@
   <xacro:drivetrain_actuator prefix="left" suffix="back" can_id="0"/>
 
 </robot>
-

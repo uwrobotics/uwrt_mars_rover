@@ -3,7 +3,7 @@
 
   <!-- import macros file -->
   <xacro:include filename="$(find uwrt_mars_rover_drivetrain_description)/urdf/drivetrain.macro.xacro"/>
-
+  
   <xacro:drivetrain_actuator prefix="right" suffix="front" can_id="5"/>
   <xacro:drivetrain_actuator prefix="right" suffix="middle" can_id="4"/>
   <xacro:drivetrain_actuator prefix="right" suffix="back" can_id="3"/>

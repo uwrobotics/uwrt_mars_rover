@@ -25,8 +25,6 @@ def generate_launch_description():
     # Use xacro to process the file
     xacro_file = os.path.join(get_package_share_directory(pkg_name),file_subpath)
 
-    doc = xacro.parse(open(xacro_file))
-    # xacro.process_doc(doc,mappings={'sim':'true'})
     robot_description_config = Command(['xacro ', xacro_file,' sim:=', sim_status])
 
 

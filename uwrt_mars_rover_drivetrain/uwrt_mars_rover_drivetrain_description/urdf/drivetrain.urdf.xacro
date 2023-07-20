@@ -3,7 +3,7 @@
   <!-- import macros file -->
   <xacro:include filename="$(find uwrt_mars_rover_drivetrain_description)/urdf/drivetrain.macro.xacro"/>
 
-  <xacro:arg name="sim" default="false"/>
+  <xacro:arg name="sim" default="true"/>
 
   <!-- load model data from yamls -->
   <xacro:load_model_data

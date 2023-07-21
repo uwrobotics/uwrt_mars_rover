@@ -1,0 +1,46 @@
+depth_camera:
+  camera1:
+    dim:
+      length: 0.05
+      width: 0.05
+      height: 0.05
+    parent_link: chassis
+    offset:
+      x: 0
+      y: 0
+      z: 0.1
+
+      r_rot: 0
+      p_rot: 0
+      y_rot: 0
+
+  camera2:
+    dim:
+      length: 0.05
+      width: 0.05
+      height: 0.05
+    parent_link: chassis
+    offset:
+      x: 0.585
+      y: 0
+      z: 0.1
+      
+      r_rot: 0
+      p_rot: 0
+      y_rot: 0
+
+lidar:
+  lidar1:
+    dim:
+      length: 0.05
+      width: 0.05
+      height: 0.05
+    parent_link: chassis
+    offset:
+      x: 0.4
+      y: 0.3
+      z: 0.1
+
+      r_rot: 0
+      p_rot: 0
+      y_rot: 0

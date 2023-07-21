@@ -6,6 +6,7 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 
 
 from launch_ros.actions import Node
+from launch_ros.substitutions import FindPackageShare
 import xacro
 
 
@@ -15,6 +16,8 @@ def generate_launch_description():
     pkg_name = 'uwrt_mars_rover_drivetrain_description'
     file_subpath = 'urdf/drivetrain.urdf.xacro'
 
+    pkg_share = FindPackageShare(package=pkg_name).find(pkg_name)
+    world_path=os.path.join(pkg_share, 'world/my_world.sdf')
 
     # Use xacro to process the file
     xacro_file = os.path.join(get_package_share_directory(pkg_name),file_subpath)

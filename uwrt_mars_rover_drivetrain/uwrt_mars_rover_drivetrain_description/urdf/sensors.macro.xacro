@@ -1,0 +1,116 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro">
+
+  <!-- import macros file -->
+  <xacro:include filename="$(find uwrt_mars_rover_drivetrain_description)/urdf/drivetrain.macro.xacro"/>
+
+  <xacro:macro name="generate_sensor_frame" params="sensor_params name">
+    <link name="${name}">
+      <xacro:identical_visual_collision>
+        <identical_blocks>
+          <geometry>
+            <box size="${sensor_params['dim']['length']} ${sensor_params['dim']['width']} ${sensor_params['dim']['height']}"/>
+          </geometry>
+          <material name="blue">
+            <color rgba="0 0 0.8 1.0"/>
+          </material>
+        </identical_blocks>
+      </xacro:identical_visual_collision>
+      <xacro:default_inertial/>
+    </link>
+
+    <joint name="${sensor_params['parent_link']}_to_${name}" type="fixed">
+      <parent link="${sensor_params['parent_link']}"/>
+      <child link="${name}"/>
+      <origin xyz="${sensor_params['offset']['x']}     ${sensor_params['offset']['y']}     ${sensor_params['offset']['z']} " 
+              rpy="${sensor_params['offset']['r_rot']} ${sensor_params['offset']['p_rot']} ${sensor_params['offset']['y_rot']} "/>
+    </joint>
+
+  </xacro:macro>
+
+
+  <xacro:macro name="default_depth_camera_frame" params="camera_link_name">
+    <gazebo reference="${camera_link_name}">
+      <sensor name="${camera_link_name}_sensor" type="depth">
+        <visualize>true</visualize>
+        <update_rate>30.0</update_rate>
+        <camera name="camera">
+          <horizontal_fov>1.047198</horizontal_fov>
+          <image>
+            <width>640</width>
+            <height>480</height>
+            <format>R8G8B8</format>
+          </image>
+          <clip>
+            <near>0.05</near>
+            <far>3</far>
+          </clip>
+        </camera>
+        <plugin name="depth_camera_controller" filename="libgazebo_ros_camera.so">
+          <cameraName>${camera_link_name}</cameraName>
+          <imageTopicName>ir/image_raw</imageTopicName>
+          <cameraInfoTopicName>ir/camera_info</cameraInfoTopicName>
+          <depthImageTopicName>depth/image_raw</depthImageTopicName>
+          <depthImageCameraInfoTopicName>depth/camera_info</depthImageCameraInfoTopicName>
+          <pointCloudTopicName>depth/points</pointCloudTopicName>
+          <frameName>${camera_link_name}_optical_frame</frameName>
+
+          <baseline>0.2</baseline>
+          <alwaysOn>true</alwaysOn>
+          <updateRate>0.0</updateRate>
+          <frame_name>camera_depth_frame</frame_name>
+          <pointCloudCutoff>0.5</pointCloudCutoff>
+          <pointCloudCutoffMax>3.0</pointCloudCutoffMax>
+          <distortionK1>0</distortionK1>
+          <distortionK2>0</distortionK2>
+          <distortionK3>0</distortionK3>
+          <distortionT1>0</distortionT1>
+          <distortionT2>0</distortionT2>
+          <CxPrime>0</CxPrime>
+          <Cx>0</Cx>
+          <Cy>0</Cy>
+          <focalLength>0</focalLength>
+          <hackBaseline>0</hackBaseline>
+        </plugin>
+      </sensor>
+    </gazebo>    
+  </xacro:macro>
+
+  <xacro:macro name="default_lidar_frame" params="lidar_link_name">
+    <gazebo reference="${lidar_link_name}">
+    <sensor name="${lidar_link_name}_sensor" type="ray">
+      <always_on>true</always_on>
+      <visualize>true</visualize>
+      <update_rate>5</update_rate>
+      <ray>
+        <scan>
+          <horizontal>
+            <samples>360</samples>
+            <resolution>1.000000</resolution>
+            <min_angle>0.000000</min_angle>
+            <max_angle>6.280000</max_angle>
+          </horizontal>
+        </scan>
+        <range>
+          <min>0.120000</min>
+          <max>3.5</max>
+          <resolution>0.015000</resolution>
+        </range>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.01</stddev>
+        </noise>
+      </ray>
+      <plugin name="lidar_controller" filename="libgazebo_ros_ray_sensor.so">
+        <ros>
+          <remapping>~/out:=${lidar_link_name}_sensor/scan</remapping>
+        </ros>
+        <output_type>sensor_msgs/LaserScan</output_type>
+        <frame_name>${lidar_link_name}</frame_name>
+      </plugin>
+    </sensor>
+  </gazebo>
+  </xacro:macro>
+
+</robot>

@@ -148,7 +148,7 @@
 
     <gazebo reference="nav_imu_link">
       <sensor name="nav_imu_sensor" type="imu">
-       <plugin filename="libgazebo_ros_imu_sensor.so" name="nav_imu_plugin">
+       <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
           <ros>
             <namespace>/demo</namespace>
             <remapping>~/out:=imu</remapping>
@@ -246,19 +246,38 @@
 
     <gazebo reference="nav_gps_link">
         <sensor name="nav_gps_sensor" type="gps">
-            <always_on>true</always_on>
-            <update_rate>1.0</update_rate>
             <plugin name="nav_gps_plugin" filename="libgazebo_ros_gps_sensor.so">
                 <ros>
-                    <!-- <namespace>/br</namespace> -->
-                    <remapping>nav_gps_plugin/out:=gps</remapping>
+                  <namespace>/demo</namespace>
+                    <remapping>~/out:=gps</remapping>
                 </ros>
                 <frame_name>gps_link</frame_name>
             </plugin>
+            <always_on>true</always_on>
+            <update_rate>100</update_rate>
+            <visualize>true</visualize>
+            <gps>
+
+              <longitude>
+                  <mean>0.0</mean>
+                  <stddev>2e-4</stddev>
+                  <bias_mean>0.0000075</bias_mean>
+                  <bias_stddev>0.0000008</bias_stddev>
+              </longitude>
+
+              <latitude>
+                  <mean>0.0</mean>
+                  <stddev>2e-4</stddev>
+                  <bias_mean>0.0000075</bias_mean>
+                  <bias_stddev>0.0000008</bias_stddev>
+              </latitude>
+
+            </gps>
         </sensor>
-        <material>Gazebo/Grey</material> <!-- TODO: fix? --!>
+        <material>Gazebo/Grey</material> <!-- TODO: fix? -->
     </gazebo>
 
   </xacro:macro>
+
 
 </robot>

@@ -41,4 +41,5 @@
   <xacro:wheel prefix="left" suffix="back" parent_link="chassis" reflect="1" x_position="${-chassis_length/2}"/>
 
   <xacro:nav_imu/>
+  <xacro:nav_gps/>
 </robot>

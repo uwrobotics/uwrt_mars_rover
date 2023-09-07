@@ -64,11 +64,16 @@
     </link>
   </xacro:macro>
 
-  <xacro:macro name="drivetrain_actuator" params="prefix suffix">
+  <xacro:macro name="drivetrain_actuator" params="prefix suffix sim_gazebo_classic:=^|false">
     <ros2_control name="${prefix}_${suffix}_wheel_actuator" type="actuator">
       <hardware>
+        <xacro:if value="${sim_gazebo_classic}">
+          <plugin>gazebo_ros2_control/GazeboSystem</plugin>
+        </xacro:if>
+        <xacro:unless value="${sim_gazebo_classic}">
         <plugin>uwrt_mars_rover_drivetrain_hw/UWRTMarsRoverDrivetrainHWActuatorInterface</plugin>
         <!-- TODO: CAN interface and Odrive id?-->
+        </xacro:unless>
       </hardware>
       <joint name="${prefix}_${suffix}_wheel_joint">
         <command_interface name="velocity">

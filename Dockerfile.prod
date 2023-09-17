@@ -1,5 +1,5 @@
-# Start with the basic ROS Galactic 20.04 image
-FROM ros:galactic
+# Start with the basic ROS Humble 22.04 image
+FROM ros:humble
 
 # Copy over the current repository to our image
 COPY . $HOME/dev_ws/src/uwrt_mars_rover

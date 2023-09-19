@@ -29,30 +29,30 @@
   </xacro:macro>
 
 
-  <xacro:macro name="default_depth_camera_frame" params="camera_link_name">
+  <xacro:macro name="default_depth_camera_frame" params="camera_link_name camera_props">
     <gazebo reference="${camera_link_name}">
       <sensor name="${camera_link_name}_sensor" type="depth">
         <visualize>true</visualize>
         <update_rate>30.0</update_rate>
         <camera name="camera">
-          <horizontal_fov>1.047198</horizontal_fov>
+          <horizontal_fov>${camera_props['horizontal_fov']}</horizontal_fov>
           <image>
-            <width>640</width>
-            <height>480</height>
-            <format>R8G8B8</format>
+            <width>${camera_props['image']['width']}</width>
+            <height>${camera_props['image']['height']}</height>
+            <format>${camera_props['image']['format']}</format>
           </image>
           <clip>
-            <near>0.05</near>
-            <far>3</far>
+            <near>${camera_props['clip']['near']}</near>
+            <far>${camera_props['clip']['far']}</far>
           </clip>
         </camera>
         <plugin name="depth_camera_controller" filename="libgazebo_ros_camera.so">
           <cameraName>${camera_link_name}</cameraName>
-          <imageTopicName>ir/image_raw</imageTopicName>
-          <cameraInfoTopicName>ir/camera_info</cameraInfoTopicName>
-          <depthImageTopicName>depth/image_raw</depthImageTopicName>
-          <depthImageCameraInfoTopicName>depth/camera_info</depthImageCameraInfoTopicName>
-          <pointCloudTopicName>depth/points</pointCloudTopicName>
+          <imageTopicName>${camera_link_name}_ir/image_raw</imageTopicName>
+          <cameraInfoTopicName>${camera_link_name}_ir/camera_info</cameraInfoTopicName>
+          <depthImageTopicName>${camera_link_name}_depth/image_raw</depthImageTopicName>
+          <depthImageCameraInfoTopicName>${camera_link_name}_depth/camera_info</depthImageCameraInfoTopicName>
+          <pointCloudTopicName>${camera_link_name}_depth/points</pointCloudTopicName>
           <frameName>${camera_link_name}_optical_frame</frameName>
 
           <baseline>0.2</baseline>
@@ -76,25 +76,25 @@
     </gazebo>    
   </xacro:macro>
 
-  <xacro:macro name="default_lidar_frame" params="lidar_link_name">
+  <xacro:macro name="default_lidar_frame" params="lidar_link_name lidar_props">
     <gazebo reference="${lidar_link_name}">
     <sensor name="${lidar_link_name}_sensor" type="ray">
       <always_on>true</always_on>
       <visualize>true</visualize>
-      <update_rate>5</update_rate>
+      <update_rate>${lidar_props['update_rate']}</update_rate>
       <ray>
         <scan>
           <horizontal>
-            <samples>360</samples>
-            <resolution>1.000000</resolution>
-            <min_angle>0.000000</min_angle>
-            <max_angle>6.280000</max_angle>
+            <samples>${lidar_props['scan']['samples']}</samples>
+            <resolution>${lidar_props['scan']['resolution']}</resolution>
+            <min_angle>${lidar_props['scan']['min_angle']}</min_angle>
+            <max_angle>${lidar_props['scan']['max_angle']}</max_angle>
           </horizontal>
         </scan>
         <range>
-          <min>0.120000</min>
-          <max>3.5</max>
-          <resolution>0.015000</resolution>
+          <min>${lidar_props['range']['min']}</min>
+          <max>${lidar_props['range']['max']}</max>
+          <resolution>${lidar_props['range']['resolution']}</resolution>
         </range>
         <noise>
           <type>gaussian</type>
@@ -103,9 +103,6 @@
         </noise>
       </ray>
       <plugin name="lidar_controller" filename="libgazebo_ros_ray_sensor.so">
-        <ros>
-          <remapping>~/out:=${lidar_link_name}_sensor/scan</remapping>
-        </ros>
         <output_type>sensor_msgs/LaserScan</output_type>
         <frame_name>${lidar_link_name}</frame_name>
       </plugin>

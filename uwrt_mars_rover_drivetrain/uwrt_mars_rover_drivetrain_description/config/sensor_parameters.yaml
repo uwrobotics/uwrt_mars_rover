@@ -36,7 +36,7 @@ depth_camera:
 
       r_rot: 0
       p_rot: 0
-      y_rot: 3.14159265359pi
+      y_rot: 3.14159265359
     camera_properties:
       horizontal_fov: 1.047198
       image:
@@ -55,8 +55,8 @@ lidar:
       height: 0.05
     parent_link: chassis
     offset:
-      x: 0.4
-      y: 0.3
+      x: 0.61
+      y: 0
       z: 0.1
 
       r_rot: 0

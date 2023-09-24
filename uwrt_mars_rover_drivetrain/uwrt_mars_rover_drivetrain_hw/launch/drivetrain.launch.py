@@ -23,7 +23,7 @@ def generate_launch_description():
     controllers_config_path = get_package_share_path(
         'uwrt_mars_rover_drivetrain_hw') / 'config' / 'drivetrain_controllers.yaml'
 
-    robot_description_content = ParameterValue(Command(['ros2 run xacro xacro ', str(model_path)]), value_type=str)
+    robot_description_content = ParameterValue(Command(['ros2 run xacro xacro ', str(model_path),' sim:=', 'false']), value_type=str)
     robot_description = {'robot_description': robot_description_content}
 
     # Nodes

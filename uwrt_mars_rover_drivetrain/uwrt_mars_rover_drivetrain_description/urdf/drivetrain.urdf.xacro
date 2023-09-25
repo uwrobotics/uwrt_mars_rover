@@ -16,10 +16,12 @@
     <!-- include ros2 control for sim -->
   <xacro:if value="$(arg sim)">
       <xacro:include filename="$(find uwrt_mars_rover_drivetrain_description)/urdf/drivetrain.ros2controlgazebo.xacro"/>
+      <xacro:uwrt_drivetrain_ros2_controls_gazebo/>
   </xacro:if>
   <!-- include ros2control description for regular -->
   <xacro:unless value="$(arg sim)">
       <xacro:include filename="$(find uwrt_mars_rover_drivetrain_description)/urdf/drivetrain.ros2control.xacro"/>
+      <xacro:uwrt_drivetrain_ros2_controls/>
   </xacro:unless>
 
   <link name="base_link"/>
@@ -51,6 +53,6 @@
   <xacro:wheel prefix="left" suffix="middle" parent_link="chassis" reflect="1" x_position="0"/>
   <xacro:wheel prefix="left" suffix="back" parent_link="chassis" reflect="1" x_position="${-chassis_length/2}"/>
 
-  <xacro:uwrt_drivetrain_ros2_controls/>
+  
 
 </robot>

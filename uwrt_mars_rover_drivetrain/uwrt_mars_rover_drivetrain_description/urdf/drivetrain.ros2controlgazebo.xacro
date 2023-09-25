@@ -4,7 +4,7 @@
   <!-- import macros file -->
   <xacro:include filename="$(find uwrt_mars_rover_drivetrain_description)/urdf/drivetrain.macro.xacro"/>
 
-  <xacro:macro name="uwrt_drivetrain_ros2_controls">
+  <xacro:macro name="uwrt_drivetrain_ros2_controls_gazebo">
     <ros2_control name="gazebo_wheel_actuator" type="system">
       <hardware>
           <plugin>gazebo_ros2_control/GazeboSystem</plugin>

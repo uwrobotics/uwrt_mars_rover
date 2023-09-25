@@ -25,11 +25,11 @@ def generate_launch_description():
     # Use xacro to process the file
     xacro_file = os.path.join(get_package_share_directory(pkg_name),file_subpath)
 
-    robot_description_config = Command(['xacro ', xacro_file,' sim:=', sim_status])
+    robot_description_config = Command(['xacro ', xacro_file,' sim:=', 'true'])
 
 
     # Configure the node
-    params={'robot_description': robot_description_config,'use_sim_time': True}
+    params={'robot_description': robot_description_config}
     node_robot_state_publisher = Node(
         package='robot_state_publisher',
         executable='robot_state_publisher',

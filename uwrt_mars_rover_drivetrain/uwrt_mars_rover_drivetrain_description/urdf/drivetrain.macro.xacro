@@ -110,7 +110,7 @@
     <xacro:property name="can_id_prop" value="${can_id}"/>
     <ros2_control name="${prefix}_${suffix}_wheel_actuator" type="actuator">
       <hardware>
-        <plugin>gazebo_ros2_control/GazeboSystem</plugin>
+        <plugin>uwrt_mars_rover_drivetrain_hw/UWRTMarsRoverDrivetrainHWActuatorInterface</plugin>
         <param name="can_id">${can_id_prop}</param>
         <!-- TODO: CAN interface?-->
       </hardware>
@@ -125,12 +125,12 @@
         <!-- TODO: acceleration, torque? -->
       </joint>
       <!-- <transmission name="transmission1"> -->
-        <!--  TODO: These are not actually parsed by ros2control yet: https://github.com/ros-controls/ros2_control/issues/32, https://github.com/ros-controls/ros2_control/issues/599 -->
-        <!-- <plugin>transmission_interface/SimpleTransmission</plugin>
-        <joint name="${prefix}_${suffix}_wheel_joint" role="joint1">
-          <mechanical_reduction>${mechanical_reduction}</mechanical_reduction>
-        </joint>
-      </transmission> -->
+         <!-- TODO: These are not actually parsed by ros2control yet: https://github.com/ros-controls/ros2_control/issues/32, https://github.com/ros-controls/ros2_control/issues/599 -->
+        <!-- <plugin>transmission_interface/SimpleTransmission</plugin> -->
+        <!-- <joint name="${prefix}_${suffix}_wheel_joint" role="joint1"> -->
+          <!-- <mechanical_reduction>${mechanical_reduction}</mechanical_reduction> -->
+        <!-- </joint> -->
+      <!-- </transmission> -->
     </ros2_control>
   </xacro:macro>
 

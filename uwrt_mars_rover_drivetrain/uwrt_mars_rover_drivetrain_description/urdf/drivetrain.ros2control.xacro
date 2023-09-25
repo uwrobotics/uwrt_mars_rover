@@ -3,13 +3,13 @@
 
   <!-- import macros file -->
   <xacro:include filename="$(find uwrt_mars_rover_drivetrain_description)/urdf/drivetrain.macro.xacro"/>
+  <xacro:macro name="uwrt_drivetrain_ros2_controls">
 
-  <xacro:drivetrain_actuator prefix="right" suffix="front"/>
-  <xacro:drivetrain_actuator prefix="right" suffix="middle"/>
-  <xacro:drivetrain_actuator prefix="right" suffix="back"/>
-  <xacro:drivetrain_actuator prefix="left" suffix="front"/>
-  <xacro:drivetrain_actuator prefix="left" suffix="middle"/>
-  <xacro:drivetrain_actuator prefix="left" suffix="back"/>
-
+    <xacro:drivetrain_actuator prefix="right" suffix="front" can_id="5"/>
+    <xacro:drivetrain_actuator prefix="right" suffix="middle" can_id="4"/>
+    <xacro:drivetrain_actuator prefix="right" suffix="back" can_id="3"/>
+    <xacro:drivetrain_actuator prefix="left" suffix="front" can_id="2"/>
+    <xacro:drivetrain_actuator prefix="left" suffix="middle" can_id="1"/>
+    <xacro:drivetrain_actuator prefix="left" suffix="back" can_id="0"/>
+ </xacro:macro>
 </robot>
-

@@ -13,11 +13,18 @@
     <xacro:property name="chassis_length" value="${chassis_parameters['length']}" scope="parent"/>
     <xacro:property name="chassis_width" value="${chassis_parameters['width']}" scope="parent"/>
     <xacro:property name="chassis_height" value="${chassis_parameters['height']}" scope="parent"/>
+    <xacro:property name="chassis_mass" value="${chassis_parameters['mass']}" scope="parent"/>
+
+
 
     <!-- wheel parameters -->
     <xacro:property name="wheel_diameter" value="${wheel_parameters['diameter']}" scope="parent"/>
     <xacro:property name="wheel_width" value="${wheel_parameters['width']}" scope="parent"/>
     <xacro:property name="wheel_mass" value="${wheel_parameters['mass']}" scope="parent"/>
+    <xacro:property name="wheel_radius" value="${(wheel_parameters['diameter'])/2}" scope="parent"/>
+
+    
+
 
     <!-- control parameters -->
     <xacro:property name="mechanical_reduction" value="${control_parameters['mechanical_reduction']}" scope="parent"/>
@@ -34,6 +41,26 @@
     </inertial>
   </xacro:macro>
 
+   <xacro:macro name="chassis_inertia" params="chassis_width:=^ chassis_height:=^ chassis_length:=^ chassis_mass:=^">
+    <inertial>
+      <mass value="${chassis_mass}" />
+      <inertia
+          ixx="${(1/12)*(((chassis_height)*(chassis_height))+((chassis_width)*(chassis_width)))}" ixy="0.0" ixz="0.0"
+          iyy="${(1/12)*(((chassis_height)*(chassis_height))+((chassis_length)*(chassis_length)))}" iyz="0.0"
+          izz="${(1/12)*(((chassis_width)*(chassis_width))+((chassis_length)*(chassis_length)))}"/>
+    </inertial>
+  </xacro:macro>
+
+  <xacro:macro name="wheel_intertia" params="wheel_radius:=^ wheel_width:=^ wheel_mass:=^">
+    <inertial>
+      <mass value="${wheel_mass}" />
+      <inertia
+          ixx="${(1/12)*(3*((wheel_radius)*(wheel_radius))+((wheel_width)*(wheel_width)))}" ixy="0.0" ixz="0.0"
+          iyy="${(1/12)*(3*((wheel_radius)*(wheel_radius))+((wheel_width)*(wheel_width)))}" iyz="0.0"
+          izz="${(1/2)*((wheel_radius)*(wheel_radius))}"/>
+    </inertial>
+  </xacro:macro>
+
   <xacro:macro name="identical_visual_collision" params="**identical_blocks">
     <visual>
       <xacro:insert_block name="identical_blocks"/>
@@ -42,7 +69,7 @@
       <xacro:insert_block name="identical_blocks"/>
     </collision>
   </xacro:macro>
-
+  <!-- macro for the wheel -->
   <xacro:macro name="wheel" params="prefix suffix parent_link reflect wheel_diameter:=^ wheel_width:=^ wheel_mass:=^ wheelbase_length:=^ x_position" >
     <joint name="${prefix}_${suffix}_wheel_joint" type="continuous">
       <axis xyz="0 1 0" rpy="0 0 0" />
@@ -60,15 +87,32 @@
           </geometry>
         </idential_blocks>
       </xacro:identical_visual_collision>
-      <xacro:default_inertial mass="${wheel_mass}"/>
+      <xacro:wheel_intertia />
     </link>
   </xacro:macro>
 
-  <xacro:macro name="drivetrain_actuator" params="prefix suffix">
+
+  <!-- drivetrain macro only for the simulation stuff -->
+  <xacro:macro name="drivetrain_actuator_gazebo" params="prefix suffix">
+      <joint name="${prefix}_${suffix}_wheel_joint">
+        <command_interface name="velocity">
+          <param name="min">${-max_speed}</param>
+          <param name="max">${max_speed}</param>
+        </command_interface>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+      </joint>
+  </xacro:macro>
+
+  <!-- actual hardware -->
+  <xacro:macro name="drivetrain_actuator" params="prefix suffix can_id">
+    <!-- convert the can_id argument to an xacro property -->
+    <xacro:property name="can_id_prop" value="${can_id}"/>
     <ros2_control name="${prefix}_${suffix}_wheel_actuator" type="actuator">
       <hardware>
         <plugin>uwrt_mars_rover_drivetrain_hw/UWRTMarsRoverDrivetrainHWActuatorInterface</plugin>
-        <!-- TODO: CAN interface and Odrive id?-->
+        <param name="can_id">${can_id_prop}</param>
+        <!-- TODO: CAN interface?-->
       </hardware>
       <joint name="${prefix}_${suffix}_wheel_joint">
         <command_interface name="velocity">
@@ -77,16 +121,16 @@
         </command_interface>
         <state_interface name="position"/>
         <state_interface name="velocity"/>
-        <state_interface name="iq_current"/>
+        <!-- <state_interface name="iq_current"/> -->
         <!-- TODO: acceleration, torque? -->
       </joint>
-      <transmission name="transmission1">
-        <!--  TODO: These are not actually parsed by ros2control yet: https://github.com/ros-controls/ros2_control/issues/32, https://github.com/ros-controls/ros2_control/issues/599 -->
-        <plugin>transmission_interface/SimpleTransmission</plugin>
-        <joint name="${prefix}_${suffix}_wheel_joint" role="joint1">
-          <mechanical_reduction>${mechanical_reduction}</mechanical_reduction>
-        </joint>
-      </transmission>
+      <!-- <transmission name="transmission1"> -->
+         <!-- TODO: These are not actually parsed by ros2control yet: https://github.com/ros-controls/ros2_control/issues/32, https://github.com/ros-controls/ros2_control/issues/599 -->
+        <!-- <plugin>transmission_interface/SimpleTransmission</plugin> -->
+        <!-- <joint name="${prefix}_${suffix}_wheel_joint" role="joint1"> -->
+          <!-- <mechanical_reduction>${mechanical_reduction}</mechanical_reduction> -->
+        <!-- </joint> -->
+      <!-- </transmission> -->
     </ros2_control>
   </xacro:macro>
 

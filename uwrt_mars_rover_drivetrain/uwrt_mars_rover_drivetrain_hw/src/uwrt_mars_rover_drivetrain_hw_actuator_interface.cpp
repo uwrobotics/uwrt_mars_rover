@@ -207,11 +207,9 @@ hardware_interface::return_type UWRTMarsRoverDrivetrainHWActuatorInterface::writ
   else
   {
     // TODO (npalmar): do something else in case of sending an error
-    RCLCPP_INFO_STREAM(logger_, "Error: Failed to send joint velocity for CAN_id" << can_id_);
-  }
-  
 
-  RCLCPP_DEBUG(logger_, "Drivetrain Actuator Written Successfully...");
+    RCLCPP_ERROR_STREAM(logger_, "Failed to send joint velocity for CAN_id" << can_id_);
+  }
   return hardware_interface::return_type::OK;
 }
 

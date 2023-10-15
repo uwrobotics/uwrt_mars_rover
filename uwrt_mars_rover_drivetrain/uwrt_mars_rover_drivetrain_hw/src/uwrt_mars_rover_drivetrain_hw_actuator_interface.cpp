@@ -157,7 +157,7 @@ LifecyleNodeCallbackReturn UWRTMarsRoverDrivetrainHWActuatorInterface::on_activa
   return LifecyleNodeCallbackReturn::SUCCESS;
 }
 
-hardware_interface::return_type UWRTMarsRoverDrivetrainHWActuatorInterface::read() {
+hardware_interface::return_type UWRTMarsRoverDrivetrainHWActuatorInterface::read(const rclcpp::Time & time, const rclcpp::Duration & period) {
   RCLCPP_DEBUG(logger_, "Drivetrain Actuator Reading...");
 
   TwoFloats encoder_readings;
@@ -182,7 +182,7 @@ hardware_interface::return_type UWRTMarsRoverDrivetrainHWActuatorInterface::read
   return hardware_interface::return_type::OK;
 }
 
-hardware_interface::return_type UWRTMarsRoverDrivetrainHWActuatorInterface::write() {
+hardware_interface::return_type UWRTMarsRoverDrivetrainHWActuatorInterface::write(const rclcpp::Time & time, const rclcpp::Duration & period) {
   RCLCPP_DEBUG(logger_, "Drivetrain Actuator Writing...");
 
   // RCLCPP_INFO_STREAM(logger_, "Joint Velocity: " << motor_velocity_);

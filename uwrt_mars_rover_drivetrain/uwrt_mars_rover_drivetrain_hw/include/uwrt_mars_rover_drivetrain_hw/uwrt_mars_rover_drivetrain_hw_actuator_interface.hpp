@@ -47,10 +47,10 @@ class UWRTMarsRoverDrivetrainHWActuatorInterface : public hardware_interface::Ac
   LifecyleNodeCallbackReturn on_activate(const rclcpp_lifecycle::State& previous_state) override;
 
   UWRT_MARS_ROVER_DRIVETRAIN_HW_PUBLIC
-  hardware_interface::return_type read() override;
+  hardware_interface::return_type read(const rclcpp::Time & time, const rclcpp::Duration & period) override;
 
   UWRT_MARS_ROVER_DRIVETRAIN_HW_PUBLIC
-  hardware_interface::return_type write() override;
+  hardware_interface::return_type write(const rclcpp::Time & time, const rclcpp::Duration & period) override;
 
   UWRT_MARS_ROVER_DRIVETRAIN_HW_PUBLIC
   std::vector<hardware_interface::StateInterface> export_state_interfaces() override;

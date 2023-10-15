@@ -3,6 +3,7 @@ bin/
 build/
 install/
 log/
+ros_dependencies/
 msg_gen/
 srv_gen/
 msg/*Action.msg

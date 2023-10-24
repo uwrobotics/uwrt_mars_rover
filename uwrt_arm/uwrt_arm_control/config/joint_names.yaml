@@ -1,0 +1,1 @@
+joint_names: ["arm_base_turntable_joint", "arm_shoulder_joint", "arm_elbow_joint", "arm_wrist_roll_joint", "arm_wrist_pitch_joint"]

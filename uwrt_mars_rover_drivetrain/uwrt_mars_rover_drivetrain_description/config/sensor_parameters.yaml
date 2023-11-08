@@ -23,29 +23,29 @@ depth_camera:
         near: 0.05
         far: 3
 
-  camera2:
-    dim:
-      length: 0.05
-      width: 0.05
-      height: 0.05
-    parent_link: chassis
-    offset:
-      x: -0.61
-      y: 0
-      z: 0
+  # camera2:
+  #   dim:
+  #     length: 0.05
+  #     width: 0.05
+  #     height: 0.05
+  #   parent_link: chassis
+  #   offset:
+  #     x: -0.61
+  #     y: 0
+  #     z: 0
 
-      r_rot: 0
-      p_rot: 0
-      y_rot: 3.14159265359
-    camera_properties:
-      horizontal_fov: 1.047198
-      image:
-        width: 640
-        height: 480
-        format: R8G8B8
-      clip:
-        near: 0.05
-        far: 3
+  #     r_rot: 0
+  #     p_rot: 0
+  #     y_rot: 3.14159265359
+  #   camera_properties:
+  #     horizontal_fov: 1.047198
+  #     image:
+  #       width: 640
+  #       height: 480
+  #       format: R8G8B8
+  #     clip:
+  #       near: 0.05
+  #       far: 3
 
 lidar:
   lidar1:
@@ -57,7 +57,7 @@ lidar:
     offset:
       x: 0.61
       y: 0
-      z: 0.1
+      z: 0.15
 
       r_rot: 0
       p_rot: 0

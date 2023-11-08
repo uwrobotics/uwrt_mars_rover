@@ -19,16 +19,11 @@ def generate_launch_description():
                        'planner_server',
                        'map_server']
     
-    map_server_config_path = os.path.join(
-        get_package_share_directory('uwrt_mars_rover_drivetrain_description'),
-        'config',
-        'map.yaml'
-    )
     nodes +=  [Node(
                 package='nav2_map_server',
                 executable='map_server',
                 output='screen',
-                parameters=[{'yaml_filename': map_server_config_path}])]
+                parameters=[controller_yaml])]
 
     nodes += [Node(
                 package='nav2_controller',

@@ -18,14 +18,12 @@ namespace vectornav {
 class VectornavNode : public rclcpp::Node {
  public:
   VectornavNode(const rclcpp::NodeOptions& options);
-  ~VectornavNode();
+  ~VectornavNode() override;
  private:
   // function
   void publish();
 
   rclcpp::Time getTimeStamp(vn::sensors::CompositeData& data);
-  geometry_msgs::msg::Quaternion toMsg(const vn::math::vec4f &rhs);
-  geometry_msgs::msg::Vector3 toMsg(const vn::math::vec3f & rhs);
 
   void publishImu(vn::sensors::CompositeData &data);
   void publishGps(vn::sensors::CompositeData &data);
@@ -44,5 +42,8 @@ class VectornavNode : public rclcpp::Node {
   const float rate = 400.0f;
   std::chrono::milliseconds delay{static_cast<long int>(1000 / rate)};
 };
+
+geometry_msgs::msg::Quaternion toMsg(const vn::math::vec4f &rhs);
+geometry_msgs::msg::Vector3 toMsg(const vn::math::vec3f & rhs);
 
 } // namespace vectornav

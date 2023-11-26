@@ -47,7 +47,7 @@ namespace vectornav {
   }
 
   // Convert from vn::math::vec4f to geometry_msgs::msgs::Quaternion
-  geometry_msgs::msg::Quaternion VectornavNode::toMsg(const vn::math::vec4f & rhs) {
+  geometry_msgs::msg::Quaternion toMsg(const vn::math::vec4f & rhs) {
     geometry_msgs::msg::Quaternion lhs;
     lhs.x = rhs[0];
     lhs.y = rhs[1];
@@ -57,7 +57,7 @@ namespace vectornav {
   }
 
   // Convert from vn::math::vec3f to geometry_msgs::msgs::Vector3
-  geometry_msgs::msg::Vector3 VectornavNode::toMsg(const vn::math::vec3f & rhs) {
+  geometry_msgs::msg::Vector3 toMsg(const vn::math::vec3f & rhs) {
     geometry_msgs::msg::Vector3 lhs;
     lhs.x = rhs[0];
     lhs.y = rhs[1];
@@ -79,17 +79,17 @@ namespace vectornav {
 
     // QUATERNION
     if (data.hasQuaternion()) {
-      message->orientation = this->toMsg(data.quaternion());
+      message->orientation = toMsg(data.quaternion());
     }
 
     // ANGULAR RATE
     if (data.hasAngularRate()) {
-      message->angular_velocity = this->toMsg(data.angularRate());
+      message->angular_velocity = toMsg(data.angularRate());
     }
 
     // ACCELERATION
     if (data.hasAcceleration()) {
-      message->linear_acceleration = this->toMsg(data.acceleration());
+      message->linear_acceleration = toMsg(data.acceleration());
     }
     this->publisher_imu_->publish(std::move(message));
   }
@@ -123,7 +123,7 @@ namespace vectornav {
     }
 
     if (data.hasPositionUncertaintyGpsNed()) {
-      geometry_msgs::msg::Vector3 uncertainty = this->toMsg(data.positionUncertaintyGpsNed());
+      geometry_msgs::msg::Vector3 uncertainty = toMsg(data.positionUncertaintyGpsNed());
       
       message->position_covariance = {uncertainty.y, 0.0000, 0.0000, 0.0000, uncertainty.x, 0.0000, 0.0000, 0.0000, uncertainty.z};
       message->position_covariance_type = sensor_msgs::msg::NavSatFix::COVARIANCE_TYPE_DIAGONAL_KNOWN;

@@ -5,6 +5,8 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 # find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
@@ -40,6 +42,22 @@ target_link_libraries( ${PROJECT_NAME}
 )
 rclcpp_components_register_nodes(${PROJECT_NAME} "vectornav::VectornavNode")
 set(node_plugs "${node_plugins}vectornav::VectornavNode;$<TARGET_FILE:${PROJECT_NAME}>\n")
+
+# testing
+if(BUILD_TESTING)
+  find_package(ament_cmake_gtest REQUIRED)
+  ament_add_gtest(${PROJECT_NAME}_test test/test.cpp)
+  target_include_directories(${PROJECT_NAME}_test PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>
+  )
+  ament_target_dependencies(${PROJECT_NAME}_test
+    rclcpp
+    geometry_msgs 
+  )
+  target_link_libraries(${PROJECT_NAME}_test ${PROJECT_NAME} vncxx)
+endif()
+
 
 # install nodes
 install(

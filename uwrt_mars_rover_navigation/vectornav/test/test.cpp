@@ -3,13 +3,9 @@
 #include <gtest/gtest.h>
 #include "rclcpp/rclcpp.hpp"
 
-TEST(vectornav, to_msg_quaternion) {
+TEST(vectornav_test, to_msg_quaternion) {
 
   rclcpp::NodeOptions options;
-
-  rclcpp::init(0, nullptr);
-  vectornav::VectornavNode vnode{options};
-  rclcpp::shutdown();
 
   geometry_msgs::msg::Quaternion quat;
   quat.x = 1;
@@ -21,12 +17,8 @@ TEST(vectornav, to_msg_quaternion) {
   EXPECT_EQ(quat, vectornav::toMsg(vec4));
 }
 
-TEST(vectornav, to_msg_vector3) {
+TEST(vectornav_test, to_msg_vector3) {
   rclcpp::NodeOptions options;
-
-  rclcpp::init(0, nullptr);
-  vectornav::VectornavNode vnode{options};
-  rclcpp::shutdown();
 
   geometry_msgs::msg::Vector3 tri;
   tri.x = 1;

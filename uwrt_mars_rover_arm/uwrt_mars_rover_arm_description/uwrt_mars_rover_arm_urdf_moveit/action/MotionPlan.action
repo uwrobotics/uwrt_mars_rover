@@ -1,0 +1,5 @@
+geometry_msgs/Pose pose #Request
+---
+bool success #Result
+---
+geometry_msgs/Pose partial_pose #Feedback

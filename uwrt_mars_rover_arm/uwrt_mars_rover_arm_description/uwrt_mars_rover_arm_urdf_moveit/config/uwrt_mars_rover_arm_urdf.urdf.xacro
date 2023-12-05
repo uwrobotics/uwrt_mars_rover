@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="uwrt_mars_rover_arm_urdf">
+    <xacro:arg name="initial_positions_file" default="initial_positions.yaml" />
+
+    <!-- Import uwrt_mars_rover_arm_urdf urdf file -->
+    <xacro:include filename="$(find uwrt_mars_rover_arm_urdf)/urdf/uwrt_mars_rover_arm_urdf.urdf" />
+
+    <!-- Import control_xacro -->
+    <xacro:include filename="uwrt_mars_rover_arm_urdf.ros2_control.xacro" />
+
+
+    <xacro:uwrt_mars_rover_arm_urdf_ros2_control name="FakeSystem" initial_positions_file="$(arg initial_positions_file)"/>
+
+</robot>

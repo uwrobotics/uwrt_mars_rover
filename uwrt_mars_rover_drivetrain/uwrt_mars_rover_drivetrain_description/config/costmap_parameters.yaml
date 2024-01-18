@@ -100,7 +100,7 @@ global_costmap:
         pointcloud1: 
           topic: /camera1_sensor/points
           sensor_frame: camera1
-          clearing: False
+          clearing: True
           marking: True
           data_type: "PointCloud2"
           min_obstacle_height: 0.001
@@ -149,7 +149,7 @@ local_costmap:
         pointcloud1: 
           topic: /camera1_sensor/points
           sensor_frame: camera1
-          clearing: False
+          clearing: True
           marking: True
           data_type: "PointCloud2"
           min_obstacle_height: 0.001

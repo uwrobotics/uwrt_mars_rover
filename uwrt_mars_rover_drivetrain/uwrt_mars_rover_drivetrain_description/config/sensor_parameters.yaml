@@ -47,30 +47,30 @@ depth_camera:
   #       near: 0.05
   #       far: 3
 
-lidar:
-  lidar1:
-    dim:
-      length: 0.05
-      width: 0.05
-      height: 0.05
-    parent_link: chassis
-    offset:
-      x: 0.61
-      y: 0
-      z: 0.15
+# lidar:
+#   lidar1:
+#     dim:
+#       length: 0.05
+#       width: 0.05
+#       height: 0.05
+#     parent_link: chassis
+#     offset:
+#       x: 0.61
+#       y: 0
+#       z: 0.15
 
-      r_rot: 0
-      p_rot: 0
-      y_rot: 0
+#       r_rot: 0
+#       p_rot: 0
+#       y_rot: 0
 
-    lidar_properties:
-      update_rate: 5
-      scan:
-        samples: 360
-        resolution: 1.000000
-        min_angle: 0.000000
-        max_angle: 6.280000
-      range:
-        min: 0.120000
-        max: 3.5
-        resolution: 0.015000
+#     lidar_properties:
+#       update_rate: 5
+#       scan:
+#         samples: 360
+#         resolution: 1.000000
+#         min_angle: 0.000000
+#         max_angle: 6.280000
+#       range:
+#         min: 0.120000
+#         max: 3.5
+#         resolution: 0.015000

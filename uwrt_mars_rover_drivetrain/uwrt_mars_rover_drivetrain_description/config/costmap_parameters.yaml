@@ -83,43 +83,33 @@ global_costmap:
   global_costmap:
     ros__parameters:
       footprint_padding: 0.03
-      update_frequency: 1.0
-      publish_frequency: 1.0
-      global_frame: map
+      update_frequency: 5.0
+      publish_frequency: 5.0
+      global_frame: odom
       robot_base_frame: base_link
       use_sim_time: True
       robot_radius: 0.22 # should modify
       resolution: 0.05
-      plugins: ["static_layer", "inflation_layer", "obstacle_layer"]
+      plugins: ["static_layer", "obstacle_layer", "inflation_layer"]
       obstacle_layer:
         plugin: "nav2_costmap_2d::ObstacleLayer"
         enabled: True
-        observation_sources: scan pointcloud1 pointcloud2
+        observation_sources: pointcloud1
         footprint_clearing_enabled: true
-        max_obstacle_height: 2.0
-        combination_method: 1
-        scan:
-          topic: /lidar_controller/out
-          obstacle_max_range: 2.5
-          obstacle_min_range: 0.0
-          raytrace_max_range: 3.0
-          raytrace_min_range: 0.0
-          max_obstacle_height: 2.0
-          min_obstacle_height: 0.0
-          clearing: True
-          marking: True
-          data_type: "LaserScan"
-          inf_is_valid: false
+        combination_method: 0
         pointcloud1: 
           topic: /camera1_sensor/points
-          clearing: True
+          sensor_frame: camera1
+          clearing: False
           marking: True
           data_type: "PointCloud2"
-        pointcloud2: 
-          topic: /camera2_sensor/points
-          clearing: True
-          marking: True
-          data_type: "PointCloud2"
+          min_obstacle_height: 0.001
+          max_obstacle_height: 10.0
+      denoise_layer:
+        plugin: "nav2_costmap_2d::DenoiseLayer"
+        enabled: True
+        minimal_group_size: 2
+        group_connectivity_type: 8
       static_layer:
         plugin: "nav2_costmap_2d::StaticLayer"
         map_subscribe_transient_local: True
@@ -140,8 +130,8 @@ local_costmap:
   local_costmap:
     ros__parameters:
       update_frequency: 5.0
-      publish_frequency: 100.0
-      global_frame: base_link
+      publish_frequency: 5.0
+      global_frame: odom
       robot_base_frame: base_link
       use_sim_time: True
       rolling_window: true
@@ -149,39 +139,21 @@ local_costmap:
       height: 3
       resolution: 0.05
 
-      plugins: ["static_layer", "inflation_layer", "obstacle_layer"]
+      plugins: ["static_layer", "obstacle_layer", "inflation_layer"]
       obstacle_layer:
         plugin: "nav2_costmap_2d::ObstacleLayer"
         enabled: True
-        observation_sources: scan pointcloud1 pointcloud2
+        observation_sources: pointcloud1
         footprint_clearing_enabled: true
-        max_obstacle_height: 2.0
-        combination_method: 1
-        scan:
-          topic: /lidar_controller/out
-          data_type: "LaserScan"
-          sensor_frame: lidar1
-          marking: true     
-          clearing: true     
-          observation_persistence: 100.0
+        combination_method: 0
         pointcloud1: 
           topic: /camera1_sensor/points
-          clearing: True
+          sensor_frame: camera1
+          clearing: False
           marking: True
           data_type: "PointCloud2"
-          sensor_frame: camera1_virtual_link
-          marking: true     
-          clearing: true     
-          observation_persistence: 100.0
-        pointcloud2: 
-          topic: /camera2_sensor/points
-          clearing: True
-          marking: True
-          data_type: "PointCloud2"
-          sensor_frame: camera2_virtual_link
-          marking: true     
-          clearing: true     
-          observation_persistence: 100.0
+          min_obstacle_height: 0.001
+          max_obstacle_height: 10.0
       static_layer:
         plugin: "nav2_costmap_2d::StaticLayer"
         map_subscribe_transient_local: True
@@ -204,9 +176,9 @@ map_saver:
 
 map_server:
   ros__parameters:
-    yaml_filename: "map.yaml"
+    yaml_filename: "/home/meshva/uwrt/uwrt_mars_rover/uwrt_mars_rover_drivetrain/uwrt_mars_rover_drivetrain_description/config/map.yaml"
     topic_name: "map"
-    frame_id: "map"
+    frame_id: "odom"
 
 costmap_filter_info_server:
   ros__parameters:

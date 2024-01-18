@@ -69,7 +69,7 @@
       <xacro:insert_block name="identical_blocks"/>
     </collision>
   </xacro:macro>
-
+  <!-- macro for the wheel -->
   <xacro:macro name="wheel" params="prefix suffix parent_link reflect wheel_diameter:=^ wheel_width:=^ wheel_mass:=^ wheelbase_length:=^ x_position" >
     <joint name="${prefix}_${suffix}_wheel_joint" type="continuous">
       <axis xyz="0 1 0" rpy="0 0 0" />
@@ -91,6 +91,20 @@
     </link>
   </xacro:macro>
 
+
+  <!-- drivetrain macro only for the simulation stuff -->
+  <xacro:macro name="drivetrain_actuator_gazebo" params="prefix suffix">
+      <joint name="${prefix}_${suffix}_wheel_joint">
+        <command_interface name="velocity">
+          <param name="min">${-max_speed}</param>
+          <param name="max">${max_speed}</param>
+        </command_interface>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+      </joint>
+  </xacro:macro>
+
+  <!-- actual hardware -->
   <xacro:macro name="drivetrain_actuator" params="prefix suffix can_id">
     <!-- convert the can_id argument to an xacro property -->
     <xacro:property name="can_id_prop" value="${can_id}"/>
@@ -110,13 +124,13 @@
         <!-- <state_interface name="iq_current"/> -->
         <!-- TODO: acceleration, torque? -->
       </joint>
-      <transmission name="transmission1">
-        <!--  TODO: These are not actually parsed by ros2control yet: https://github.com/ros-controls/ros2_control/issues/32, https://github.com/ros-controls/ros2_control/issues/599 -->
-        <plugin>transmission_interface/SimpleTransmission</plugin>
-        <joint name="${prefix}_${suffix}_wheel_joint" role="joint1">
-          <mechanical_reduction>${mechanical_reduction}</mechanical_reduction>
-        </joint>
-      </transmission>
+      <!-- <transmission name="transmission1"> -->
+         <!-- TODO: These are not actually parsed by ros2control yet: https://github.com/ros-controls/ros2_control/issues/32, https://github.com/ros-controls/ros2_control/issues/599 -->
+        <!-- <plugin>transmission_interface/SimpleTransmission</plugin> -->
+        <!-- <joint name="${prefix}_${suffix}_wheel_joint" role="joint1"> -->
+          <!-- <mechanical_reduction>${mechanical_reduction}</mechanical_reduction> -->
+        <!-- </joint> -->
+      <!-- </transmission> -->
     </ros2_control>
   </xacro:macro>
 

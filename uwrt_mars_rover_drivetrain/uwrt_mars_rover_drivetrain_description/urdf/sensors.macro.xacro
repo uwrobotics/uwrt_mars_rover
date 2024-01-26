@@ -30,19 +30,6 @@
 
 
   <xacro:macro name="default_depth_camera_frame" params="camera_link_name camera_props">
-
-    <!-- need virtual joint due to axis misalignment -->
-    <link name="${camera_link_name}_virtual_link">
-      <visual>
-      </visual>
-    </link>
-
-    <joint type="fixed" name="${camera_link_name}_virtual_joint">
-      <origin rpy="${-pi/2} 0 ${-pi/2}" xyz="0 0 0"/>
-      <child link="${camera_link_name}_virtual_link"/>
-      <parent link="${camera_link_name}"/>
-    </joint>
-
     <gazebo reference="${camera_link_name}">
       <sensor name="${camera_link_name}_sensor" type="depth">
         <visualize>true</visualize>
@@ -61,10 +48,17 @@
         </camera>
         <plugin name="depth_camera_controller" filename="libgazebo_ros_camera.so">
           <cameraName>${camera_link_name}</cameraName>
-          <frame_name>${camera_link_name}_virtual_link</frame_name>
+          <imageTopicName>${camera_link_name}_ir/image_raw</imageTopicName>
+          <cameraInfoTopicName>${camera_link_name}_ir/camera_info</cameraInfoTopicName>
+          <depthImageTopicName>${camera_link_name}_depth/image_raw</depthImageTopicName>
+          <depthImageCameraInfoTopicName>${camera_link_name}_depth/camera_info</depthImageCameraInfoTopicName>
+          <pointCloudTopicName>${camera_link_name}_depth/points</pointCloudTopicName>
+          <frameName>${camera_link_name}_optical_frame</frameName>
+
           <baseline>0.2</baseline>
           <alwaysOn>true</alwaysOn>
           <updateRate>0.0</updateRate>
+          <frame_name>camera_depth_frame</frame_name>
           <pointCloudCutoff>0.5</pointCloudCutoff>
           <pointCloudCutoffMax>3.0</pointCloudCutoffMax>
           <distortionK1>0</distortionK1>

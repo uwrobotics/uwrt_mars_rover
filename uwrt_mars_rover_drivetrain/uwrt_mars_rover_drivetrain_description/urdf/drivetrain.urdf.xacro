@@ -63,10 +63,10 @@
   <xacro:generate_sensor_frame sensor_params="${sensors_parameters['depth_camera']['camera1']}" name="camera1"/>
   <xacro:default_depth_camera_frame camera_link_name="camera1" camera_props="${sensors_parameters['depth_camera']['camera1']['camera_properties']}"/>
   
-  <!-- <xacro:generate_sensor_frame sensor_params="${sensors_parameters['depth_camera']['camera2']}" name="camera2"/>
-  <xacro:default_depth_camera_frame camera_link_name="camera2" camera_props="${sensors_parameters['depth_camera']['camera2']['camera_properties']}"/> -->
+  <xacro:generate_sensor_frame sensor_params="${sensors_parameters['depth_camera']['camera2']}" name="camera2"/>
+  <xacro:default_depth_camera_frame camera_link_name="camera2" camera_props="${sensors_parameters['depth_camera']['camera2']['camera_properties']}"/>
 
-  <!-- <xacro:generate_sensor_frame sensor_params="${sensors_parameters['lidar']['lidar1']}"         name="lidar1"/>
-  <xacro:default_lidar_frame lidar_link_name="lidar1" lidar_props="${sensors_parameters['lidar']['lidar1']['lidar_properties']}"/> -->
+  <xacro:generate_sensor_frame sensor_params="${sensors_parameters['lidar']['lidar1']}"         name="lidar1"/>
+  <xacro:default_lidar_frame lidar_link_name="lidar1" lidar_props="${sensors_parameters['lidar']['lidar1']['lidar_properties']}"/>
 
 </robot>

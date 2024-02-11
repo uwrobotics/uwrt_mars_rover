@@ -56,7 +56,6 @@
   <xacro:wheel prefix="left" suffix="middle" parent_link="chassis" reflect="1" x_position="0"/>
   <xacro:wheel prefix="left" suffix="back" parent_link="chassis" reflect="1" x_position="${-chassis_length/2}"/>
 
-
   <!-- sensors -->
   <xacro:property name="sensors_parameters" value="${load_yaml(sensor_paramater_file)}"/>
 
@@ -68,5 +67,8 @@
 
   <!-- <xacro:generate_sensor_frame sensor_params="${sensors_parameters['lidar']['lidar1']}"         name="lidar1"/>
   <xacro:default_lidar_frame lidar_link_name="lidar1" lidar_props="${sensors_parameters['lidar']['lidar1']['lidar_properties']}"/> -->
+
+  <xacro:nav_imu/>
+  <xacro:nav_gps/>
 
 </robot>

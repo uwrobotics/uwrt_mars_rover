@@ -134,4 +134,164 @@
     </ros2_control>
   </xacro:macro>
 
+  <xacro:macro name="nav_imu">
+    <link name="nav_imu_link">
+      <visual>
+        <geometry>
+          <box size="0.1 0.1 0.1"/>
+        </geometry>
+        <!-- <material name="cyan"> -->
+        <!--   <color rgba"0 1.0 1.0 1.0"/> -->
+        <!-- </material> -->
+      </visual>
+
+      <collision>
+        <geometry>
+          <box size="0.1 0.1 0.1"/>
+        </geometry>
+      </collision>
+
+      <!-- <xacro:box_inertia m="0.1" w="0.1" d="0.1" h="0.1"/> -->
+    </link>
+
+    <joint name="nav_imu_joint" type="fixed">
+      <parent link="base_link"/>
+      <child link="nav_imu_link"/>
+      <origin xyz="0 0 0.01"/>
+    </joint>
+
+    <gazebo reference="nav_imu_link">
+      <sensor name="nav_imu_sensor" type="imu">
+       <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
+          <ros>
+            <namespace>/demo</namespace>
+            <remapping>~/out:=imu</remapping>
+          </ros>
+          <initial_orientation_as_reference>false</initial_orientation_as_reference>
+        </plugin>
+        <always_on>true</always_on>
+        <update_rate>100</update_rate>
+        <visualize>true</visualize>
+        <imu>
+          <angular_velocity>
+            <x>
+              <noise type="gaussian">
+                <mean>0.0</mean>
+                <stddev>2e-4</stddev>
+                <bias_mean>0.0000075</bias_mean>
+                <bias_stddev>0.0000008</bias_stddev>
+              </noise>
+            </x>
+            <y>
+              <noise type="gaussian">
+                <mean>0.0</mean>
+                <stddev>2e-4</stddev>
+                <bias_mean>0.0000075</bias_mean>
+                <bias_stddev>0.0000008</bias_stddev>
+              </noise>
+            </y>
+            <z>
+              <noise type="gaussian">
+                <mean>0.0</mean>
+                <stddev>2e-4</stddev>
+                <bias_mean>0.0000075</bias_mean>
+                <bias_stddev>0.0000008</bias_stddev>
+              </noise>
+            </z>
+          </angular_velocity>
+          <linear_acceleration>
+            <x>
+              <noise type="gaussian">
+                <mean>0.0</mean>
+                <stddev>1.7e-2</stddev>
+                <bias_mean>0.1</bias_mean>
+                <bias_stddev>0.001</bias_stddev>
+              </noise>
+            </x>
+            <y>
+              <noise type="gaussian">
+                <mean>0.0</mean>
+                <stddev>1.7e-2</stddev>
+                <bias_mean>0.1</bias_mean>
+                <bias_stddev>0.001</bias_stddev>
+              </noise>
+            </y>
+            <z>
+              <noise type="gaussian">
+                <mean>0.0</mean>
+                <stddev>1.7e-2</stddev>
+                <bias_mean>0.1</bias_mean>
+                <bias_stddev>0.001</bias_stddev>
+              </noise>
+            </z>
+          </linear_acceleration>
+        </imu>
+      </sensor>
+    </gazebo>
+
+  </xacro:macro>
+
+  <xacro:macro name="nav_gps">
+
+    <link name="nav_gps_link">
+      <visual>
+        <geometry>
+          <box size="0.1 0.1 0.1"/>
+        </geometry>
+        <!-- <material name="cyan"> -->
+        <!--   <color rgba"0 1.0 1.0 1.0"/> -->
+        <!-- </material> -->
+      </visual>
+
+      <collision>
+        <geometry>
+          <box size="0.1 0.1 0.1"/>
+        </geometry>
+      </collision>
+
+      <!-- <xacro:box_inertia m="0.1" w="0.1" d="0.1" h="0.1"/> -->
+    </link>
+
+    <joint name="nav_gps_joint" type="fixed">
+      <parent link="base_link"/>
+      <child link="nav_gps_link"/>
+      <origin xyz="0 0 0.01"/>
+    </joint>
+
+    <gazebo reference="nav_gps_link">
+        <sensor name="nav_gps_sensor" type="gps">
+            <plugin name="nav_gps_plugin" filename="libgazebo_ros_gps_sensor.so">
+                <ros>
+                  <namespace>/demo</namespace>
+                    <remapping>~/out:=gps</remapping>
+                </ros>
+                <frame_name>gps_link</frame_name>
+            </plugin>
+            <always_on>true</always_on>
+            <update_rate>100</update_rate>
+            <visualize>true</visualize>
+            <gps>
+
+              <longitude>
+                  <mean>0.0</mean>
+                  <stddev>2e-4</stddev>
+                  <bias_mean>0.0000075</bias_mean>
+                  <bias_stddev>0.0000008</bias_stddev>
+              </longitude>
+
+              <latitude>
+                  <mean>0.0</mean>
+                  <stddev>2e-4</stddev>
+                  <bias_mean>0.0000075</bias_mean>
+                  <bias_stddev>0.0000008</bias_stddev>
+              </latitude>
+
+            </gps>
+        </sensor>
+        <material>Gazebo/Grey</material> <!-- TODO: fix? -->
+    </gazebo>
+
+  </xacro:macro>
+
+
 </robot>

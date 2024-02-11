@@ -31,7 +31,9 @@ def generate_launch_description():
                 output='screen',
                 respawn=True,
                 respawn_delay=2.0,
-                parameters=[controller_yaml])]
+                parameters=[controller_yaml],
+                remappings=[
+                ("/cmd_vel", "/differential_drivetrain_controller/cmd_vel_unstamped")])]
     
     nodes += [Node(
                 package='nav2_planner',

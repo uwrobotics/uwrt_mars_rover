@@ -99,11 +99,6 @@ global_costmap:
           data_type: "PointCloud2"
           min_obstacle_height: 0.001
           max_obstacle_height: 10.0
-      denoise_layer:
-        plugin: "nav2_costmap_2d::DenoiseLayer"
-        enabled: True
-        minimal_group_size: 2
-        group_connectivity_type: 8
       static_layer:
         plugin: "nav2_costmap_2d::StaticLayer"
         map_subscribe_transient_local: True

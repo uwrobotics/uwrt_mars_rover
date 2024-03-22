@@ -10,7 +10,13 @@ import os
 
 def generate_launch_description():
 
-    declared_arguments = []
+    declared_arguments = [
+        # DeclareLaunchArgument(
+        #     "map_yaml_filename",
+        #     default_value=os.path.join(get_package_share_directory('uwrt_mars_rover_drivetrain_description'), 'config', 'map.yaml'),
+        #     description='Map yaml file path'
+        # )
+    ]
     nodes = []
 
     controller_yaml = os.path.join(get_package_share_directory('uwrt_mars_rover_drivetrain_description'), 'config', 'costmap_parameters.yaml')
@@ -23,7 +29,9 @@ def generate_launch_description():
                 package='nav2_map_server',
                 executable='map_server',
                 output='screen',
-                parameters=[controller_yaml])]
+                # parameters=[{"yaml_file": LaunchConfiguration("map_yaml_filename")}, controller_yaml],
+                parameters=[controller_yaml]
+                )]
 
     nodes += [Node(
                 package='nav2_controller',

@@ -38,7 +38,7 @@
           ixx="1e-3" ixy="0.0" ixz="0.0"
           iyy="1e-3" iyz="0.0"
           izz="1e-3"/>
-    </inertial>
+      </inertial>
   </xacro:macro>
 
    <xacro:macro name="chassis_inertia" params="chassis_width:=^ chassis_height:=^ chassis_length:=^ chassis_mass:=^">
@@ -150,22 +150,16 @@
           <box size="0.1 0.1 0.1"/>
         </geometry>
       </collision>
-
+      <xacro:default_inertial mass="0.001"/>
       <!-- <xacro:box_inertia m="0.1" w="0.1" d="0.1" h="0.1"/> -->
-    </link>
-
-    <joint name="nav_imu_joint" type="fixed">
-      <parent link="base_link"/>
-      <child link="nav_imu_link"/>
-      <origin xyz="0 0 0.01"/>
-    </joint>
+    </link> 
 
     <gazebo reference="nav_imu_link">
       <sensor name="nav_imu_sensor" type="imu">
        <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
           <ros>
-            <namespace>/demo</namespace>
-            <remapping>~/out:=imu</remapping>
+            <!-- <namespace>/demo</namespace> -->
+            <remapping>~/out:=imu/data</remapping>
           </ros>
           <initial_orientation_as_reference>false</initial_orientation_as_reference>
         </plugin>
@@ -178,24 +172,24 @@
               <noise type="gaussian">
                 <mean>0.0</mean>
                 <stddev>2e-4</stddev>
-                <bias_mean>0.0000075</bias_mean>
-                <bias_stddev>0.0000008</bias_stddev>
+                <!-- <bias_mean>0.0000075</bias_mean>
+                <bias_stddev>0.0000008</bias_stddev> -->
               </noise>
             </x>
             <y>
               <noise type="gaussian">
                 <mean>0.0</mean>
                 <stddev>2e-4</stddev>
-                <bias_mean>0.0000075</bias_mean>
-                <bias_stddev>0.0000008</bias_stddev>
+                <!-- <bias_mean>0.0000075</bias_mean>
+                <bias_stddev>0.0000008</bias_stddev> -->
               </noise>
             </y>
             <z>
               <noise type="gaussian">
                 <mean>0.0</mean>
                 <stddev>2e-4</stddev>
-                <bias_mean>0.0000075</bias_mean>
-                <bias_stddev>0.0000008</bias_stddev>
+                <!-- <bias_mean>0.0000075</bias_mean>
+                <bias_stddev>0.0000008</bias_stddev> -->
               </noise>
             </z>
           </angular_velocity>
@@ -204,24 +198,24 @@
               <noise type="gaussian">
                 <mean>0.0</mean>
                 <stddev>1.7e-2</stddev>
-                <bias_mean>0.1</bias_mean>
-                <bias_stddev>0.001</bias_stddev>
+                <!-- <bias_mean>0.1</bias_mean>
+                <bias_stddev>0.001</bias_stddev> -->
               </noise>
             </x>
             <y>
               <noise type="gaussian">
                 <mean>0.0</mean>
                 <stddev>1.7e-2</stddev>
-                <bias_mean>0.1</bias_mean>
-                <bias_stddev>0.001</bias_stddev>
+                <!-- <bias_mean>0.1</bias_mean>
+                <bias_stddev>0.001</bias_stddev> -->
               </noise>
             </y>
             <z>
               <noise type="gaussian">
                 <mean>0.0</mean>
                 <stddev>1.7e-2</stddev>
-                <bias_mean>0.1</bias_mean>
-                <bias_stddev>0.001</bias_stddev>
+                <!-- <bias_mean>0.1</bias_mean>
+                <bias_stddev>0.001</bias_stddev> -->
               </noise>
             </z>
           </linear_acceleration>
@@ -229,11 +223,20 @@
       </sensor>
     </gazebo>
 
+    <joint name="nav_imu_joint" type="fixed">
+      <parent link="base_link"/>
+      <child link="nav_imu_link"/>
+      <origin xyz ="0 0 0.01"/>
+      <axis>
+          <xyz>0 0 1</xyz>
+      </axis>
+    </joint> 
+
   </xacro:macro>
 
   <xacro:macro name="nav_gps">
 
-    <link name="nav_gps_link">
+    <link name="gps_link">
       <visual>
         <geometry>
           <box size="0.1 0.1 0.1"/>
@@ -248,22 +251,16 @@
           <box size="0.1 0.1 0.1"/>
         </geometry>
       </collision>
-
+      <xacro:default_inertial mass="0.001"/>
       <!-- <xacro:box_inertia m="0.1" w="0.1" d="0.1" h="0.1"/> -->
     </link>
 
-    <joint name="nav_gps_joint" type="fixed">
-      <parent link="base_link"/>
-      <child link="nav_gps_link"/>
-      <origin xyz="0 0 0.01"/>
-    </joint>
-
-    <gazebo reference="nav_gps_link">
-        <sensor name="nav_gps_sensor" type="gps">
-            <plugin name="nav_gps_plugin" filename="libgazebo_ros_gps_sensor.so">
+    <gazebo reference="gps_link">
+        <sensor name="gps_sensor" type="gps">
+            <plugin name="gps_plugin" filename="libgazebo_ros_gps_sensor.so">
                 <ros>
-                  <namespace>/demo</namespace>
-                    <remapping>~/out:=gps</remapping>
+                  <!-- <namespace>/demo</namespace> -->
+                  <remapping>~/out:=gps/fix</remapping>
                 </ros>
                 <frame_name>gps_link</frame_name>
             </plugin>
@@ -274,22 +271,31 @@
 
               <longitude>
                   <mean>0.0</mean>
-                  <stddev>2e-4</stddev>
-                  <bias_mean>0.0000075</bias_mean>
-                  <bias_stddev>0.0000008</bias_stddev>
+                  <stddev>0.01</stddev>
+                  <!-- <bias_mean>0.0000075</bias_mean>
+                  <bias_stddev>0.0000008</bias_stddev> -->
               </longitude>
 
               <latitude>
                   <mean>0.0</mean>
-                  <stddev>2e-4</stddev>
-                  <bias_mean>0.0000075</bias_mean>
-                  <bias_stddev>0.0000008</bias_stddev>
+                  <stddev>0.01</stddev>
+                  <!-- <bias_mean>0.0000075</bias_mean>
+                  <bias_stddev>0.0000008</bias_stddev> -->
               </latitude>
 
             </gps>
         </sensor>
         <material>Gazebo/Grey</material> <!-- TODO: fix? -->
     </gazebo>
+
+    <joint name="gps_joint" type="fixed">
+      <parent link="base_link"/>
+      <child link="gps_link"/>
+      <origin xyz="0 0 0.01"/>
+      <axis>
+          <xyz>0 0 1</xyz>
+        </axis>
+    </joint>
 
   </xacro:macro>
 

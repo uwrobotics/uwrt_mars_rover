@@ -176,7 +176,7 @@ map_saver:
 
 map_server:
   ros__parameters:
-    yaml_filename: "/home/meshva/uwrt/uwrt_mars_rover/uwrt_mars_rover_drivetrain/uwrt_mars_rover_drivetrain_description/config/map.yaml"
+    yaml_filename: "/home/nico/uwrt_ws/src/uwrt_mars_rover/uwrt_mars_rover_drivetrain/uwrt_mars_rover_drivetrain_description/config/map.yaml"
     topic_name: "map"
     frame_id: "odom"
 

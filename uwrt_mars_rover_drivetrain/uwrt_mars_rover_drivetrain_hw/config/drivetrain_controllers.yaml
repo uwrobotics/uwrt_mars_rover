@@ -28,7 +28,7 @@ differential_drivetrain_controller:
     twist_covariance_diagonal: [ 0.001, 0.001, 0.001, 0.001, 0.001, 0.01 ]
 
     publish_rate: 50.0
-    enable_odom_tf: true
+    enable_odom_tf: false
     open_loop: false # If true, integrates vel_cmd to estimate odom, else uses wheel feedback to compute odom
     position_feedback: true # If true, uses position state_interface for odom calculations, else use velocity state interface
     # TODO: this setting doesnt really make sense to me to tie both odom pose and twist calculations to either use position or

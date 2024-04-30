@@ -12,32 +12,28 @@ namespace uwrt_xbox
 using joy_msg = sensor_msgs::msg::Joy;
 using xbox_msg = uwrt_mars_rover_xbox_controller::msg::XboxController;
 class UWRTXboxController : public rclcpp::Node
-{
-public:
-  UWRT_MARS_ROVER_XBOX_CONTROLLER_PUBLIC
-  explicit UWRTXboxController(const rclcpp::NodeOptions & options);
+    {
+    public:
+        explicit UWRTXboxController(const rclcpp::NodeOptions & options);
 
-private:
-  rclcpp::Subscription<joy_msg>::SharedPtr joy_node_sub;
-  rclcpp::Publisher<xbox_msg>::SharedPtr xbox_node_pub;
-  // publish to a generic 'manipulated xbox controller' topic
-  rclcpp::TimerBase::SharedPtr pub_timer;
+    private:
+        rclcpp::Subscription<joy_msg>::SharedPtr joy_node_sub;
+        rclcpp::Publisher<xbox_msg>::SharedPtr xbox_node_pub;
+        // publish to a generic 'manipulated xbox controller' topic
+        rclcpp::TimerBase::SharedPtr pub_timer;
 
-  struct JsData
-  {
-    float drivetrain_js_x;
-    float drivetrain_js_y;
-    float gimble_js_x;
-    float gimble_js_y;
-  };
+        struct JsData {
+            float drivetrain_js_x;
+            float drivetrain_js_y;
+            float gimble_js_x;
+            float gimble_js_y;
+        };
 
-  JsData joystick_data;
+        JsData joystick_data;
 
-  UWRT_MARS_ROVER_XBOX_CONTROLLER_LOCAL
-  void getXboxData(const joy_msg::SharedPtr msg);
-  UWRT_MARS_ROVER_XBOX_CONTROLLER_LOCAL
-  void publishStructuredXboxData();
-};
+        void getXboxData(const joy_msg::SharedPtr msg);
+        void publishStructuredXboxData();
+    };
 }  // namespace uwrt_xbox
 
 #endif  // XBOX_CONTROLLER_H

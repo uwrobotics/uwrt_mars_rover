@@ -3,8 +3,16 @@
 <package format="3">
   <name>uwrt_mars_rover_xbox_controller</name>
   <version>0.0.0</version>
-  <description>ROS2 rover xbox joystick controller</description>
+  <description>
+  ROS2 rover xbox joystick controller
+  Creator: Nico
+  Modifiers: Edward, Soumya, Alex
+  Link to detailed description: 
+  </description>
   <maintainer email="npalmar@uwaterloo.ca">nico</maintainer>
+  <maintainer email="@uwaterloo.ca">edward</maintainer>
+  <maintainer email="@uwaterloo.ca">soumya</maintainer>
+  <maintainer email="aszabo@uwaterloo.ca">alex</maintainer>
   <license>Apache License 2.0</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>

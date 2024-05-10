@@ -9,7 +9,7 @@ CoordinateNode::CoordinateNode(const rclcpp::NodeOptions & options) : Node("coor
 
         auto msg = std::make_unique<geometry_msgs::msg::Twist>();
         msg->linear.x = (*msg_in).drivetrain_joy_x * vConstant;
-        msg->linear.y = (*msg_in).drivetrain_joy_y * vConstant;
+        msg->angular.z = (*msg_in).gimble_joy_x * vConstant;
 
         pub_->publish(std::move(msg));
     };

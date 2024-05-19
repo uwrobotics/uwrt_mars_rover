@@ -176,7 +176,8 @@ map_saver:
 
 map_server:
   ros__parameters:
-    yaml_filename: "/home/meshva/uwrt/uwrt_mars_rover/uwrt_mars_rover_drivetrain/uwrt_mars_rover_drivetrain_description/config/map.yaml"
+    # TODO: Change name "nico" to use the USER env var instead
+    yaml_filename: "/home/nico/uwrt_ws/src/uwrt_mars_rover/uwrt_mars_rover_drivetrain/uwrt_mars_rover_drivetrain_description/config/map.yaml"
     topic_name: "map"
     frame_id: "odom"
 

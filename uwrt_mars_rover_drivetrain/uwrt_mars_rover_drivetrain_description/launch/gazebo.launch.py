@@ -15,20 +15,10 @@ from launch_ros.parameter_descriptions import ParameterValue
 
 
 def generate_launch_description():
-    #this is launching gazebo
-    gazebo = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([os.path.join(
-            get_package_share_directory('gazebo_ros'), 'launch'), '/gazebo.launch.py']),
-        )
-
-    spawn_entity = Node(package='gazebo_ros', executable='spawn_entity.py',
-                arguments=['-topic', 'robot_description',
-                            '-entity', 'my_bot'],
-                output='screen')
-    #-------------------------------------------------------------------------------------
-
-
+    gazebo_ros_package_path = get_package_share_directory('gazebo_ros')
     drivetrain_description_package_path = get_package_share_path('uwrt_mars_rover_drivetrain_description')
+    # TODO: change the world path below to an argument that we can change
+    my_world_path = drivetrain_description_package_path / 'world' / 'my_world.sdf'
     model_path = drivetrain_description_package_path / 'urdf' / 'drivetrain.urdf.xacro'
     rviz_config_path = drivetrain_description_package_path / 'rviz' / 'urdf.rviz'
     controllers_config_path = get_package_share_path(
@@ -36,6 +26,17 @@ def generate_launch_description():
 
     robot_description_content = ParameterValue(Command(['ros2 run xacro xacro ', str(model_path)]), value_type=str)
     robot_description = {'robot_description': robot_description_content}
+
+    # launch gazebo
+    gazebo = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([os.path.join(gazebo_ros_package_path, 'launch', 'gazebo.launch.py')]),
+        launch_arguments={'world': str(my_world_path)}.items(),
+        )
+
+    spawn_entity = Node(package='gazebo_ros', executable='spawn_entity.py',
+                arguments=['-topic', 'robot_description',
+                            '-entity', 'my_bot'],
+                output='screen')
 
     # Nodes
     nodes = []
@@ -107,8 +108,6 @@ def generate_launch_description():
     )]
 
     #-------------------------------------------------------------------------------------
-
-
 
 
     # Run the node

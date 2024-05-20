@@ -26,7 +26,33 @@ def generate_launch_description():
                 name="ekf_filter_node_odom",
                 output="screen",
                 parameters=[rl_params_file, {"use_sim_time": True}],
+                # first ekf publishes to odometry/local and gives odom -> base_link transform
                 remappings=[("odometry/filtered", "odometry/local")],
+            ),
+            launch_ros.actions.Node(
+                package="robot_localization",
+                executable="ekf_node",
+                name="ekf_filter_node_map",
+                output="screen",
+                parameters=[rl_params_file, {"use_sim_time": True}],
+                # second ekf publishes to odometry/global and gives map -> odom transform
+                remappings=[("odometry/filtered", "odometry/global")],
+            ),
+            launch_ros.actions.Node(
+                package="robot_localization",
+                executable="navsat_transform_node",
+                name="navsat_transform",
+                output="screen",
+                parameters=[rl_params_file, {"use_sim_time": True}],
+                # this is the nav sat transform node which esentially changes the global GPS coordinates to 
+                # the local coordinates, so that it can be fused into localization
+                remappings=[
+                    ("imu/data", "imu/data"),
+                    ("gps/fix", "gps/fix"),
+                    ("gps/filtered", "gps/filtered"), # no need to remap these
+                    ("odometry/gps", "odometry/gps"),
+                    ("odometry/filtered", "odometry/global"),
+                ],
             ),
         ]
     )

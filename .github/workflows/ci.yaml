@@ -46,7 +46,7 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
     
       - name: ROS2 Linter - [ament-${{ matrix.linter }}]
         uses: ros-tooling/action-ros-lint@master
@@ -66,7 +66,7 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: ROS2 Linter - [ament-clang-format]
         uses: ros-tooling/action-ros-lint@master
@@ -87,7 +87,7 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: ROS2 Linter - [ament-flake8]
         uses: ros-tooling/action-ros-lint@master
@@ -130,7 +130,7 @@ jobs:
     # Possibly resolveable with https://github.com/actions/runner/issues/320
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install Docker/QEMU dependencies
         id: qemu

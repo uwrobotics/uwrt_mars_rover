@@ -85,12 +85,17 @@ global_costmap:
       footprint_padding: 0.03
       update_frequency: 5.0
       publish_frequency: 5.0
-      global_frame: odom
+      global_frame: map
       robot_base_frame: base_link
       use_sim_time: True
-      robot_radius: 0.22 # should modify
-      resolution: 0.05
-      plugins: ["static_layer", "obstacle_layer", "inflation_layer"]
+      robot_radius: 0.95 # based on urdf
+      resolution: 0.1 # 0.1m per pixel of costmap; rough
+      rolling_window: true
+      width: 50
+      height: 50
+      track_unknown_space: true
+      # TODO: investigate the usage of a static layer... are we going to be mapping at all?
+      plugins: ["obstacle_layer", "inflation_layer"]
       obstacle_layer:
         plugin: "nav2_costmap_2d::ObstacleLayer"
         enabled: True
@@ -104,18 +109,18 @@ global_costmap:
           marking: True
           data_type: "PointCloud2"
           min_obstacle_height: 0.001
-          max_obstacle_height: 10.0
-      denoise_layer:
-        plugin: "nav2_costmap_2d::DenoiseLayer"
-        enabled: True
-        minimal_group_size: 2
-        group_connectivity_type: 8
-      static_layer:
-        plugin: "nav2_costmap_2d::StaticLayer"
-        map_subscribe_transient_local: True
-        enabled: true
-        subscribe_to_updates: true
-        transform_tolerance: 0.1
+          max_obstacle_height: 3.0
+      # denoise_layer:
+      #   plugin: "nav2_costmap_2d::DenoiseLayer"
+      #   enabled: True
+      #   minimal_group_size: 2
+      #   group_connectivity_type: 8
+      # static_layer:
+      #   plugin: "nav2_costmap_2d::StaticLayer"
+      #   map_subscribe_transient_local: True
+      #   enabled: true
+      #   subscribe_to_updates: true
+      #   transform_tolerance: 0.1
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
         enabled: true
@@ -135,11 +140,12 @@ local_costmap:
       robot_base_frame: base_link
       use_sim_time: True
       rolling_window: true
-      width: 3
+      width: 3 # local costmap is quite small
       height: 3
-      resolution: 0.05
-
-      plugins: ["static_layer", "obstacle_layer", "inflation_layer"]
+      resolution: 0.05 # more fine precision map
+      # based off the current urdf file
+      footprint: "[ [0.735, 0.59], [0.735, -0.59], [-0.735, -0.59], [-0.735, 0.59] ]"
+      plugins: ["obstacle_layer", "inflation_layer"]
       obstacle_layer:
         plugin: "nav2_costmap_2d::ObstacleLayer"
         enabled: True
@@ -153,13 +159,13 @@ local_costmap:
           marking: True
           data_type: "PointCloud2"
           min_obstacle_height: 0.001
-          max_obstacle_height: 10.0
-      static_layer:
-        plugin: "nav2_costmap_2d::StaticLayer"
-        map_subscribe_transient_local: True
-        enabled: true
-        subscribe_to_updates: true
-        transform_tolerance: 0.1
+          max_obstacle_height: 3.0
+      # static_layer:
+      #   plugin: "nav2_costmap_2d::StaticLayer"
+      #   map_subscribe_transient_local: True
+      #   enabled: true
+      #   subscribe_to_updates: true
+      #   transform_tolerance: 0.1
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
         enabled: true
@@ -174,12 +180,12 @@ map_saver:
     free_thresh_default: 0.25
     occupied_thresh_default: 0.65
 
-map_server:
-  ros__parameters:
-    # TODO: Change name "nico" to use the USER env var instead
-    yaml_filename: "/home/nico/uwrt_ws/src/uwrt_mars_rover/uwrt_mars_rover_drivetrain/uwrt_mars_rover_drivetrain_description/config/map.yaml"
-    topic_name: "map"
-    frame_id: "odom"
+# map_server:
+#   ros__parameters:
+#     # TODO: Change name "nico" to use the USER env var instead
+#     yaml_filename: "map.yaml"
+#     topic_name: "map"
+#     frame_id: "odom"
 
 costmap_filter_info_server:
   ros__parameters:

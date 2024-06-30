@@ -1,0 +1,121 @@
+[0.043s] Invoking command in '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_xbox_controller': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --build /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_xbox_controller -- -j4 -l4
+[0.147s] [  2%] Built target uwrt_mars_rover_xbox_controller__cpp
+[0.151s] [ 11%] Built target uwrt_mars_rover_xbox_controller__rosidl_generator_c
+[0.213s] [ 20%] Built target uwrt_mars_rover_xbox_controller__rosidl_typesupport_cpp
+[0.213s] [ 28%] Built target uwrt_mars_rover_xbox_controller__rosidl_typesupport_introspection_cpp
+[0.213s] [ 37%] Built target uwrt_mars_rover_xbox_controller__rosidl_typesupport_introspection_c
+[0.239s] [ 45%] Built target uwrt_mars_rover_xbox_controller__rosidl_typesupport_fastrtps_cpp
+[0.266s] [ 54%] Built target uwrt_mars_rover_xbox_controller__rosidl_typesupport_c
+[0.290s] [ 62%] Built target uwrt_mars_rover_xbox_controller__rosidl_typesupport_fastrtps_c
+[0.329s] [ 62%] Built target uwrt_mars_rover_xbox_controller
+[0.402s] [ 68%] Built target coordinateNode
+[0.424s] [ 71%] Built target uwrt_mars_rover_xbox_controller__py
+[0.433s] [ 77%] Built target xbox_controller
+[0.492s] [ 82%] Built target uwrt_mars_rover_xbox_controller__python
+[0.557s] [ 88%] Built target uwrt_mars_rover_xbox_controller__rosidl_typesupport_introspection_c__pyext
+[0.564s] [ 94%] Built target uwrt_mars_rover_xbox_controller__rosidl_typesupport_c__pyext
+[0.567s] [100%] Built target uwrt_mars_rover_xbox_controller__rosidl_typesupport_fastrtps_c__pyext
+[0.585s] Invoked command in '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_xbox_controller' returned '0': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --build /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_xbox_controller -- -j4 -l4
+[0.701s] Invoking command in '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_xbox_controller': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --install /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_xbox_controller
+[0.719s] -- Install configuration: ""
+[0.719s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/ament_index/resource_index/rosidl_interfaces/uwrt_mars_rover_xbox_controller
+[0.719s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/include/uwrt_mars_rover_xbox_controller
+[0.720s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/include/uwrt_mars_rover_xbox_controller/msg
+[0.720s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/include/uwrt_mars_rover_xbox_controller/msg/xbox_controller.h
+[0.720s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/include/uwrt_mars_rover_xbox_controller/msg/detail
+[0.720s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/include/uwrt_mars_rover_xbox_controller/msg/detail/xbox_controller__functions.h
+[0.720s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/include/uwrt_mars_rover_xbox_controller/msg/detail/xbox_controller__functions.c
+[0.721s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/include/uwrt_mars_rover_xbox_controller/msg/detail/xbox_controller__struct.h
+[0.721s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/include/uwrt_mars_rover_xbox_controller/msg/detail/xbox_controller__type_support.h
+[0.721s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/include/uwrt_mars_rover_xbox_controller/msg/rosidl_generator_c__visibility_control.h
+[0.721s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/uwrt_mars_rover_xbox_controller/environment/library_path.sh
+[0.721s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/uwrt_mars_rover_xbox_controller/environment/library_path.dsv
+[0.721s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/lib/libuwrt_mars_rover_xbox_controller__rosidl_generator_c.so
+[0.722s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/include/uwrt_mars_rover_xbox_controller
+[0.722s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/include/uwrt_mars_rover_xbox_controller/msg
+[0.722s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/include/uwrt_mars_rover_xbox_controller/msg/rosidl_typesupport_fastrtps_c__visibility_control.h
+[0.722s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/include/uwrt_mars_rover_xbox_controller/msg/detail
+[0.722s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/include/uwrt_mars_rover_xbox_controller/msg/detail/xbox_controller__rosidl_typesupport_fastrtps_c.h
+[0.722s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/lib/libuwrt_mars_rover_xbox_controller__rosidl_typesupport_fastrtps_c.so
+[0.723s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/include/uwrt_mars_rover_xbox_controller
+[0.723s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/include/uwrt_mars_rover_xbox_controller/msg
+[0.723s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/include/uwrt_mars_rover_xbox_controller/msg/detail
+[0.723s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/include/uwrt_mars_rover_xbox_controller/msg/detail/xbox_controller__rosidl_typesupport_fastrtps_cpp.hpp
+[0.723s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/include/uwrt_mars_rover_xbox_controller/msg/detail/dds_fastrtps
+[0.723s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/include/uwrt_mars_rover_xbox_controller/msg/rosidl_typesupport_fastrtps_cpp__visibility_control.h
+[0.723s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/lib/libuwrt_mars_rover_xbox_controller__rosidl_typesupport_fastrtps_cpp.so
+[0.724s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/include/uwrt_mars_rover_xbox_controller
+[0.724s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/include/uwrt_mars_rover_xbox_controller/msg
+[0.725s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/include/uwrt_mars_rover_xbox_controller/msg/detail
+[0.725s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/include/uwrt_mars_rover_xbox_controller/msg/detail/xbox_controller__type_support.c
+[0.725s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/include/uwrt_mars_rover_xbox_controller/msg/detail/xbox_controller__rosidl_typesupport_introspection_c.h
+[0.725s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/include/uwrt_mars_rover_xbox_controller/msg/rosidl_typesupport_introspection_c__visibility_control.h
+[0.726s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/lib/libuwrt_mars_rover_xbox_controller__rosidl_typesupport_introspection_c.so
+[0.726s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/lib/libuwrt_mars_rover_xbox_controller__rosidl_typesupport_c.so
+[0.727s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/include/uwrt_mars_rover_xbox_controller
+[0.727s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/include/uwrt_mars_rover_xbox_controller/msg
+[0.727s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/include/uwrt_mars_rover_xbox_controller/msg/detail
+[0.727s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/include/uwrt_mars_rover_xbox_controller/msg/detail/xbox_controller__struct.hpp
+[0.727s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/include/uwrt_mars_rover_xbox_controller/msg/detail/xbox_controller__builder.hpp
+[0.728s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/include/uwrt_mars_rover_xbox_controller/msg/detail/xbox_controller__traits.hpp
+[0.728s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/include/uwrt_mars_rover_xbox_controller/msg/xbox_controller.hpp
+[0.728s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/include/uwrt_mars_rover_xbox_controller
+[0.728s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/include/uwrt_mars_rover_xbox_controller/msg
+[0.728s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/include/uwrt_mars_rover_xbox_controller/msg/detail
+[0.728s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/include/uwrt_mars_rover_xbox_controller/msg/detail/xbox_controller__type_support.cpp
+[0.729s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/include/uwrt_mars_rover_xbox_controller/msg/detail/xbox_controller__rosidl_typesupport_introspection_cpp.hpp
+[0.729s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/lib/libuwrt_mars_rover_xbox_controller__rosidl_typesupport_introspection_cpp.so
+[0.730s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/lib/libuwrt_mars_rover_xbox_controller__rosidl_typesupport_cpp.so
+[0.730s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/uwrt_mars_rover_xbox_controller/environment/pythonpath.sh
+[0.730s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/uwrt_mars_rover_xbox_controller/environment/pythonpath.dsv
+[0.730s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/lib/python3.8/site-packages/uwrt_mars_rover_xbox_controller/__init__.py
+[0.791s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/lib/python3.8/site-packages/uwrt_mars_rover_xbox_controller/msg
+[0.792s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/lib/python3.8/site-packages/uwrt_mars_rover_xbox_controller/msg/_xbox_controller_s.c
+[0.792s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/lib/python3.8/site-packages/uwrt_mars_rover_xbox_controller/msg/_xbox_controller.py
+[0.792s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/lib/python3.8/site-packages/uwrt_mars_rover_xbox_controller/msg/__init__.py
+[0.792s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/lib/python3.8/site-packages/uwrt_mars_rover_xbox_controller/uwrt_mars_rover_xbox_controller_s__rosidl_typesupport_fastrtps_c.cpython-38-x86_64-linux-gnu.so
+[0.792s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/lib/python3.8/site-packages/uwrt_mars_rover_xbox_controller/uwrt_mars_rover_xbox_controller_s__rosidl_typesupport_introspection_c.cpython-38-x86_64-linux-gnu.so
+[0.793s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/lib/python3.8/site-packages/uwrt_mars_rover_xbox_controller/uwrt_mars_rover_xbox_controller_s__rosidl_typesupport_c.cpython-38-x86_64-linux-gnu.so
+[0.794s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/lib/libuwrt_mars_rover_xbox_controller__python.so
+[0.796s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/uwrt_mars_rover_xbox_controller/msg/XboxController.idl
+[0.796s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/uwrt_mars_rover_xbox_controller/msg/XboxController.msg
+[0.796s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/uwrt_mars_rover_xbox_controller/launch
+[0.796s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/uwrt_mars_rover_xbox_controller/launch/xbox_launch.py
+[0.796s] -- Installing: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/uwrt_mars_rover_xbox_controller/launch/location_launch.py
+[0.796s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/lib/libxbox_controller.so
+[0.797s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/lib/libcoordinateNode.so
+[0.797s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/ament_index/resource_index/package_run_dependencies/uwrt_mars_rover_xbox_controller
+[0.797s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/ament_index/resource_index/parent_prefix_path/uwrt_mars_rover_xbox_controller
+[0.797s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/uwrt_mars_rover_xbox_controller/environment/ament_prefix_path.sh
+[0.798s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/uwrt_mars_rover_xbox_controller/environment/ament_prefix_path.dsv
+[0.798s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/uwrt_mars_rover_xbox_controller/environment/path.sh
+[0.798s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/uwrt_mars_rover_xbox_controller/environment/path.dsv
+[0.798s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/uwrt_mars_rover_xbox_controller/local_setup.bash
+[0.799s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/uwrt_mars_rover_xbox_controller/local_setup.sh
+[0.799s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/uwrt_mars_rover_xbox_controller/local_setup.zsh
+[0.799s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/uwrt_mars_rover_xbox_controller/local_setup.dsv
+[0.799s] -- Installing: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/uwrt_mars_rover_xbox_controller/package.dsv
+[0.799s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/ament_index/resource_index/packages/uwrt_mars_rover_xbox_controller
+[0.799s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/uwrt_mars_rover_xbox_controller/cmake/uwrt_mars_rover_xbox_controller__rosidl_generator_cExport.cmake
+[0.800s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/uwrt_mars_rover_xbox_controller/cmake/uwrt_mars_rover_xbox_controller__rosidl_generator_cExport-noconfig.cmake
+[0.801s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/uwrt_mars_rover_xbox_controller/cmake/uwrt_mars_rover_xbox_controller__rosidl_typesupport_introspection_cExport.cmake
+[0.801s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/uwrt_mars_rover_xbox_controller/cmake/uwrt_mars_rover_xbox_controller__rosidl_typesupport_introspection_cExport-noconfig.cmake
+[0.808s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/uwrt_mars_rover_xbox_controller/cmake/uwrt_mars_rover_xbox_controller__rosidl_typesupport_cExport.cmake
+[0.808s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/uwrt_mars_rover_xbox_controller/cmake/uwrt_mars_rover_xbox_controller__rosidl_typesupport_cExport-noconfig.cmake
+[0.809s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/uwrt_mars_rover_xbox_controller/cmake/uwrt_mars_rover_xbox_controller__rosidl_generator_cppExport.cmake
+[0.809s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/uwrt_mars_rover_xbox_controller/cmake/uwrt_mars_rover_xbox_controller__rosidl_typesupport_introspection_cppExport.cmake
+[0.809s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/uwrt_mars_rover_xbox_controller/cmake/uwrt_mars_rover_xbox_controller__rosidl_typesupport_introspection_cppExport-noconfig.cmake
+[0.810s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/uwrt_mars_rover_xbox_controller/cmake/uwrt_mars_rover_xbox_controller__rosidl_typesupport_cppExport.cmake
+[0.810s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/uwrt_mars_rover_xbox_controller/cmake/uwrt_mars_rover_xbox_controller__rosidl_typesupport_cppExport-noconfig.cmake
+[0.810s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/ament_index/resource_index/rclcpp_components/uwrt_mars_rover_xbox_controller
+[0.811s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/uwrt_mars_rover_xbox_controller/cmake/rosidl_cmake-extras.cmake
+[0.811s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/uwrt_mars_rover_xbox_controller/cmake/ament_cmake_export_dependencies-extras.cmake
+[0.811s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/uwrt_mars_rover_xbox_controller/cmake/ament_cmake_export_libraries-extras.cmake
+[0.811s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/uwrt_mars_rover_xbox_controller/cmake/ament_cmake_export_targets-extras.cmake
+[0.812s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/uwrt_mars_rover_xbox_controller/cmake/ament_cmake_export_include_directories-extras.cmake
+[0.812s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/uwrt_mars_rover_xbox_controller/cmake/rosidl_cmake_export_typesupport_libraries-extras.cmake
+[0.812s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/uwrt_mars_rover_xbox_controller/cmake/rosidl_cmake_export_typesupport_targets-extras.cmake
+[0.813s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/uwrt_mars_rover_xbox_controller/cmake/uwrt_mars_rover_xbox_controllerConfig.cmake
+[0.813s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/uwrt_mars_rover_xbox_controller/cmake/uwrt_mars_rover_xbox_controllerConfig-version.cmake
+[0.813s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/uwrt_mars_rover_xbox_controller/package.xml
+[0.821s] Invoked command in '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_xbox_controller' returned '0': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --install /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_xbox_controller

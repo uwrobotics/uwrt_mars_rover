@@ -1,0 +1,7 @@
+[
+{
+  "directory": "/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_drivetrain_hw",
+  "command": "/usr/bin/c++  -DDEFAULT_RMW_IMPLEMENTATION=rmw_cyclonedds_cpp -DRCUTILS_ENABLE_FAULT_INJECTION -DUWRT_MARS_ROVER_DRIVETRAIN_HW_BUILDING_LIBRARY -Duwrt_mars_rover_drivetrain_hw_EXPORTS -I/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/uwrt_mars_rover_drivetrain/uwrt_mars_rover_drivetrain_hw/include -isystem /opt/ros/galactic/include  -fPIC   -Wall -Wextra -Wpedantic -std=gnu++17 -o CMakeFiles/uwrt_mars_rover_drivetrain_hw.dir/src/uwrt_mars_rover_drivetrain_hw_actuator_interface.cpp.o -c /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/uwrt_mars_rover_drivetrain/uwrt_mars_rover_drivetrain_hw/src/uwrt_mars_rover_drivetrain_hw_actuator_interface.cpp",
+  "file": "/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/uwrt_mars_rover_drivetrain/uwrt_mars_rover_drivetrain_hw/src/uwrt_mars_rover_drivetrain_hw_actuator_interface.cpp"
+}
+]

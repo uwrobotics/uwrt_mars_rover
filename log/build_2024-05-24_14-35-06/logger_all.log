@@ -1,0 +1,504 @@
+[0.362s] DEBUG:colcon:Command line arguments: ['/usr/bin/colcon', 'build']
+[0.362s] DEBUG:colcon:Parsed command line arguments: Namespace(allow_overriding=[], ament_cmake_args=None, base_paths=['.'], build_base='build', catkin_cmake_args=None, catkin_skip_building_tests=False, cmake_args=None, cmake_clean_cache=False, cmake_clean_first=False, cmake_force_configure=False, cmake_target=None, cmake_target_skip_unavailable=False, continue_on_error=False, event_handlers=None, executor='parallel', ignore_user_meta=False, install_base='install', log_base=None, log_level=None, main=<bound method BuildVerb.main of <colcon_core.verb.build.BuildVerb object at 0x7f638fff9070>>, merge_install=False, metas=['./colcon.meta'], packages_above=None, packages_above_and_dependencies=None, packages_above_depth=None, packages_end=None, packages_ignore=None, packages_ignore_regex=None, packages_select=None, packages_select_build_failed=False, packages_select_by_dep=None, packages_select_regex=None, packages_select_test_failures=False, packages_skip=None, packages_skip_build_finished=False, packages_skip_by_dep=None, packages_skip_regex=None, packages_skip_test_passed=False, packages_skip_up_to=None, packages_start=None, packages_up_to=None, packages_up_to_regex=None, parallel_workers=4, paths=None, symlink_install=False, test_result_base=None, verb_extension=<colcon_core.verb.build.BuildVerb object at 0x7f638fff9070>, verb_name='build', verb_parser=<colcon_defaults.argument_parser.defaults.DefaultArgumentsDecorator object at 0x7f638fff95b0>)
+[0.392s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) check parameters
+[0.392s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) check parameters
+[0.392s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) check parameters
+[0.392s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) check parameters
+[0.392s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) discover
+[0.392s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) discover
+[0.392s] INFO:colcon.colcon_core.package_discovery:Crawling recursively for packages in '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover'
+[0.392s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ignore', 'ignore_ament_install']
+[0.393s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore'
+[0.393s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore_ament_install'
+[0.393s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_pkg']
+[0.393s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_pkg'
+[0.393s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_meta']
+[0.393s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_meta'
+[0.393s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ros']
+[0.393s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ros'
+[0.415s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['cmake', 'python']
+[0.415s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'cmake'
+[0.415s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'python'
+[0.415s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['python_setup_py']
+[0.416s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'python_setup_py'
+[0.416s] Level 1:colcon.colcon_core.package_identification:_identify(build) by extensions ['ignore', 'ignore_ament_install']
+[0.416s] Level 1:colcon.colcon_core.package_identification:_identify(build) by extension 'ignore'
+[0.416s] Level 1:colcon.colcon_core.package_identification:_identify(build) ignored
+[0.416s] Level 1:colcon.colcon_core.package_identification:_identify(install) by extensions ['ignore', 'ignore_ament_install']
+[0.416s] Level 1:colcon.colcon_core.package_identification:_identify(install) by extension 'ignore'
+[0.416s] Level 1:colcon.colcon_core.package_identification:_identify(install) ignored
+[0.416s] Level 1:colcon.colcon_core.package_identification:_identify(log) by extensions ['ignore', 'ignore_ament_install']
+[0.416s] Level 1:colcon.colcon_core.package_identification:_identify(log) by extension 'ignore'
+[0.417s] Level 1:colcon.colcon_core.package_identification:_identify(log) ignored
+[0.417s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover) by extensions ['ignore', 'ignore_ament_install']
+[0.417s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover) by extension 'ignore'
+[0.417s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover) by extension 'ignore_ament_install'
+[0.417s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover) by extensions ['colcon_pkg']
+[0.417s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover) by extension 'colcon_pkg'
+[0.417s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover) by extensions ['colcon_meta']
+[0.417s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover) by extension 'colcon_meta'
+[0.417s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover) by extensions ['ros']
+[0.417s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover) by extension 'ros'
+[0.420s] DEBUG:colcon.colcon_core.package_identification:Package 'uwrt_mars_rover' with type 'ros.ament_cmake' and name 'uwrt_mars_rover'
+[0.420s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_description) by extensions ['ignore', 'ignore_ament_install']
+[0.420s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_description) by extension 'ignore'
+[0.420s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_description) by extension 'ignore_ament_install'
+[0.420s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_description) by extensions ['colcon_pkg']
+[0.420s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_description) by extension 'colcon_pkg'
+[0.421s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_description) by extensions ['colcon_meta']
+[0.421s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_description) by extension 'colcon_meta'
+[0.421s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_description) by extensions ['ros']
+[0.421s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_description) by extension 'ros'
+[0.421s] DEBUG:colcon.colcon_core.package_identification:Package 'uwrt_mars_rover_description' with type 'ros.ament_cmake' and name 'uwrt_mars_rover_description'
+[0.421s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_drivetrain) by extensions ['ignore', 'ignore_ament_install']
+[0.422s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_drivetrain) by extension 'ignore'
+[0.422s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_drivetrain) by extension 'ignore_ament_install'
+[0.422s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_drivetrain) by extensions ['colcon_pkg']
+[0.422s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_drivetrain) by extension 'colcon_pkg'
+[0.422s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_drivetrain) by extensions ['colcon_meta']
+[0.422s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_drivetrain) by extension 'colcon_meta'
+[0.422s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_drivetrain) by extensions ['ros']
+[0.422s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_drivetrain) by extension 'ros'
+[0.422s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_drivetrain) by extensions ['cmake', 'python']
+[0.422s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_drivetrain) by extension 'cmake'
+[0.422s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_drivetrain) by extension 'python'
+[0.422s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_drivetrain) by extensions ['python_setup_py']
+[0.422s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_drivetrain) by extension 'python_setup_py'
+[0.422s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_drivetrain/uwrt_mars_rover_drivetrain) by extensions ['ignore', 'ignore_ament_install']
+[0.422s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_drivetrain/uwrt_mars_rover_drivetrain) by extension 'ignore'
+[0.423s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_drivetrain/uwrt_mars_rover_drivetrain) by extension 'ignore_ament_install'
+[0.423s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_drivetrain/uwrt_mars_rover_drivetrain) by extensions ['colcon_pkg']
+[0.423s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_drivetrain/uwrt_mars_rover_drivetrain) by extension 'colcon_pkg'
+[0.423s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_drivetrain/uwrt_mars_rover_drivetrain) by extensions ['colcon_meta']
+[0.423s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_drivetrain/uwrt_mars_rover_drivetrain) by extension 'colcon_meta'
+[0.423s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_drivetrain/uwrt_mars_rover_drivetrain) by extensions ['ros']
+[0.423s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_drivetrain/uwrt_mars_rover_drivetrain) by extension 'ros'
+[0.423s] DEBUG:colcon.colcon_core.package_identification:Package 'uwrt_mars_rover_drivetrain/uwrt_mars_rover_drivetrain' with type 'ros.ament_cmake' and name 'uwrt_mars_rover_drivetrain'
+[0.423s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_drivetrain/uwrt_mars_rover_drivetrain_description) by extensions ['ignore', 'ignore_ament_install']
+[0.424s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_drivetrain/uwrt_mars_rover_drivetrain_description) by extension 'ignore'
+[0.424s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_drivetrain/uwrt_mars_rover_drivetrain_description) by extension 'ignore_ament_install'
+[0.424s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_drivetrain/uwrt_mars_rover_drivetrain_description) by extensions ['colcon_pkg']
+[0.424s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_drivetrain/uwrt_mars_rover_drivetrain_description) by extension 'colcon_pkg'
+[0.424s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_drivetrain/uwrt_mars_rover_drivetrain_description) by extensions ['colcon_meta']
+[0.424s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_drivetrain/uwrt_mars_rover_drivetrain_description) by extension 'colcon_meta'
+[0.424s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_drivetrain/uwrt_mars_rover_drivetrain_description) by extensions ['ros']
+[0.424s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_drivetrain/uwrt_mars_rover_drivetrain_description) by extension 'ros'
+[0.425s] DEBUG:colcon.colcon_core.package_identification:Package 'uwrt_mars_rover_drivetrain/uwrt_mars_rover_drivetrain_description' with type 'ros.ament_cmake' and name 'uwrt_mars_rover_drivetrain_description'
+[0.425s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_drivetrain/uwrt_mars_rover_drivetrain_hw) by extensions ['ignore', 'ignore_ament_install']
+[0.425s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_drivetrain/uwrt_mars_rover_drivetrain_hw) by extension 'ignore'
+[0.425s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_drivetrain/uwrt_mars_rover_drivetrain_hw) by extension 'ignore_ament_install'
+[0.425s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_drivetrain/uwrt_mars_rover_drivetrain_hw) by extensions ['colcon_pkg']
+[0.425s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_drivetrain/uwrt_mars_rover_drivetrain_hw) by extension 'colcon_pkg'
+[0.425s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_drivetrain/uwrt_mars_rover_drivetrain_hw) by extensions ['colcon_meta']
+[0.425s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_drivetrain/uwrt_mars_rover_drivetrain_hw) by extension 'colcon_meta'
+[0.425s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_drivetrain/uwrt_mars_rover_drivetrain_hw) by extensions ['ros']
+[0.425s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_drivetrain/uwrt_mars_rover_drivetrain_hw) by extension 'ros'
+[0.427s] DEBUG:colcon.colcon_core.package_identification:Package 'uwrt_mars_rover_drivetrain/uwrt_mars_rover_drivetrain_hw' with type 'ros.ament_cmake' and name 'uwrt_mars_rover_drivetrain_hw'
+[0.427s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_utils) by extensions ['ignore', 'ignore_ament_install']
+[0.427s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_utils) by extension 'ignore'
+[0.427s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_utils) by extension 'ignore_ament_install'
+[0.427s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_utils) by extensions ['colcon_pkg']
+[0.427s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_utils) by extension 'colcon_pkg'
+[0.427s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_utils) by extensions ['colcon_meta']
+[0.427s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_utils) by extension 'colcon_meta'
+[0.427s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_utils) by extensions ['ros']
+[0.427s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_utils) by extension 'ros'
+[0.427s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_utils) by extensions ['cmake', 'python']
+[0.427s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_utils) by extension 'cmake'
+[0.427s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_utils) by extension 'python'
+[0.427s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_utils) by extensions ['python_setup_py']
+[0.428s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_utils) by extension 'python_setup_py'
+[0.428s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_utils/config) by extensions ['ignore', 'ignore_ament_install']
+[0.428s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_utils/config) by extension 'ignore'
+[0.428s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_utils/config) by extension 'ignore_ament_install'
+[0.428s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_utils/config) by extensions ['colcon_pkg']
+[0.428s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_utils/config) by extension 'colcon_pkg'
+[0.428s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_utils/config) by extensions ['colcon_meta']
+[0.428s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_utils/config) by extension 'colcon_meta'
+[0.428s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_utils/config) by extensions ['ros']
+[0.428s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_utils/config) by extension 'ros'
+[0.428s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_utils/config) by extensions ['cmake', 'python']
+[0.428s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_utils/config) by extension 'cmake'
+[0.428s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_utils/config) by extension 'python'
+[0.428s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_utils/config) by extensions ['python_setup_py']
+[0.428s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_utils/config) by extension 'python_setup_py'
+[0.429s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_utils/uwrt_mars_rover_xbox_controller) by extensions ['ignore', 'ignore_ament_install']
+[0.429s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_utils/uwrt_mars_rover_xbox_controller) by extension 'ignore'
+[0.429s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_utils/uwrt_mars_rover_xbox_controller) by extension 'ignore_ament_install'
+[0.429s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_utils/uwrt_mars_rover_xbox_controller) by extensions ['colcon_pkg']
+[0.429s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_utils/uwrt_mars_rover_xbox_controller) by extension 'colcon_pkg'
+[0.429s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_utils/uwrt_mars_rover_xbox_controller) by extensions ['colcon_meta']
+[0.429s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_utils/uwrt_mars_rover_xbox_controller) by extension 'colcon_meta'
+[0.429s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_utils/uwrt_mars_rover_xbox_controller) by extensions ['ros']
+[0.429s] Level 1:colcon.colcon_core.package_identification:_identify(uwrt_mars_rover_utils/uwrt_mars_rover_xbox_controller) by extension 'ros'
+[0.430s] DEBUG:colcon.colcon_core.package_identification:Package 'uwrt_mars_rover_utils/uwrt_mars_rover_xbox_controller' with type 'ros.ament_cmake' and name 'uwrt_mars_rover_xbox_controller'
+[0.430s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) using defaults
+[0.430s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) discover
+[0.430s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) using defaults
+[0.430s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) discover
+[0.430s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) using defaults
+[0.455s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) check parameters
+[0.455s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) discover
+[0.460s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 301 installed packages in /opt/ros/galactic
+[0.462s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) using defaults
+[0.559s] Level 5:colcon.colcon_core.verb:set package 'uwrt_mars_rover_description' build argument 'cmake_args' from command line to 'None'
+[0.559s] Level 5:colcon.colcon_core.verb:set package 'uwrt_mars_rover_description' build argument 'cmake_target' from command line to 'None'
+[0.559s] Level 5:colcon.colcon_core.verb:set package 'uwrt_mars_rover_description' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.560s] Level 5:colcon.colcon_core.verb:set package 'uwrt_mars_rover_description' build argument 'cmake_clean_cache' from command line to 'False'
+[0.560s] Level 5:colcon.colcon_core.verb:set package 'uwrt_mars_rover_description' build argument 'cmake_clean_first' from command line to 'False'
+[0.560s] Level 5:colcon.colcon_core.verb:set package 'uwrt_mars_rover_description' build argument 'cmake_force_configure' from command line to 'False'
+[0.560s] Level 5:colcon.colcon_core.verb:set package 'uwrt_mars_rover_description' build argument 'ament_cmake_args' from command line to 'None'
+[0.560s] Level 5:colcon.colcon_core.verb:set package 'uwrt_mars_rover_description' build argument 'catkin_cmake_args' from command line to 'None'
+[0.560s] Level 5:colcon.colcon_core.verb:set package 'uwrt_mars_rover_description' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.560s] DEBUG:colcon.colcon_core.verb:Building package 'uwrt_mars_rover_description' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_description', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_description', 'merge_install': False, 'path': '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/uwrt_mars_rover_description', 'symlink_install': False, 'test_result_base': None}
+[0.561s] Level 5:colcon.colcon_core.verb:set package 'uwrt_mars_rover_drivetrain_description' build argument 'cmake_args' from command line to 'None'
+[0.561s] Level 5:colcon.colcon_core.verb:set package 'uwrt_mars_rover_drivetrain_description' build argument 'cmake_target' from command line to 'None'
+[0.561s] Level 5:colcon.colcon_core.verb:set package 'uwrt_mars_rover_drivetrain_description' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.561s] Level 5:colcon.colcon_core.verb:set package 'uwrt_mars_rover_drivetrain_description' build argument 'cmake_clean_cache' from command line to 'False'
+[0.561s] Level 5:colcon.colcon_core.verb:set package 'uwrt_mars_rover_drivetrain_description' build argument 'cmake_clean_first' from command line to 'False'
+[0.561s] Level 5:colcon.colcon_core.verb:set package 'uwrt_mars_rover_drivetrain_description' build argument 'cmake_force_configure' from command line to 'False'
+[0.561s] Level 5:colcon.colcon_core.verb:set package 'uwrt_mars_rover_drivetrain_description' build argument 'ament_cmake_args' from command line to 'None'
+[0.561s] Level 5:colcon.colcon_core.verb:set package 'uwrt_mars_rover_drivetrain_description' build argument 'catkin_cmake_args' from command line to 'None'
+[0.561s] Level 5:colcon.colcon_core.verb:set package 'uwrt_mars_rover_drivetrain_description' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.561s] DEBUG:colcon.colcon_core.verb:Building package 'uwrt_mars_rover_drivetrain_description' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_drivetrain_description', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description', 'merge_install': False, 'path': '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/uwrt_mars_rover_drivetrain/uwrt_mars_rover_drivetrain_description', 'symlink_install': False, 'test_result_base': None}
+[0.562s] Level 5:colcon.colcon_core.verb:set package 'uwrt_mars_rover_xbox_controller' build argument 'cmake_args' from command line to 'None'
+[0.562s] Level 5:colcon.colcon_core.verb:set package 'uwrt_mars_rover_xbox_controller' build argument 'cmake_target' from command line to 'None'
+[0.562s] Level 5:colcon.colcon_core.verb:set package 'uwrt_mars_rover_xbox_controller' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.562s] Level 5:colcon.colcon_core.verb:set package 'uwrt_mars_rover_xbox_controller' build argument 'cmake_clean_cache' from command line to 'False'
+[0.562s] Level 5:colcon.colcon_core.verb:set package 'uwrt_mars_rover_xbox_controller' build argument 'cmake_clean_first' from command line to 'False'
+[0.563s] Level 5:colcon.colcon_core.verb:set package 'uwrt_mars_rover_xbox_controller' build argument 'cmake_force_configure' from command line to 'False'
+[0.563s] Level 5:colcon.colcon_core.verb:set package 'uwrt_mars_rover_xbox_controller' build argument 'ament_cmake_args' from command line to 'None'
+[0.563s] Level 5:colcon.colcon_core.verb:set package 'uwrt_mars_rover_xbox_controller' build argument 'catkin_cmake_args' from command line to 'None'
+[0.563s] Level 5:colcon.colcon_core.verb:set package 'uwrt_mars_rover_xbox_controller' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.563s] DEBUG:colcon.colcon_core.verb:Building package 'uwrt_mars_rover_xbox_controller' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_xbox_controller', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller', 'merge_install': False, 'path': '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/uwrt_mars_rover_utils/uwrt_mars_rover_xbox_controller', 'symlink_install': False, 'test_result_base': None}
+[0.564s] Level 5:colcon.colcon_core.verb:set package 'uwrt_mars_rover_drivetrain_hw' build argument 'cmake_args' from command line to 'None'
+[0.564s] Level 5:colcon.colcon_core.verb:set package 'uwrt_mars_rover_drivetrain_hw' build argument 'cmake_target' from command line to 'None'
+[0.564s] Level 5:colcon.colcon_core.verb:set package 'uwrt_mars_rover_drivetrain_hw' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.564s] Level 5:colcon.colcon_core.verb:set package 'uwrt_mars_rover_drivetrain_hw' build argument 'cmake_clean_cache' from command line to 'False'
+[0.564s] Level 5:colcon.colcon_core.verb:set package 'uwrt_mars_rover_drivetrain_hw' build argument 'cmake_clean_first' from command line to 'False'
+[0.564s] Level 5:colcon.colcon_core.verb:set package 'uwrt_mars_rover_drivetrain_hw' build argument 'cmake_force_configure' from command line to 'False'
+[0.564s] Level 5:colcon.colcon_core.verb:set package 'uwrt_mars_rover_drivetrain_hw' build argument 'ament_cmake_args' from command line to 'None'
+[0.564s] Level 5:colcon.colcon_core.verb:set package 'uwrt_mars_rover_drivetrain_hw' build argument 'catkin_cmake_args' from command line to 'None'
+[0.564s] Level 5:colcon.colcon_core.verb:set package 'uwrt_mars_rover_drivetrain_hw' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.564s] DEBUG:colcon.colcon_core.verb:Building package 'uwrt_mars_rover_drivetrain_hw' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_drivetrain_hw', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw', 'merge_install': False, 'path': '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/uwrt_mars_rover_drivetrain/uwrt_mars_rover_drivetrain_hw', 'symlink_install': False, 'test_result_base': None}
+[0.565s] Level 5:colcon.colcon_core.verb:set package 'uwrt_mars_rover_drivetrain' build argument 'cmake_args' from command line to 'None'
+[0.565s] Level 5:colcon.colcon_core.verb:set package 'uwrt_mars_rover_drivetrain' build argument 'cmake_target' from command line to 'None'
+[0.565s] Level 5:colcon.colcon_core.verb:set package 'uwrt_mars_rover_drivetrain' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.565s] Level 5:colcon.colcon_core.verb:set package 'uwrt_mars_rover_drivetrain' build argument 'cmake_clean_cache' from command line to 'False'
+[0.565s] Level 5:colcon.colcon_core.verb:set package 'uwrt_mars_rover_drivetrain' build argument 'cmake_clean_first' from command line to 'False'
+[0.565s] Level 5:colcon.colcon_core.verb:set package 'uwrt_mars_rover_drivetrain' build argument 'cmake_force_configure' from command line to 'False'
+[0.565s] Level 5:colcon.colcon_core.verb:set package 'uwrt_mars_rover_drivetrain' build argument 'ament_cmake_args' from command line to 'None'
+[0.565s] Level 5:colcon.colcon_core.verb:set package 'uwrt_mars_rover_drivetrain' build argument 'catkin_cmake_args' from command line to 'None'
+[0.565s] Level 5:colcon.colcon_core.verb:set package 'uwrt_mars_rover_drivetrain' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.565s] DEBUG:colcon.colcon_core.verb:Building package 'uwrt_mars_rover_drivetrain' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_drivetrain', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain', 'merge_install': False, 'path': '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/uwrt_mars_rover_drivetrain/uwrt_mars_rover_drivetrain', 'symlink_install': False, 'test_result_base': None}
+[0.567s] Level 5:colcon.colcon_core.verb:set package 'uwrt_mars_rover' build argument 'cmake_args' from command line to 'None'
+[0.567s] Level 5:colcon.colcon_core.verb:set package 'uwrt_mars_rover' build argument 'cmake_target' from command line to 'None'
+[0.567s] Level 5:colcon.colcon_core.verb:set package 'uwrt_mars_rover' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.567s] Level 5:colcon.colcon_core.verb:set package 'uwrt_mars_rover' build argument 'cmake_clean_cache' from command line to 'False'
+[0.567s] Level 5:colcon.colcon_core.verb:set package 'uwrt_mars_rover' build argument 'cmake_clean_first' from command line to 'False'
+[0.567s] Level 5:colcon.colcon_core.verb:set package 'uwrt_mars_rover' build argument 'cmake_force_configure' from command line to 'False'
+[0.567s] Level 5:colcon.colcon_core.verb:set package 'uwrt_mars_rover' build argument 'ament_cmake_args' from command line to 'None'
+[0.567s] Level 5:colcon.colcon_core.verb:set package 'uwrt_mars_rover' build argument 'catkin_cmake_args' from command line to 'None'
+[0.567s] Level 5:colcon.colcon_core.verb:set package 'uwrt_mars_rover' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.567s] DEBUG:colcon.colcon_core.verb:Building package 'uwrt_mars_rover' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover', 'merge_install': False, 'path': '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/uwrt_mars_rover', 'symlink_install': False, 'test_result_base': None}
+[0.568s] INFO:colcon.colcon_core.executor:Executing jobs using 'parallel' executor
+[0.572s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete
+[0.572s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/uwrt_mars_rover_drivetrain/uwrt_mars_rover_drivetrain_description' with build type 'ament_cmake'
+[0.572s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/uwrt_mars_rover_drivetrain/uwrt_mars_rover_drivetrain_description'
+[0.579s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_core.shell.bat': Not used on non-Windows systems
+[0.579s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.579s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.589s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/uwrt_mars_rover_description' with build type 'ament_cmake'
+[0.590s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/uwrt_mars_rover_description'
+[0.592s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.593s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.601s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/uwrt_mars_rover_utils/uwrt_mars_rover_xbox_controller' with build type 'ament_cmake'
+[0.602s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/uwrt_mars_rover_utils/uwrt_mars_rover_xbox_controller'
+[0.604s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.605s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.625s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_drivetrain_description': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --build /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_drivetrain_description -- -j4 -l4
+[0.632s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_description': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --build /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_description -- -j4 -l4
+[0.645s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_xbox_controller': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --build /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_xbox_controller -- -j4 -l4
+[0.709s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_drivetrain_description' returned '0': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --build /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_drivetrain_description -- -j4 -l4
+[0.716s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_description' returned '0': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --build /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_description -- -j4 -l4
+[0.774s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_drivetrain_description': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --install /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_drivetrain_description
+[0.796s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_description': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --install /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_description
+[0.824s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(uwrt_mars_rover_drivetrain_description)
+[0.836s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_drivetrain_description' returned '0': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --install /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_drivetrain_description
+[0.841s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description' for CMake module files
+[0.842s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description' for CMake config files
+[0.843s] Level 1:colcon.colcon_core.shell:create_environment_hook('uwrt_mars_rover_drivetrain_description', 'cmake_prefix_path')
+[0.846s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description/share/uwrt_mars_rover_drivetrain_description/hook/cmake_prefix_path.ps1'
+[0.848s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description/share/uwrt_mars_rover_drivetrain_description/hook/cmake_prefix_path.dsv'
+[0.849s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description/share/uwrt_mars_rover_drivetrain_description/hook/cmake_prefix_path.sh'
+[0.851s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description/bin'
+[0.851s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description/lib/pkgconfig/uwrt_mars_rover_drivetrain_description.pc'
+[0.852s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description/lib/python3.8/site-packages'
+[0.852s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description/bin'
+[0.855s] INFO:colcon.colcon_core.shell:Creating package script '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description/share/uwrt_mars_rover_drivetrain_description/package.ps1'
+[0.857s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description/share/uwrt_mars_rover_drivetrain_description/package.dsv'
+[0.858s] INFO:colcon.colcon_core.shell:Creating package script '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description/share/uwrt_mars_rover_drivetrain_description/package.sh'
+[0.859s] INFO:colcon.colcon_core.shell:Creating package script '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description/share/uwrt_mars_rover_drivetrain_description/package.bash'
+[0.861s] INFO:colcon.colcon_core.shell:Creating package script '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description/share/uwrt_mars_rover_drivetrain_description/package.zsh'
+[0.862s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description/share/colcon-core/packages/uwrt_mars_rover_drivetrain_description)
+[0.870s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(uwrt_mars_rover_description)
+[0.876s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_description' for CMake module files
+[0.877s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_description' returned '0': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --install /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_description
+[0.879s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_description' for CMake config files
+[0.879s] Level 1:colcon.colcon_core.shell:create_environment_hook('uwrt_mars_rover_description', 'cmake_prefix_path')
+[0.883s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_description/share/uwrt_mars_rover_description/hook/cmake_prefix_path.ps1'
+[0.884s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_description/share/uwrt_mars_rover_description/hook/cmake_prefix_path.dsv'
+[0.885s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_description/share/uwrt_mars_rover_description/hook/cmake_prefix_path.sh'
+[0.886s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_description/bin'
+[0.886s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_description/lib/pkgconfig/uwrt_mars_rover_description.pc'
+[0.886s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_description/lib/python3.8/site-packages'
+[0.887s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_description/bin'
+[0.890s] INFO:colcon.colcon_core.shell:Creating package script '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_description/share/uwrt_mars_rover_description/package.ps1'
+[0.891s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_description/share/uwrt_mars_rover_description/package.dsv'
+[0.892s] INFO:colcon.colcon_core.shell:Creating package script '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_description/share/uwrt_mars_rover_description/package.sh'
+[0.893s] INFO:colcon.colcon_core.shell:Creating package script '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_description/share/uwrt_mars_rover_description/package.bash'
+[0.893s] INFO:colcon.colcon_core.shell:Creating package script '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_description/share/uwrt_mars_rover_description/package.zsh'
+[0.894s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_description/share/colcon-core/packages/uwrt_mars_rover_description)
+[0.907s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(uwrt_mars_rover_drivetrain_description)
+[0.912s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description' for CMake module files
+[0.914s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description' for CMake config files
+[0.915s] Level 1:colcon.colcon_core.shell:create_environment_hook('uwrt_mars_rover_drivetrain_description', 'cmake_prefix_path')
+[0.919s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description/share/uwrt_mars_rover_drivetrain_description/hook/cmake_prefix_path.ps1'
+[0.920s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description/share/uwrt_mars_rover_drivetrain_description/hook/cmake_prefix_path.dsv'
+[0.921s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description/share/uwrt_mars_rover_drivetrain_description/hook/cmake_prefix_path.sh'
+[0.921s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description/bin'
+[0.922s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description/lib/pkgconfig/uwrt_mars_rover_drivetrain_description.pc'
+[0.922s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description/lib/python3.8/site-packages'
+[0.923s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description/bin'
+[0.928s] INFO:colcon.colcon_core.shell:Creating package script '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description/share/uwrt_mars_rover_drivetrain_description/package.ps1'
+[0.929s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description/share/uwrt_mars_rover_drivetrain_description/package.dsv'
+[0.931s] INFO:colcon.colcon_core.shell:Creating package script '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description/share/uwrt_mars_rover_drivetrain_description/package.sh'
+[0.932s] INFO:colcon.colcon_core.shell:Creating package script '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description/share/uwrt_mars_rover_drivetrain_description/package.bash'
+[0.932s] INFO:colcon.colcon_core.shell:Creating package script '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description/share/uwrt_mars_rover_drivetrain_description/package.zsh'
+[0.933s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description/share/colcon-core/packages/uwrt_mars_rover_drivetrain_description)
+[0.935s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/uwrt_mars_rover_drivetrain/uwrt_mars_rover_drivetrain_hw' with build type 'ament_cmake'
+[0.937s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/uwrt_mars_rover_drivetrain/uwrt_mars_rover_drivetrain_hw'
+[0.941s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.949s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.987s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(uwrt_mars_rover_description)
+[0.992s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_description' for CMake module files
+[0.994s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_description' for CMake config files
+[0.996s] Level 1:colcon.colcon_core.shell:create_environment_hook('uwrt_mars_rover_description', 'cmake_prefix_path')
+[1.002s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_description/share/uwrt_mars_rover_description/hook/cmake_prefix_path.ps1'
+[1.005s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_description/share/uwrt_mars_rover_description/hook/cmake_prefix_path.dsv'
+[1.006s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_description/share/uwrt_mars_rover_description/hook/cmake_prefix_path.sh'
+[1.007s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_description/bin'
+[1.007s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_description/lib/pkgconfig/uwrt_mars_rover_description.pc'
+[1.008s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_description/lib/python3.8/site-packages'
+[1.008s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_description/bin'
+[1.014s] INFO:colcon.colcon_core.shell:Creating package script '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_description/share/uwrt_mars_rover_description/package.ps1'
+[1.015s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_description/share/uwrt_mars_rover_description/package.dsv'
+[1.016s] INFO:colcon.colcon_core.shell:Creating package script '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_description/share/uwrt_mars_rover_description/package.sh'
+[1.017s] INFO:colcon.colcon_core.shell:Creating package script '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_description/share/uwrt_mars_rover_description/package.bash'
+[1.018s] INFO:colcon.colcon_core.shell:Creating package script '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_description/share/uwrt_mars_rover_description/package.zsh'
+[1.019s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_description/share/colcon-core/packages/uwrt_mars_rover_description)
+[1.029s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_drivetrain_hw': AMENT_PREFIX_PATH=/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description:/opt/ros/galactic /usr/bin/cmake --build /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_drivetrain_hw -- -j4 -l4
+[1.187s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_xbox_controller' returned '0': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --build /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_xbox_controller -- -j4 -l4
+[1.212s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_drivetrain_hw' returned '0': AMENT_PREFIX_PATH=/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description:/opt/ros/galactic /usr/bin/cmake --build /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_drivetrain_hw -- -j4 -l4
+[1.249s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_drivetrain_hw': AMENT_PREFIX_PATH=/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description:/opt/ros/galactic /usr/bin/cmake --install /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_drivetrain_hw
+[1.269s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(uwrt_mars_rover_drivetrain_hw)
+[1.274s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw' for CMake module files
+[1.277s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw' for CMake config files
+[1.278s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_drivetrain_hw' returned '0': AMENT_PREFIX_PATH=/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description:/opt/ros/galactic /usr/bin/cmake --install /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_drivetrain_hw
+[1.279s] Level 1:colcon.colcon_core.shell:create_environment_hook('uwrt_mars_rover_drivetrain_hw', 'cmake_prefix_path')
+[1.283s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/uwrt_mars_rover_drivetrain_hw/hook/cmake_prefix_path.ps1'
+[1.284s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/uwrt_mars_rover_drivetrain_hw/hook/cmake_prefix_path.dsv'
+[1.284s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/uwrt_mars_rover_drivetrain_hw/hook/cmake_prefix_path.sh'
+[1.285s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/lib'
+[1.285s] Level 1:colcon.colcon_core.shell:create_environment_hook('uwrt_mars_rover_drivetrain_hw', 'ld_library_path_lib')
+[1.287s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/uwrt_mars_rover_drivetrain_hw/hook/ld_library_path_lib.ps1'
+[1.288s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/uwrt_mars_rover_drivetrain_hw/hook/ld_library_path_lib.dsv'
+[1.288s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/uwrt_mars_rover_drivetrain_hw/hook/ld_library_path_lib.sh'
+[1.289s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/bin'
+[1.289s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/lib/pkgconfig/uwrt_mars_rover_drivetrain_hw.pc'
+[1.289s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/lib/python3.8/site-packages'
+[1.290s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/bin'
+[1.292s] INFO:colcon.colcon_core.shell:Creating package script '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/uwrt_mars_rover_drivetrain_hw/package.ps1'
+[1.293s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/uwrt_mars_rover_drivetrain_hw/package.dsv'
+[1.293s] INFO:colcon.colcon_core.shell:Creating package script '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/uwrt_mars_rover_drivetrain_hw/package.sh'
+[1.293s] INFO:colcon.colcon_core.shell:Creating package script '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/uwrt_mars_rover_drivetrain_hw/package.bash'
+[1.294s] INFO:colcon.colcon_core.shell:Creating package script '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/uwrt_mars_rover_drivetrain_hw/package.zsh'
+[1.294s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/colcon-core/packages/uwrt_mars_rover_drivetrain_hw)
+[1.302s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_xbox_controller': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --install /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_xbox_controller
+[1.341s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(uwrt_mars_rover_drivetrain_hw)
+[1.346s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw' for CMake module files
+[1.346s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw' for CMake config files
+[1.347s] Level 1:colcon.colcon_core.shell:create_environment_hook('uwrt_mars_rover_drivetrain_hw', 'cmake_prefix_path')
+[1.348s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/uwrt_mars_rover_drivetrain_hw/hook/cmake_prefix_path.ps1'
+[1.349s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/uwrt_mars_rover_drivetrain_hw/hook/cmake_prefix_path.dsv'
+[1.351s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/uwrt_mars_rover_drivetrain_hw/hook/cmake_prefix_path.sh'
+[1.352s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/lib'
+[1.352s] Level 1:colcon.colcon_core.shell:create_environment_hook('uwrt_mars_rover_drivetrain_hw', 'ld_library_path_lib')
+[1.354s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/uwrt_mars_rover_drivetrain_hw/hook/ld_library_path_lib.ps1'
+[1.355s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/uwrt_mars_rover_drivetrain_hw/hook/ld_library_path_lib.dsv'
+[1.355s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/uwrt_mars_rover_drivetrain_hw/hook/ld_library_path_lib.sh'
+[1.355s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/bin'
+[1.355s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/lib/pkgconfig/uwrt_mars_rover_drivetrain_hw.pc'
+[1.356s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/lib/python3.8/site-packages'
+[1.356s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/bin'
+[1.358s] INFO:colcon.colcon_core.shell:Creating package script '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/uwrt_mars_rover_drivetrain_hw/package.ps1'
+[1.359s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/uwrt_mars_rover_drivetrain_hw/package.dsv'
+[1.359s] INFO:colcon.colcon_core.shell:Creating package script '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/uwrt_mars_rover_drivetrain_hw/package.sh'
+[1.360s] INFO:colcon.colcon_core.shell:Creating package script '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/uwrt_mars_rover_drivetrain_hw/package.bash'
+[1.360s] INFO:colcon.colcon_core.shell:Creating package script '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/uwrt_mars_rover_drivetrain_hw/package.zsh'
+[1.361s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/colcon-core/packages/uwrt_mars_rover_drivetrain_hw)
+[1.361s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/uwrt_mars_rover_drivetrain/uwrt_mars_rover_drivetrain' with build type 'ament_cmake'
+[1.362s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/uwrt_mars_rover_drivetrain/uwrt_mars_rover_drivetrain'
+[1.364s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[1.364s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[1.391s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_drivetrain': AMENT_PREFIX_PATH=/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw:/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw:/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description:/opt/ros/galactic LD_LIBRARY_PATH=/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/lib:${LD_LIBRARY_PATH} /usr/bin/cmake --build /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_drivetrain -- -j4 -l4
+[1.418s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(uwrt_mars_rover_xbox_controller)
+[1.422s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller' for CMake module files
+[1.423s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_xbox_controller' returned '0': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --install /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_xbox_controller
+[1.424s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller' for CMake config files
+[1.424s] Level 1:colcon.colcon_core.shell:create_environment_hook('uwrt_mars_rover_xbox_controller', 'cmake_prefix_path')
+[1.428s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/uwrt_mars_rover_xbox_controller/hook/cmake_prefix_path.ps1'
+[1.428s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/uwrt_mars_rover_xbox_controller/hook/cmake_prefix_path.dsv'
+[1.429s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/uwrt_mars_rover_xbox_controller/hook/cmake_prefix_path.sh'
+[1.430s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/lib'
+[1.430s] Level 1:colcon.colcon_core.shell:create_environment_hook('uwrt_mars_rover_xbox_controller', 'ld_library_path_lib')
+[1.431s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/uwrt_mars_rover_xbox_controller/hook/ld_library_path_lib.ps1'
+[1.432s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/uwrt_mars_rover_xbox_controller/hook/ld_library_path_lib.dsv'
+[1.432s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/uwrt_mars_rover_xbox_controller/hook/ld_library_path_lib.sh'
+[1.433s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/bin'
+[1.433s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/lib/pkgconfig/uwrt_mars_rover_xbox_controller.pc'
+[1.433s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/lib/python3.8/site-packages'
+[1.433s] Level 1:colcon.colcon_core.shell:create_environment_hook('uwrt_mars_rover_xbox_controller', 'pythonpath')
+[1.435s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/uwrt_mars_rover_xbox_controller/hook/pythonpath.ps1'
+[1.435s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/uwrt_mars_rover_xbox_controller/hook/pythonpath.dsv'
+[1.436s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/uwrt_mars_rover_xbox_controller/hook/pythonpath.sh'
+[1.436s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/bin'
+[1.438s] INFO:colcon.colcon_core.shell:Creating package script '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/uwrt_mars_rover_xbox_controller/package.ps1'
+[1.439s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/uwrt_mars_rover_xbox_controller/package.dsv'
+[1.440s] INFO:colcon.colcon_core.shell:Creating package script '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/uwrt_mars_rover_xbox_controller/package.sh'
+[1.440s] INFO:colcon.colcon_core.shell:Creating package script '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/uwrt_mars_rover_xbox_controller/package.bash'
+[1.441s] INFO:colcon.colcon_core.shell:Creating package script '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/uwrt_mars_rover_xbox_controller/package.zsh'
+[1.441s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/colcon-core/packages/uwrt_mars_rover_xbox_controller)
+[1.471s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_drivetrain' returned '0': AMENT_PREFIX_PATH=/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw:/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw:/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description:/opt/ros/galactic LD_LIBRARY_PATH=/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/lib:${LD_LIBRARY_PATH} /usr/bin/cmake --build /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_drivetrain -- -j4 -l4
+[1.505s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_drivetrain': AMENT_PREFIX_PATH=/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw:/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw:/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description:/opt/ros/galactic LD_LIBRARY_PATH=/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/lib:${LD_LIBRARY_PATH} /usr/bin/cmake --install /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_drivetrain
+[1.522s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(uwrt_mars_rover_drivetrain)
+[1.528s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain' for CMake module files
+[1.529s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_drivetrain' returned '0': AMENT_PREFIX_PATH=/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw:/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw:/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description:/opt/ros/galactic LD_LIBRARY_PATH=/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/lib:${LD_LIBRARY_PATH} /usr/bin/cmake --install /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_drivetrain
+[1.530s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain' for CMake config files
+[1.530s] Level 1:colcon.colcon_core.shell:create_environment_hook('uwrt_mars_rover_drivetrain', 'cmake_prefix_path')
+[1.533s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain/share/uwrt_mars_rover_drivetrain/hook/cmake_prefix_path.ps1'
+[1.534s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain/share/uwrt_mars_rover_drivetrain/hook/cmake_prefix_path.dsv'
+[1.534s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain/share/uwrt_mars_rover_drivetrain/hook/cmake_prefix_path.sh'
+[1.535s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain/bin'
+[1.535s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain/lib/pkgconfig/uwrt_mars_rover_drivetrain.pc'
+[1.536s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain/lib/python3.8/site-packages'
+[1.536s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain/bin'
+[1.538s] INFO:colcon.colcon_core.shell:Creating package script '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain/share/uwrt_mars_rover_drivetrain/package.ps1'
+[1.538s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain/share/uwrt_mars_rover_drivetrain/package.dsv'
+[1.539s] INFO:colcon.colcon_core.shell:Creating package script '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain/share/uwrt_mars_rover_drivetrain/package.sh'
+[1.539s] INFO:colcon.colcon_core.shell:Creating package script '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain/share/uwrt_mars_rover_drivetrain/package.bash'
+[1.539s] INFO:colcon.colcon_core.shell:Creating package script '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain/share/uwrt_mars_rover_drivetrain/package.zsh'
+[1.540s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain/share/colcon-core/packages/uwrt_mars_rover_drivetrain)
+[1.547s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(uwrt_mars_rover_xbox_controller)
+[1.549s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller' for CMake module files
+[1.550s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller' for CMake config files
+[1.551s] Level 1:colcon.colcon_core.shell:create_environment_hook('uwrt_mars_rover_xbox_controller', 'cmake_prefix_path')
+[1.552s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/uwrt_mars_rover_xbox_controller/hook/cmake_prefix_path.ps1'
+[1.553s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/uwrt_mars_rover_xbox_controller/hook/cmake_prefix_path.dsv'
+[1.553s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/uwrt_mars_rover_xbox_controller/hook/cmake_prefix_path.sh'
+[1.554s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/lib'
+[1.554s] Level 1:colcon.colcon_core.shell:create_environment_hook('uwrt_mars_rover_xbox_controller', 'ld_library_path_lib')
+[1.556s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/uwrt_mars_rover_xbox_controller/hook/ld_library_path_lib.ps1'
+[1.557s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/uwrt_mars_rover_xbox_controller/hook/ld_library_path_lib.dsv'
+[1.557s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/uwrt_mars_rover_xbox_controller/hook/ld_library_path_lib.sh'
+[1.558s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/bin'
+[1.558s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/lib/pkgconfig/uwrt_mars_rover_xbox_controller.pc'
+[1.558s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/lib/python3.8/site-packages'
+[1.558s] Level 1:colcon.colcon_core.shell:create_environment_hook('uwrt_mars_rover_xbox_controller', 'pythonpath')
+[1.560s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/uwrt_mars_rover_xbox_controller/hook/pythonpath.ps1'
+[1.561s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/uwrt_mars_rover_xbox_controller/hook/pythonpath.dsv'
+[1.561s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/uwrt_mars_rover_xbox_controller/hook/pythonpath.sh'
+[1.562s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/bin'
+[1.564s] INFO:colcon.colcon_core.shell:Creating package script '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/uwrt_mars_rover_xbox_controller/package.ps1'
+[1.565s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/uwrt_mars_rover_xbox_controller/package.dsv'
+[1.566s] INFO:colcon.colcon_core.shell:Creating package script '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/uwrt_mars_rover_xbox_controller/package.sh'
+[1.566s] INFO:colcon.colcon_core.shell:Creating package script '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/uwrt_mars_rover_xbox_controller/package.bash'
+[1.567s] INFO:colcon.colcon_core.shell:Creating package script '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/uwrt_mars_rover_xbox_controller/package.zsh'
+[1.568s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_xbox_controller/share/colcon-core/packages/uwrt_mars_rover_xbox_controller)
+[1.571s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(uwrt_mars_rover_drivetrain)
+[1.573s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain' for CMake module files
+[1.574s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain' for CMake config files
+[1.574s] Level 1:colcon.colcon_core.shell:create_environment_hook('uwrt_mars_rover_drivetrain', 'cmake_prefix_path')
+[1.576s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain/share/uwrt_mars_rover_drivetrain/hook/cmake_prefix_path.ps1'
+[1.576s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain/share/uwrt_mars_rover_drivetrain/hook/cmake_prefix_path.dsv'
+[1.577s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain/share/uwrt_mars_rover_drivetrain/hook/cmake_prefix_path.sh'
+[1.577s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain/bin'
+[1.578s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain/lib/pkgconfig/uwrt_mars_rover_drivetrain.pc'
+[1.578s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain/lib/python3.8/site-packages'
+[1.578s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain/bin'
+[1.580s] INFO:colcon.colcon_core.shell:Creating package script '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain/share/uwrt_mars_rover_drivetrain/package.ps1'
+[1.581s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain/share/uwrt_mars_rover_drivetrain/package.dsv'
+[1.582s] INFO:colcon.colcon_core.shell:Creating package script '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain/share/uwrt_mars_rover_drivetrain/package.sh'
+[1.583s] INFO:colcon.colcon_core.shell:Creating package script '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain/share/uwrt_mars_rover_drivetrain/package.bash'
+[1.583s] INFO:colcon.colcon_core.shell:Creating package script '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain/share/uwrt_mars_rover_drivetrain/package.zsh'
+[1.584s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain/share/colcon-core/packages/uwrt_mars_rover_drivetrain)
+[1.584s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/uwrt_mars_rover' with build type 'ament_cmake'
+[1.585s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/uwrt_mars_rover'
+[1.588s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[1.588s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[1.613s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover': AMENT_PREFIX_PATH=/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain:/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw:/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description:/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_description:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain:/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw:/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description:/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_description:/opt/ros/galactic LD_LIBRARY_PATH=/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/lib:${LD_LIBRARY_PATH} /usr/bin/cmake --build /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover -- -j4 -l4
+[1.670s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover' returned '0': AMENT_PREFIX_PATH=/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain:/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw:/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description:/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_description:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain:/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw:/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description:/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_description:/opt/ros/galactic LD_LIBRARY_PATH=/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/lib:${LD_LIBRARY_PATH} /usr/bin/cmake --build /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover -- -j4 -l4
+[1.701s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover': AMENT_PREFIX_PATH=/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain:/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw:/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description:/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_description:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain:/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw:/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description:/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_description:/opt/ros/galactic LD_LIBRARY_PATH=/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/lib:${LD_LIBRARY_PATH} /usr/bin/cmake --install /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover
+[1.718s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(uwrt_mars_rover)
+[1.722s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover' for CMake module files
+[1.722s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover' returned '0': AMENT_PREFIX_PATH=/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain:/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw:/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description:/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_description:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain:/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw:/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description:/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_description:/opt/ros/galactic LD_LIBRARY_PATH=/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/lib:${LD_LIBRARY_PATH} /usr/bin/cmake --install /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover
+[1.723s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover' for CMake config files
+[1.723s] Level 1:colcon.colcon_core.shell:create_environment_hook('uwrt_mars_rover', 'cmake_prefix_path')
+[1.725s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover/share/uwrt_mars_rover/hook/cmake_prefix_path.ps1'
+[1.726s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover/share/uwrt_mars_rover/hook/cmake_prefix_path.dsv'
+[1.726s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover/share/uwrt_mars_rover/hook/cmake_prefix_path.sh'
+[1.727s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover/bin'
+[1.727s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover/lib/pkgconfig/uwrt_mars_rover.pc'
+[1.727s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover/lib/python3.8/site-packages'
+[1.728s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover/bin'
+[1.729s] INFO:colcon.colcon_core.shell:Creating package script '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover/share/uwrt_mars_rover/package.ps1'
+[1.730s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover/share/uwrt_mars_rover/package.dsv'
+[1.730s] INFO:colcon.colcon_core.shell:Creating package script '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover/share/uwrt_mars_rover/package.sh'
+[1.731s] INFO:colcon.colcon_core.shell:Creating package script '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover/share/uwrt_mars_rover/package.bash'
+[1.731s] INFO:colcon.colcon_core.shell:Creating package script '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover/share/uwrt_mars_rover/package.zsh'
+[1.732s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover/share/colcon-core/packages/uwrt_mars_rover)
+[1.764s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(uwrt_mars_rover)
+[1.766s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover' for CMake module files
+[1.767s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover' for CMake config files
+[1.768s] Level 1:colcon.colcon_core.shell:create_environment_hook('uwrt_mars_rover', 'cmake_prefix_path')
+[1.769s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover/share/uwrt_mars_rover/hook/cmake_prefix_path.ps1'
+[1.770s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover/share/uwrt_mars_rover/hook/cmake_prefix_path.dsv'
+[1.771s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover/share/uwrt_mars_rover/hook/cmake_prefix_path.sh'
+[1.771s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover/bin'
+[1.771s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover/lib/pkgconfig/uwrt_mars_rover.pc'
+[1.772s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover/lib/python3.8/site-packages'
+[1.772s] Level 1:colcon.colcon_core.environment:checking '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover/bin'
+[1.774s] INFO:colcon.colcon_core.shell:Creating package script '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover/share/uwrt_mars_rover/package.ps1'
+[1.775s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover/share/uwrt_mars_rover/package.dsv'
+[1.776s] INFO:colcon.colcon_core.shell:Creating package script '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover/share/uwrt_mars_rover/package.sh'
+[1.776s] INFO:colcon.colcon_core.shell:Creating package script '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover/share/uwrt_mars_rover/package.bash'
+[1.777s] INFO:colcon.colcon_core.shell:Creating package script '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover/share/uwrt_mars_rover/package.zsh'
+[1.778s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover/share/colcon-core/packages/uwrt_mars_rover)
+[1.778s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:closing loop
+[1.779s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:loop closed
+[1.779s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete finished with '0'
+[1.779s] DEBUG:colcon.colcon_core.event_reactor:joining thread
+[1.788s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.terminal_notifier': Not used on non-Darwin systems
+[1.788s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.win32': Not used on non-Windows systems
+[1.788s] INFO:colcon.colcon_notification.desktop_notification:Sending desktop notification using 'notify2'
+[1.806s] DEBUG:colcon.colcon_core.event_reactor:joined thread
+[1.808s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/local_setup.ps1'
+[1.809s] INFO:colcon.colcon_core.shell:Creating prefix util module '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/_local_setup_util_ps1.py'
+[1.812s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/setup.ps1'
+[1.815s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/local_setup.sh'
+[1.815s] INFO:colcon.colcon_core.shell:Creating prefix util module '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/_local_setup_util_sh.py'
+[1.816s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/setup.sh'
+[1.818s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/local_setup.bash'
+[1.819s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/setup.bash'
+[1.820s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/local_setup.zsh'
+[1.821s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/setup.zsh'

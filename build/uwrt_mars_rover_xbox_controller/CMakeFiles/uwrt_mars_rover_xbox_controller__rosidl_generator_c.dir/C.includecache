@@ -1,0 +1,44 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_xbox_controller/rosidl_generator_c/uwrt_mars_rover_xbox_controller/msg/detail/xbox_controller__functions.c
+uwrt_mars_rover_xbox_controller/msg/detail/xbox_controller__functions.h
+/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_xbox_controller/rosidl_generator_c/uwrt_mars_rover_xbox_controller/msg/detail/uwrt_mars_rover_xbox_controller/msg/detail/xbox_controller__functions.h
+assert.h
+-
+stdbool.h
+-
+stdlib.h
+-
+string.h
+-
+
+/opt/ros/galactic/include/rosidl_runtime_c/visibility_control.h
+
+rosidl_generator_c/uwrt_mars_rover_xbox_controller/msg/detail/xbox_controller__functions.h
+stdbool.h
+-
+stdlib.h
+-
+rosidl_runtime_c/visibility_control.h
+rosidl_generator_c/uwrt_mars_rover_xbox_controller/msg/detail/rosidl_runtime_c/visibility_control.h
+uwrt_mars_rover_xbox_controller/msg/rosidl_generator_c__visibility_control.h
+rosidl_generator_c/uwrt_mars_rover_xbox_controller/msg/detail/uwrt_mars_rover_xbox_controller/msg/rosidl_generator_c__visibility_control.h
+uwrt_mars_rover_xbox_controller/msg/detail/xbox_controller__struct.h
+rosidl_generator_c/uwrt_mars_rover_xbox_controller/msg/detail/uwrt_mars_rover_xbox_controller/msg/detail/xbox_controller__struct.h
+
+rosidl_generator_c/uwrt_mars_rover_xbox_controller/msg/detail/xbox_controller__struct.h
+stdbool.h
+-
+stddef.h
+-
+stdint.h
+-
+
+rosidl_generator_c/uwrt_mars_rover_xbox_controller/msg/rosidl_generator_c__visibility_control.h
+

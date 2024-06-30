@@ -1,0 +1,15 @@
+/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover/share/ament_index/resource_index/package_run_dependencies/uwrt_mars_rover
+/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover/share/ament_index/resource_index/parent_prefix_path/uwrt_mars_rover
+/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover/share/uwrt_mars_rover/environment/ament_prefix_path.sh
+/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover/share/uwrt_mars_rover/environment/ament_prefix_path.dsv
+/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover/share/uwrt_mars_rover/environment/path.sh
+/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover/share/uwrt_mars_rover/environment/path.dsv
+/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover/share/uwrt_mars_rover/local_setup.bash
+/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover/share/uwrt_mars_rover/local_setup.sh
+/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover/share/uwrt_mars_rover/local_setup.zsh
+/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover/share/uwrt_mars_rover/local_setup.dsv
+/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover/share/uwrt_mars_rover/package.dsv
+/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover/share/ament_index/resource_index/packages/uwrt_mars_rover
+/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover/share/uwrt_mars_rover/cmake/uwrt_mars_roverConfig.cmake
+/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover/share/uwrt_mars_rover/cmake/uwrt_mars_roverConfig-version.cmake
+/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover/share/uwrt_mars_rover/package.xml

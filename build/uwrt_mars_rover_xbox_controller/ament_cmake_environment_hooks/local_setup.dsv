@@ -1,0 +1,4 @@
+source;share/uwrt_mars_rover_xbox_controller/environment/ament_prefix_path.sh
+source;share/uwrt_mars_rover_xbox_controller/environment/library_path.sh
+source;share/uwrt_mars_rover_xbox_controller/environment/path.sh
+source;share/uwrt_mars_rover_xbox_controller/environment/pythonpath.sh

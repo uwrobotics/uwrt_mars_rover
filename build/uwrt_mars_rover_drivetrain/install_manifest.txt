@@ -1,0 +1,15 @@
+/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain/share/ament_index/resource_index/package_run_dependencies/uwrt_mars_rover_drivetrain
+/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain/share/ament_index/resource_index/parent_prefix_path/uwrt_mars_rover_drivetrain
+/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain/share/uwrt_mars_rover_drivetrain/environment/ament_prefix_path.sh
+/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain/share/uwrt_mars_rover_drivetrain/environment/ament_prefix_path.dsv
+/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain/share/uwrt_mars_rover_drivetrain/environment/path.sh
+/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain/share/uwrt_mars_rover_drivetrain/environment/path.dsv
+/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain/share/uwrt_mars_rover_drivetrain/local_setup.bash
+/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain/share/uwrt_mars_rover_drivetrain/local_setup.sh
+/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain/share/uwrt_mars_rover_drivetrain/local_setup.zsh
+/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain/share/uwrt_mars_rover_drivetrain/local_setup.dsv
+/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain/share/uwrt_mars_rover_drivetrain/package.dsv
+/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain/share/ament_index/resource_index/packages/uwrt_mars_rover_drivetrain
+/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain/share/uwrt_mars_rover_drivetrain/cmake/uwrt_mars_rover_drivetrainConfig.cmake
+/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain/share/uwrt_mars_rover_drivetrain/cmake/uwrt_mars_rover_drivetrainConfig-version.cmake
+/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain/share/uwrt_mars_rover_drivetrain/package.xml

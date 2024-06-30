@@ -1,0 +1,55 @@
+[0.049s] Invoking command in '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_drivetrain_description': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/uwrt_mars_rover_drivetrain/uwrt_mars_rover_drivetrain_description -DCMAKE_INSTALL_PREFIX=/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description
+[0.161s] -- The C compiler identification is GNU 9.4.0
+[0.270s] -- The CXX compiler identification is GNU 9.4.0
+[0.278s] -- Check for working C compiler: /usr/bin/cc
+[0.427s] -- Check for working C compiler: /usr/bin/cc -- works
+[0.427s] -- Detecting C compiler ABI info
+[0.635s] -- Detecting C compiler ABI info - done
+[0.654s] -- Detecting C compile features
+[0.655s] -- Detecting C compile features - done
+[0.661s] -- Check for working CXX compiler: /usr/bin/c++
+[0.821s] -- Check for working CXX compiler: /usr/bin/c++ -- works
+[0.823s] -- Detecting CXX compiler ABI info
+[0.969s] -- Detecting CXX compiler ABI info - done
+[1.016s] -- Detecting CXX compile features
+[1.022s] -- Detecting CXX compile features - done
+[1.029s] -- Found ament_cmake: 1.1.6 (/opt/ros/galactic/share/ament_cmake/cmake)
+[1.118s] -- Found PythonInterp: /usr/bin/python3 (found suitable version "3.8.10", minimum required is "3") 
+[1.119s] -- Using PYTHON_EXECUTABLE: /usr/bin/python3
+[1.306s] -- Found ament_cmake_flake8: 0.10.7 (/opt/ros/galactic/share/ament_cmake_flake8/cmake)
+[1.310s] -- Found ament_cmake_xmllint: 0.10.7 (/opt/ros/galactic/share/ament_cmake_xmllint/cmake)
+[1.460s] -- Configuring done
+[1.464s] -- Generating done
+[1.467s] -- Build files have been written to: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_drivetrain_description
+[1.475s] Invoked command in '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_drivetrain_description' returned '0': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/uwrt_mars_rover_drivetrain/uwrt_mars_rover_drivetrain_description -DCMAKE_INSTALL_PREFIX=/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description
+[1.482s] Invoking command in '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_drivetrain_description': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --build /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_drivetrain_description -- -j4 -l4
+[1.592s] Invoked command in '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_drivetrain_description' returned '0': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --build /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_drivetrain_description -- -j4 -l4
+[1.663s] Invoking command in '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_drivetrain_description': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --install /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_drivetrain_description
+[1.685s] -- Install configuration: ""
+[1.685s] -- Installing: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description/share/uwrt_mars_rover_drivetrain_description/config
+[1.685s] -- Installing: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description/share/uwrt_mars_rover_drivetrain_description/config/physical_parameters.yaml
+[1.687s] -- Installing: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description/share/uwrt_mars_rover_drivetrain_description/launch
+[1.687s] -- Installing: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description/share/uwrt_mars_rover_drivetrain_description/launch/simulation.launch.py
+[1.687s] -- Installing: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description/share/uwrt_mars_rover_drivetrain_description/launch/display.launch.py
+[1.691s] -- Installing: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description/share/uwrt_mars_rover_drivetrain_description/rviz
+[1.691s] -- Installing: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description/share/uwrt_mars_rover_drivetrain_description/rviz/urdf.rviz
+[1.692s] -- Installing: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description/share/uwrt_mars_rover_drivetrain_description/urdf
+[1.692s] -- Installing: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description/share/uwrt_mars_rover_drivetrain_description/urdf/drivetrain.urdf.xacro
+[1.694s] -- Installing: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description/share/uwrt_mars_rover_drivetrain_description/urdf/drivetrain.ros2control.xacro
+[1.695s] -- Installing: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description/share/uwrt_mars_rover_drivetrain_description/urdf/drivetrain.macro.xacro
+[1.699s] -- Installing: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description/share/ament_index/resource_index/package_run_dependencies/uwrt_mars_rover_drivetrain_description
+[1.699s] -- Installing: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description/share/ament_index/resource_index/parent_prefix_path/uwrt_mars_rover_drivetrain_description
+[1.700s] -- Installing: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description/share/uwrt_mars_rover_drivetrain_description/environment/ament_prefix_path.sh
+[1.700s] -- Installing: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description/share/uwrt_mars_rover_drivetrain_description/environment/ament_prefix_path.dsv
+[1.700s] -- Installing: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description/share/uwrt_mars_rover_drivetrain_description/environment/path.sh
+[1.700s] -- Installing: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description/share/uwrt_mars_rover_drivetrain_description/environment/path.dsv
+[1.701s] -- Installing: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description/share/uwrt_mars_rover_drivetrain_description/local_setup.bash
+[1.701s] -- Installing: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description/share/uwrt_mars_rover_drivetrain_description/local_setup.sh
+[1.701s] -- Installing: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description/share/uwrt_mars_rover_drivetrain_description/local_setup.zsh
+[1.702s] -- Installing: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description/share/uwrt_mars_rover_drivetrain_description/local_setup.dsv
+[1.705s] -- Installing: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description/share/uwrt_mars_rover_drivetrain_description/package.dsv
+[1.705s] -- Installing: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description/share/ament_index/resource_index/packages/uwrt_mars_rover_drivetrain_description
+[1.705s] -- Installing: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description/share/uwrt_mars_rover_drivetrain_description/cmake/uwrt_mars_rover_drivetrain_descriptionConfig.cmake
+[1.705s] -- Installing: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description/share/uwrt_mars_rover_drivetrain_description/cmake/uwrt_mars_rover_drivetrain_descriptionConfig-version.cmake
+[1.705s] -- Installing: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description/share/uwrt_mars_rover_drivetrain_description/package.xml
+[1.748s] Invoked command in '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_drivetrain_description' returned '0': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --install /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_drivetrain_description

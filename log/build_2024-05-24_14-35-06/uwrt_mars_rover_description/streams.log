@@ -1,0 +1,20 @@
+[0.040s] Invoking command in '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_description': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --build /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_description -- -j4 -l4
+[0.123s] Invoked command in '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_description' returned '0': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --build /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_description -- -j4 -l4
+[0.203s] Invoking command in '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_description': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --install /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_description
+[0.243s] -- Install configuration: ""
+[0.244s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_description/share/ament_index/resource_index/package_run_dependencies/uwrt_mars_rover_description
+[0.244s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_description/share/ament_index/resource_index/parent_prefix_path/uwrt_mars_rover_description
+[0.244s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_description/share/uwrt_mars_rover_description/environment/ament_prefix_path.sh
+[0.244s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_description/share/uwrt_mars_rover_description/environment/ament_prefix_path.dsv
+[0.244s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_description/share/uwrt_mars_rover_description/environment/path.sh
+[0.244s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_description/share/uwrt_mars_rover_description/environment/path.dsv
+[0.244s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_description/share/uwrt_mars_rover_description/local_setup.bash
+[0.245s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_description/share/uwrt_mars_rover_description/local_setup.sh
+[0.245s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_description/share/uwrt_mars_rover_description/local_setup.zsh
+[0.245s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_description/share/uwrt_mars_rover_description/local_setup.dsv
+[0.245s] -- Installing: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_description/share/uwrt_mars_rover_description/package.dsv
+[0.245s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_description/share/ament_index/resource_index/packages/uwrt_mars_rover_description
+[0.245s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_description/share/uwrt_mars_rover_description/cmake/uwrt_mars_rover_descriptionConfig.cmake
+[0.245s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_description/share/uwrt_mars_rover_description/cmake/uwrt_mars_rover_descriptionConfig-version.cmake
+[0.246s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_description/share/uwrt_mars_rover_description/package.xml
+[0.284s] Invoked command in '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_description' returned '0': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --install /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_description

@@ -1,0 +1,4 @@
+source;share/uwrt_mars_rover_drivetrain_hw/local_setup.bash
+source;share/uwrt_mars_rover_drivetrain_hw/local_setup.dsv
+source;share/uwrt_mars_rover_drivetrain_hw/local_setup.sh
+source;share/uwrt_mars_rover_drivetrain_hw/local_setup.zsh

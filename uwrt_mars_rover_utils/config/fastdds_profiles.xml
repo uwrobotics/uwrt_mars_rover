@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<profiles xmlns="http://www.eprosima.com/XMLSchemas/fastRTPS_Profiles">
+    <participant profile_name="default_participant_profile" is_default_profile="true">
+        <rtps>
+            <builtin>
+                <initialPeersList>
+                    <locator>
+                        <udpv4>
+                            <address>10.0.0.2</address> <!-- IP of the other device -->
+                            <port>7412</port>
+                        </udpv4>
+                    </locator>
+                    <locator>
+                        <udpv4>
+                            <address>10.0.0.1</address> <!-- IP of this device -->
+                            <port>7412</port>
+                        </udpv4>
+                    </locator>
+                </initialPeersList>
+                <use_WriterLivelinessProtocol>true</use_WriterLivelinessProtocol>
+            </builtin>
+            <sendSocketBufferSize>65536</sendSocketBufferSize>
+            <listenSocketBufferSize>65536</listenSocketBufferSize>
+        </rtps>
+    </participant>
+
+    <publisher profile_name="default_publisher" is_default_profile="true">
+        <historyMemoryPolicy>DYNAMIC</historyMemoryPolicy>
+    </publisher>
+
+    <publisher profile_name="/differential_drivetrain_controller/cmd_vel_unstamped">
+        <historyMemoryPolicy>DYNAMIC</historyMemoryPolicy>
+        <qos>
+            <publishMode>
+                <kind>ASYNCHRONOUS</kind>
+            </publishMode>
+        </qos>
+    </publisher>
+
+    <subscriber profile_name="/xbox_info">
+        <historyMemoryPolicy>DYNAMIC</historyMemoryPolicy>
+    </subscriber>
+</profiles>

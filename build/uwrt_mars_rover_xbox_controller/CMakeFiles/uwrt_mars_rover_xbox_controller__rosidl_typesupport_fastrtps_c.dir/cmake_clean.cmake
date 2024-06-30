@@ -1,0 +1,12 @@
+file(REMOVE_RECURSE
+  "CMakeFiles/uwrt_mars_rover_xbox_controller__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/uwrt_mars_rover_xbox_controller/msg/detail/xbox_controller__type_support_c.cpp.o"
+  "libuwrt_mars_rover_xbox_controller__rosidl_typesupport_fastrtps_c.pdb"
+  "libuwrt_mars_rover_xbox_controller__rosidl_typesupport_fastrtps_c.so"
+  "rosidl_typesupport_fastrtps_c/uwrt_mars_rover_xbox_controller/msg/detail/xbox_controller__rosidl_typesupport_fastrtps_c.h"
+  "rosidl_typesupport_fastrtps_c/uwrt_mars_rover_xbox_controller/msg/detail/xbox_controller__type_support_c.cpp"
+)
+
+# Per-language clean rules from dependency scanning.
+foreach(lang CXX)
+  include(CMakeFiles/uwrt_mars_rover_xbox_controller__rosidl_typesupport_fastrtps_c.dir/cmake_clean_${lang}.cmake OPTIONAL)
+endforeach()

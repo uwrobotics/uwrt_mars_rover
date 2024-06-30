@@ -1,10 +1,12 @@
+import os
 import launch
 from launch import LaunchDescription
-from launch_ros.actions import Node
-from launch_ros.descriptions import ComposableNode
+from launch.actions import SetEnvironmentVariable
 from launch_ros.actions import ComposableNodeContainer
+from launch_ros.descriptions import ComposableNode
 
 def generate_launch_description():
+
     container = ComposableNodeContainer(
         name='container',
         namespace="",
@@ -16,7 +18,8 @@ def generate_launch_description():
                 plugin='drivetraincontrollerComposition::CoordinateNode',
                 name='coordinateNode'
             ),
-        ]
+        ],
+        output='screen'
     )
+    
     return launch.LaunchDescription([container])
-

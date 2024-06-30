@@ -12,7 +12,7 @@ UWRTXboxController::UWRTXboxController(const rclcpp::NodeOptions & options)
         "joy", 10, std::bind(&UWRTXboxController::getXboxData, this, std::placeholders::_1));
     xbox_node_pub = create_publisher<xbox_msg>("/xbox_info", 10);
     pub_timer =
-        create_wall_timer(100ms, std::bind(&UWRTXboxController::publishStructuredXboxData, this));
+        create_wall_timer(1000ms, std::bind(&UWRTXboxController::publishStructuredXboxData, this));
 }
 
 void UWRTXboxController::getXboxData(const joy_msg::SharedPtr msg)

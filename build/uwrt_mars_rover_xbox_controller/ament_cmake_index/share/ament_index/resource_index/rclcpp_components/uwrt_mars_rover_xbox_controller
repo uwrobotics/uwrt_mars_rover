@@ -1,0 +1,2 @@
+uwrt_xbox::UWRTXboxController;lib/libxbox_controller.so
+drivetraincontrollerComposition::CoordinateNode;lib/libcoordinateNode.so

@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- import macros file -->
+  <xacro:include filename="$(find uwrt_mars_rover_drivetrain_description)/urdf/drivetrain.macro.xacro"/>
+
+  <xacro:macro name="uwrt_drivetrain_ros2_controls_gazebo">
+    <ros2_control name="gazebo_wheel_actuator" type="system">
+      <hardware>
+          <plugin>gazebo_ros2_control/GazeboSystem</plugin>
+      </hardware>
+      
+      <xacro:drivetrain_actuator_gazebo  prefix="right" suffix="front" />
+      <xacro:drivetrain_actuator_gazebo  prefix="right" suffix="middle" />
+      <xacro:drivetrain_actuator_gazebo  prefix="right" suffix="back" />
+      <xacro:drivetrain_actuator_gazebo  prefix="left" suffix="front" />
+      <xacro:drivetrain_actuator_gazebo  prefix="left" suffix="middle" />
+      <xacro:drivetrain_actuator_gazebo  prefix="left" suffix="back" />
+      <!--  -->
+   </ros2_control>
+      <!-- controller manager -->
+      <gazebo>
+          <plugin filename="libgazebo_ros2_control.so" name="gazebo_ros2_control">
+            <parameters>$(find uwrt_mars_rover_drivetrain_hw)/config/drivetrain_controllers.yaml</parameters>
+            <robot_param_node>/robot_state_publisher </robot_param_node>
+          </plugin>
+      </gazebo>
+
+      
+  </xacro:macro>
+
+
+</robot>
+      

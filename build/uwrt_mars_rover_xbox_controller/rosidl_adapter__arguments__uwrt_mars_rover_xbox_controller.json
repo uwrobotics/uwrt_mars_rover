@@ -1,0 +1,6 @@
+{
+  "package_name": "uwrt_mars_rover_xbox_controller",
+  "non_idl_tuples": [
+    "/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/uwrt_mars_rover_utils/uwrt_mars_rover_xbox_controller:msg/XboxController.msg"
+  ]
+}

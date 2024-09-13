@@ -1,0 +1,8 @@
+source;share/uwrt_mars_rover_drivetrain/hook/cmake_prefix_path.ps1
+source;share/uwrt_mars_rover_drivetrain/hook/cmake_prefix_path.dsv
+source;share/uwrt_mars_rover_drivetrain/hook/cmake_prefix_path.sh
+source;share/uwrt_mars_rover_drivetrain/local_setup.bash
+source;share/uwrt_mars_rover_drivetrain/local_setup.dsv
+source;share/uwrt_mars_rover_drivetrain/local_setup.ps1
+source;share/uwrt_mars_rover_drivetrain/local_setup.sh
+source;share/uwrt_mars_rover_drivetrain/local_setup.zsh

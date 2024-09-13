@@ -2,6 +2,7 @@ chassis:
   length: 1.17
   width: 0.807
   height: 0.2
+  mass: 20 #assuming 20kg 
 
 wheels:
   # Should match values defined in uwrt_mars_rover_drivetrain_hw/config/drivetrain_controllers.yaml

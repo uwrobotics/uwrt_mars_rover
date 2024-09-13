@@ -1,0 +1,9 @@
+<library path="uwrt_mars_rover_drivetrain_hw">
+  <class name="uwrt_mars_rover_drivetrain_hw/UWRTMarsRoverDrivetrainHWActuatorInterface"
+         type="uwrt_mars_rover_drivetrain_hw::UWRTMarsRoverDrivetrainHWActuatorInterface"
+         base_class_type="hardware_interface::ActuatorInterface">
+    <description>
+      ROS2 Control hardware implementation of the UWRT drivetrain, implemented using 6 ActuatorInterfaces.
+    </description>
+  </class>
+</library>

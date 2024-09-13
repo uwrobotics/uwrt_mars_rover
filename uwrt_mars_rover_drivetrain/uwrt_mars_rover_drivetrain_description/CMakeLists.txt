@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.5)
 project(uwrt_mars_rover_drivetrain_description)
 
 find_package(ament_cmake REQUIRED)
+find_package(sensor_msgs REQUIRED)
 
 install(
     DIRECTORY
@@ -9,6 +10,7 @@ install(
       launch
       rviz
       urdf
+      world
     DESTINATION
       share/${PROJECT_NAME}
 )

@@ -1,0 +1,22 @@
+// generated from rosidl_adapter/resource/msg.idl.em
+// with input from uwrt_mars_rover_xbox_controller/msg/XboxController.msg
+// generated code does not contain a copyright notice
+
+
+module uwrt_mars_rover_xbox_controller {
+  module msg {
+    struct XboxController {
+      float drivetrain_joy_x;
+
+      float drivetrain_joy_y;
+
+      float gimble_joy_x;
+
+      float gimble_joy_y;
+
+      float lt;
+
+      float rt;
+    };
+  };
+};

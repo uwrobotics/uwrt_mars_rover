@@ -23,7 +23,7 @@ def generate_launch_description():
     controllers_config_path = get_package_share_path(
         'uwrt_mars_rover_drivetrain_hw') / 'config' / 'drivetrain_controllers.yaml'
 
-    robot_description_content = ParameterValue(Command(['ros2 run xacro xacro ', str(model_path)]), value_type=str)
+    robot_description_content = ParameterValue(Command(['ros2 run xacro xacro ', str(model_path),' sim:=', 'false']), value_type=str)
     robot_description = {'robot_description': robot_description_content}
 
     # Nodes
@@ -43,6 +43,9 @@ def generate_launch_description():
         executable='robot_state_publisher',
         output='both',
         parameters=[robot_description],
+        remappings=[
+            ("/differential_drivetrain_controller/cmd_vel_unstamped", "/cmd_vel"),
+        ],
     )]
 
     joint_state_broadcaster_spawner = Node(
@@ -71,7 +74,7 @@ def generate_launch_description():
     drivetrain_controller_spawner = Node(
         package='controller_manager',
         executable='spawner',
-        arguments=['differential_drivetrain_controller', '-c', '/controller_manager'],
+        arguments=['differential_drivetrain_controller', "--controller-manager", '/controller_manager'],
     )
     nodes += [RegisterEventHandler(
         event_handler=OnProcessExit(

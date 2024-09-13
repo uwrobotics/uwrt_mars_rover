@@ -1,0 +1,9 @@
+/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_drivetrain/CMakeFiles/install/strip.dir
+/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_drivetrain/CMakeFiles/install.dir
+/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_drivetrain/CMakeFiles/list_install_components.dir
+/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_drivetrain/CMakeFiles/rebuild_cache.dir
+/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_drivetrain/CMakeFiles/edit_cache.dir
+/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_drivetrain/CMakeFiles/test.dir
+/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_drivetrain/CMakeFiles/install/local.dir
+/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_drivetrain/CMakeFiles/uwrt_mars_rover_drivetrain_uninstall.dir
+/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_drivetrain/CMakeFiles/uninstall.dir

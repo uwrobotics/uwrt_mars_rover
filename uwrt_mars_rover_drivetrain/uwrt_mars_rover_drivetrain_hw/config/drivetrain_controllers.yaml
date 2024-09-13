@@ -1,7 +1,7 @@
 controller_manager:
   ros__parameters:
     update_rate: 100 # Hz
-
+    use_sim_time: true
     joint_state_broadcaster:
       type: joint_state_broadcaster/JointStateBroadcaster
 
@@ -38,7 +38,7 @@ differential_drivetrain_controller:
 
     cmd_vel_timeout: 0.2 # seconds. min cmd_vel publish rate is 5Hz
     publish_limited_velocity: true
-    use_stamped_vel: true
+    use_stamped_vel: false # FIXME (npalmar): chaneg back to true
     velocity_rolling_window_size: 10
 
     # Velocity and acceleration limits

@@ -1,0 +1,14 @@
+source;share/uwrt_mars_rover_xbox_controller/hook/cmake_prefix_path.ps1
+source;share/uwrt_mars_rover_xbox_controller/hook/cmake_prefix_path.dsv
+source;share/uwrt_mars_rover_xbox_controller/hook/cmake_prefix_path.sh
+source;share/uwrt_mars_rover_xbox_controller/hook/ld_library_path_lib.ps1
+source;share/uwrt_mars_rover_xbox_controller/hook/ld_library_path_lib.dsv
+source;share/uwrt_mars_rover_xbox_controller/hook/ld_library_path_lib.sh
+source;share/uwrt_mars_rover_xbox_controller/hook/pythonpath.ps1
+source;share/uwrt_mars_rover_xbox_controller/hook/pythonpath.dsv
+source;share/uwrt_mars_rover_xbox_controller/hook/pythonpath.sh
+source;share/uwrt_mars_rover_xbox_controller/local_setup.bash
+source;share/uwrt_mars_rover_xbox_controller/local_setup.dsv
+source;share/uwrt_mars_rover_xbox_controller/local_setup.ps1
+source;share/uwrt_mars_rover_xbox_controller/local_setup.sh
+source;share/uwrt_mars_rover_xbox_controller/local_setup.zsh

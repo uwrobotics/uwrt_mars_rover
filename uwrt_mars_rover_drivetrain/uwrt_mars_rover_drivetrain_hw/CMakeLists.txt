@@ -12,6 +12,7 @@ find_package(pluginlib REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclcpp_lifecycle REQUIRED)
 find_package(transmission_interface REQUIRED)
+find_package(uwrt_mars_rover_utilities REQUIRED)
 
 add_library(
     ${PROJECT_NAME}
@@ -38,6 +39,7 @@ ament_target_dependencies(
     rclcpp
     rclcpp_lifecycle
     transmission_interface
+    uwrt_mars_rover_utilities
 )
 
 # Causes the visibility macros to use dllexport rather than dllimport,

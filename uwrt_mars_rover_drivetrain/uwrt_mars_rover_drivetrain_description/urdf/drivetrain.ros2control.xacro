@@ -1,15 +1,37 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
+  <xacro:arg name="sim_gazebo_classic" default="true" />
   <!-- import macros file -->
   <xacro:include filename="$(find uwrt_mars_rover_drivetrain_description)/urdf/drivetrain.macro.xacro"/>
+  <xacro:macro name="uwrt_drivetrain_ros2_controls">
 
-  <xacro:drivetrain_actuator prefix="right" suffix="front"/>
-  <xacro:drivetrain_actuator prefix="right" suffix="middle"/>
-  <xacro:drivetrain_actuator prefix="right" suffix="back"/>
-  <xacro:drivetrain_actuator prefix="left" suffix="front"/>
-  <xacro:drivetrain_actuator prefix="left" suffix="middle"/>
-  <xacro:drivetrain_actuator prefix="left" suffix="back"/>
+    <xacro:drivetrain_actuator prefix="right" suffix="front" can_id="5"/>
+    <xacro:drivetrain_actuator prefix="right" suffix="middle" can_id="4"/>
+    <xacro:drivetrain_actuator prefix="right" suffix="back" can_id="3"/>
+    <xacro:drivetrain_actuator prefix="left" suffix="front" can_id="2"/>
+    <xacro:drivetrain_actuator prefix="left" suffix="middle" can_id="1"/>
+    <xacro:drivetrain_actuator prefix="left" suffix="back" can_id="0"/>
+ </xacro:macro>
+  <xacro:drivetrain_actuator prefix="right" suffix="front" sim_gazebo_classic="$(arg sim_gazebo_classic)"/>
+  <xacro:drivetrain_actuator prefix="right" suffix="middle" sim_gazebo_classic="$(arg sim_gazebo_classic)"/>
+  <xacro:drivetrain_actuator prefix="right" suffix="back" sim_gazebo_classic="$(arg sim_gazebo_classic)"/>
+  <xacro:drivetrain_actuator prefix="left" suffix="front" sim_gazebo_classic="$(arg sim_gazebo_classic)"/>
+  <xacro:drivetrain_actuator prefix="left" suffix="middle" sim_gazebo_classic="$(arg sim_gazebo_classic)"/>
+  <xacro:drivetrain_actuator prefix="left" suffix="back" sim_gazebo_classic="$(arg sim_gazebo_classic)"/>
+  
+  <xacro:if value="$(arg sim_gazebo_classic)">
+    <!-- Gazebo plugins -->
+    <gazebo reference="world">
+    </gazebo>
+    <gazebo>
+      <plugin filename="libgazebo_ros2_control.so" name="gazebo_ros2_control">
+      <robot_param>robot_description</robot_param>
+      <robot_param_node>robot_state_publisher</robot_param_node>
+      <robot_sim_type>gazebo_ros2_control/DefaultRobotHWSim</robot_sim_type>
+      <parameters>$(find uwrt_mars_rover_drivetrain_hw)/config/drivetrain_controllers.yaml</parameters>
+      </plugin>
+    </gazebo>
+  </xacro:if>
 
 </robot>
-

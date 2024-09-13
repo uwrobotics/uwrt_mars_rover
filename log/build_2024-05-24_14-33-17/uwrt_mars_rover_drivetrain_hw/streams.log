@@ -1,0 +1,37 @@
+[0.081s] Invoking command in '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_drivetrain_hw': AMENT_PREFIX_PATH=/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description:/opt/ros/galactic /usr/bin/cmake --build /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_drivetrain_hw -- -j4 -l4
+[0.282s] [100%] Built target uwrt_mars_rover_drivetrain_hw
+[0.304s] Invoked command in '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_drivetrain_hw' returned '0': AMENT_PREFIX_PATH=/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description:/opt/ros/galactic /usr/bin/cmake --build /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_drivetrain_hw -- -j4 -l4
+[0.358s] Invoking command in '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_drivetrain_hw': AMENT_PREFIX_PATH=/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description:/opt/ros/galactic /usr/bin/cmake --install /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_drivetrain_hw
+[0.373s] -- Install configuration: ""
+[0.373s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/uwrt_mars_rover_drivetrain_hw/uwrt_mars_rover_drivetrain_hw.xml
+[0.373s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/lib/libuwrt_mars_rover_drivetrain_hw.so
+[0.373s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/include/include
+[0.374s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/include/include/uwrt_mars_rover_drivetrain_hw
+[0.374s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/include/include/uwrt_mars_rover_drivetrain_hw/uwrt_mars_rover_drivetrain_hw_actuator_interface.hpp
+[0.374s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/include/include/uwrt_mars_rover_drivetrain_hw/visibility_control.hpp
+[0.374s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/uwrt_mars_rover_drivetrain_hw/config
+[0.374s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/uwrt_mars_rover_drivetrain_hw/config/drivetrain_controllers.yaml
+[0.375s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/uwrt_mars_rover_drivetrain_hw/launch
+[0.375s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/uwrt_mars_rover_drivetrain_hw/launch/drivetrain.launch.py
+[0.375s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/uwrt_mars_rover_drivetrain_hw/environment/library_path.sh
+[0.375s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/uwrt_mars_rover_drivetrain_hw/environment/library_path.dsv
+[0.375s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/ament_index/resource_index/package_run_dependencies/uwrt_mars_rover_drivetrain_hw
+[0.375s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/ament_index/resource_index/parent_prefix_path/uwrt_mars_rover_drivetrain_hw
+[0.375s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/uwrt_mars_rover_drivetrain_hw/environment/ament_prefix_path.sh
+[0.376s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/uwrt_mars_rover_drivetrain_hw/environment/ament_prefix_path.dsv
+[0.376s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/uwrt_mars_rover_drivetrain_hw/environment/path.sh
+[0.376s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/uwrt_mars_rover_drivetrain_hw/environment/path.dsv
+[0.376s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/uwrt_mars_rover_drivetrain_hw/local_setup.bash
+[0.376s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/uwrt_mars_rover_drivetrain_hw/local_setup.sh
+[0.376s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/uwrt_mars_rover_drivetrain_hw/local_setup.zsh
+[0.377s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/uwrt_mars_rover_drivetrain_hw/local_setup.dsv
+[0.377s] -- Installing: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/uwrt_mars_rover_drivetrain_hw/package.dsv
+[0.377s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/ament_index/resource_index/packages/uwrt_mars_rover_drivetrain_hw
+[0.377s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/ament_index/resource_index/hardware_interface__pluginlib__plugin/uwrt_mars_rover_drivetrain_hw
+[0.377s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/uwrt_mars_rover_drivetrain_hw/cmake/ament_cmake_export_include_directories-extras.cmake
+[0.377s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/uwrt_mars_rover_drivetrain_hw/cmake/ament_cmake_export_libraries-extras.cmake
+[0.378s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/uwrt_mars_rover_drivetrain_hw/cmake/ament_cmake_export_dependencies-extras.cmake
+[0.378s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/uwrt_mars_rover_drivetrain_hw/cmake/uwrt_mars_rover_drivetrain_hwConfig.cmake
+[0.378s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/uwrt_mars_rover_drivetrain_hw/cmake/uwrt_mars_rover_drivetrain_hwConfig-version.cmake
+[0.378s] -- Up-to-date: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/uwrt_mars_rover_drivetrain_hw/package.xml
+[0.385s] Invoked command in '/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_drivetrain_hw' returned '0': AMENT_PREFIX_PATH=/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_description:/opt/ros/galactic /usr/bin/cmake --install /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_drivetrain_hw

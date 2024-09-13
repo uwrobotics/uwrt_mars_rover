@@ -1,0 +1,81 @@
+-- The C compiler identification is GNU 9.4.0
+-- The CXX compiler identification is GNU 9.4.0
+-- Check for working C compiler: /usr/bin/cc
+-- Check for working C compiler: /usr/bin/cc -- works
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Check for working CXX compiler: /usr/bin/c++
+-- Check for working CXX compiler: /usr/bin/c++ -- works
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Found ament_cmake: 1.1.6 (/opt/ros/galactic/share/ament_cmake/cmake)
+-- Found PythonInterp: /usr/bin/python3 (found suitable version "3.8.10", minimum required is "3") 
+-- Using PYTHON_EXECUTABLE: /usr/bin/python3
+-- Found hardware_interface: 1.6.0 (/opt/ros/galactic/share/hardware_interface/cmake)
+-- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+-- Found rosidl_adapter: 2.2.3 (/opt/ros/galactic/share/rosidl_adapter/cmake)
+-- Found OpenSSL: /usr/lib/x86_64-linux-gnu/libcrypto.so (found version "1.1.1f")  
+-- Found FastRTPS: /opt/ros/galactic/include  
+-- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+-- Found rmw_implementation_cmake: 3.3.1 (/opt/ros/galactic/share/rmw_implementation_cmake/cmake)
+-- Found rmw_cyclonedds_cpp: 0.22.6 (/opt/ros/galactic/share/rmw_cyclonedds_cpp/cmake)
+-- Using RMW implementation 'rmw_cyclonedds_cpp' as default
+-- Looking for pthread.h
+-- Looking for pthread.h - found
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Failed
+-- Looking for pthread_create in pthreads
+-- Looking for pthread_create in pthreads - not found
+-- Looking for pthread_create in pthread
+-- Looking for pthread_create in pthread - found
+-- Found Threads: TRUE  
+-- Found transmission_interface: 1.6.0 (/opt/ros/galactic/share/transmission_interface/cmake)
+-- Found ament_cmake_clang_format: 0.10.7 (/opt/ros/galactic/share/ament_cmake_clang_format/cmake)
+-- Found ament_cmake_clang_tidy: 0.10.7 (/opt/ros/galactic/share/ament_cmake_clang_tidy/cmake)
+-- Found ament_cmake_cppcheck: 0.10.7 (/opt/ros/galactic/share/ament_cmake_cppcheck/cmake)
+-- Found ament_cmake_flake8: 0.10.7 (/opt/ros/galactic/share/ament_cmake_flake8/cmake)
+-- Found ament_cmake_xmllint: 0.10.7 (/opt/ros/galactic/share/ament_cmake_xmllint/cmake)
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/build/uwrt_mars_rover_drivetrain_hw
+[35m[1mScanning dependencies of target uwrt_mars_rover_drivetrain_hw[0m
+[ 50%] [32mBuilding CXX object CMakeFiles/uwrt_mars_rover_drivetrain_hw.dir/src/uwrt_mars_rover_drivetrain_hw_actuator_interface.cpp.o[0m
+[100%] [32m[1mLinking CXX shared library libuwrt_mars_rover_drivetrain_hw.so[0m
+[100%] Built target uwrt_mars_rover_drivetrain_hw
+-- Install configuration: ""
+-- Installing: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/uwrt_mars_rover_drivetrain_hw/uwrt_mars_rover_drivetrain_hw.xml
+-- Installing: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/lib/libuwrt_mars_rover_drivetrain_hw.so
+-- Set runtime path of "/home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/lib/libuwrt_mars_rover_drivetrain_hw.so" to ""
+-- Installing: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/include/include
+-- Installing: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/include/include/uwrt_mars_rover_drivetrain_hw
+-- Installing: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/include/include/uwrt_mars_rover_drivetrain_hw/uwrt_mars_rover_drivetrain_hw_actuator_interface.hpp
+-- Installing: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/include/include/uwrt_mars_rover_drivetrain_hw/visibility_control.hpp
+-- Installing: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/uwrt_mars_rover_drivetrain_hw/config
+-- Installing: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/uwrt_mars_rover_drivetrain_hw/config/drivetrain_controllers.yaml
+-- Installing: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/uwrt_mars_rover_drivetrain_hw/launch
+-- Installing: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/uwrt_mars_rover_drivetrain_hw/launch/drivetrain.launch.py
+-- Installing: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/uwrt_mars_rover_drivetrain_hw/environment/library_path.sh
+-- Installing: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/uwrt_mars_rover_drivetrain_hw/environment/library_path.dsv
+-- Installing: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/ament_index/resource_index/package_run_dependencies/uwrt_mars_rover_drivetrain_hw
+-- Installing: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/ament_index/resource_index/parent_prefix_path/uwrt_mars_rover_drivetrain_hw
+-- Installing: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/uwrt_mars_rover_drivetrain_hw/environment/ament_prefix_path.sh
+-- Installing: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/uwrt_mars_rover_drivetrain_hw/environment/ament_prefix_path.dsv
+-- Installing: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/uwrt_mars_rover_drivetrain_hw/environment/path.sh
+-- Installing: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/uwrt_mars_rover_drivetrain_hw/environment/path.dsv
+-- Installing: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/uwrt_mars_rover_drivetrain_hw/local_setup.bash
+-- Installing: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/uwrt_mars_rover_drivetrain_hw/local_setup.sh
+-- Installing: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/uwrt_mars_rover_drivetrain_hw/local_setup.zsh
+-- Installing: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/uwrt_mars_rover_drivetrain_hw/local_setup.dsv
+-- Installing: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/uwrt_mars_rover_drivetrain_hw/package.dsv
+-- Installing: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/ament_index/resource_index/packages/uwrt_mars_rover_drivetrain_hw
+-- Installing: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/ament_index/resource_index/hardware_interface__pluginlib__plugin/uwrt_mars_rover_drivetrain_hw
+-- Installing: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/uwrt_mars_rover_drivetrain_hw/cmake/ament_cmake_export_include_directories-extras.cmake
+-- Installing: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/uwrt_mars_rover_drivetrain_hw/cmake/ament_cmake_export_libraries-extras.cmake
+-- Installing: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/uwrt_mars_rover_drivetrain_hw/cmake/ament_cmake_export_dependencies-extras.cmake
+-- Installing: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/uwrt_mars_rover_drivetrain_hw/cmake/uwrt_mars_rover_drivetrain_hwConfig.cmake
+-- Installing: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/uwrt_mars_rover_drivetrain_hw/cmake/uwrt_mars_rover_drivetrain_hwConfig-version.cmake
+-- Installing: /home/uwrt/xbox_test_ws/src/uwrt_mars_rover/install/uwrt_mars_rover_drivetrain_hw/share/uwrt_mars_rover_drivetrain_hw/package.xml
